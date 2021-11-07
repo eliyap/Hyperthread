@@ -16,11 +16,14 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
     /// IDs for further fetching.
     var idsToFetch = Set<Tweet.ID>()
     
+    /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
             realm.add(User(raw: rawUser), update: .modified)
         }
     }
+    
+    /// Insert all tweets.
     try realm.write {
         for rawTweet in rawTweets {
             let tweet: Tweet = Tweet(raw: rawTweet)
