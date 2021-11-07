@@ -125,12 +125,16 @@ final class LoginViewController: UIViewController {
 
     init() {
         button = UIButton(configuration: .filled(), primaryAction: nil)
-        button.setTitle("Log in to Twitter", for: .normal)
         super.init(nibName: nil, bundle: nil)
-        button.addAction(UIAction(handler: { [weak self] action in
-            self?.startLogin()
-        }), for: .touchUpInside)
+        
+        /// Configure Button.
         view.addSubview(button)
+        button.setTitle("Log in to Twitter", for: .normal)
+        let btnAction = UIAction(handler: { [weak self] action in
+            guard Auth.shared.state.isLoggingIn == false else { return }
+            self?.startLogin()
+        })
+        button.addAction(btnAction, for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
