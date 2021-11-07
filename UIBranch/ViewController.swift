@@ -10,13 +10,13 @@ import Twig
 
 class ViewController: PMViewController {
 
-    let tableVC = MainTable()
+    let mainVC = Navigation()
     var loginVC = LoginViewController()
     var authVC: AuthViewController? = nil
     
     required init?(coder: NSCoder) {
         super.init(nibName: nil, bundle: nil)
-        adopt(tableVC)
+        adopt(mainVC)
         adopt(loginVC)
         view.bringSubviewToFront(loginVC.view)
         store(Auth.shared.$state.sink(receiveValue: react))
@@ -32,13 +32,13 @@ class ViewController: PMViewController {
         switch state {
         case .idle:
             loginVC.view.isHidden = false
-            tableVC.view.isHidden = true
+            mainVC.view.isHidden = true
         case .loggingIn(let token):
             authVC = AuthViewController(token: token, handler: callbackHandler)
             adopt(authVC!)
         case .loggedIn:
             loginVC.view.isHidden = true
-            tableVC.view.isHidden = false
+            mainVC.view.isHidden = false
         default:
             break
         }
@@ -65,12 +65,16 @@ class ViewController: PMViewController {
     }
 }
 
-final class MainTable: UITableViewController {
+final class Navigation: UINavigationController {
+
+    let tableVC = MainTable()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
+        adopt(tableVC)
     }
-    
+
     required init?(coder: NSCoder) {
-        fatalError("No.")
+        fatalError("init(coder:) has not been implemented")
     }
 }

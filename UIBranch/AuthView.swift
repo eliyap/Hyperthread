@@ -15,8 +15,18 @@ public final class Auth: ObservableObject {
     static let shared = Auth()
     @Published var state: LoginState = .idle
     private init() {
+        /// Load pre-existing credentials from UserDefaults.
         if let cred = UserDefaults.groupSuite.oAuthCredentials {
             state = .loggedIn(cred: cred)
+        }
+    }
+    
+    public var credentials: OAuthCredentials? {
+        switch state {
+        case .loggedIn(let cred):
+            return cred
+        default:
+            return nil
         }
     }
 }
