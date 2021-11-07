@@ -114,6 +114,7 @@ final class DiscussionTable: UITableViewController {
         tweets = realm.discussion(id: discussionID)!.tweets.sorted(by: {$0.id < $1.id})
         super.init(nibName: nil, bundle: nil)
         tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
+        tableView.bounces = false
     }
     
     required init?(coder: NSCoder) {
