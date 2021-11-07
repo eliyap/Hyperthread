@@ -8,13 +8,17 @@
 import UIKit
 import Twig
 
-final class LoginViewController: UIViewController {
+final class LoginViewController: PMViewController {
 
     let button: UIButton
+    public let loadingView = UIActivityIndicatorView(style: .large)
 
     init() {
         button = UIButton(configuration: .filled(), primaryAction: nil)
         super.init(nibName: nil, bundle: nil)
+        
+        /// Set Background
+        view.backgroundColor = .systemBackground
         
         /// Configure Button.
         view.addSubview(button)
@@ -29,11 +33,33 @@ final class LoginViewController: UIViewController {
             button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
+        
+        /// Configure loading indicator.
+        view.addSubview(loadingView)
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingView.topAnchor.constraint(equalToSystemSpacingBelow: button.bottomAnchor, multiplier: 3)
+        ])
+        
+        store(Auth.shared.$state.sink(receiveValue: react))
+    }
+    
+    fileprivate func react(to state: LoginState) -> Void {
+        switch state {
+        case .loggingIn, .requestingToken:
+            loadingView.startAnimating()
+            button.isEnabled = false
+        default: 
+            loadingView.stopAnimating()
+            button.isEnabled = true
+        }
     }
     
     fileprivate func startLogin() -> Void {
         Task {
             guard Auth.shared.state.isLoggingIn == false else { return }
+            Auth.shared.state = .requestingToken
             do {
                 if let response = try await requestToken() {
                     Auth.shared.state = .loggingIn(token: response.oauth_token)

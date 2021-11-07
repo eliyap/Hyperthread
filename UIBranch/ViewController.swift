@@ -19,7 +19,6 @@ class ViewController: PMViewController {
         adopt(tableVC)
         adopt(loginVC)
         view.bringSubviewToFront(loginVC.view)
-        
         store(Auth.shared.$state.sink(receiveValue: react))
     }
     
@@ -33,6 +32,8 @@ class ViewController: PMViewController {
         case .idle:
             loginVC.view.isHidden = false
             tableVC.view.isHidden = true
+        case .requestingToken:
+            break
         case .loggingIn(let token):
             // TODO: show loading indicator
             authVC = AuthViewController(token: token, handler: callbackHandler)
