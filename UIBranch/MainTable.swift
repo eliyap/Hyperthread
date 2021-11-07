@@ -12,12 +12,12 @@ final class MainTable: UITableViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
-        
     }
     
     @objc
-    func addTapped() {}
-
+    func addTapped() {
+        
+    }
     
     required init?(coder: NSCoder) {
         fatalError("No.")

@@ -20,6 +20,15 @@ public final class Auth: ObservableObject {
             state = .loggedIn(cred: cred)
         }
     }
+    
+    public var credentials: OAuthCredentials? {
+        switch state {
+        case .loggedIn(let cred):
+            return cred
+        default:
+            return nil
+        }
+    }
 }
 
 final class AuthViewController: UIViewController {
