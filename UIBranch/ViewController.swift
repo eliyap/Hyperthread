@@ -46,13 +46,7 @@ class ViewController: PMViewController {
         adopt(loginVC)
         view.bringSubviewToFront(loginVC.view)
         
-        store(
-            Auth.shared.$state
-                .sink { [weak self] state in
-                    self?.react(to: state)
-                }
-        )
-        
+        store(Auth.shared.$state.sink(receiveValue: react))
     }
     
     override func viewDidLoad() {
