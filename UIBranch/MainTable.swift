@@ -54,11 +54,29 @@ extension MainTable {
 }
 
 final class DiscussionCell: UITableViewCell {
+    
+    private let stackView = UIStackView()
+    
     public static let reuseID = "DiscussionCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.addSubview(stackView)
+        stackView.backgroundColor = .systemPurple
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            stackView.heightAnchor.constraint(equalTo: contentView.heightAnchor),
+            stackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+        ])
+        let label = UILabel()
+        label.text = "LOL"
+        label.frame = stackView.frame
+        stackView.addArrangedSubview(label)
+        stackView.axis = .vertical
+        stackView.alignment = .leading
     }
     
     required init?(coder: NSCoder) {
