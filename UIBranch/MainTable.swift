@@ -79,7 +79,6 @@ final class DiscussionCell: UITableViewCell {
         stackView.backgroundColor = .systemPurple
         let label = UILabel()
         label.text = "LOL"
-        label.frame = stackView.frame
         stackView.addArrangedSubview(label)
     }
     
@@ -89,3 +88,49 @@ final class DiscussionCell: UITableViewCell {
 }
 
 
+final class DiscussionTable: UITableViewController {
+    let realm = try! Realm()
+    var tweets: [Tweet]
+    
+    init(_ discussionID: Tweet.ID) {
+        tweets = realm.discussion(id: discussionID)!.tweets.sorted(by: {$0.id < $1.id})
+        super.init(nibName: nil, bundle: nil)
+        tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - `UITableViewDataSource` Conformance.
+extension DiscussionTable {
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tweets.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TweetCell.reuseID, for: indexPath)
+        return cell
+    }
+}
+
+final class TweetCell: UITableViewCell {
+    
+    public static let reuseID = "TweetCell"
+    override var reuseIdentifier: String? { Self.reuseID }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        contentView.backgroundColor = .systemPink
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
