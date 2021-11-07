@@ -14,7 +14,11 @@ import SwiftUI
 public final class Auth: ObservableObject {
     static let shared = Auth()
     @Published var state: LoginState = .idle
-    private init() {}
+    private init() {
+        if let cred = UserDefaults.groupSuite.oAuthCredentials {
+            state = .loggedIn(cred: cred)
+        }
+    }
 }
 
 final class AuthViewController: UIViewController {
