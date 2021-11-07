@@ -57,6 +57,16 @@ extension UserDefaults {
             set(newValue, forKey: Self.maxIDKey)
         }
     }
+
+    fileprivate static let followingIDsKey = "followingIDs"
+    var followingIDs: [String]? {
+        get { 
+            return array(forKey: Self.followingIDsKey) as? [String]
+        }
+        set {
+            set(newValue, forKey: Self.followingIDsKey)
+        }
+    }
 }
 
 final class SharedAuth: ObservableObject {
