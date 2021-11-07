@@ -48,7 +48,9 @@ extension MainTable {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: DiscussionCell.reuseID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: DiscussionCell.reuseID, for: indexPath) as! DiscussionCell
+        let id = discussions[indexPath.row].id
+        cell.test(id: id)
         return cell
     }
 }
@@ -56,6 +58,7 @@ extension MainTable {
 final class DiscussionCell: UITableViewCell {
     
     private let stackView = UIStackView()
+    private var table: DiscussionTable? = nil
     
     public static let reuseID = "DiscussionCell"
     override var reuseIdentifier: String? { Self.reuseID }
@@ -80,6 +83,21 @@ final class DiscussionCell: UITableViewCell {
         let label = UILabel()
         label.text = "LOL"
         stackView.addArrangedSubview(label)
+    }
+    
+    func test(id: Tweet.ID) {
+        /// Clear all subviews
+        let svs = stackView.arrangedSubviews
+        for v in svs {
+            stackView.removeArrangedSubview(v)
+            NSLayoutConstraint.deactivate(v.constraints)
+            v.removeFromSuperview()
+        }
+        
+        table = DiscussionTable(id)
+        
+        stackView.addArrangedSubview(table!.view)
+        NSLayoutConstraint.activate([table!.view.widthAnchor.constraint(equalTo: stackView.widthAnchor)])
     }
     
     required init?(coder: NSCoder) {
@@ -115,6 +133,7 @@ extension DiscussionTable {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TweetCell.reuseID, for: indexPath)
+        cell.textLabel?.text = "???"
         return cell
     }
 }
