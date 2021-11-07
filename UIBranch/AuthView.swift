@@ -10,6 +10,13 @@ import UIKit
 import Twig
 import SwiftUI
 
+/// Singleton Authorization Object.
+public final class Auth: ObservableObject {
+    static let shared = Auth()
+    @Published var state: LoginState = .idle
+    private init() {}
+}
+
 final class AuthViewController: UIViewController {
     
     var session: ASWebAuthenticationSession? = nil

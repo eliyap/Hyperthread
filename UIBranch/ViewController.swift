@@ -8,32 +8,6 @@
 import UIKit
 import Twig
 
-enum LoginState {
-    case idle
-    case failed(Error?)
-    case loggingIn(token: String)
-    case loggedIn(cred: OAuthCredentials)
-    
-    var isLoggingIn: Bool {
-        switch self {
-        case .loggingIn(token: _):
-            return true
-        default:
-            return false
-        }
-    }
-}
-
-enum LoginError: Error {
-    case couldNotRequestLogin
-}
-
-public final class Auth: ObservableObject {
-    static let shared = Auth()
-    @Published var state: LoginState = .idle
-    private init() {}
-}
-
 class ViewController: PMViewController {
 
     let tableVC = MainTable()
@@ -98,59 +72,6 @@ final class MainTable: UITableViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("No.")
-    }
-}
-
-extension UIViewController {
-    /// Convenience method for adding a subview to the view hierarchy.
-    func adopt(_ child: UIViewController) {
-        addChild(child)
-        child.view.frame = view.frame
-        view.addSubview(child.view)
-        child.didMove(toParent: self)
-    }
-}
-
-final class LoginViewController: UIViewController {
-
-    let button: UIButton
-
-    init() {
-        button = UIButton(configuration: .filled(), primaryAction: nil)
-        super.init(nibName: nil, bundle: nil)
-        
-        /// Configure Button.
-        view.addSubview(button)
-        button.setTitle("Log in to Twitter", for: .normal)
-        let btnAction = UIAction(handler: { [weak self] action in
-            guard Auth.shared.state.isLoggingIn == false else { return }
-            self?.startLogin()
-        })
-        button.addAction(btnAction, for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        ])
-    }
-    
-    fileprivate func startLogin() -> Void {
-        Task {
-            guard Auth.shared.state.isLoggingIn == false else { return }
-            do {
-                if let response = try await requestToken() {
-                    Auth.shared.state = .loggingIn(token: response.oauth_token)
-                } else {
-                    Auth.shared.state = .failed(LoginError.couldNotRequestLogin)
-                }
-            } catch {
-                Auth.shared.state = .failed(error)
-            }
-        }
-    }
-
     required init?(coder: NSCoder) {
         fatalError("No.")
     }

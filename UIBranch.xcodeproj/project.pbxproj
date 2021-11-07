@@ -31,6 +31,9 @@
 		223BBF7827377F5100375530 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF7727377F5100375530 /* Storage.swift */; };
 		223BBF7A2737867800375530 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF792737867800375530 /* AuthView.swift */; };
 		223BBF7C273791A100375530 /* PMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF7B273791A100375530 /* PMViewController.swift */; };
+		223BBF7E273846BE00375530 /* LoginState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF7D273846BE00375530 /* LoginState.swift */; };
+		223BBF82273847C300375530 /* Adopt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF81273847C300375530 /* Adopt.swift */; };
+		223BBF84273847E900375530 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF83273847E900375530 /* LoginViewController.swift */; };
 		3579A6A613DCA02DE5BEEC38 /* Pods_UIBranch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9C6048D65B067C8D0766FEB /* Pods_UIBranch.framework */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +83,9 @@
 		223BBF7727377F5100375530 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		223BBF792737867800375530 /* AuthView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		223BBF7B273791A100375530 /* PMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PMViewController.swift; sourceTree = "<group>"; };
+		223BBF7D273846BE00375530 /* LoginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginState.swift; sourceTree = "<group>"; };
+		223BBF81273847C300375530 /* Adopt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Adopt.swift; sourceTree = "<group>"; };
+		223BBF83273847E900375530 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
 		D9C6048D65B067C8D0766FEB /* Pods_UIBranch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UIBranch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,7 +121,7 @@
 		223BBF1E27377BE500375530 = {
 			isa = PBXGroup;
 			children = (
-				223BBF7B273791A100375530 /* PMViewController.swift */,
+				223BBF7F2738476B00375530 /* Misc */,
 				223BBF7227377EE500375530 /* Logging */,
 				223BBF6727377EAD00375530 /* Models */,
 				223BBF5A27377E3E00375530 /* Packages */,
@@ -145,8 +151,10 @@
 				223BBF2A27377BE500375530 /* AppDelegate.swift */,
 				223BBF2C27377BE500375530 /* SceneDelegate.swift */,
 				223BBF2E27377BE500375530 /* ViewController.swift */,
+				223BBF7D273846BE00375530 /* LoginState.swift */,
 				223BBF792737867800375530 /* AuthView.swift */,
 				223BBF7527377F2100375530 /* MiscFetch.swift */,
+				223BBF83273847E900375530 /* LoginViewController.swift */,
 				223BBF7727377F5100375530 /* Storage.swift */,
 				223BBF3027377BE500375530 /* Main.storyboard */,
 				223BBF3327377BE600375530 /* Assets.xcassets */,
@@ -210,6 +218,23 @@
 				223BBF7327377EF100375530 /* Logger.swift */,
 			);
 			path = Logging;
+			sourceTree = "<group>";
+		};
+		223BBF7F2738476B00375530 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				223BBF7B273791A100375530 /* PMViewController.swift */,
+				223BBF802738477000375530 /* Extensions */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		223BBF802738477000375530 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				223BBF81273847C300375530 /* Adopt.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		B0EEE3B548932ECDAC7403EE /* Frameworks */ = {
@@ -408,14 +433,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				223BBF6D27377EC300375530 /* Conversation.swift in Sources */,
+				223BBF7E273846BE00375530 /* LoginState.swift in Sources */,
 				223BBF6F27377EC300375530 /* Discussion.swift in Sources */,
 				223BBF2F27377BE500375530 /* ViewController.swift in Sources */,
 				223BBF6527377E8900375530 /* BigFetch.swift in Sources */,
 				223BBF7127377EC300375530 /* Query.swift in Sources */,
 				223BBF6627377E8900375530 /* Buffer.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
+				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
 				223BBF7C273791A100375530 /* PMViewController.swift in Sources */,
 				223BBF6327377E8900375530 /* Airport.swift in Sources */,
+				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
 				223BBF7627377F2100375530 /* MiscFetch.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
