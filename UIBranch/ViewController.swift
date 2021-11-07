@@ -28,20 +28,18 @@ class ViewController: PMViewController {
     }
 
     fileprivate func react(to state: LoginState) -> Void {
+        /// Bring appropriate view to the front.
         switch state {
         case .idle:
             loginVC.view.isHidden = false
             tableVC.view.isHidden = true
-        case .requestingToken:
-            break
         case .loggingIn(let token):
             authVC = AuthViewController(token: token, handler: callbackHandler)
             adopt(authVC!)
         case .loggedIn:
             loginVC.view.isHidden = true
             tableVC.view.isHidden = false
-        case .failed(let error):
-            // TODO: show error
+        default:
             break
         }
     }
