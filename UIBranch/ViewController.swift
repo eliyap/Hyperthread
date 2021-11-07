@@ -28,6 +28,7 @@ class ViewController: PMViewController {
     }
 
     fileprivate func react(to state: LoginState) -> Void {
+        /// Bring appropriate view to the front.
         switch state {
         case .idle:
             loginVC.view.isHidden = false
