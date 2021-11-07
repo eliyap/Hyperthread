@@ -24,13 +24,23 @@ final class MainTable: UITableViewController {
             .sorted(by: \Discussion.id, ascending: false)
         super.init(nibName: nil, bundle: nil)
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+        navigationItem.leftBarButtonItems = [
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped)),
+            UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(addTapped2)),
+        ]
     }
     
     @objc
     func addTapped() {
         Task {
             await fetchOld(airport: airport, credentials: Auth.shared.credentials!)
+        }
+    }
+    
+    @objc
+    func addTapped2() {
+        Task {
+            await updateFollowing(credentials: Auth.shared.credentials!)
         }
     }
     
