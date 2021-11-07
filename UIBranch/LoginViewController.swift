@@ -12,6 +12,7 @@ final class LoginViewController: PMViewController {
 
     let button: UIButton
     public let loadingView = UIActivityIndicatorView(style: .large)
+    public let errorLabel = UILabel()
 
     init() {
         button = UIButton(configuration: .filled(), primaryAction: nil)
@@ -34,18 +35,29 @@ final class LoginViewController: PMViewController {
             button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
         
+        /// Configure error label.
+        view.addSubview(errorLabel)
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.isHidden = true
+        errorLabel.textColor = .systemRed
+        NSLayoutConstraint.activate([
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            errorLabel.topAnchor.constraint(equalToSystemSpacingBelow: button.bottomAnchor, multiplier: 3)
+        ])
+        
         /// Configure loading indicator.
         view.addSubview(loadingView)
         loadingView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loadingView.topAnchor.constraint(equalToSystemSpacingBelow: button.bottomAnchor, multiplier: 3)
+            loadingView.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 3)
         ])
         
         store(Auth.shared.$state.sink(receiveValue: react))
     }
     
     fileprivate func react(to state: LoginState) -> Void {
+        /// Start / Stop spinner.
         switch state {
         case .loggingIn, .requestingToken:
             loadingView.startAnimating()
@@ -53,6 +65,20 @@ final class LoginViewController: PMViewController {
         default: 
             loadingView.stopAnimating()
             button.isEnabled = true
+        }
+        
+        /// Set / Clear error text.
+        switch state {
+        case .failed(.some(let error)):
+            errorLabel.text = error.localizedDescription
+            errorLabel.isHidden = false
+        case .failed(.none):
+            errorLabel.text = "Unknown Error"
+            errorLabel.isHidden = false
+        default:
+            errorLabel.text = nil
+            errorLabel.isHidden = true
+            break
         }
     }
     
