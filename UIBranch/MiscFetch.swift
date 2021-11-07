@@ -8,6 +8,14 @@
 import Foundation
 import Twig
 
+func updateFollowing(credentials: OAuthCredentials) async -> Void {
+    do {
+        let rawUsers = try await requestFollowing(credentials: credentials)
+        UserDefaults.groupSuite.followingIDs = rawUsers.map(\.id)
+    } catch {
+        fatalError(error.localizedDescription)
+    }
+}
 
 func fetchOld(airport: Airport, credentials: OAuthCredentials) async -> Void {
     let limitID = UserDefaults.groupSuite.maxID
