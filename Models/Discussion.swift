@@ -67,6 +67,17 @@ extension Discussion {
         }
         result.formUnion(refIDs.map{ id in tweets.first(where: {id == $0.id})!})
         
+        /// Remove retweets, but add an ephemeral mark for displaying.
+        var toRemove = Set<Tweet>()
+        for tweet in result {
+            if let rtID = tweet.retweeting {
+                toRemove.insert(tweet)
+                let retweeted = tweets.first(where: {$0.id == rtID})!
+                retweeted.retweetedBy.insert(tweet.authorID)
+            }
+        }
+        result.formSymmetricDifference(toRemove)
+        
         return result.sorted(by: {$0.id < $1.id})
     }
 }
