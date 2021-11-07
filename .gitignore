@@ -1,0 +1,8 @@
+**/xcuserdata/
+**/xcshareddata/
+
+### CocoaPods Realm ###
+# Unused Platforms
+Pods/Realm/core/realm-monorepo.xcframework/watchos*
+Pods/Realm/core/realm-monorepo.xcframework/tvos*
+Pods/Realm/core/realm-monorepo.xcframework/macos*
