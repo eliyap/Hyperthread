@@ -14,8 +14,11 @@ final class MainTable: UITableViewController {
     /// Laziness prevents attempting to load nil IDs.
     private lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
 
-    let realm = try! Realm()
+    private let realm = try! Realm()
     var discussions: Results<Discussion>
+    
+    /// Freeze fetch so that there is no ambiguity.
+    private let followingIDs = UserDefaults.groupSuite.followingIDs
     
     typealias Cell = TweetCell
     
@@ -57,12 +60,12 @@ extension MainTable {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let discussion = discussions[section]
-        return discussion.tweets.count
+        return discussion.relevantTweets(followingUserIDs: followingIDs).count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID, for: indexPath) as! Cell
-        let tweet = discussions[indexPath.section].tweets[indexPath.row]
+        let tweet = discussions[indexPath.section].relevantTweets(followingUserIDs: followingIDs)[indexPath.row]
         cell.textLabel?.text = tweet.text
         
         return cell

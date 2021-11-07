@@ -43,14 +43,18 @@ extension Discussion {
 }
 
 extension Discussion {
-    func relevantTweets(followingUserIDs: [String]) -> [Tweet] {
+    func relevantTweets(followingUserIDs: [String]?) -> [Tweet] {
         let tweets = self.tweets
+        guard let followingUserIDs = followingUserIDs else { 
+            Swift.debugPrint("No followingUserIDs, returning list unaltered.")
+            return tweets 
+        }
         var result = Set<Tweet>()
 
         /// Include tweets from following users.
         var followingTweets = [Tweet]()
         for tweet in tweets {
-            if followingUserIDs.contains(tweet.user.first!.id) {
+            if followingUserIDs.contains(tweet.authorID) {
                 followingTweets.append(tweet)
             }
         }
