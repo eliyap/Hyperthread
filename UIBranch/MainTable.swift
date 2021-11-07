@@ -21,7 +21,7 @@ final class MainTable: UITableViewController {
     @objc
     func addTapped() {
         Task {
-            await fetchNew(airport: airport, credentials: Auth.shared.credentials!)
+            await fetchOld(airport: airport, credentials: Auth.shared.credentials!)
         }
     }
     
