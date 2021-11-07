@@ -35,7 +35,6 @@ class ViewController: PMViewController {
         case .requestingToken:
             break
         case .loggingIn(let token):
-            // TODO: show loading indicator
             authVC = AuthViewController(token: token, handler: callbackHandler)
             adopt(authVC!)
         case .loggedIn:
