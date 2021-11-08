@@ -112,7 +112,6 @@ final class TweetCell: UITableViewCell {
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
         ])
 
-        // stackView.addArrangedSubview(handleLabel)
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetLabel)
 
@@ -126,8 +125,7 @@ final class TweetCell: UITableViewCell {
     }
 
     public func configure(tweet: Tweet, author: User) {
-        userView.nameLabel.text = author.name
-        userView.handleLabel.text = author.handle
+        userView.configure(user: author)
         tweetLabel.text = tweet.text
     }
     
@@ -138,13 +136,16 @@ final class TweetCell: UITableViewCell {
 
 final class UserView: UIStackView {
     
-    public let nameLabel = UILabel()
-    public let handleLabel = UILabel()
+    private let nameLabel = UILabel()
+    private let handleLabel = UILabel()
     
+    fileprivate let _spacing: CGFloat = 5
+
     init() {
         super.init(frame: .zero)
         axis = .horizontal
         alignment = .firstBaseline
+        spacing = _spacing
 
         translatesAutoresizingMaskIntoConstraints = false
         
@@ -153,8 +154,19 @@ final class UserView: UIStackView {
 
         nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         nameLabel.adjustsFontForContentSizeCategory = true
+        
         handleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        handleLabel.adjustsFontForContentSizeCategory = true   
+        handleLabel.adjustsFontForContentSizeCategory = true
+        handleLabel.textColor = .secondaryLabel
+        
+        /// Allow handle to be truncated if space is insufficient.
+        /// We want this to be truncated before the username is.
+        handleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    }
+
+    public func configure(user: User) {
+        nameLabel.text = user.name
+        handleLabel.text = "@" + user.handle
     }
 
     required init(coder: NSCoder) {
