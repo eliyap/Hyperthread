@@ -139,10 +139,13 @@ final class UserView: UIStackView {
     private let nameLabel = UILabel()
     private let handleLabel = UILabel()
     
+    fileprivate let _spacing: CGFloat = 5
+
     init() {
         super.init(frame: .zero)
         axis = .horizontal
         alignment = .firstBaseline
+        spacing = _spacing
 
         translatesAutoresizingMaskIntoConstraints = false
         
