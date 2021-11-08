@@ -65,7 +65,15 @@ extension Discussion {
         for tweet in followingTweets {
             refIDs.formUnion(tweet.referenced)
         }
-        result.formUnion(refIDs.map{ id in tweets.first(where: {id == $0.id})!})
+        let refTweets: [Tweet] = refIDs.compactMap { id in
+            if let tweet = tweets.first(where: {id == $0.id}) {
+                return tweet
+            } else {
+                Swift.debugPrint("Referenced tweet not in discussion with id \(id)")
+                return nil
+            }
+        }
+        result.formUnion(refTweets)
         
         /// Remove retweets, but add an ephemeral mark for displaying.
         var toRemove = Set<Tweet>()
