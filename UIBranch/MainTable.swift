@@ -95,6 +95,7 @@ final class TweetCell: UITableViewCell {
     let replyView = ReplyView()
     let userView = UserView()
     let tweetLabel = UILabel()
+    let retweetView = RetweetView()
     // TODO: add profile image
     // TODO: add retweet marker
     
@@ -116,6 +117,7 @@ final class TweetCell: UITableViewCell {
         stackView.addArrangedSubview(replyView)
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetLabel)
+        stackView.addArrangedSubview(retweetView)
 
         /// Configure Label
         tweetLabel.font = UIFont.preferredFont(forTextStyle: .body)
@@ -130,6 +132,7 @@ final class TweetCell: UITableViewCell {
         userView.configure(user: author)
         tweetLabel.text = tweet.text
         replyView.configure(tweet: tweet, realm: realm)
+        retweetView.configure(tweet: tweet, realm: realm)
     }
     
     required init?(coder: NSCoder) {
@@ -142,7 +145,7 @@ final class IconView: UIStackView {
     private let imageView = UIImageView()
     private let label = UILabel()
     
-    init(sfSymbol: String) {
+    init(sfSymbol: String, config: UIImage.SymbolConfiguration? = nil) {
         super.init(frame: .zero)
         
         /// Configure Main Stack View.
@@ -155,7 +158,11 @@ final class IconView: UIStackView {
         addArrangedSubview(label)
 
         label.font = UIFont.preferredFont(forTextStyle: .footnote)
+        
         imageView.image = UIImage(systemName: sfSymbol)
+        if let config = config {
+            imageView.preferredSymbolConfiguration = config
+        }
 
         // Mute Colors.
         imageView.tintColor = .secondaryLabel
@@ -197,7 +204,7 @@ final class ReplyView: UIStackView {
                 let t = realm.tweet(id: replyingID),
                 let handle = realm.user(id: t.authorID)?.handle
             else { fatalError("Unable to lookup replied user!") }
-            replyLabel.setText(to: handle)
+            replyLabel.setText(to: "@" + handle)
             replyLabel.isHidden = false
         } else {
             replyLabel.isHidden = true
@@ -208,7 +215,7 @@ final class ReplyView: UIStackView {
                 let t = realm.tweet(id: quotingID),
                 let handle = realm.user(id: t.authorID)?.handle
             else { fatalError("Unable to lookup quoted user!") }
-            quoteLabel.setText(to: handle)
+            quoteLabel.setText(to: "@" + handle)
             quoteLabel.isHidden = false
         } else {
             quoteLabel.isHidden = true
@@ -217,6 +224,39 @@ final class ReplyView: UIStackView {
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class RetweetView: UIStackView {
+    
+    var retweetLabels: [IconView] = []
+
+    init() {
+        super.init(frame: .zero)
+        axis = .vertical
+        alignment = .leading
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    public func configure(tweet: Tweet, realm: Realm) {
+        /// Clear existing labels.
+        retweetLabels.forEach {
+            removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
+        retweetLabels = []
+        
+        tweet.retweetedBy.forEach { userID in
+            let user = realm.user(id: userID)!
+            let label = IconView(sfSymbol: "arrow.2.squarepath", config: UIImage.SymbolConfiguration(weight: .black))
+            label.setText(to: "@" + user.handle)
+            retweetLabels.append(label)
+            addArrangedSubview(label)
+        }
     }
 }
 
