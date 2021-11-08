@@ -92,8 +92,7 @@ final class TweetCell: UITableViewCell {
     
     /// Component Views
     let stackView = UIStackView()
-    let userStackView = UIStackView()
-    let handleLabel = UILabel()
+    let userView = UserView()
     let tweetLabel = UILabel()
     // TODO: add profile image
     // TODO: add retweet marker
@@ -113,19 +112,12 @@ final class TweetCell: UITableViewCell {
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
         ])
 
-        /// Configure User Stack View
-        stackView.addArrangedSubview(userStackView)
-        userStackView.axis = .horizontal
-        userStackView.alignment = .firstBaseline
-        userStackView.addArrangedSubview(handleLabel)
-
         // stackView.addArrangedSubview(handleLabel)
+        stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetLabel)
 
         /// Configure Label
-        handleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         tweetLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        handleLabel.adjustsFontForContentSizeCategory = true
         tweetLabel.adjustsFontForContentSizeCategory = true
 
         /// Allow tweet to wrap across lines.
@@ -134,7 +126,8 @@ final class TweetCell: UITableViewCell {
     }
 
     public func configure(tweet: Tweet, author: User) {
-        handleLabel.text = author.screen_name
+        userView.nameLabel.text = author.name
+        userView.handleLabel.text = author.handle
         tweetLabel.text = tweet.text
     }
     
@@ -153,6 +146,8 @@ final class UserView: UIStackView {
         axis = .horizontal
         alignment = .firstBaseline
 
+        translatesAutoresizingMaskIntoConstraints = false
+        
         addArrangedSubview(nameLabel)
         addArrangedSubview(handleLabel)
 

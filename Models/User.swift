@@ -22,7 +22,7 @@ final class User: Object, Identifiable {
     
     /// User's displayed name.
     @Persisted 
-    var screen_name: String
+    var handle: String
     
     @Persisted 
     var tweets: RealmSwift.List<Tweet>
@@ -32,15 +32,15 @@ final class User: Object, Identifiable {
         super.init()
         self.id = "\(raw.id)"
         self.name = raw.name
-        self.screen_name = raw.screen_name
+        self.handle = raw.screen_name
         self.tweets = RealmSwift.List<Tweet>()
     }
     
     init(raw: RawIncludeUser) {
         super.init()
         self.id = raw.id
-        self.name = raw.username
-        self.screen_name = raw.name
+        self.name = raw.name
+        self.handle = raw.username
         self.tweets = RealmSwift.List<Tweet>()
     }
     
