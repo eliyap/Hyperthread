@@ -49,9 +49,10 @@ final class Tweet: Object, Identifiable {
     @Persisted
     var metrics: PublicMetrics?
     
-    /// - Note: Tweet must belong to a unique ``User``.
-    @Persisted(originProperty: User.tweetsPropertyName)
-    var user: LinkingObjects<User>
+    /// - Note: `LinkingObjects` failed me, so use an ID instead.
+    /// Fortunately, we can assume that a Tweet will never change users.
+    @Persisted
+    var authorID: User.ID
     
     /// - Note: Tweet must belong to a unique ``Conversation``.
     @Persisted(originProperty: Conversation.tweetsPropertyName)
@@ -69,12 +70,17 @@ final class Tweet: Object, Identifiable {
     @Persisted
     var quoting: ID?
     
+    /// Users who retweets this.
+    /// Ephemeral.
+    var retweetedBy = Set<User.ID>()
+    
     init(raw: RawHydratedTweet) {
         super.init()
         self.id = raw.id
         self.text = raw.text
         self.conversation_id = raw.conversation_id
         self.metrics = PublicMetrics(raw: raw.public_metrics)
+        self.authorID = raw.author_id
         
         if let references = raw.referenced_tweets {
             for reference in references {
