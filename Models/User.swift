@@ -39,8 +39,8 @@ final class User: Object, Identifiable {
     init(raw: RawIncludeUser) {
         super.init()
         self.id = raw.id
-        self.name = raw.name
-        self.screen_name = raw.username
+        self.name = raw.username
+        self.screen_name = raw.name
         self.tweets = RealmSwift.List<Tweet>()
     }
     
