@@ -10,7 +10,7 @@ import Twig
 
 class ViewController: PMViewController {
 
-    let mainVC = Navigation()
+    let mainVC = Split()
     var loginVC = LoginViewController()
     var authVC: AuthViewController? = nil
     
@@ -74,6 +74,23 @@ final class Navigation: UINavigationController {
         adopt(tableVC)
     }
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class Split: UISplitViewController {
+    init() {
+        /// Set up preferred style.
+        super.init(style: .doubleColumn)
+        preferredDisplayMode = .oneBesideSecondary
+        preferredSplitBehavior = .tile
+        presentsWithGesture = true
+        
+        let mainVC = MainTable()
+        setViewController(mainVC, for: .primary)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
