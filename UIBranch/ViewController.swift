@@ -71,7 +71,7 @@ final class Split: UISplitViewController {
         super.init(style: .doubleColumn)
         preferredDisplayMode = .oneBesideSecondary
         preferredSplitBehavior = .tile
-        presentsWithGesture = true
+        presentsWithGesture = false
         
         let mainVC = MainTable()
         setViewController(mainVC, for: .primary)
