@@ -133,6 +133,15 @@ extension MainTable {
         guard let discussion = dds.itemIdentifier(for: indexPath) else {
             fatalError("Could not find discussion from row!")
         }
+        
+        /**
+         In compact width mode, it seems the `.secondary` view controller in `UISplitViewController` is lazily loaded,
+         so the delegate's `splitController` can be `nil`.
+         Therefore, as the active view we need to push the detail view onto the stack before calling `present`.
+         */
+        assert(splitViewController != nil, "Could not find ancestor split view!")
+        splitViewController?.show(.secondary)
+        
         splitDelegate.present(discussion)
     }
 }
