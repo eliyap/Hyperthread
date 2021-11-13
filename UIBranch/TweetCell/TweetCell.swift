@@ -114,6 +114,15 @@ class LabelledButton: UIButton {
     
     @objc
     func onTap() -> Void { /* does nothing */}
+    
+    /// Hide metrics with 0 count.
+    func setTitle(_ count: Int) -> Void {
+        if count > 0 {
+            setTitle("\(count)", for: .normal)
+        } else {
+            setTitle("", for: .normal)
+        }
+    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -131,7 +140,7 @@ final class ReplyButton: LabelledButton {
     }
 
     func configure(_ tweet: Tweet) {
-        setTitle("\(tweet.metrics.reply_count)", for: .normal)
+        super.setTitle(tweet.metrics.reply_count)
     }
 
     required init?(coder: NSCoder) {
@@ -150,7 +159,7 @@ final class RetweetButton: LabelledButton {
     }
 
     func configure(_ tweet: Tweet) {
-        setTitle("\(tweet.metrics.retweet_count)", for: .normal)
+        super.setTitle(tweet.metrics.retweet_count)
     }
 
     required init?(coder: NSCoder) {
@@ -169,7 +178,7 @@ final class LikeButton: LabelledButton {
     }
 
     func configure(_ tweet: Tweet) {
-        setTitle("\(tweet.metrics.like_count)", for: .normal)
+        super.setTitle(tweet.metrics.like_count)
     }
 
     required init?(coder: NSCoder) {
