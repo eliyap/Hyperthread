@@ -22,17 +22,18 @@ final class MainTable: UITableViewController {
     
     private var dds: DDS! = nil
     
-    typealias DDS = MainTableDDS
+    typealias DDS = DiscussionDDS
     typealias Cell = TweetCell
     
     init() {
         self.discussions = realm.objects(Discussion.self)
             .sorted(by: \Discussion.id, ascending: false)
         super.init(nibName: nil, bundle: nil)
-        dds = DDS(followingIDs: followingIDs ?? [], tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, tweet: Tweet) -> UITableViewCell? in
+        dds = DDS(tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
                 fatalError("Failed to create or cast new cell!")
             }
+            let tweet = self!.realm.tweet(id: discussion.id)!
             let author = self!.realm.user(id: tweet.authorID)!
             cell.configure(tweet: tweet, author: author, realm: self!.realm)
 
