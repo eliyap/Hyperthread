@@ -154,7 +154,7 @@ final class ReplyButton: LabelledButton {
 
 final class RetweetButton: LabelledButton {
     init() {
-        super.init(symbolName: "arrow.2.squarepath", symbolConfig: .init(weight: .black))
+        super.init(symbolName: RetweetSymbol.name, symbolConfig: RetweetSymbol.config)
     }
     
     @objc
