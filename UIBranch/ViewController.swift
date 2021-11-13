@@ -65,20 +65,6 @@ class ViewController: PMViewController {
     }
 }
 
-final class Navigation: UINavigationController {
-
-    let tableVC = MainTable()
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        adopt(tableVC)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 final class Split: UISplitViewController {
     init() {
         /// Set up preferred style.
