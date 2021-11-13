@@ -47,6 +47,7 @@ final class Airport {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .failure(let error):
+                    Swift.debugPrint(error)
                     fatalError(error.localizedDescription)
                 case .finished:
                     fatalError("Should not finish")
