@@ -87,8 +87,6 @@ final class MetricsView: UIStackView {
         addArrangedSubview(likeButton)
         addArrangedSubview(timestampLabel)
 
-        replyButton.setImage(UIImage(systemName: "message.fill"), for: .normal)
-        retweetButton.setImage(UIImage(systemName: "arrowshape.turn.up.left.fill"), for: .normal)
         timestampLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         timestampLabel.adjustsFontForContentSizeCategory = true
     }
