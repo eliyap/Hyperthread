@@ -75,6 +75,9 @@ final class Split: UISplitViewController {
         
         let mainVC = MainTable()
         setViewController(mainVC, for: .primary)
+        
+        let detailVC = DiscussionTable()
+        setViewController(detailVC, for: .secondary)
     }
     
     required init?(coder: NSCoder) {
