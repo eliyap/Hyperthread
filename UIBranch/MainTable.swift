@@ -77,6 +77,53 @@ final class MainTable: UITableViewController {
     }
 }
 
+enum DiscussionSection: Int {
+    /// The only section, for now.
+    case Main
+}
+
+final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion> {
+    private let realm = try! Realm()
+    private var token: NotificationToken! = nil
+
+    /// For our convenience.
+    typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
+
+    override init(tableView: UITableView, cellProvider: @escaping CellProvider) {
+        #warning("TODO: sort by date instead.")
+        let results = realm.objects(Discussion.self)
+            .sorted(by: \Discussion.id, ascending: false)
+        
+        super.init(tableView: tableView, cellProvider: cellProvider)
+        /// Immediately register token.
+        token = results.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let self = self else { 
+                assert(false, "No self!")
+                return 
+            }
+            switch changes {
+            case .initial(let results):
+                self.setContents(to: results, animated: false)
+                
+            case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                print("Update: \(results.count) tweets, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
+                self.setContents(to: results, animated: true)
+            
+            case .error(let error):
+                fatalError("\(error)")
+            } 
+        }
+    }
+
+    fileprivate func setContents(to results: Results<Discussion>, animated: Bool) -> Void {
+        var snapshot = Snapshot()
+        snapshot.appendSections([.Main])
+        snapshot.appendItems(Array(results), toSection: .Main)
+        Swift.debugPrint("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.")
+        apply(snapshot, animatingDifferences: animated)
+    }
+}
+
 final class MainTableDDS: UITableViewDiffableDataSource<Discussion, Tweet> {
     
     private let realm = try! Realm()
