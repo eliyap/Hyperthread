@@ -48,6 +48,12 @@ final class DiscussionTable: UITableViewController {
     }
 }
 
+extension DiscussionTable: SplitDelegate {
+    func present(_ discussion: Discussion) -> Void {
+        print(discussion)
+    }
+}
+
 final class TweetDDS: UITableViewDiffableDataSource<TweetSection, Tweet> {
     private let realm = try! Realm()
     private var token: NotificationToken! = nil

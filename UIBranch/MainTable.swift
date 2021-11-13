@@ -19,10 +19,14 @@ final class MainTable: UITableViewController {
     
     private var dds: DDS! = nil
     
+    /// Object to notify when something elsewhere in the `UISplitViewController` should change.
+    private let splitDelegate: SplitDelegate
+    
     typealias DDS = DiscussionDDS
     typealias Cell = TweetCell
     
-    init() {
+    init(splitDelegate: SplitDelegate) {
+        self.splitDelegate = splitDelegate
         self.discussions = realm.objects(Discussion.self)
             .sorted(by: \Discussion.id, ascending: false)
         super.init(nibName: nil, bundle: nil)
@@ -120,6 +124,16 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         snapshot.appendItems(Array(results), toSection: .Main)
         Swift.debugPrint("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.")
         apply(snapshot, animatingDifferences: animated)
+    }
+}
+
+// MARK: - `UITableViewDelegate` Conformance
+extension MainTable {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let discussion = dds.itemIdentifier(for: indexPath) else {
+            fatalError("Could not find discussion from row!")
+        }
+        splitDelegate.present(discussion)
     }
 }
 
