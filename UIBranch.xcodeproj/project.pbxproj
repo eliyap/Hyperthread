@@ -44,6 +44,7 @@
 		22D127E52740659E00932614 /* RetweetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E42740659E00932614 /* RetweetView.swift */; };
 		22D127E7274065E900932614 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E6274065E900932614 /* UserView.swift */; };
 		22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E927406F9700932614 /* RetweetSymbol.swift */; };
+		22D127EC274070CD00932614 /* MetricButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127EB274070CD00932614 /* MetricButtons.swift */; };
 		3579A6A613DCA02DE5BEEC38 /* Pods_UIBranch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9C6048D65B067C8D0766FEB /* Pods_UIBranch.framework */; };
 /* End PBXBuildFile section */
 
@@ -106,6 +107,7 @@
 		22D127E42740659E00932614 /* RetweetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetweetView.swift; sourceTree = "<group>"; };
 		22D127E6274065E900932614 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		22D127E927406F9700932614 /* RetweetSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetweetSymbol.swift; sourceTree = "<group>"; };
+		22D127EB274070CD00932614 /* MetricButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricButtons.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
 		D9C6048D65B067C8D0766FEB /* Pods_UIBranch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UIBranch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -266,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				22D127DD2740651C00932614 /* TweetCell.swift */,
+				22D127EB274070CD00932614 /* MetricButtons.swift */,
 				22D127E02740655900932614 /* IconView.swift */,
 				22D127E22740658700932614 /* ReplyView.swift */,
 				22D127E6274065E900932614 /* UserView.swift */,
@@ -471,6 +474,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */,
+				22D127EC274070CD00932614 /* MetricButtons.swift in Sources */,
 				223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */,
 				223BBF6D27377EC300375530 /* Conversation.swift in Sources */,
 				223BBF7E273846BE00375530 /* LoginState.swift in Sources */,
