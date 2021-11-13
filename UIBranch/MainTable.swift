@@ -20,12 +20,23 @@ final class MainTable: UITableViewController {
     /// Freeze fetch so that there is no ambiguity.
     private let followingIDs = UserDefaults.groupSuite.followingIDs
     
+    private var dds: DDS! = nil
+    
+    typealias DDS = MainTableDDS
     typealias Cell = TweetCell
     
     init() {
         self.discussions = realm.objects(Discussion.self)
             .sorted(by: \Discussion.id, ascending: false)
         super.init(nibName: nil, bundle: nil)
+        dds = DDS(followingIDs: followingIDs ?? [], tableView: tableView) { (tableView, indexPath, discussion) -> UITableViewCell? in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) else {
+                fatalError("Could not create new cell!")
+            }
+            // TODO: populate cell with discussion information
+            return cell
+        }
+        
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped)),
@@ -55,35 +66,79 @@ final class MainTable: UITableViewController {
     }
 }
 
-// MARK: - `UITableViewDataSource` Conformance.
-extension MainTable {
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return discussions.count
-    }
+final class MainTableDDS: UITableViewDiffableDataSource<Discussion, Tweet> {
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let discussion = discussions[section]
-        return discussion.relevantTweets(followingUserIDs: followingIDs).count
-    }
+    private let realm = try! Realm()
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID, for: indexPath) as! Cell
-        let tweet = discussions[indexPath.section].relevantTweets(followingUserIDs: followingIDs)[indexPath.row]
-        let author = realm.user(id: tweet.authorID)!
-        cell.configure(tweet: tweet, author: author, realm: realm)
+    private var token: NotificationToken! = nil
+    
+    private var followingIDs: [User.ID]
+    
+    fileprivate typealias Snapshot = NSDiffableDataSourceSnapshot<Discussion, Tweet>
+    
+    init(followingIDs: [User.ID], tableView: UITableView, cellProvider: @escaping UITableViewDiffableDataSource<Discussion, Tweet>.CellProvider) {
+        self.followingIDs = followingIDs
+        super.init(tableView: tableView, cellProvider: cellProvider)
+        /// Immediately register token.
+        let results = realm.objects(Discussion.self)
+            .sorted(by: \Discussion.id, ascending: false)
+        self.token = results.observe { [weak self] changes in
+            switch changes {
+            case .initial(let results):
+                var snapshot = Snapshot()
+                snapshot.appendSections(Array(results))
+                for discussion in results {
+                    snapshot.appendItems(discussion.tweets, toSection: discussion)
+                }
+                Swift.debugPrint("Initial snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.")
+                self?.apply(snapshot)
+                
+            case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                print("Update: \(results.count) tweets, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
+                
+            case .error(let error):
+                fatalError("\(error)")
+            }
+            
+        }
         
-        return cell
+        // TODO: populate table here
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return discussions[section].id
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        /// Enable self sizing table view cells.
-        UITableView.automaticDimension
+    deinit {
+        token.invalidate()
     }
 }
+
+//// MARK: - `UITableViewDataSource` Conformance.
+//extension MainTable {
+//    override func numberOfSections(in tableView: UITableView) -> Int {
+//        return discussions.count
+//    }
+//
+//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        let discussion = discussions[section]
+//        return discussion.relevantTweets(followingUserIDs: followingIDs).count
+//    }
+//
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID, for: indexPath) as! Cell
+//        let tweet = discussions[indexPath.section].relevantTweets(followingUserIDs: followingIDs)[indexPath.row]
+//        let author = realm.user(id: tweet.authorID)!
+//        cell.configure(tweet: tweet, author: author, realm: realm)
+//
+//        return cell
+//    }
+//
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return discussions[section].id
+//    }
+//
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        /// Enable self sizing table view cells.
+//        UITableView.automaticDimension
+//    }
+//}
 
 final class TweetCell: UITableViewCell {
     
