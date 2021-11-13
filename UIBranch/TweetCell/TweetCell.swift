@@ -104,10 +104,14 @@ final class MetricsView: UIStackView {
 
 class LabelledButton: UIButton {
     
-    init(symbolName: String) {
+    init(symbolName: String, symbolConfig: UIImage.SymbolConfiguration? = nil) {
         super.init(frame: .zero)
         setImage(UIImage(systemName: symbolName), for: .normal)
-        setPreferredSymbolConfiguration(.init(paletteColors: [.secondaryLabel]), forImageIn: .normal)
+        var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
+        if let other = symbolConfig {
+            config = config.applying(other)
+        }
+        setPreferredSymbolConfiguration(config, forImageIn: .normal)
         setTitleColor(.secondaryLabel, for: .normal)
         addTarget(self, action: #selector(onTap), for: .touchUpInside)
     }
