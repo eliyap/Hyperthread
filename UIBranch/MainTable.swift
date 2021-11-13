@@ -125,55 +125,6 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     }
 }
 
-final class MainTableDDS: UITableViewDiffableDataSource<Discussion, Tweet> {
-    
-    private let realm = try! Realm()
-    
-    private var token: NotificationToken! = nil
-    
-    private var followingIDs: [User.ID]
-    
-    fileprivate typealias Snapshot = NSDiffableDataSourceSnapshot<Discussion, Tweet>
-    
-    init(followingIDs: [User.ID], tableView: UITableView, cellProvider: @escaping UITableViewDiffableDataSource<Discussion, Tweet>.CellProvider) {
-        self.followingIDs = followingIDs
-        super.init(tableView: tableView, cellProvider: cellProvider)
-        /// Immediately register token.
-        let results = realm.objects(Discussion.self)
-            .sorted(by: \Discussion.id, ascending: false)
-        self.token = results.observe { [weak self] changes in
-            switch changes {
-            case .initial(let results):
-                self?.setContents(to: results, animated: false)
-                
-            case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                print("Update: \(results.count) tweets, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
-                self?.setContents(to: results, animated: true)
-                
-            case .error(let error):
-                fatalError("\(error)")
-            }
-            
-        }
-        
-        // TODO: populate table here
-    }
-    
-    fileprivate func setContents(to results: Results<Discussion>, animated: Bool) -> Void {
-        var snapshot = Snapshot()
-        snapshot.appendSections(Array(results))
-        for discussion in results {
-            snapshot.appendItems(discussion.relevantTweets(followingUserIDs: followingIDs), toSection: discussion)
-        }
-        Swift.debugPrint("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.")
-        apply(snapshot, animatingDifferences: animated)
-    }
-    
-    deinit {
-        token.invalidate()
-    }
-}
-
 final class TweetCell: UITableViewCell {
     
     public static let reuseID = "DiscussionCell"
