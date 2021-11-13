@@ -176,6 +176,9 @@ final class Tweet: Object, Identifiable {
     var id: ID
     typealias ID = String
     
+    @Persisted
+    var createdAt: Date
+    
     /// Tweet's body text.
     @Persisted 
     var text: String
@@ -211,6 +214,7 @@ final class Tweet: Object, Identifiable {
     init(raw: RawHydratedTweet) {
         super.init()
         self.id = raw.id
+        self.createdAt = raw.created_at
         self.text = raw.text
         self.conversation_id = raw.conversation_id
         self.metrics = PublicMetrics(raw: raw.public_metrics)
