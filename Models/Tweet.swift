@@ -13,7 +13,7 @@ import Twig
 final class PublicMetrics: EmbeddedObject {
     
     @Persisted 
-    var favorite_count: Int?
+    var like_count: Int
     
     @Persisted 
     var retweet_count: Int
@@ -28,7 +28,7 @@ final class PublicMetrics: EmbeddedObject {
     }
     
     init(raw: RawPublicMetrics) {
-        favorite_count = raw.like_count
+        like_count = raw.like_count
         retweet_count = raw.retweet_count
         reply_count = raw.reply_count
         quote_count = raw.quote_count    
@@ -176,12 +176,16 @@ final class Tweet: Object, Identifiable {
     var id: ID
     typealias ID = String
     
+    @Persisted
+    var createdAt: Date
+    
     /// Tweet's body text.
     @Persisted 
     var text: String
     
+    /// - Note: Realm requires embedded objects to be optional.
     @Persisted
-    var metrics: PublicMetrics?
+    var metrics: PublicMetrics!
     
     /// - Note: `LinkingObjects` failed me, so use an ID instead.
     /// Fortunately, we can assume that a Tweet will never change users.
@@ -211,6 +215,7 @@ final class Tweet: Object, Identifiable {
     init(raw: RawHydratedTweet) {
         super.init()
         self.id = raw.id
+        self.createdAt = raw.created_at
         self.text = raw.text
         self.conversation_id = raw.conversation_id
         self.metrics = PublicMetrics(raw: raw.public_metrics)

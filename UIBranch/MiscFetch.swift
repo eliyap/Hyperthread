@@ -24,13 +24,17 @@ func fetchOld(airport: Airport, credentials: OAuthCredentials) async -> Void {
         Swift.debugPrint("Failed to fetch timeline!")
         return
     }
+    if rawTweets.isEmpty {
+        NetLog.log(items: "No new tweets found!")
+    }
     let ids = rawTweets.map{"\($0.id)"}
     airport.enqueue(ids)
     
     /// Update boundaries.
     let newMaxID = min(rawTweets.map(\.id).min(), Int64?(limitID))
     UserDefaults.groupSuite.maxID = newMaxID.string
-    Swift.debugPrint("newMaxID \(newMaxID ?? 0)")
+    Swift.debugPrint("newMaxID \(newMaxID ?? 0), previously \(limitID ?? "")")
+    Swift.debugPrint(rawTweets.map(\.id))
 }
 
 func fetchNew(airport: Airport, credentials: OAuthCredentials) async -> Void {

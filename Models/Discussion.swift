@@ -12,6 +12,7 @@ import Twig
 
 final class Discussion: Object, Identifiable {
     
+    /// The root conversation ID, and thereby the root Tweet ID.
     @Persisted(primaryKey: true)
     var id: ID
     typealias ID = Tweet.ID

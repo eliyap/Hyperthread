@@ -31,7 +31,8 @@ final class Airport {
             .buffer(size: 100, timer)
             .filter(\.isNotEmpty)
             .asyncMap { (ids: [Tweet.ID]) in
-                try await hydratedTweets(
+                NetLog.log(items: "Fetching \(ids.count) IDs")
+                return try await hydratedTweets(
                     credentials: credentials,
                     ids: ids,
                     fields: RawHydratedTweet.fields,
@@ -46,6 +47,7 @@ final class Airport {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .failure(let error):
+                    Swift.debugPrint(error)
                     fatalError(error.localizedDescription)
                 case .finished:
                     fatalError("Should not finish")
@@ -60,16 +62,12 @@ final class Airport {
         guard inFlight.contains(id) == false else {
             return
         }
-        
-        NetLog.log(items: "Enqueueing 1 ID")
-        
         inFlight.insert(id)
         queue.send(id)
     }
     
     /// Add `ids` to list of tweets waiting to be fetched.
     public func enqueue<T: Collection>(_ ids: T) -> Void where T.Element == Tweet.ID {
-        NetLog.log(items: "Enqueueing \(ids.count) IDs")
         ids.forEach { enqueue($0) }
     }
 }

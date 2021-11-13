@@ -37,6 +37,13 @@
 		223BBF862738572C00375530 /* MainTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF852738572C00375530 /* MainTable.swift */; };
 		223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8927385AFA00375530 /* OptionalCompare.swift */; };
 		223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8B27385B0F00375530 /* OptionalCast.swift */; };
+		22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DB27404F4200932614 /* DiscussionTable.swift */; };
+		22D127DE2740651C00932614 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DD2740651C00932614 /* TweetCell.swift */; };
+		22D127E12740655900932614 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E02740655900932614 /* IconView.swift */; };
+		22D127E32740658700932614 /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E22740658700932614 /* ReplyView.swift */; };
+		22D127E52740659E00932614 /* RetweetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E42740659E00932614 /* RetweetView.swift */; };
+		22D127E7274065E900932614 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E6274065E900932614 /* UserView.swift */; };
+		22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E927406F9700932614 /* RetweetSymbol.swift */; };
 		3579A6A613DCA02DE5BEEC38 /* Pods_UIBranch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9C6048D65B067C8D0766FEB /* Pods_UIBranch.framework */; };
 /* End PBXBuildFile section */
 
@@ -92,6 +99,13 @@
 		223BBF852738572C00375530 /* MainTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTable.swift; sourceTree = "<group>"; };
 		223BBF8927385AFA00375530 /* OptionalCompare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCompare.swift; sourceTree = "<group>"; };
 		223BBF8B27385B0F00375530 /* OptionalCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCast.swift; sourceTree = "<group>"; };
+		22D127DB27404F4200932614 /* DiscussionTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTable.swift; sourceTree = "<group>"; };
+		22D127DD2740651C00932614 /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
+		22D127E02740655900932614 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
+		22D127E22740658700932614 /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
+		22D127E42740659E00932614 /* RetweetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetweetView.swift; sourceTree = "<group>"; };
+		22D127E6274065E900932614 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		22D127E927406F9700932614 /* RetweetSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetweetSymbol.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
 		D9C6048D65B067C8D0766FEB /* Pods_UIBranch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UIBranch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,6 +172,8 @@
 				223BBF2C27377BE500375530 /* SceneDelegate.swift */,
 				223BBF2E27377BE500375530 /* ViewController.swift */,
 				223BBF852738572C00375530 /* MainTable.swift */,
+				22D127DF2740653900932614 /* TweetCell */,
+				22D127DB27404F4200932614 /* DiscussionTable.swift */,
 				223BBF7D273846BE00375530 /* LoginState.swift */,
 				223BBF792737867800375530 /* AuthView.swift */,
 				223BBF7527377F2100375530 /* MiscFetch.swift */,
@@ -244,6 +260,19 @@
 				223BBF8B27385B0F00375530 /* OptionalCast.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		22D127DF2740653900932614 /* TweetCell */ = {
+			isa = PBXGroup;
+			children = (
+				22D127DD2740651C00932614 /* TweetCell.swift */,
+				22D127E02740655900932614 /* IconView.swift */,
+				22D127E22740658700932614 /* ReplyView.swift */,
+				22D127E6274065E900932614 /* UserView.swift */,
+				22D127E42740659E00932614 /* RetweetView.swift */,
+				22D127E927406F9700932614 /* RetweetSymbol.swift */,
+			);
+			path = TweetCell;
 			sourceTree = "<group>";
 		};
 		B0EEE3B548932ECDAC7403EE /* Frameworks */ = {
@@ -441,9 +470,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */,
 				223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */,
 				223BBF6D27377EC300375530 /* Conversation.swift in Sources */,
 				223BBF7E273846BE00375530 /* LoginState.swift in Sources */,
+				22D127E7274065E900932614 /* UserView.swift in Sources */,
+				22D127E12740655900932614 /* IconView.swift in Sources */,
 				223BBF862738572C00375530 /* MainTable.swift in Sources */,
 				223BBF6F27377EC300375530 /* Discussion.swift in Sources */,
 				223BBF2F27377BE500375530 /* ViewController.swift in Sources */,
@@ -453,14 +485,18 @@
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
 				223BBF7C273791A100375530 /* PMViewController.swift in Sources */,
+				22D127DE2740651C00932614 /* TweetCell.swift in Sources */,
 				223BBF6327377E8900375530 /* Airport.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
 				223BBF7627377F2100375530 /* MiscFetch.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
+				22D127E32740658700932614 /* ReplyView.swift in Sources */,
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,
 				223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */,
 				223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */,
+				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
+				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
