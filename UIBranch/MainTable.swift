@@ -126,36 +126,6 @@ final class MainTableDDS: UITableViewDiffableDataSource<Discussion, Tweet> {
     }
 }
 
-//// MARK: - `UITableViewDataSource` Conformance.
-//extension MainTable {
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        return discussions.count
-//    }
-//
-//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        let discussion = discussions[section]
-//        return discussion.relevantTweets(followingUserIDs: followingIDs).count
-//    }
-//
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID, for: indexPath) as! Cell
-//        let tweet = discussions[indexPath.section].relevantTweets(followingUserIDs: followingIDs)[indexPath.row]
-//        let author = realm.user(id: tweet.authorID)!
-//        cell.configure(tweet: tweet, author: author, realm: realm)
-//
-//        return cell
-//    }
-//
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return discussions[section].id
-//    }
-//
-//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        /// Enable self sizing table view cells.
-//        UITableView.automaticDimension
-//    }
-//}
-
 final class TweetCell: UITableViewCell {
     
     public static let reuseID = "DiscussionCell"
