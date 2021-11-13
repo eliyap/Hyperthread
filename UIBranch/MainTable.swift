@@ -29,10 +29,13 @@ final class MainTable: UITableViewController {
         self.discussions = realm.objects(Discussion.self)
             .sorted(by: \Discussion.id, ascending: false)
         super.init(nibName: nil, bundle: nil)
-        dds = DDS(followingIDs: followingIDs ?? [], tableView: tableView) { (tableView, indexPath, discussion) -> UITableViewCell? in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) else {
-                fatalError("Could not create new cell!")
+        dds = DDS(followingIDs: followingIDs ?? [], tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, tweet: Tweet) -> UITableViewCell? in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
+                fatalError("Failed to create or cast new cell!")
             }
+            let author = self!.realm.user(id: tweet.authorID)!
+            cell.configure(tweet: tweet, author: author, realm: self!.realm)
+
             // TODO: populate cell with discussion information
             return cell
         }
@@ -40,6 +43,7 @@ final class MainTable: UITableViewController {
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped)),
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped3)),
             UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(addTapped2)),
         ]
         
@@ -51,6 +55,13 @@ final class MainTable: UITableViewController {
     func addTapped() {
         Task {
             await fetchOld(airport: airport, credentials: Auth.shared.credentials!)
+        }
+    }
+    
+    @objc
+    func addTapped3() {
+        Task {
+            await fetchNew(airport: airport, credentials: Auth.shared.credentials!)
         }
     }
     
@@ -85,16 +96,11 @@ final class MainTableDDS: UITableViewDiffableDataSource<Discussion, Tweet> {
         self.token = results.observe { [weak self] changes in
             switch changes {
             case .initial(let results):
-                var snapshot = Snapshot()
-                snapshot.appendSections(Array(results))
-                for discussion in results {
-                    snapshot.appendItems(discussion.tweets, toSection: discussion)
-                }
-                Swift.debugPrint("Initial snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.")
-                self?.apply(snapshot)
+                self?.setContents(to: results, animated: false)
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 print("Update: \(results.count) tweets, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
+                self?.setContents(to: results, animated: true)
                 
             case .error(let error):
                 fatalError("\(error)")
@@ -103,6 +109,16 @@ final class MainTableDDS: UITableViewDiffableDataSource<Discussion, Tweet> {
         }
         
         // TODO: populate table here
+    }
+    
+    fileprivate func setContents(to results: Results<Discussion>, animated: Bool) -> Void {
+        var snapshot = Snapshot()
+        snapshot.appendSections(Array(results))
+        for discussion in results {
+            snapshot.appendItems(discussion.relevantTweets(followingUserIDs: followingIDs), toSection: discussion)
+        }
+        Swift.debugPrint("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.")
+        apply(snapshot, animatingDifferences: animated)
     }
     
     deinit {
@@ -255,11 +271,15 @@ final class ReplyView: UIStackView {
     
     func configure(tweet: Tweet, realm: Realm) -> Void {
         if let replyingID = tweet.replying_to {
-            guard
+            if
                 let t = realm.tweet(id: replyingID),
                 let handle = realm.user(id: t.authorID)?.handle
-            else { fatalError("Unable to lookup replied user!") }
-            replyLabel.setText(to: "@" + handle)
+            {
+                replyLabel.setText(to: "@" + handle)
+            } else {
+                Swift.debugPrint("Unable to lookup replied user")
+                replyLabel.setText(to: "@[ERROR]")
+            }
             replyLabel.isHidden = false
         } else {
             replyLabel.isHidden = true
