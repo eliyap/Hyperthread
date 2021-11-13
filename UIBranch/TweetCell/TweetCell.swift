@@ -104,13 +104,16 @@ final class MetricsView: UIStackView {
 
 class LabelledButton: UIButton {
     
-    
     init(symbolName: String) {
         super.init(frame: .zero)
         setImage(UIImage(systemName: symbolName), for: .normal)
         setPreferredSymbolConfiguration(.init(paletteColors: [.secondaryLabel]), forImageIn: .normal)
         setTitleColor(.secondaryLabel, for: .normal)
+        addTarget(self, action: #selector(onTap), for: .touchUpInside)
     }
+    
+    @objc
+    func onTap() -> Void { /* does nothing */}
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -120,6 +123,11 @@ class LabelledButton: UIButton {
 final class ReplyButton: LabelledButton {
     init() {
         super.init(symbolName: "arrowshape.turn.up.left.fill")
+    }
+    
+    @objc
+    override func onTap() -> Void {
+        print("Reply Not Implemented!")
     }
 
     func configure(_ tweet: Tweet) {
@@ -135,6 +143,11 @@ final class RetweetButton: LabelledButton {
     init() {
         super.init(symbolName: "arrow.2.squarepath")
     }
+    
+    @objc
+    override func onTap() -> Void {
+        print("Retweet Not Implemented!")
+    }
 
     func configure(_ tweet: Tweet) {
         setTitle("\(tweet.metrics.retweet_count)", for: .normal)
@@ -149,9 +162,13 @@ final class LikeButton: LabelledButton {
     init() {
         super.init(symbolName: "heart.fill")
     }
+    
+    @objc
+    override func onTap() -> Void {
+        print("Like Not Implemented!")
+    }
 
     func configure(_ tweet: Tweet) {
-        
         setTitle("\(tweet.metrics.like_count)", for: .normal)
     }
 
