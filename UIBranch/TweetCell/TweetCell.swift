@@ -44,6 +44,12 @@ final class TweetCell: UITableViewCell {
         stackView.addArrangedSubview(tweetLabel)
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
+        
+        /// Manually constrain to full width.
+        NSLayoutConstraint.activate([
+            metricsView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+        ])
 
         /// Configure Label
         tweetLabel.font = UIFont.preferredFont(forTextStyle: .body)

@@ -19,13 +19,16 @@ final class MetricsView: UIStackView {
     init() {
         super.init(frame: .zero)
         axis = .horizontal
-        distribution = .fillEqually
+        distribution = .fill
         alignment = .center
         spacing = _spacing
+        
+        translatesAutoresizingMaskIntoConstraints = false
 
         addArrangedSubview(replyButton)
         addArrangedSubview(retweetButton)
         addArrangedSubview(likeButton)
+        addArrangedSubview(UIView())
         addArrangedSubview(timestampLabel)
 
         timestampLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
