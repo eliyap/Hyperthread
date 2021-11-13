@@ -31,7 +31,17 @@ final class DiscussionTable: UITableViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
-        dds = DDS(tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, tweet: Tweet) -> UITableViewCell? in
+        spawnDDS(discussion: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("No.")
+    }
+    
+    private func spawnDDS(discussion: Discussion?) {
+        self.tableView = UITableView()
+        tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
+        dds = DDS(followingIDs: followingIDs, discussion: discussion, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, tweet: Tweet) -> UITableViewCell? in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
                 fatalError("Failed to create or cast new cell!")
             }
@@ -42,15 +52,12 @@ final class DiscussionTable: UITableViewController {
             return cell
         }
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("No.")
-    }
 }
 
 extension DiscussionTable: SplitDelegate {
     func present(_ discussion: Discussion) -> Void {
-        print(discussion)
+        self.tableView = UITableView()
+        spawnDDS(discussion: discussion)
     }
 }
 
@@ -61,7 +68,34 @@ final class TweetDDS: UITableViewDiffableDataSource<TweetSection, Tweet> {
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<TweetSection, Tweet>
     
-    override init(tableView: UITableView, cellProvider: @escaping CellProvider) {
+    init(
+        followingIDs: [User.ID]?,
+        discussion: Discussion?, 
+        tableView: UITableView, 
+        cellProvider: @escaping CellProvider
+    ) {
         super.init(tableView: tableView, cellProvider: cellProvider)
+        /// Immediately defuse unwrapped nil.
+        token = discussion?.observe { change in
+            switch change {
+            case .change(let object, let properties):
+                break
+            case .deleted:
+                break
+            case .error(let error):
+                fatalError("\(error)")
+            }
+        }
+        
+        var snapshot = Snapshot()
+        snapshot.appendSections([.Main])
+        snapshot.appendItems(discussion?.relevantTweets(followingUserIDs: followingIDs) ?? [])
+        self.apply(snapshot, animatingDifferences: false)
+    }
+    
+    deinit {
+        if let token = token {
+            token.invalidate()
+        }
     }
 }
