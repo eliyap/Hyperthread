@@ -20,7 +20,7 @@ final class MainTable: UITableViewController {
     private var dds: DDS! = nil
     
     /// Object to notify when something elsewhere in the `UISplitViewController` should change.
-    private let splitDelegate: SplitDelegate
+    private weak var splitDelegate: SplitDelegate!
     
     typealias DDS = DiscussionDDS
     typealias Cell = TweetCell
