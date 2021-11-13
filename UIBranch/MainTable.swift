@@ -17,9 +17,6 @@ final class MainTable: UITableViewController {
     private let realm = try! Realm()
     var discussions: Results<Discussion>
     
-    /// Freeze fetch so that there is no ambiguity.
-    private let followingIDs = UserDefaults.groupSuite.followingIDs
-    
     private var dds: DDS! = nil
     
     typealias DDS = DiscussionDDS
@@ -29,6 +26,7 @@ final class MainTable: UITableViewController {
         self.discussions = realm.objects(Discussion.self)
             .sorted(by: \Discussion.id, ascending: false)
         super.init(nibName: nil, bundle: nil)
+        /// Immediately defuse unwrapped nil `dds`.
         dds = DDS(tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
                 fatalError("Failed to create or cast new cell!")
