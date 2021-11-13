@@ -29,6 +29,7 @@ final class MetricsView: UIStackView {
         addArrangedSubview(timestampLabel)
 
         timestampLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        timestampLabel.textColor = .secondaryLabel
         timestampLabel.adjustsFontForContentSizeCategory = true
     }
 
@@ -36,6 +37,7 @@ final class MetricsView: UIStackView {
         replyButton.configure(tweet)
         retweetButton.configure(tweet)
         likeButton.configure(tweet)
+        timestampLabel.text = approximateTimeSince(tweet.createdAt)
     }
 
     required init(coder: NSCoder) {
