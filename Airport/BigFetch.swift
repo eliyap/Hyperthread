@@ -83,7 +83,7 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
             }
             
             /// Remove conversations that are standalone discussions.
-            guard let primaryReference = root.primaryReference else {
+            guard let primaryReference: Tweet.ID = root.primaryReference else {
                 /// Recognize conversation as its own discussion.
                 orphan.upstream = root.id
                 realm.add(Discussion(root: orphan))
@@ -91,7 +91,7 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
             }
             
             /// Remove conversations with un-fetched upstream tweets.
-            guard let orphanRootReferenced = realm.tweet(id: primaryReference) else {
+            guard let orphanRootReferenced: Tweet = realm.tweet(id: primaryReference) else {
                 /// Go fetch the upstream reference.
                 idsToFetch.insert(primaryReference)
                 continue
