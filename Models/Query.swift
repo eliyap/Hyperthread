@@ -31,3 +31,10 @@ extension Realm {
             .filter("\(Conversation.discussionPropertyName).@count == 0")
     }
 }
+
+extension Realm {
+    func orphanTweets() -> Results<Tweet> {
+        objects(Tweet.self)
+            .filter("\(Tweet.conversationPropertyName).@count == 0")
+    }
+}
