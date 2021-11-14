@@ -45,6 +45,9 @@ final class MainTable: UITableViewController {
         
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
         
+        /// Erase separators.
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        
         /// Enable self sizing table view cells.
         tableView.estimatedRowHeight = 100
         
