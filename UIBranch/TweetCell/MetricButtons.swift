@@ -16,8 +16,9 @@ final class MetricsView: UIStackView {
 
     fileprivate let _spacing: CGFloat = 5
     
-    /// Sets the font size for this view.
-    public static let font = UIFont.preferredFont(forTextStyle: .caption2)
+    /// Central font settings.
+    public static var font: UIFont { UIFont.preferredFont(forTextStyle: Self.fontStyle) }
+    public static let fontStyle = UIFont.TextStyle.caption2
     
     init() {
         super.init(frame: .zero)
@@ -59,6 +60,7 @@ class LabelledButton: UIButton {
         /// Configure Image.
         setImage(UIImage(systemName: symbolName), for: .normal)
         var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
+        config = config.applying(UIImage.SymbolConfiguration(textStyle: MetricsView.fontStyle))
         if let other = symbolConfig {
             config = config.applying(other)
         }
