@@ -72,7 +72,7 @@ class LabelledButton: UIButton {
     }
     
     @objc
-    func onTap() -> Void { /* does nothing */}
+    func onTap() -> Void { /* does nothing */ }
     
     /// Hide metrics with 0 count.
     func setTitle(_ count: Int) -> Void {
