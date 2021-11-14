@@ -52,13 +52,19 @@ class LabelledButton: UIButton {
     
     init(symbolName: String, symbolConfig: UIImage.SymbolConfiguration? = nil) {
         super.init(frame: .zero)
+        
+        /// Configure Image.
         setImage(UIImage(systemName: symbolName), for: .normal)
         var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
         if let other = symbolConfig {
             config = config.applying(other)
         }
         setPreferredSymbolConfiguration(config, forImageIn: .normal)
+        
+        /// Configure Label.
         setTitleColor(.secondaryLabel, for: .normal)
+        
+        /// Configure Action.
         addTarget(self, action: #selector(onTap), for: .touchUpInside)
     }
     
