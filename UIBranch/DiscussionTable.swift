@@ -11,8 +11,11 @@ import Twig
 import Combine
 
 enum TweetSection: Int {
-    /// The only section, for now.
-    case Main
+    /// The root tweet.
+    case root
+    
+    /// Discussion flowing from the root tweet.
+    case discussion
 }
 
 final class DiscussionTable: UITableViewController {
@@ -104,8 +107,11 @@ final class TweetDDS: UITableViewDiffableDataSource<TweetSection, Tweet> {
         }
         
         var snapshot = Snapshot()
-        snapshot.appendSections([.Main])
-        snapshot.appendItems(discussion?.relevantTweets(followingUserIDs: followingIDs) ?? [])
+        if let discussion = discussion {
+            snapshot.appendSections([.root, .discussion])
+            snapshot.appendItems([realm.tweet(id: discussion.id)!], toSection: .root)
+            snapshot.appendItems(discussion.relevantTweets(followingUserIDs: followingIDs), toSection: .discussion)
+        }
         self.apply(snapshot, animatingDifferences: false)
     }
     

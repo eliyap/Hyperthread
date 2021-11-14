@@ -1,17 +1,17 @@
 //
-//  TweetCell.swift
+//  CardCell.swift
 //  UIBranch
 //
-//  Created by Secret Asian Man Dev on 13/11/21.
+//  Created by Secret Asian Man Dev on 14/11/21.
 //
 
 import UIKit
 import RealmSwift
 import Twig
 
-final class TweetCell: UITableViewCell {
+final class CardCell: UITableViewCell {
     
-    public static let reuseID = "TweetCell"
+    public static let reuseID = "CardCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Component Views

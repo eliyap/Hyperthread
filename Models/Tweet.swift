@@ -195,6 +195,7 @@ final class Tweet: Object, Identifiable {
     /// - Note: Tweet must belong to a unique ``Conversation``.
     @Persisted(originProperty: Conversation.tweetsPropertyName)
     var conversation: LinkingObjects<Conversation>
+    public static let conversationPropertyName = "conversation"
     
     /// The ID whose `Conversation` this Tweet belongs to.
     /// Note this is also the ID of the Conversation's root tweet.

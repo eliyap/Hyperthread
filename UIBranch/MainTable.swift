@@ -8,6 +8,7 @@
 import UIKit
 import Twig
 import RealmSwift
+import Combine
 
 final class MainTable: UITableViewController {
     
@@ -23,6 +24,8 @@ final class MainTable: UITableViewController {
     
     typealias DDS = DiscussionDDS
     typealias Cell = TweetCell
+    
+    private var observers = Set<AnyCancellable>()
     
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
@@ -49,12 +52,37 @@ final class MainTable: UITableViewController {
         tableView.prefetchDataSource = fetcher
         
         /// Refresh timeline at app startup.
-        /// - Note: this also causes a fetch at login!
         fetcher.fetchNewTweets { /* do nothing */ }
+        
+        /// Refresh timeline at login.
+        Auth.shared.$state
+            .sink { [weak self] state in
+                switch state {
+                case .loggedIn:
+                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                default:
+                    break
+                }
+            }
+            .store(in: &observers)
         
         /// Configure Refresh.
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        
+        /// DEBUG
+        #if DEBUG
+        navigationItem.leftBarButtonItems = [
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod))
+        ]
+        #endif
+    }
+    
+    @objc
+    func debugMethod() {
+        Swift.debugPrint(realm.orphanConversations().count, " orphan conversations.")
+        Swift.debugPrint(realm.orphanTweets().count, " orphan tweets.")
+        Swift.debugPrint(realm.tweet(id: "1459940197697732615")?.conversation)
     }
     
     required init?(coder: NSCoder) {
@@ -66,6 +94,11 @@ final class MainTable: UITableViewController {
         fetcher.fetchNewTweets { [weak self] in
             self?.tableView.refreshControl?.endRefreshing()
         }
+    }
+    
+    deinit {
+        /// Cancel to prevent leak.
+        observers.forEach { $0.cancel() }
     }
 }
 
@@ -99,7 +132,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 self.setContents(to: results, animated: false)
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                print("Update: \(results.count) tweets, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
+                print("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
                 self.setContents(to: results, animated: true)
             
             case .error(let error):
@@ -170,7 +203,8 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     public func fetchOldTweets() {
         Task {
             guard let credentials = Auth.shared.credentials else {
-                assert(false, "Tried to load tweets with nil credentials!")
+                Swift.debugPrint("Tried to load tweets with nil credentials!")
+                return
             }
             
             /// Prevent repeated requests.
@@ -196,7 +230,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Update boundaries.
             let newMaxID = min(rawTweets.map(\.id).min(), Int64?(maxID))
             UserDefaults.groupSuite.maxID = newMaxID.string
-            Swift.debugPrint("newMaxID \(newMaxID ?? 0), previously \(maxID ?? "")")
+            Swift.debugPrint("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
             Swift.debugPrint(rawTweets.map(\.id))
         }
     }
@@ -205,7 +239,8 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     public func fetchNewTweets(onFetched: @escaping () -> Void) {
         Task {
             guard let credentials = Auth.shared.credentials else {
-                assert(false, "Tried to load tweets with nil credentials!")
+                Swift.debugPrint("Tried to load tweets with nil credentials!")
+                return
             }
             
             /// Prevent repeated requests.
@@ -227,7 +262,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Update boundaries.
             let newSinceID = max(rawTweets.map(\.id).max(), Int64?(sinceID))
             UserDefaults.groupSuite.sinceID = newSinceID.string
-            Swift.debugPrint("newSinceID \(newSinceID ?? 0)")
+            Swift.debugPrint("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
             
             onFetched()
         }

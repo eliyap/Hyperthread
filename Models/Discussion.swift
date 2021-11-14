@@ -58,9 +58,6 @@ extension Discussion {
             return tweets 
         }
         var result = Set<Tweet>()
-        
-        /// Include root tweet.
-        result.update(with: tweets.first(where: {$0.id == self.id})!)
 
         /// Include tweets from following users.
         var followingTweets = [Tweet]()
@@ -96,6 +93,9 @@ extension Discussion {
             }
         }
         result.formSymmetricDifference(toRemove)
+        
+        /// Exclude root tweet.
+        result.remove(tweets.first(where: {$0.id == self.id})!)
         
         return result.sorted(by: {$0.id < $1.id})
     }

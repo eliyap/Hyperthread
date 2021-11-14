@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		222161F22741A8EA00220F0C /* CardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardCell.swift */; };
 		223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2A27377BE500375530 /* AppDelegate.swift */; };
 		223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2C27377BE500375530 /* SceneDelegate.swift */; };
 		223BBF2F27377BE500375530 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2E27377BE500375530 /* ViewController.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		222161F12741A8EA00220F0C /* CardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCell.swift; sourceTree = "<group>"; };
 		223BBF2727377BE500375530 /* UIBranch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIBranch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		223BBF2A27377BE500375530 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		223BBF2C27377BE500375530 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +146,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		222161F02741A8D300220F0C /* CardCell */ = {
+			isa = PBXGroup;
+			children = (
+				222161F12741A8EA00220F0C /* CardCell.swift */,
+			);
+			path = CardCell;
+			sourceTree = "<group>";
+		};
 		223BBF1E27377BE500375530 = {
 			isa = PBXGroup;
 			children = (
@@ -178,6 +188,7 @@
 				223BBF2C27377BE500375530 /* SceneDelegate.swift */,
 				223BBF2E27377BE500375530 /* ViewController.swift */,
 				223BBF852738572C00375530 /* MainTable.swift */,
+				222161F02741A8D300220F0C /* CardCell */,
 				22D127DF2740653900932614 /* TweetCell */,
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
 				223BBF7D273846BE00375530 /* LoginState.swift */,
@@ -502,6 +513,7 @@
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
 				223BBF7627377F2100375530 /* MiscFetch.swift in Sources */,
+				222161F22741A8EA00220F0C /* CardCell.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
 				22D127E32740658700932614 /* ReplyView.swift in Sources */,
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,
