@@ -11,7 +11,7 @@ import Twig
 
 final class TweetCell: UITableViewCell {
     
-    public static let reuseID = "DiscussionCell"
+    public static let reuseID = "TweetCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Component Views
