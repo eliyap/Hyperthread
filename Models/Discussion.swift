@@ -100,7 +100,9 @@ extension Discussion {
 
 extension Discussion {
     /// Update the last updated date.
-    func update(with date: Date) -> Void {
-        updatedAt = max(updatedAt, date)
+    func update(with date: Date?) -> Void {
+        if let date = date {
+            updatedAt = max(updatedAt, date)
+        }
     }
 }
