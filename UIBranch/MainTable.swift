@@ -15,7 +15,6 @@ final class MainTable: UITableViewController {
     private lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
 
     private let realm = try! Realm()
-    var discussions: Results<Discussion>
     
     private var dds: DDS! = nil
     
@@ -27,8 +26,6 @@ final class MainTable: UITableViewController {
     
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
-        self.discussions = realm.objects(Discussion.self)
-            .sorted(by: \Discussion.id, ascending: false)
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
         dds = DDS(tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
