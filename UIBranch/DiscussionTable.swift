@@ -31,7 +31,6 @@ final class DiscussionTable: UITableViewController {
     
     private var observers = Set<AnyCancellable>()
     
-    typealias Cell = TweetCell
     typealias DDS = TweetDDS
     
     init() {
@@ -50,16 +49,28 @@ final class DiscussionTable: UITableViewController {
     
     private func spawnDDS(discussion: Discussion?) {
         self.tableView = UITableView()
-        tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
+        tableView.register(CardCell.self, forCellReuseIdentifier: CardCell.reuseID)
+        tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
         dds = DDS(followingIDs: followingIDs, discussion: discussion, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, tweet: Tweet) -> UITableViewCell? in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
-                fatalError("Failed to create or cast new cell!")
-            }
             let author = self!.realm.user(id: tweet.authorID)!
-            cell.configure(tweet: tweet, author: author, realm: self!.realm)
+            if indexPath == IndexPath(row: 0, section: 0) {
+                /// Safety check.
+                assert(tweet.id == discussion?.id, "Root tweet ID does not match discussion ID!")
+                
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: CardCell.reuseID) as? CardCell else {
+                    fatalError("Failed to create or cast new cell!")
+                }
+                cell.configure(tweet: tweet, author: author, realm: self!.realm)
 
-            // TODO: populate cell with discussion information
-            return cell
+                return cell
+            } else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TweetCell.reuseID) as? TweetCell else {
+                    fatalError("Failed to create or cast new cell!")
+                }
+                cell.configure(tweet: tweet, author: author, realm: self!.realm)
+
+                return cell
+            }
         }
     }
     
