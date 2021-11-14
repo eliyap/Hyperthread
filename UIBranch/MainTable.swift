@@ -50,11 +50,22 @@ final class MainTable: UITableViewController {
         
         /// Refresh timeline at app startup.
         /// - Note: this also causes a fetch at login!
-        fetcher.fetchNewTweets()
+        fetcher.fetchNewTweets { /* do nothing */ }
+        
+        /// Configure Refresh.
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     required init?(coder: NSCoder) {
         fatalError("No.")
+    }
+    
+    @objc
+    public func refresh() {
+        fetcher.fetchNewTweets { [weak self] in
+            self?.tableView.refreshControl?.endRefreshing()
+        }
     }
 }
 
@@ -191,7 +202,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     }
     
     @objc
-    public func fetchNewTweets() {
+    public func fetchNewTweets(onFetched: @escaping () -> Void) {
         Task {
             guard let credentials = Auth.shared.credentials else {
                 assert(false, "Tried to load tweets with nil credentials!")
@@ -217,6 +228,8 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             let newSinceID = max(rawTweets.map(\.id).max(), Int64?(sinceID))
             UserDefaults.groupSuite.sinceID = newSinceID.string
             Swift.debugPrint("newSinceID \(newSinceID ?? 0)")
+            
+            onFetched()
         }
     }
 }
