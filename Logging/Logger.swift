@@ -16,6 +16,10 @@ class Logger {
     }
 }
 
+final class TableLog: Logger {
+    override class var enabled: Bool { true }
+}
+
 final class NetLog: Logger {
     override class var enabled: Bool { true }
 }

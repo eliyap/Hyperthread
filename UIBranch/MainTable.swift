@@ -12,10 +12,9 @@ import RealmSwift
 final class MainTable: UITableViewController {
     
     /// Laziness prevents attempting to load nil IDs.
-    private lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
+    private let fetcher = Fetcher()
 
     private let realm = try! Realm()
-    var discussions: Results<Discussion>
     
     private var dds: DDS! = nil
     
@@ -27,11 +26,9 @@ final class MainTable: UITableViewController {
     
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
-        self.discussions = realm.objects(Discussion.self)
-            .sorted(by: \Discussion.id, ascending: false)
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
-        dds = DDS(tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
+        dds = DDS(fetcher: fetcher, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
                 fatalError("Failed to create or cast new cell!")
             }
@@ -44,39 +41,31 @@ final class MainTable: UITableViewController {
         }
         
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
-        navigationItem.leftBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped)),
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped3)),
-            UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(addTapped2)),
-        ]
         
         /// Enable self sizing table view cells.
         tableView.estimatedRowHeight = 100
-    }
-    
-    @objc
-    func addTapped() {
-        Task {
-            await fetchOld(airport: airport, credentials: Auth.shared.credentials!)
-        }
-    }
-    
-    @objc
-    func addTapped3() {
-        Task {
-            await fetchNew(airport: airport, credentials: Auth.shared.credentials!)
-        }
-    }
-    
-    @objc
-    func addTapped2() {
-        Task {
-            await updateFollowing(credentials: Auth.shared.credentials!)
-        }
+        
+        /// Enable pre-fetching.
+        tableView.prefetchDataSource = fetcher
+        
+        /// Refresh timeline at app startup.
+        /// - Note: this also causes a fetch at login!
+        fetcher.fetchNewTweets { /* do nothing */ }
+        
+        /// Configure Refresh.
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     required init?(coder: NSCoder) {
         fatalError("No.")
+    }
+    
+    @objc
+    public func refresh() {
+        fetcher.fetchNewTweets { [weak self] in
+            self?.tableView.refreshControl?.endRefreshing()
+        }
     }
 }
 
@@ -89,13 +78,15 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     private let realm = try! Realm()
     private var token: NotificationToken! = nil
 
+    private let fetcher: Fetcher
+    
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
 
-    override init(tableView: UITableView, cellProvider: @escaping CellProvider) {
+    init(fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider) {
         let results = realm.objects(Discussion.self)
             .sorted(by: \Discussion.updatedAt, ascending: false)
-        
+        self.fetcher = fetcher
         super.init(tableView: tableView, cellProvider: cellProvider)
         /// Immediately register token.
         token = results.observe { [weak self] (changes: RealmCollectionChange) in
@@ -123,6 +114,8 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         snapshot.appendItems(Array(results), toSection: .Main)
         Swift.debugPrint("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.")
         apply(snapshot, animatingDifferences: animated)
+        
+        fetcher.numDiscussions = results.count
     }
 }
 
@@ -145,3 +138,98 @@ extension MainTable {
     }
 }
 
+final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
+    
+    public var numDiscussions: Int? = nil
+    private(set) var isFetching = false
+    private let threshhold = 25
+    
+    /// Laziness prevents attempting to load nil IDs.
+    public lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
+        if
+            isFetching == false,
+            let numDiscussions = numDiscussions,
+            (numDiscussions - indexPaths.max()!.row) < threshhold
+        {
+            TableLog.log(items: "Row \(indexPaths.max()!.row) requested, prefetching items...")
+            fetchOldTweets()
+        }
+    }
+    
+    /**
+     
+     - Note: there is a limitation on history depth.
+       > Up to 800 Tweets are obtainable on the home timeline
+     - Docs: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/api-reference/get-statuses-home_timeline
+     
+     Therefore, if the v1 `home_timeline` API returns 0 results, do not allow further *backwards* fetches (this session).
+     */
+    @objc
+    public func fetchOldTweets() {
+        Task {
+            guard let credentials = Auth.shared.credentials else {
+                assert(false, "Tried to load tweets with nil credentials!")
+            }
+            
+            /// Prevent repeated requests.
+            isFetching = true
+            
+            /// Perform a simple `home_timelime` fetch.
+            let maxID = UserDefaults.groupSuite.maxID
+            guard let rawTweets = try? await timeline(credentials: credentials, sinceID: nil, maxID: maxID) else {
+                Swift.debugPrint("Failed to fetch timeline!")
+                return
+            }
+            if rawTweets.isEmpty {
+                NetLog.log(items: "No new tweets found!")
+            } else {
+                /// Allow further requests.
+                isFetching = false
+            }
+            
+            /// Send to airport for further fetching.
+            let ids = rawTweets.map{"\($0.id)"}
+            airport.enqueue(ids)
+            
+            /// Update boundaries.
+            let newMaxID = min(rawTweets.map(\.id).min(), Int64?(maxID))
+            UserDefaults.groupSuite.maxID = newMaxID.string
+            Swift.debugPrint("newMaxID \(newMaxID ?? 0), previously \(maxID ?? "")")
+            Swift.debugPrint(rawTweets.map(\.id))
+        }
+    }
+    
+    @objc
+    public func fetchNewTweets(onFetched: @escaping () -> Void) {
+        Task {
+            guard let credentials = Auth.shared.credentials else {
+                assert(false, "Tried to load tweets with nil credentials!")
+            }
+            
+            /// Prevent repeated requests.
+            isFetching = true
+            
+            /// Perform a simple `home_timelime` fetch.
+            let sinceID = UserDefaults.groupSuite.sinceID
+            guard let rawTweets = try? await timeline(credentials: credentials, sinceID: sinceID, maxID: nil) else {
+                Swift.debugPrint("Failed to fetch timeline!")
+                return
+            }
+            /// Allow further requests.
+            isFetching = false
+            
+            /// Send to airport for further fetching.
+            let ids = rawTweets.map{"\($0.id)"}
+            airport.enqueue(ids)
+            
+            /// Update boundaries.
+            let newSinceID = max(rawTweets.map(\.id).max(), Int64?(sinceID))
+            UserDefaults.groupSuite.sinceID = newSinceID.string
+            Swift.debugPrint("newSinceID \(newSinceID ?? 0)")
+            
+            onFetched()
+        }
+    }
+}

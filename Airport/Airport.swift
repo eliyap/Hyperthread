@@ -29,6 +29,8 @@ final class Airport {
     init(credentials: OAuthCredentials) {
         x = queue
             .buffer(size: 100, timer)
+            /// Send work to background.
+            .subscribe(on: DispatchQueue.global())
             .filter(\.isNotEmpty)
             .asyncMap { (ids: [Tweet.ID]) in
                 NetLog.log(items: "Fetching \(ids.count) IDs")
@@ -38,6 +40,11 @@ final class Airport {
                     fields: RawHydratedTweet.fields,
                     expansions: RawHydratedTweet.expansions
                 )
+            }
+            .map { [weak self] (tweets: [RawHydratedTweet], users: [RawIncludeUser]) in
+                /// Remove from in-flight list.
+                tweets.forEach { self?.inFlight.remove($0.id) }
+                return (tweets, users)
             }
             .tryMap(furtherFetch)
             .map { ids in
