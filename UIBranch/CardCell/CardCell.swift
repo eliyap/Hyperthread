@@ -23,10 +23,24 @@ final class CardCell: UITableViewCell {
     let metricsView = MetricsView()
     // TODO: add profile image
     
+    private let inset: CGFloat = 6
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = .systemRed
+        /// Configure background.
+        let backgroundButton = UIButton()
+        backgroundButton.backgroundColor = .secondarySystemBackground
+        addSubview(backgroundButton)
+        backgroundButton.layer.cornerRadius = inset * 2
+        backgroundButton.layer.cornerCurve = .continuous
+        backgroundButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundButton.topAnchor.constraint(equalTo: topAnchor, constant: inset),
+            backgroundButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -inset),
+            backgroundButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
+            backgroundButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
+        ])
         
         /// Configure Main Stack View
         contentView.addSubview(stackView)
@@ -34,10 +48,10 @@ final class CardCell: UITableViewCell {
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset * 2),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset * 2),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset * 2),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset * 2),
         ])
 
         stackView.addArrangedSubview(replyView)
