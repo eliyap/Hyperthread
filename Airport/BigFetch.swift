@@ -98,7 +98,7 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
             }
             
             /// Set upstream conversation.
-            let upstreamID = orphanRootReferenced.conversation_id
+            let upstreamID: Conversation.ID = orphanRootReferenced.conversation_id
             orphan.upstream = upstreamID
                 
             /// Inherit discussion, if possible.
