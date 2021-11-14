@@ -87,12 +87,12 @@ final class CardCell: UITableViewCell {
     }
     
     func style(selected: Bool) -> Void {
-        if selected {
-            UIView.animate(withDuration: 0.25) { [weak self] in
-                guard let self = self else { 
-                    assert(false, "self is nil")
-                    return 
-                }
+        UIView.animate(withDuration: 0.25) { [weak self] in
+            guard let self = self else {
+                assert(false, "self is nil")
+                return
+            }
+            if selected {
                 self.stackView.transform = CGAffineTransform(translationX: 0, y: -self.inset / 2)
                 self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: -self.inset / 2)
 //                self.backgroundButton.backgroundColor = .systemRed
@@ -100,13 +100,7 @@ final class CardCell: UITableViewCell {
                 self.backgroundButton.layer.shadowOpacity = 0.3
                 self.backgroundButton.layer.shadowRadius = self.inset / 2
                 self.backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: self.inset / 2)
-            }
-        } else {
-            UIView.animate(withDuration: 0.25) { [weak self] in
-                guard let self = self else { 
-                    assert(false, "self is nil")
-                    return 
-                }
+            } else {
                 self.stackView.transform = CGAffineTransform(translationX: 0, y: 0)
                 self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
 //                self.backgroundButton.backgroundColor = .secondarySystemBackground
