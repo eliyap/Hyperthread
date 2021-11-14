@@ -26,6 +26,8 @@ final class CardCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        contentView.backgroundColor = .systemRed
+        
         /// Configure Main Stack View
         contentView.addSubview(stackView)
         stackView.axis = .vertical
