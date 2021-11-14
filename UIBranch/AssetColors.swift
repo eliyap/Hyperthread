@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 extension UIColor {
-    static let devSecondary = UIColor(named: "secondary")!
-    static let devSecondarySelected = UIColor(named: "secondarySelected")!
+    static let card = UIColor(named: "card")!
+    static let cardSelected = UIColor(named: "cardSelected")!
+    static let flat = UIColor(named: "flat")!
 }

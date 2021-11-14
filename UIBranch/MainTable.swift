@@ -38,8 +38,8 @@ final class MainTable: UITableViewController {
             let tweet = self!.realm.tweet(id: discussion.id)!
             let author = self!.realm.user(id: tweet.authorID)!
             cell.configure(tweet: tweet, author: author, realm: self!.realm)
-
-            // TODO: populate cell with discussion information
+            cell.resetStyle()
+            
             return cell
         }
         
@@ -79,6 +79,8 @@ final class MainTable: UITableViewController {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod))
         ]
         #endif
+        
+        tableView.backgroundColor = .systemRed
     }
     
     @objc
@@ -180,7 +182,11 @@ extension MainTable {
             assert(false, "Could not cast cell to CardCell!")
             return
         }
-        cardCell.style(selected: true)
+        
+        /// Only style if cell will stay on screen.
+        if (splitViewController?.isCollapsed ?? true) == false {
+            cardCell.style(selected: true)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

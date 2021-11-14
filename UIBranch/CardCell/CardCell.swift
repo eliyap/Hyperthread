@@ -31,6 +31,7 @@ final class CardCell: UITableViewCell {
         
         /// Do not change color when selected.
         selectionStyle = .none
+        backgroundColor = .flat
         
         /// Configure background.
         backgroundButton.backgroundColor = .secondarySystemBackground
@@ -76,6 +77,9 @@ final class CardCell: UITableViewCell {
         /// Allow tweet to wrap across lines.
         tweetLabel.lineBreakMode = .byWordWrapping
         tweetLabel.numberOfLines = 0 /// Yes, really.
+        
+        /// Apply default styling.
+        self.resetStyle()
     }
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
@@ -94,25 +98,40 @@ final class CardCell: UITableViewCell {
             }
             /// By changing the radius, offset, and transform at the same time, we can grow / shrink the shadow in place,
             /// creating a "lifting" illusion.
-            let shadowSize = self.inset * 0.75
             if selected {
-                self.stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-                self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-                self.backgroundButton.backgroundColor = .devSecondarySelected
-                self.backgroundButton.layer.shadowColor = UIColor.black.cgColor
-                self.backgroundButton.layer.shadowOpacity = 0.3
-                self.backgroundButton.layer.shadowRadius = shadowSize
-                self.backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
+                self.styleSelected()
             } else {
-                self.stackView.transform = CGAffineTransform(translationX: 0, y: 0)
-                self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
-                self.backgroundButton.backgroundColor = .devSecondary
-                self.backgroundButton.layer.shadowColor = UIColor.black.cgColor
-                self.backgroundButton.layer.shadowOpacity = 0
-                self.backgroundButton.layer.shadowRadius = 0
-                self.backgroundButton.layer.shadowOffset = CGSize.zero
+                self.resetStyle()
             }
         }
+    }
+    
+    public func styleSelected() -> Void {
+        let shadowSize = self.inset * 0.75
+        
+        stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
+        backgroundButton.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
+        backgroundButton.layer.shadowColor = UIColor.black.cgColor
+        backgroundButton.layer.shadowOpacity = 0.3
+        backgroundButton.layer.shadowRadius = shadowSize
+        backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
+        
+        backgroundButton.backgroundColor = .cardSelected
+        backgroundButton.layer.borderWidth = 0
+        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
+    }
+    
+    public func resetStyle() -> Void {
+        stackView.transform = CGAffineTransform(translationX: 0, y: 0)
+        backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
+        backgroundButton.layer.shadowColor = UIColor.black.cgColor
+        backgroundButton.layer.shadowOpacity = 0
+        backgroundButton.layer.shadowRadius = 0
+        backgroundButton.layer.shadowOffset = CGSize.zero
+        
+        backgroundButton.backgroundColor = .card
+        backgroundButton.layer.borderWidth = 1.00
+        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
     
     required init?(coder: NSCoder) {
