@@ -80,10 +80,12 @@ class LabelledButton: UIButton {
     
     /// Hide metrics with 0 count.
     func setTitle(_ count: Int) -> Void {
-        if count > 0 {
-            setTitle("\(count)", for: .normal)
-        } else {
+        if count == 0 {
             setTitle("", for: .normal)
+        } else if count > 1000 {
+            setTitle("\(count/1000)k", for: .normal)
+        } else {
+            setTitle("\(count)", for: .normal)
         }
     }
 
