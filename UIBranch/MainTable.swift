@@ -12,7 +12,7 @@ import RealmSwift
 final class MainTable: UITableViewController {
     
     /// Laziness prevents attempting to load nil IDs.
-    private lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
+    private let fetcher = Fetcher()
 
     private let realm = try! Realm()
     
@@ -28,7 +28,7 @@ final class MainTable: UITableViewController {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
-        dds = DDS(tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
+        dds = DDS(fetcher: fetcher, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
                 fatalError("Failed to create or cast new cell!")
             }
@@ -41,35 +41,12 @@ final class MainTable: UITableViewController {
         }
         
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
-        navigationItem.leftBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped)),
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped3)),
-            UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(addTapped2)),
-        ]
         
         /// Enable self sizing table view cells.
         tableView.estimatedRowHeight = 100
-    }
-    
-    @objc
-    func addTapped() {
-        Task {
-            await fetchOld(airport: airport, credentials: Auth.shared.credentials!)
-        }
-    }
-    
-    @objc
-    func addTapped3() {
-        Task {
-            await fetchNew(airport: airport, credentials: Auth.shared.credentials!)
-        }
-    }
-    
-    @objc
-    func addTapped2() {
-        Task {
-            await updateFollowing(credentials: Auth.shared.credentials!)
-        }
+        
+        /// Enable pre-fetching.
+        tableView.prefetchDataSource = fetcher
     }
     
     required init?(coder: NSCoder) {
@@ -86,13 +63,15 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     private let realm = try! Realm()
     private var token: NotificationToken! = nil
 
+    private let fetcher: Fetcher
+    
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
 
-    override init(tableView: UITableView, cellProvider: @escaping CellProvider) {
+    init(fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider) {
         let results = realm.objects(Discussion.self)
             .sorted(by: \Discussion.updatedAt, ascending: false)
-        
+        self.fetcher = fetcher
         super.init(tableView: tableView, cellProvider: cellProvider)
         /// Immediately register token.
         token = results.observe { [weak self] (changes: RealmCollectionChange) in
@@ -120,6 +99,63 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         snapshot.appendItems(Array(results), toSection: .Main)
         Swift.debugPrint("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.")
         apply(snapshot, animatingDifferences: animated)
+        
+        fetcher.numDiscussions = results.count
+    }
+}
+
+// MARK: - `UITableViewDelegate` Conformance
+extension MainTable {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let discussion = dds.itemIdentifier(for: indexPath) else {
+            fatalError("Could not find discussion from row!")
+        }
+        
+        /**
+         In compact width mode, it seems the `.secondary` view controller in `UISplitViewController` is lazily loaded,
+         so the delegate's `splitController` can be `nil`.
+         Therefore, as the active view we need to push the detail view onto the stack before calling `present`.
+         */
+        assert(splitViewController != nil, "Could not find ancestor split view!")
+        splitViewController?.show(.secondary)
+        
+        splitDelegate.present(discussion)
+    }
+}
+
+final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
+    
+    public var numDiscussions: Int? = nil
+    private(set) var isFetching = false
+    private let threshhold = 25
+    
+    /// Laziness prevents attempting to load nil IDs.
+    public lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
+        if
+            isFetching == false,
+            let numDiscussions = numDiscussions,
+            (indexPaths.max()!.row - numDiscussions) < threshhold
+        {
+            fetchOldTweets()
+        }
+    }
+    
+    @objc
+    public func fetchOldTweets() {
+        Task {
+            isFetching = true
+            await fetchOld(airport: airport, credentials: Auth.shared.credentials!)
+        }
+    }
+    
+    @objc
+    public func fetchNewTweets() {
+        Task {
+            isFetching = true
+            await fetchNew(airport: airport, credentials: Auth.shared.credentials!)
+        }
     }
 }
 
@@ -156,22 +192,3 @@ func fetchNew(airport: Airport, credentials: OAuthCredentials) async -> Void {
     UserDefaults.groupSuite.sinceID = newSinceID.string
     Swift.debugPrint("newSinceID \(newSinceID ?? 0)")
 }
-// MARK: - `UITableViewDelegate` Conformance
-extension MainTable {
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let discussion = dds.itemIdentifier(for: indexPath) else {
-            fatalError("Could not find discussion from row!")
-        }
-        
-        /**
-         In compact width mode, it seems the `.secondary` view controller in `UISplitViewController` is lazily loaded,
-         so the delegate's `splitController` can be `nil`.
-         Therefore, as the active view we need to push the detail view onto the stack before calling `present`.
-         */
-        assert(splitViewController != nil, "Could not find ancestor split view!")
-        splitViewController?.show(.secondary)
-        
-        splitDelegate.present(discussion)
-    }
-}
-
