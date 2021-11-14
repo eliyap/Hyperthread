@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import Twig
+import Combine
 
 enum TweetSection: Int {
     /// The only section, for now.
@@ -17,13 +18,15 @@ enum TweetSection: Int {
 final class DiscussionTable: UITableViewController {
     
     /// Freeze fetch so that there is no ambiguity.
-    private let followingIDs = UserDefaults.groupSuite.followingIDs
+    private var followingIDs = Following.shared.ids
     
     private let realm = try! Realm()
     
     private var dds: DDS! = nil
     
     public private(set) var discussion: Discussion? = nil
+    
+    private var observers = Set<AnyCancellable>()
     
     typealias Cell = TweetCell
     typealias DDS = TweetDDS
@@ -32,6 +35,10 @@ final class DiscussionTable: UITableViewController {
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
         spawnDDS(discussion: nil)
+        
+        Following.shared.$ids
+            .assign(to: \DiscussionTable.followingIDs, on: self)
+            .store(in: &observers)
     }
     
     required init?(coder: NSCoder) {
@@ -51,6 +58,11 @@ final class DiscussionTable: UITableViewController {
             // TODO: populate cell with discussion information
             return cell
         }
+    }
+    
+    deinit {
+        /// Cancel subscriptions so that they do not leak.
+        observers.forEach { $0.cancel() }
     }
 }
 
