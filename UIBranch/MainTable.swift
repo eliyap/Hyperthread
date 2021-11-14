@@ -69,6 +69,20 @@ final class MainTable: UITableViewController {
         /// Configure Refresh.
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        
+        /// DEBUG
+        #if DEBUG
+        navigationItem.leftBarButtonItems = [
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod))
+        ]
+        #endif
+    }
+    
+    @objc
+    func debugMethod() {
+        Swift.debugPrint(realm.orphanConversations().count, " orphan conversations.")
+        Swift.debugPrint(realm.orphanTweets().count, " orphan tweets.")
+        Swift.debugPrint(realm.tweet(id: "1459940197697732615")?.conversation)
     }
     
     required init?(coder: NSCoder) {
