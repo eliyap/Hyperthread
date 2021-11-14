@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		222161F22741A8EA00220F0C /* CardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardCell.swift */; };
+		222161F42741C2F400220F0C /* AssetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F32741C2F400220F0C /* AssetColors.swift */; };
 		223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2A27377BE500375530 /* AppDelegate.swift */; };
 		223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2C27377BE500375530 /* SceneDelegate.swift */; };
 		223BBF2F27377BE500375530 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2E27377BE500375530 /* ViewController.swift */; };
@@ -70,6 +71,7 @@
 
 /* Begin PBXFileReference section */
 		222161F12741A8EA00220F0C /* CardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCell.swift; sourceTree = "<group>"; };
+		222161F32741C2F400220F0C /* AssetColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetColors.swift; sourceTree = "<group>"; };
 		223BBF2727377BE500375530 /* UIBranch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIBranch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		223BBF2A27377BE500375530 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		223BBF2C27377BE500375530 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				223BBF7527377F2100375530 /* MiscFetch.swift */,
 				223BBF83273847E900375530 /* LoginViewController.swift */,
 				223BBF7727377F5100375530 /* Storage.swift */,
+				222161F32741C2F400220F0C /* AssetColors.swift */,
 				223BBF3027377BE500375530 /* Main.storyboard */,
 				223BBF3327377BE600375530 /* Assets.xcassets */,
 				223BBF3527377BE600375530 /* LaunchScreen.storyboard */,
@@ -519,6 +522,7 @@
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,
 				223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */,
 				223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */,
+				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,

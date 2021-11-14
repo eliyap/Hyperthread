@@ -23,7 +23,7 @@ final class MainTable: UITableViewController {
     private weak var splitDelegate: SplitDelegate!
     
     typealias DDS = DiscussionDDS
-    typealias Cell = TweetCell
+    typealias Cell = CardCell
     
     private var observers = Set<AnyCancellable>()
     
@@ -38,12 +38,15 @@ final class MainTable: UITableViewController {
             let tweet = self!.realm.tweet(id: discussion.id)!
             let author = self!.realm.user(id: tweet.authorID)!
             cell.configure(tweet: tweet, author: author, realm: self!.realm)
-
-            // TODO: populate cell with discussion information
+            cell.resetStyle()
+            
             return cell
         }
         
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
+        
+        /// Erase separators.
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         
         /// Enable self sizing table view cells.
         tableView.estimatedRowHeight = 100
@@ -76,6 +79,8 @@ final class MainTable: UITableViewController {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod))
         ]
         #endif
+        
+        tableView.backgroundColor = .systemRed
     }
     
     @objc
@@ -158,7 +163,6 @@ extension MainTable {
         guard let discussion = dds.itemIdentifier(for: indexPath) else {
             fatalError("Could not find discussion from row!")
         }
-        
         /**
          In compact width mode, it seems the `.secondary` view controller in `UISplitViewController` is lazily loaded,
          so the delegate's `splitController` can be `nil`.
@@ -168,6 +172,34 @@ extension MainTable {
         splitViewController?.show(.secondary)
         
         splitDelegate.present(discussion)
+
+        /// Style cell.
+        guard let cell = tableView.cellForRow(at: indexPath) else {
+            Swift.debugPrint("Could not find cell at \(indexPath)")
+            return
+        }
+        guard let cardCell = cell as? CardCell else {
+            assert(false, "Could not cast cell to CardCell!")
+            return
+        }
+        
+        /// Only style if cell will stay on screen.
+        if (splitViewController?.isCollapsed ?? true) == false {
+            cardCell.style(selected: true)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        /// Style cell.
+        guard let cell = tableView.cellForRow(at: indexPath) else {
+            Swift.debugPrint("Could not find cell at \(indexPath)")
+            return
+        }
+        guard let cardCell = cell as? CardCell else {
+            assert(false, "Could not cast cell to CardCell!")
+            return
+        }
+        cardCell.style(selected: false)
     }
 }
 
