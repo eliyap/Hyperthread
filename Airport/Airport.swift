@@ -39,6 +39,11 @@ final class Airport {
                     expansions: RawHydratedTweet.expansions
                 )
             }
+            .map { [weak self] (tweets: [RawHydratedTweet], users: [RawIncludeUser]) in
+                /// Remove from in-flight list.
+                tweets.forEach { self?.inFlight.remove($0.id) }
+                return (tweets, users)
+            }
             .tryMap(furtherFetch)
             .map { ids in
                 self.enqueue(ids) /// Recursive step.
