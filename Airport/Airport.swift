@@ -29,6 +29,8 @@ final class Airport {
     init(credentials: OAuthCredentials) {
         x = queue
             .buffer(size: 100, timer)
+            /// Send work to background.
+            .subscribe(on: DispatchQueue.global())
             .filter(\.isNotEmpty)
             .asyncMap { (ids: [Tweet.ID]) in
                 NetLog.log(items: "Fetching \(ids.count) IDs")
