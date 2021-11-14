@@ -96,10 +96,9 @@ final class CardCell: UITableViewCell {
                 self.backgroundButton.backgroundColor = .systemRed
                 self.backgroundButton.layer.shadowColor = UIColor.black.cgColor
                 self.backgroundButton.layer.shadowOpacity = 0.3
-                self.backgroundButton.layer.shadowRadius = self.inset
-                self.backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: self.inset)
+                self.backgroundButton.layer.shadowRadius = self.inset / 2
+                self.backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: self.inset / 2)
             }
-            
         } else {
             UIView.animate(withDuration: 0.25) { [weak self] in
                 guard let self = self else { 
