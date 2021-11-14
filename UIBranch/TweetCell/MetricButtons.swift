@@ -34,7 +34,7 @@ final class MetricsView: UIStackView {
         addArrangedSubview(UIView())
         addArrangedSubview(timestampLabel)
 
-        timestampLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        timestampLabel.font = Self.font
         timestampLabel.textColor = .secondaryLabel
         timestampLabel.adjustsFontForContentSizeCategory = true
     }
