@@ -8,6 +8,7 @@
 import UIKit
 import Twig
 import RealmSwift
+import Combine
 
 final class MainTable: UITableViewController {
     
@@ -23,6 +24,8 @@ final class MainTable: UITableViewController {
     
     typealias DDS = DiscussionDDS
     typealias Cell = TweetCell
+    
+    private var observers = Set<AnyCancellable>()
     
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
@@ -49,8 +52,19 @@ final class MainTable: UITableViewController {
         tableView.prefetchDataSource = fetcher
         
         /// Refresh timeline at app startup.
-        /// - Note: this also causes a fetch at login!
         fetcher.fetchNewTweets { /* do nothing */ }
+        
+        /// Refresh timeline at login.
+        Auth.shared.$state
+            .sink { [weak self] state in
+                switch state {
+                case .loggedIn:
+                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                default:
+                    break
+                }
+            }
+            .store(in: &observers)
         
         /// Configure Refresh.
         tableView.refreshControl = UIRefreshControl()
@@ -66,6 +80,11 @@ final class MainTable: UITableViewController {
         fetcher.fetchNewTweets { [weak self] in
             self?.tableView.refreshControl?.endRefreshing()
         }
+    }
+    
+    deinit {
+        /// Cancel to prevent leak.
+        observers.forEach { $0.cancel() }
     }
 }
 
