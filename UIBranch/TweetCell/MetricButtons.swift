@@ -12,7 +12,7 @@ final class MetricsView: UIStackView {
     let replyButton = ReplyButton()
     let retweetButton = RetweetButton()
     let likeButton = LikeButton()
-    let timestampLabel = UILabel()
+    let timestampButton = TimestampButton()
 
     fileprivate let _spacing: CGFloat = 5
     
@@ -33,18 +33,14 @@ final class MetricsView: UIStackView {
         addArrangedSubview(retweetButton)
         addArrangedSubview(likeButton)
         addArrangedSubview(UIView())
-        addArrangedSubview(timestampLabel)
-
-        timestampLabel.font = Self.font
-        timestampLabel.textColor = .secondaryLabel
-        timestampLabel.adjustsFontForContentSizeCategory = true
+        addArrangedSubview(timestampButton)
     }
 
     func configure(_ tweet: Tweet) {
         replyButton.configure(tweet)
         retweetButton.configure(tweet)
         likeButton.configure(tweet)
-        timestampLabel.text = approximateTimeSince(tweet.createdAt)
+        timestampButton.configure(tweet)
     }
 
     required init(coder: NSCoder) {
@@ -151,3 +147,16 @@ final class LikeButton: LabelledButton {
     }
 }
 
+final class TimestampButton: LabelledButton {
+    init() {
+        super.init(symbolName: "clock")
+    }
+    
+    func configure(_ tweet: Tweet) {
+        setTitle(approximateTimeSince(tweet.createdAt), for: .normal)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
