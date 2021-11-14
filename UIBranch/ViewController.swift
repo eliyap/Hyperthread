@@ -67,18 +67,24 @@ class ViewController: PMViewController {
 
 final class Split: UISplitViewController {
     
+    private let mainVC: MainTable
+    private let detailVC: DiscussionTable
+    
     init() {
+        self.detailVC = DiscussionTable()
+        self.mainVC = MainTable(splitDelegate: detailVC)
+        
         /// Set up preferred style.
         super.init(style: .doubleColumn)
         preferredDisplayMode = .oneBesideSecondary
         preferredSplitBehavior = .tile
         presentsWithGesture = false
         
-        let detailVC = DiscussionTable()
         setViewController(detailVC, for: .secondary)
-        
-        let mainVC = MainTable(splitDelegate: detailVC)
         setViewController(mainVC, for: .primary)
+        
+        /// Monitor split events.
+        delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -89,4 +95,18 @@ final class Split: UISplitViewController {
 /// Some class that communicates across the split view components.
 protocol SplitDelegate: AnyObject {
     func present(_ discussion: Discussion) -> Void
+}
+
+extension Split: UISplitViewControllerDelegate {
+    /// Prefer secondary view controller in compact width.
+    /// This allows the user to keep editing the document.
+    /// Docs: https://developer.apple.com/documentation/uikit/uisplitviewcontrollerdelegate/3580925-splitviewcontroller
+    func splitViewController(_ svc: UISplitViewController, topColumnForCollapsingToProposedTopColumn proposedTopColumn: UISplitViewController.Column) -> UISplitViewController.Column {
+        /// Collapse to document if one is open, otherwise collapse to the document picker.
+        if detailVC.discussion == nil {
+            return .primary
+        } else {
+            return .secondary
+        }
+    }
 }

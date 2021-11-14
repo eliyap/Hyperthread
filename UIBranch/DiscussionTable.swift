@@ -23,7 +23,7 @@ final class DiscussionTable: UITableViewController {
     
     private var dds: DDS! = nil
     
-    private var discussion: Discussion? = nil
+    public private(set) var discussion: Discussion? = nil
     
     typealias Cell = TweetCell
     typealias DDS = TweetDDS
@@ -56,6 +56,10 @@ final class DiscussionTable: UITableViewController {
 
 extension DiscussionTable: SplitDelegate {
     func present(_ discussion: Discussion) -> Void {
+        /// - Note: setting the `discussion` alerts ancestor `UISplitViewController` to prefer
+        ///   the secondary view when collapsing.
+        self.discussion = discussion
+        
         self.tableView = UITableView()
         spawnDDS(discussion: discussion)
     }

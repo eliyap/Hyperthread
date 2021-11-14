@@ -16,6 +16,10 @@ final class MetricsView: UIStackView {
 
     fileprivate let _spacing: CGFloat = 5
     
+    /// Central font settings.
+    public static var font: UIFont { UIFont.preferredFont(forTextStyle: Self.fontStyle) }
+    public static let fontStyle = UIFont.TextStyle.caption2
+    
     init() {
         super.init(frame: .zero)
         axis = .horizontal
@@ -31,7 +35,7 @@ final class MetricsView: UIStackView {
         addArrangedSubview(UIView())
         addArrangedSubview(timestampLabel)
 
-        timestampLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
+        timestampLabel.font = Self.font
         timestampLabel.textColor = .secondaryLabel
         timestampLabel.adjustsFontForContentSizeCategory = true
     }
@@ -52,18 +56,27 @@ class LabelledButton: UIButton {
     
     init(symbolName: String, symbolConfig: UIImage.SymbolConfiguration? = nil) {
         super.init(frame: .zero)
+        
+        /// Configure Image.
         setImage(UIImage(systemName: symbolName), for: .normal)
         var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
+        config = config.applying(UIImage.SymbolConfiguration(textStyle: MetricsView.fontStyle))
         if let other = symbolConfig {
             config = config.applying(other)
         }
         setPreferredSymbolConfiguration(config, forImageIn: .normal)
+        
+        /// Configure Label.
         setTitleColor(.secondaryLabel, for: .normal)
+        titleLabel?.font = MetricsView.font
+        titleLabel?.adjustsFontForContentSizeCategory = true
+        
+        /// Configure Action.
         addTarget(self, action: #selector(onTap), for: .touchUpInside)
     }
     
     @objc
-    func onTap() -> Void { /* does nothing */}
+    func onTap() -> Void { /* does nothing */ }
     
     /// Hide metrics with 0 count.
     func setTitle(_ count: Int) -> Void {
