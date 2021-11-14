@@ -93,9 +93,8 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
 
     override init(tableView: UITableView, cellProvider: @escaping CellProvider) {
-        #warning("TODO: sort by date instead.")
         let results = realm.objects(Discussion.self)
-            .sorted(by: \Discussion.id, ascending: false)
+            .sorted(by: \Discussion.updatedAt, ascending: false)
         
         super.init(tableView: tableView, cellProvider: cellProvider)
         /// Immediately register token.
