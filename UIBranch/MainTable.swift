@@ -23,7 +23,7 @@ final class MainTable: UITableViewController {
     private weak var splitDelegate: SplitDelegate!
     
     typealias DDS = DiscussionDDS
-    typealias Cell = TweetCell
+    typealias Cell = CardCell
     
     private var observers = Set<AnyCancellable>()
     
