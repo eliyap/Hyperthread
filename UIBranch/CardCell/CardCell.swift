@@ -93,7 +93,9 @@ final class CardCell: UITableViewCell {
                     assert(false, "self is nil")
                     return 
                 }
-                self.backgroundButton.backgroundColor = .systemRed
+                self.stackView.transform = CGAffineTransform(translationX: 0, y: -self.inset / 2)
+                self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: -self.inset / 2)
+//                self.backgroundButton.backgroundColor = .systemRed
                 self.backgroundButton.layer.shadowColor = UIColor.black.cgColor
                 self.backgroundButton.layer.shadowOpacity = 0.3
                 self.backgroundButton.layer.shadowRadius = self.inset / 2
@@ -105,8 +107,10 @@ final class CardCell: UITableViewCell {
                     assert(false, "self is nil")
                     return 
                 }
-                self.backgroundButton.backgroundColor = .secondarySystemBackground
-                self.backgroundButton.layer.shadowColor = UIColor.clear.cgColor
+                self.stackView.transform = CGAffineTransform(translationX: 0, y: 0)
+                self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
+//                self.backgroundButton.backgroundColor = .secondarySystemBackground
+                self.backgroundButton.layer.shadowColor = UIColor.black.cgColor
                 self.backgroundButton.layer.shadowOpacity = 0
                 self.backgroundButton.layer.shadowRadius = 0
                 self.backgroundButton.layer.shadowOffset = CGSize.zero
