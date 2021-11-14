@@ -58,6 +58,9 @@ extension Discussion {
             return tweets 
         }
         var result = Set<Tweet>()
+        
+        /// Include root tweet.
+        result.update(with: tweets.first(where: {$0.id == self.id})!)
 
         /// Include tweets from following users.
         var followingTweets = [Tweet]()
