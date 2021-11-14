@@ -14,7 +14,8 @@ final class CardCell: UITableViewCell {
     public static let reuseID = "CardCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
-    /// Component Views
+    /// Component
+    let backgroundButton = UIButton()
     let stackView = UIStackView()
     let replyView = ReplyView()
     let userView = UserView()
@@ -22,14 +23,16 @@ final class CardCell: UITableViewCell {
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
-    
+
     private let inset: CGFloat = 6
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        /// Do not change color when selected.
+        selectionStyle = .none
+        
         /// Configure background.
-        let backgroundButton = UIButton()
         backgroundButton.backgroundColor = .secondarySystemBackground
         addSubview(backgroundButton)
         backgroundButton.layer.cornerRadius = inset * 2
@@ -81,6 +84,35 @@ final class CardCell: UITableViewCell {
         replyView.configure(tweet: tweet, realm: realm)
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
+    }
+    
+    func style(selected: Bool) -> Void {
+        if selected {
+            UIView.animate(withDuration: 0.25) { [weak self] in
+                guard let self = self else { 
+                    assert(false, "self is nil")
+                    return 
+                }
+                self.backgroundButton.backgroundColor = .systemRed
+                self.backgroundButton.layer.shadowColor = UIColor.black.cgColor
+                self.backgroundButton.layer.shadowOpacity = 0.3
+                self.backgroundButton.layer.shadowRadius = self.inset
+                self.backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: self.inset)
+            }
+            
+        } else {
+            UIView.animate(withDuration: 0.25) { [weak self] in
+                guard let self = self else { 
+                    assert(false, "self is nil")
+                    return 
+                }
+                self.backgroundButton.backgroundColor = .secondarySystemBackground
+                self.backgroundButton.layer.shadowColor = UIColor.clear.cgColor
+                self.backgroundButton.layer.shadowOpacity = 0
+                self.backgroundButton.layer.shadowRadius = 0
+                self.backgroundButton.layer.shadowOffset = CGSize.zero
+            }
+        }
     }
     
     required init?(coder: NSCoder) {

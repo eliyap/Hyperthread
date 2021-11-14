@@ -161,7 +161,6 @@ extension MainTable {
         guard let discussion = dds.itemIdentifier(for: indexPath) else {
             fatalError("Could not find discussion from row!")
         }
-        
         /**
          In compact width mode, it seems the `.secondary` view controller in `UISplitViewController` is lazily loaded,
          so the delegate's `splitController` can be `nil`.
@@ -171,6 +170,30 @@ extension MainTable {
         splitViewController?.show(.secondary)
         
         splitDelegate.present(discussion)
+
+        /// Style cell.
+        guard let cell = tableView.cellForRow(at: indexPath) else {
+            Swift.debugPrint("Could not find cell at \(indexPath)")
+            return
+        }
+        guard let cardCell = cell as? CardCell else {
+            assert(false, "Could not cast cell to CardCell!")
+            return
+        }
+        cardCell.style(selected: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        /// Style cell.
+        guard let cell = tableView.cellForRow(at: indexPath) else {
+            Swift.debugPrint("Could not find cell at \(indexPath)")
+            return
+        }
+        guard let cardCell = cell as? CardCell else {
+            assert(false, "Could not cast cell to CardCell!")
+            return
+        }
+        cardCell.style(selected: false)
     }
 }
 
