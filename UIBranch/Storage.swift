@@ -47,6 +47,7 @@ extension UserDefaults {
         }
     }
 
+    /// - Note: **only** update this value with tweets from a user's actual timeline, NOT follow up fetches!
     /// Docs: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/guides/working-with-timelines
     fileprivate static let maxIDKey = "maxID"
     var maxID: String? {

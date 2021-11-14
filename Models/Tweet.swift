@@ -196,6 +196,8 @@ final class Tweet: Object, Identifiable {
     @Persisted(originProperty: Conversation.tweetsPropertyName)
     var conversation: LinkingObjects<Conversation>
     
+    /// The ID whose `Conversation` this Tweet belongs to.
+    /// Note this is also the ID of the Conversation's root tweet.
     @Persisted
     var conversation_id: ID
     

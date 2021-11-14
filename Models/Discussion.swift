@@ -20,6 +20,10 @@ final class Discussion: Object, Identifiable {
     @Persisted
     var root: Conversation?
     
+    /// The `createdAt` date of the most recent Tweet in this Discussion.
+    @Persisted
+    var updatedAt: Date
+    
     @Persisted
     var conversations: List<Conversation>
     public static let conversationsPropertyName = "conversations"
@@ -34,6 +38,9 @@ final class Discussion: Object, Identifiable {
         self.root = root
         self.conversations = List<Conversation>()
         self.conversations.append(root)
+        
+        /// Safe to force unwrap, `root` must have ≥1 `tweets`.
+        self.updatedAt = root.tweets.map(\.createdAt).max()!
     }
 }
 
@@ -88,5 +95,14 @@ extension Discussion {
         result.formSymmetricDifference(toRemove)
         
         return result.sorted(by: {$0.id < $1.id})
+    }
+}
+
+extension Discussion {
+    /// Update the last updated date.
+    func update(with date: Date?) -> Void {
+        if let date = date {
+            updatedAt = max(updatedAt, date)
+        }
     }
 }
