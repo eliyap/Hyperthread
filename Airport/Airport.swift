@@ -41,9 +41,10 @@ final class Airport {
                     expansions: RawHydratedTweet.expansions
                 )
             }
+            /// Remove from in-flight list.
             .map { [weak self] (tweets: [RawHydratedTweet], users: [RawIncludeUser]) in
-                /// Remove from in-flight list.
                 tweets.forEach { self?.inFlight.remove($0.id) }
+                print("Fetched \(tweets.count) tweets. \(self?.inFlight.count ?? -1) still in flight.")
                 return (tweets, users)
             }
             .tryMap(furtherFetch)
@@ -59,8 +60,8 @@ final class Airport {
                 case .finished:
                     fatalError("Should not finish")
                 }
-            }, receiveValue: { (ids: Set<Tweet.ID>) in
-                print("Fetched \(ids.count) ids")
+            }, receiveValue: { (_: Set<Tweet.ID>) in
+                /// Nothing.
             })
     }
     
