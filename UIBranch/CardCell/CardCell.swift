@@ -36,10 +36,10 @@ final class CardCell: UITableViewCell {
         backgroundButton.layer.cornerCurve = .continuous
         backgroundButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            backgroundButton.topAnchor.constraint(equalTo: topAnchor, constant: inset),
-            backgroundButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -inset),
-            backgroundButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
-            backgroundButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
+            backgroundButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: inset),
+            backgroundButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -inset),
+            backgroundButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: inset),
+            backgroundButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -inset),
         ])
         
         /// Configure Main Stack View
