@@ -118,7 +118,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 self.setContents(to: results, animated: false)
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                print("Update: \(results.count) tweets, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
+                print("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
                 self.setContents(to: results, animated: true)
             
             case .error(let error):
