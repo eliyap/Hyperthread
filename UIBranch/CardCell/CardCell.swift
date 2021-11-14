@@ -22,7 +22,6 @@ final class CardCell: UITableViewCell {
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
-    // TODO: add retweet marker
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
