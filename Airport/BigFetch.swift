@@ -107,6 +107,7 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
                 let upstreamDiscussion = upstreamConvo.discussion.first
             {
                 upstreamDiscussion.conversations.append(orphan)
+                upstreamDiscussion.update(with: orphan.tweets.map(\.createdAt).max())
             } else {
                 /// Go fetch the upstream conversation root.
                 idsToFetch.insert(upstreamID)
