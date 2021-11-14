@@ -55,14 +55,15 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
     /// Check orphaned conversations.
     let orphans = realm.orphanConversations()
     try realm.write {
-        for orphan in orphans {
+        for orphan: Conversation in orphans {
             /// Link to upstream's discussion, if possible.
             if
                 let upstreamID = orphan.upstream,
                 let upstreamConvo = realm.conversation(id: upstreamID),
-                let upstreamDiscussion = upstreamConvo.discussion.first
+                let upstream: Discussion = upstreamConvo.discussion.first
             {
-                upstreamDiscussion.conversations.append(orphan)
+                upstream.conversations.append(orphan)
+                upstream.update(with: orphan.tweets.map(\.createdAt).max())
                 continue
             }
             /** Conclusion: upstream is either missing, or itself has no `Discussion`. **/
