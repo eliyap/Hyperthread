@@ -92,14 +92,17 @@ final class CardCell: UITableViewCell {
                 assert(false, "self is nil")
                 return
             }
+            /// By changing the radius, offset, and transform at the same time, we can grow / shrink the shadow in place,
+            /// creating a "lifting" illusion.
+            let shadowSize = self.inset * 0.75
             if selected {
-                self.stackView.transform = CGAffineTransform(translationX: 0, y: -self.inset / 2)
-                self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: -self.inset / 2)
+                self.stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
+                self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
 //                self.backgroundButton.backgroundColor = .systemRed
                 self.backgroundButton.layer.shadowColor = UIColor.black.cgColor
                 self.backgroundButton.layer.shadowOpacity = 0.3
-                self.backgroundButton.layer.shadowRadius = self.inset / 2
-                self.backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: self.inset / 2)
+                self.backgroundButton.layer.shadowRadius = shadowSize
+                self.backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
             } else {
                 self.stackView.transform = CGAffineTransform(translationX: 0, y: 0)
                 self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
