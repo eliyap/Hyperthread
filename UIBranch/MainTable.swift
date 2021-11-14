@@ -49,6 +49,7 @@ final class MainTable: UITableViewController {
         tableView.prefetchDataSource = fetcher
         
         /// Refresh timeline at app startup.
+        /// - Note: this also causes a fetch at login!
         fetcher.fetchNewTweets()
     }
     
