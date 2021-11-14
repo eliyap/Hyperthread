@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import Twig
+import Combine
 
 enum TweetSection: Int {
     /// The only section, for now.
@@ -24,6 +25,8 @@ final class DiscussionTable: UITableViewController {
     private var dds: DDS! = nil
     
     public private(set) var discussion: Discussion? = nil
+    
+    private var observers = Set<AnyCancellable>()
     
     typealias Cell = TweetCell
     typealias DDS = TweetDDS
@@ -51,6 +54,11 @@ final class DiscussionTable: UITableViewController {
             // TODO: populate cell with discussion information
             return cell
         }
+    }
+    
+    deinit {
+        /// Cancel subscriptions so that they do not leak.
+        observers.forEach { $0.cancel() }
     }
 }
 
