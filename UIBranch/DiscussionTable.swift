@@ -47,6 +47,14 @@ final class DiscussionTable: UITableViewController {
         fatalError("No.")
     }
     
+    /// Create a new Diffable Data Source and new UITableView
+    /// to present the new Discussion.
+    ///
+    /// From the docs:
+    /// >  If the table view needs a new data source after you configure it initially,
+    /// > create and configure a new table view and diffable data source.
+    ///
+    /// Docs: https://developer.apple.com/documentation/uikit/uitableviewdiffabledatasource
     private func spawnDDS(discussion: Discussion?) {
         self.tableView = UITableView()
         tableView.register(CardCell.self, forCellReuseIdentifier: CardCell.reuseID)
