@@ -47,6 +47,9 @@ final class MainTable: UITableViewController {
         
         /// Enable pre-fetching.
         tableView.prefetchDataSource = fetcher
+        
+        /// Refresh timeline at app startup.
+        fetcher.fetchNewTweets()
     }
     
     required init?(coder: NSCoder) {
