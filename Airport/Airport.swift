@@ -13,6 +13,11 @@ import Twig
  Organizes requests for Tweets so that they are dispatched in an orderly, yet timely fasion.
  */
 final class Airport {
+    /**
+     - Important: Tech Note. Using `.subscribe(on: DispatchQueue.global())`
+       to "background" work, caused the first fetch (containing the most recent ~100 tweets) to "go missing".
+       Avoid this method for now.
+     */
     
     /// - Note: tolerance set to 100% to prevent performance hits.
     /// Docs: https://developer.apple.com/documentation/foundation/timer/1415085-tolerance
@@ -29,8 +34,6 @@ final class Airport {
     init(credentials: OAuthCredentials) {
         x = queue
             .buffer(size: 100, timer)
-            /// Send work to background.
-            .subscribe(on: DispatchQueue.global())
             .filter(\.isNotEmpty)
             .asyncMap { (ids: [Tweet.ID]) in
                 NetLog.log(items: "Fetching \(ids.count) IDs")
