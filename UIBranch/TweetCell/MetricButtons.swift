@@ -66,6 +66,8 @@ class LabelledButton: UIButton {
         
         /// Configure Label.
         setTitleColor(.secondaryLabel, for: .normal)
+        titleLabel?.font = MetricsView.font
+        titleLabel?.adjustsFontForContentSizeCategory = true
         
         /// Configure Action.
         addTarget(self, action: #selector(onTap), for: .touchUpInside)
