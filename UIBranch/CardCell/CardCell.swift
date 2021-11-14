@@ -98,7 +98,7 @@ final class CardCell: UITableViewCell {
             if selected {
                 self.stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
                 self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-//                self.backgroundButton.backgroundColor = .systemRed
+                self.backgroundButton.backgroundColor = .devSecondarySelected
                 self.backgroundButton.layer.shadowColor = UIColor.black.cgColor
                 self.backgroundButton.layer.shadowOpacity = 0.3
                 self.backgroundButton.layer.shadowRadius = shadowSize
@@ -106,7 +106,7 @@ final class CardCell: UITableViewCell {
             } else {
                 self.stackView.transform = CGAffineTransform(translationX: 0, y: 0)
                 self.backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
-//                self.backgroundButton.backgroundColor = .secondarySystemBackground
+                self.backgroundButton.backgroundColor = .devSecondary
                 self.backgroundButton.layer.shadowColor = UIColor.black.cgColor
                 self.backgroundButton.layer.shadowOpacity = 0
                 self.backgroundButton.layer.shadowRadius = 0
