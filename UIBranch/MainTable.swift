@@ -171,6 +171,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
         Task {
             guard let credentials = Auth.shared.credentials else {
                 assert(false, "Tried to load tweets with nil credentials!")
+                return
             }
             
             /// Prevent repeated requests.
@@ -206,6 +207,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
         Task {
             guard let credentials = Auth.shared.credentials else {
                 assert(false, "Tried to load tweets with nil credentials!")
+                return
             }
             
             /// Prevent repeated requests.
