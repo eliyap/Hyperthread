@@ -58,6 +58,8 @@ final class TweetCell: UITableViewCell {
         /// Allow tweet to wrap across lines.
         tweetLabel.lineBreakMode = .byWordWrapping
         tweetLabel.numberOfLines = 0 /// Yes, really.
+        
+        backgroundColor = .flat
     }
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
