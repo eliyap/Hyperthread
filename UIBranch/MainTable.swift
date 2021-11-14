@@ -216,7 +216,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Update boundaries.
             let newMaxID = min(rawTweets.map(\.id).min(), Int64?(maxID))
             UserDefaults.groupSuite.maxID = newMaxID.string
-            Swift.debugPrint("newMaxID \(newMaxID ?? 0), previously \(maxID ?? "")")
+            Swift.debugPrint("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
             Swift.debugPrint(rawTweets.map(\.id))
         }
     }
@@ -248,7 +248,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Update boundaries.
             let newSinceID = max(rawTweets.map(\.id).max(), Int64?(sinceID))
             UserDefaults.groupSuite.sinceID = newSinceID.string
-            Swift.debugPrint("newSinceID \(newSinceID ?? 0)")
+            Swift.debugPrint("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
             
             onFetched()
         }
