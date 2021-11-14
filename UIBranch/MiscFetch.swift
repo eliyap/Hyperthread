@@ -16,7 +16,7 @@ func updateFollowing(credentials: OAuthCredentials) async -> Void {
         /// Store on disk.
         UserDefaults.groupSuite.followingIDs = rawUsers.map(\.id)
         
-        /// Update in memory store.
+        /// Update in-memory store.
         Following.shared.ids = rawUsers.map(\.id)
     } catch {
         fatalError(error.localizedDescription)
