@@ -16,6 +16,9 @@ final class MetricsView: UIStackView {
 
     fileprivate let _spacing: CGFloat = 5
     
+    /// Sets the font size for this view.
+    public static let font = UIFont.preferredFont(forTextStyle: .caption2)
+    
     init() {
         super.init(frame: .zero)
         axis = .horizontal
