@@ -138,6 +138,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             let numDiscussions = numDiscussions,
             (indexPaths.max()!.row - numDiscussions) < threshhold
         {
+            TableLog.log(items: "\(indexPaths.max()!.row) requested, prefetching items...")
             fetchOldTweets()
         }
     }
