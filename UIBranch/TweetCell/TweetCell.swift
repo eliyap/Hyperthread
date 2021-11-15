@@ -19,7 +19,6 @@ final class TweetCell: UITableViewCell {
     
     /// Component Views
     let stackView = UIStackView()
-    let replyView = ReplyView()
     let userView = UserView()
     let tweetLabel = UILabel()
     let retweetView = RetweetView()
@@ -47,7 +46,6 @@ final class TweetCell: UITableViewCell {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(replyView)
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetLabel)
         stackView.addArrangedSubview(retweetView)
@@ -73,7 +71,6 @@ final class TweetCell: UITableViewCell {
     public func configure(node: Node, author: User, realm: Realm) {
         userView.configure(tweet: node.tweet, user: author, timestamp: node.tweet.createdAt)
         tweetLabel.text = node.tweet.text
-        replyView.configure(tweet: node.tweet, realm: realm)
         retweetView.configure(tweet: node.tweet, realm: realm)
         metricsView.configure(node.tweet)
         
