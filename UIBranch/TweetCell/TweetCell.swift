@@ -15,6 +15,7 @@ final class TweetCell: UITableViewCell {
     override var reuseIdentifier: String? { Self.reuseID }
     
     let depthStack = UIStackView()
+    let depthSpacer = UIView()
     
     /// Component Views
     let stackView = UIStackView()
@@ -33,6 +34,7 @@ final class TweetCell: UITableViewCell {
         contentView.addSubview(depthStack)
         depthStack.axis = .horizontal
         depthStack.translatesAutoresizingMaskIntoConstraints = false
+        depthStack.addArrangedSubview(depthSpacer)
         depthStack.addArrangedSubview(stackView)
 
         /// Configure Main Stack View.
