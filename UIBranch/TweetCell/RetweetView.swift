@@ -32,8 +32,7 @@ final class RetweetView: UIStackView {
         }
         retweetLabels = []
         
-        tweet.retweetedBy.forEach { userID in
-            let user = realm.user(id: userID)!
+        tweet.retweetedBy.forEach { user in
             let label = IconView(sfSymbol: RetweetSymbol.name, config: RetweetSymbol.config)
             label.setText(to: "@" + user.handle)
             retweetLabels.append(label)
