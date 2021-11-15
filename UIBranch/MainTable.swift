@@ -85,9 +85,9 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod() {
-        Swift.debugPrint(realm.orphanConversations().count, " orphan conversations.")
-        Swift.debugPrint(realm.orphanTweets().count, " orphan tweets.")
-        Swift.debugPrint(realm.tweet(id: "1459940197697732615")?.conversation)
+        let rted = realm.objects(Tweet.self)
+            .filter("retweetedBy.length > 0")
+        Swift.debugPrint(rted.count)
     }
     
     required init?(coder: NSCoder) {
