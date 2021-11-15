@@ -245,6 +245,13 @@ extension Tweet {
     var primaryReference: ID? {
         replying_to ?? quoting ?? retweeting
     }
+    
+    var primaryReferenceType: RawReferenceType? {
+        if replying_to != nil { return .replied_to }
+        if quoting != nil { return .quoted }
+        if retweeting != nil { return .retweeted }
+        return .none
+    }
 }
 
 // MARK: - Convenience Methods.
