@@ -38,7 +38,7 @@ final class UserView: UIStackView {
         handleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
-    public func configure(user: User, timestamp: Date) {
+    public func configure(tweet: Tweet, user: User, timestamp: Date) {
         nameLabel.text = user.name
         handleLabel.text = "@" + user.handle
     }

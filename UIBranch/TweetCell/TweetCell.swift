@@ -71,7 +71,7 @@ final class TweetCell: UITableViewCell {
     }
 
     public func configure(node: Node, author: User, realm: Realm) {
-        userView.configure(user: author, timestamp: node.tweet.createdAt)
+        userView.configure(tweet: node.tweet, user: author, timestamp: node.tweet.createdAt)
         tweetLabel.text = node.tweet.text
         replyView.configure(tweet: node.tweet, realm: realm)
         retweetView.configure(tweet: node.tweet, realm: realm)
