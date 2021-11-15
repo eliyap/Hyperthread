@@ -80,6 +80,10 @@ final class DiscussionTable: UITableViewController {
                 return cell
             }
         }
+        
+        var arr = [Node]()
+        discussion?.makeTree().assemble(&arr)
+        print(arr)
     }
     
     deinit {

@@ -14,37 +14,45 @@ final class Node {
     /// How many references away `tweet` is from the discussion root.
     public let depth: Int
     
-    /// - Note: nodes must be chronologically sorted by `createdAt`.
-    private(set) var referencing: [Node]
+    public private(set) weak var parent: Node!
     
-    init(_ tweet: Tweet, depth: Int) {
+    /// - Note: nodes must be chronologically sorted by `createdAt`.
+    public private(set) var children: [Node]
+    
+    init(_ tweet: Tweet, depth: Int, parent: Node?) {
         self.tweet = tweet
         self.depth = depth
-        self.referencing = []
+        self.children = []
+        self.parent = parent
+        parent?.append(self)
     }
     
     /// Use tail recursion to create proper list.
-    func assemble(_ array: inout [Tweet]) -> Void {
-        array.append(tweet)
-        for node in referencing {
+    func assemble(_ array: inout [Node]) -> Void {
+        array.append(self)
+        for node in children {
             node.assemble(&array)
         }
     }
     
-    func append(_ node: Node) -> Void {
-        referencing.append(node)
+    private func append(_ node: Node) -> Void {
+        children.append(node)
     }
 }
 
 extension Discussion {
     func makeTree() -> Node {
         let realm = try! Realm()
-        let root = Node(realm.tweet(id: self.id)!, depth: 0)
+        let root = Node(realm.tweet(id: self.id)!, depth: 0, parent: nil)
         let chron = self.tweets.sorted { $0.createdAt < $1.createdAt }
         var nodes = [root]
         
         
         for t: Tweet in chron[1...] {
+            /// Discard retweets.
+            guard t.retweeting == nil else { continue }
+            
+            /// Safety checks.
             guard let PRID = t.primaryReference else {
                 assert(false, "No primary reference.")
                 continue
@@ -53,8 +61,7 @@ extension Discussion {
                 assert(false, "Could not find primary reference.")
                 continue
             }
-            let newNode = Node(t, depth: PRNode.depth + 1)
-            PRNode.append(newNode)
+            let newNode = Node(t, depth: PRNode.depth + 1, parent: PRNode)
             nodes.append(newNode)
         }
         return root
