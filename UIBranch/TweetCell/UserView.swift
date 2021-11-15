@@ -11,6 +11,7 @@ import Twig
 
 final class UserView: UIStackView {
     
+    private let symbolButton = UIButton()
     private let nameLabel = UILabel()
     private let handleLabel = UILabel()
     fileprivate let _spacing: CGFloat = 5
@@ -23,6 +24,7 @@ final class UserView: UIStackView {
 
         translatesAutoresizingMaskIntoConstraints = false
         
+        addArrangedSubview(symbolButton)
         addArrangedSubview(nameLabel)
         addArrangedSubview(handleLabel)
 
@@ -36,11 +38,31 @@ final class UserView: UIStackView {
         /// Allow handle to be truncated if space is insufficient.
         /// We want this to be truncated before the username is.
         handleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        
+        /// Configure Symbol.
+        var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
+        config = config.applying(UIImage.SymbolConfiguration(textStyle: .headline))
+        symbolButton.setPreferredSymbolConfiguration(config, forImageIn: .normal)
     }
 
     public func configure(tweet: Tweet, user: User, timestamp: Date) {
         nameLabel.text = user.name
         handleLabel.text = "@" + user.handle
+        
+        switch tweet.primaryReferenceType {
+        case .replied_to:
+            symbolButton.isHidden = false
+            symbolButton.setImage(UIImage(systemName: "arrowshape.turn.up.left.fill"), for: .normal)
+        case .quoted:
+            symbolButton.isHidden = false
+            symbolButton.setImage(UIImage(systemName: "quote.bubble.fill"), for: .normal)
+        default:
+            symbolButton.isHidden = true
+            
+            /// Placeholder image prevents height shrinking to zero, which leads to graphical glitches.
+            symbolButton.setImage(UIImage(systemName: "circle"), for: .normal)
+        }
+        
     }
 
     required init(coder: NSCoder) {
