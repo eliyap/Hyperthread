@@ -14,6 +14,8 @@ final class TweetCell: UITableViewCell {
     public static let reuseID = "TweetCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
+    let depthStack = UIStackView()
+    
     /// Component Views
     let stackView = UIStackView()
     let replyView = ReplyView()
@@ -27,8 +29,13 @@ final class TweetCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        /// Configure Main Stack View
-        contentView.addSubview(stackView)
+        /// Configure Depth Stack View.
+        contentView.addSubview(depthStack)
+        depthStack.axis = .horizontal
+        depthStack.translatesAutoresizingMaskIntoConstraints = false
+        depthStack.addArrangedSubview(stackView)
+
+        /// Configure Main Stack View.
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
