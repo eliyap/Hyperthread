@@ -76,6 +76,10 @@ final class TweetCell: UITableViewCell {
         replyView.configure(tweet: node.tweet, realm: realm)
         retweetView.configure(tweet: node.tweet, realm: realm)
         metricsView.configure(node.tweet)
+        
+        NSLayoutConstraint.activate([
+            depthSpacer.widthAnchor.constraint(equalToConstant: 10 * CGFloat(node.depth))
+        ])
     }
     
     required init?(coder: NSCoder) {
