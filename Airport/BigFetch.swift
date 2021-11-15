@@ -20,10 +20,15 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
     /// IDs for further fetching.
     var idsToFetch = Set<Tweet.ID>()
     
+    var tweets = Set<Tweet>()
+    var users = Set<User>()
+    
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
-            realm.add(User(raw: rawUser), update: .modified)
+            let user = User(raw: rawUser)
+            realm.add(user, update: .modified)
+            users.insert(user)
         }
     }
     
@@ -32,6 +37,7 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
         for rawTweet in rawTweets {
             let tweet: Tweet = Tweet(raw: rawTweet)
             realm.add(tweet, update: .modified)
+            tweets.insert(tweet)
             
             /// Attach to user.
             guard let user: User = realm.user(id: rawTweet.author_id) else {
@@ -55,6 +61,8 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
             }
         }
     }
+    
+    try linkRetweets(tweets: tweets, users: users, realm: realm)
     
     /// Check orphaned conversations.
     let orphans = realm.orphanConversations()
@@ -125,5 +133,28 @@ fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, rea
     } else {
         /// Go fetch the upstream conversation root.
         idsToFetch.insert(upstreamID)
+    }
+}
+
+/// Mark an inverse relationship.
+fileprivate func linkRetweets(tweets: Set<Tweet>, users: Set<User>, realm: Realm) throws -> Void {
+    try realm.write {
+        for tweet in tweets {
+            guard let retweetID = tweet.retweeting else { continue }
+            
+            /// Safety Checks. A retweet on the timeline should **always** have the original tweet
+            /// and the retweeting user included in the response.
+            guard
+                let original: Tweet = tweets.first(where: {$0.id == retweetID}),
+                let retweeter: User = realm.user(id: tweet.authorID)
+            else {
+                assert(false, "\(retweetID)'s tweet or author not found in return value!")
+                return
+            }
+            
+            if original.retweetedBy.contains(retweeter) == false {
+                original.retweetedBy.append(retweeter)
+            }
+        }
     }
 }
