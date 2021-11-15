@@ -31,7 +31,7 @@ final class DiscussionTable: UITableViewController {
     
     private var observers = Set<AnyCancellable>()
     
-    typealias DDS = TweetDDS
+    typealias DDS = NodeDDS
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -59,31 +59,27 @@ final class DiscussionTable: UITableViewController {
         self.tableView = UITableView()
         tableView.register(CardCell.self, forCellReuseIdentifier: CardCell.reuseID)
         tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
-        dds = DDS(followingIDs: followingIDs, discussion: discussion, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, tweet: Tweet) -> UITableViewCell? in
-            let author = self!.realm.user(id: tweet.authorID)!
+        dds = DDS(followingIDs: followingIDs, discussion: discussion, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, node: Node) -> UITableViewCell? in
+            let author = self!.realm.user(id: node.tweet.authorID)!
             if indexPath == IndexPath(row: 0, section: 0) {
                 /// Safety check.
-                assert(tweet.id == discussion?.id, "Root tweet ID does not match discussion ID!")
+                assert(node.tweet.id == discussion?.id, "Root tweet ID does not match discussion ID!")
                 
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: CardCell.reuseID) as? CardCell else {
                     fatalError("Failed to create or cast new cell!")
                 }
-                cell.configure(tweet: tweet, author: author, realm: self!.realm)
+                cell.configure(tweet: node.tweet, author: author, realm: self!.realm)
 
                 return cell
             } else {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TweetCell.reuseID) as? TweetCell else {
                     fatalError("Failed to create or cast new cell!")
                 }
-                cell.configure(tweet: tweet, author: author, realm: self!.realm)
+                cell.configure(node: node, author: author, realm: self!.realm)
 
                 return cell
             }
         }
-        
-        var arr = [Node]()
-        discussion?.makeTree().assemble(&arr)
-        print(arr)
     }
     
     deinit {
@@ -103,12 +99,12 @@ extension DiscussionTable: SplitDelegate {
     }
 }
 
-final class TweetDDS: UITableViewDiffableDataSource<TweetSection, Tweet> {
+final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
     private let realm = try! Realm()
     private var token: NotificationToken! = nil
 
     /// For our convenience.
-    typealias Snapshot = NSDiffableDataSourceSnapshot<TweetSection, Tweet>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<TweetSection, Node>
     
     init(
         followingIDs: [User.ID]?,
@@ -129,11 +125,15 @@ final class TweetDDS: UITableViewDiffableDataSource<TweetSection, Tweet> {
             }
         }
         
+        
         var snapshot = Snapshot()
         if let discussion = discussion {
+            var flatTree = [Node]()
+            discussion.makeTree().assemble(&flatTree)
+            
             snapshot.appendSections([.root, .discussion])
-            snapshot.appendItems([realm.tweet(id: discussion.id)!], toSection: .root)
-            snapshot.appendItems(discussion.relevantTweets(followingUserIDs: followingIDs), toSection: .discussion)
+            snapshot.appendItems([flatTree[0]], toSection: .root)
+            snapshot.appendItems(Array(flatTree[1...]), toSection: .discussion)
         }
         self.apply(snapshot, animatingDifferences: false)
     }

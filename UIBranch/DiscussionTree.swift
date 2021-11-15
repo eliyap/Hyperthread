@@ -8,7 +8,9 @@
 import Foundation
 import RealmSwift
 
-final class Node {
+final class Node: Identifiable {
+    public var id: Tweet.ID { tweet.id }
+    
     public let tweet: Tweet
     
     /// How many references away `tweet` is from the discussion root.
@@ -37,6 +39,19 @@ final class Node {
     
     private func append(_ node: Node) -> Void {
         children.append(node)
+    }
+}
+
+extension Node: Equatable {
+    static func == (lhs: Node, rhs: Node) -> Bool {
+        return lhs.tweet == rhs.tweet && lhs.depth == rhs.depth && lhs.children == rhs.children
+    }
+}
+extension Node: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(tweet)
+        hasher.combine(depth)
+        hasher.combine(children)
     }
 }
 

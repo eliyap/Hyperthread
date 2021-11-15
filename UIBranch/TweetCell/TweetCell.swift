@@ -71,12 +71,12 @@ final class TweetCell: UITableViewCell {
         backgroundColor = .flat
     }
 
-    public func configure(tweet: Tweet, author: User, realm: Realm) {
-        userView.configure(user: author, timestamp: tweet.createdAt)
-        tweetLabel.text = tweet.text
-        replyView.configure(tweet: tweet, realm: realm)
-        retweetView.configure(tweet: tweet, realm: realm)
-        metricsView.configure(tweet)
+    public func configure(node: Node, author: User, realm: Realm) {
+        userView.configure(user: author, timestamp: node.tweet.createdAt)
+        tweetLabel.text = node.tweet.text
+        replyView.configure(tweet: node.tweet, realm: realm)
+        retweetView.configure(tweet: node.tweet, realm: realm)
+        metricsView.configure(node.tweet)
     }
     
     required init?(coder: NSCoder) {
