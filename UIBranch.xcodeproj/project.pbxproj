@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		222161F22741A8EA00220F0C /* CardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardCell.swift */; };
 		222161F42741C2F400220F0C /* AssetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F32741C2F400220F0C /* AssetColors.swift */; };
+		222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F52741D7FF00220F0C /* DiscussionTree.swift */; };
 		223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2A27377BE500375530 /* AppDelegate.swift */; };
 		223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2C27377BE500375530 /* SceneDelegate.swift */; };
 		223BBF2F27377BE500375530 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2E27377BE500375530 /* ViewController.swift */; };
@@ -72,6 +73,7 @@
 /* Begin PBXFileReference section */
 		222161F12741A8EA00220F0C /* CardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCell.swift; sourceTree = "<group>"; };
 		222161F32741C2F400220F0C /* AssetColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetColors.swift; sourceTree = "<group>"; };
+		222161F52741D7FF00220F0C /* DiscussionTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DiscussionTree.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/DiscussionTree.swift; sourceTree = "<absolute>"; };
 		223BBF2727377BE500375530 /* UIBranch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIBranch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		223BBF2A27377BE500375530 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		223BBF2C27377BE500375530 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				223BBF2C27377BE500375530 /* SceneDelegate.swift */,
 				223BBF2E27377BE500375530 /* ViewController.swift */,
 				223BBF852738572C00375530 /* MainTable.swift */,
+				222161F52741D7FF00220F0C /* DiscussionTree.swift */,
 				222161F02741A8D300220F0C /* CardCell */,
 				22D127DF2740653900932614 /* TweetCell */,
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
@@ -508,6 +511,7 @@
 				223BBF7127377EC300375530 /* Query.swift in Sources */,
 				223BBF6627377E8900375530 /* Buffer.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
+				222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
 				22D127F02740A17B00932614 /* Following.swift in Sources */,
 				223BBF7C273791A100375530 /* PMViewController.swift in Sources */,

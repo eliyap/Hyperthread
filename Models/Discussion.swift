@@ -88,8 +88,6 @@ extension Discussion {
         for tweet in result {
             if let rtID = tweet.retweeting {
                 toRemove.insert(tweet)
-                let retweeted = tweets.first(where: {$0.id == rtID})!
-                retweeted.retweetedBy.insert(tweet.authorID)
             }
         }
         result.formSymmetricDifference(toRemove)

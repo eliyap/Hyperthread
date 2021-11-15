@@ -14,6 +14,9 @@ final class TweetCell: UITableViewCell {
     public static let reuseID = "TweetCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
+    let depthStack = UIStackView()
+    let depthSpacer = UIView()
+    
     /// Component Views
     let stackView = UIStackView()
     let replyView = ReplyView()
@@ -27,18 +30,23 @@ final class TweetCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        /// Configure Main Stack View
-        contentView.addSubview(stackView)
+        /// Configure Depth Stack View.
+        contentView.addSubview(depthStack)
+        depthStack.axis = .horizontal
+        depthStack.translatesAutoresizingMaskIntoConstraints = false
+        depthStack.addArrangedSubview(depthSpacer)
+        depthStack.addArrangedSubview(stackView)
+        NSLayoutConstraint.activate([
+            depthStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            depthStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            depthStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            depthStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+        ])
+
+        /// Configure Main Stack View.
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-        ])
-
         stackView.addArrangedSubview(replyView)
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetLabel)
@@ -58,14 +66,20 @@ final class TweetCell: UITableViewCell {
         /// Allow tweet to wrap across lines.
         tweetLabel.lineBreakMode = .byWordWrapping
         tweetLabel.numberOfLines = 0 /// Yes, really.
+        
+        backgroundColor = .flat
     }
 
-    public func configure(tweet: Tweet, author: User, realm: Realm) {
-        userView.configure(user: author, timestamp: tweet.createdAt)
-        tweetLabel.text = tweet.text
-        replyView.configure(tweet: tweet, realm: realm)
-        retweetView.configure(tweet: tweet, realm: realm)
-        metricsView.configure(tweet)
+    public func configure(node: Node, author: User, realm: Realm) {
+        userView.configure(user: author, timestamp: node.tweet.createdAt)
+        tweetLabel.text = node.tweet.text
+        replyView.configure(tweet: node.tweet, realm: realm)
+        retweetView.configure(tweet: node.tweet, realm: realm)
+        metricsView.configure(node.tweet)
+        
+        NSLayoutConstraint.activate([
+            depthSpacer.widthAnchor.constraint(equalToConstant: 10 * CGFloat(node.depth))
+        ])
     }
     
     required init?(coder: NSCoder) {

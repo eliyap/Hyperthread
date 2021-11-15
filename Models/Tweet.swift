@@ -211,10 +211,6 @@ final class Tweet: Object, Identifiable {
     @Persisted
     var quoting: ID?
     
-    /// Users who retweets this.
-    /// Ephemeral.
-    var retweetedBy = Set<User.ID>()
-    
     init(raw: RawHydratedTweet) {
         super.init()
         self.id = raw.id
