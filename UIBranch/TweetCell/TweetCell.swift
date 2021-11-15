@@ -36,18 +36,17 @@ final class TweetCell: UITableViewCell {
         depthStack.translatesAutoresizingMaskIntoConstraints = false
         depthStack.addArrangedSubview(depthSpacer)
         depthStack.addArrangedSubview(stackView)
+        NSLayoutConstraint.activate([
+            depthStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            depthStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            depthStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            depthStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+        ])
 
         /// Configure Main Stack View.
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-        ])
-
         stackView.addArrangedSubview(replyView)
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetLabel)
