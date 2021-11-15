@@ -9,7 +9,11 @@ import Foundation
 import RealmSwift
 import Twig
 
-
+/**
+ Accepts raw data from the Twitter v2 API.
+ Returns: Tweet IDs still need to be fetched.
+ Also tries to link Tweets to Conversations, and Conversations to Discussions.
+ */
 func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) throws -> Set<Tweet.ID> {
     let realm = try! Realm()
     
@@ -23,7 +27,7 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
         }
     }
     
-    /// Insert all tweets.
+    /// Insert Tweets into local database.
     try realm.write {
         for rawTweet in rawTweets {
             let tweet: Tweet = Tweet(raw: rawTweet)
