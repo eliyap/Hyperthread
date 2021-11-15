@@ -57,25 +57,6 @@ extension Discussion {
             PRNode.append(newNode)
             nodes.append(newNode)
         }
-//        /// Assign depths to all tweets.
-//        for t: Tweet in chron {
-//            guard t.depth == nil else { continue }
-//            guard t.id != self.id else { t.depth = 0; continue }
-//
-//            guard let PRID = t.primaryReference else {
-//                assert(false, "No primary reference.")
-//                continue
-//            }
-//            guard let PR = chron.first(where: {$0.id == PRID}) else {
-//                assert(false, "Could not find primary reference.")
-//                continue
-//            }
-//            guard let PRDepth = PR.depth else {
-//                assert(false, "Primary Reference has no depth.")
-//                continue
-//            }
-//            t.depth = PRDepth + 1
-//        }
         return root
     }
 }
