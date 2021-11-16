@@ -14,7 +14,9 @@ final class IconView: UIStackView {
     private let imageView = UIImageView()
     private let label = UILabel()
     
-    init(sfSymbol: String, config: UIImage.SymbolConfiguration? = nil) {
+    private let textStyle = UIFont.TextStyle.footnote
+    
+    init(sfSymbol: String, symbolConfig: UIImage.SymbolConfiguration? = nil) {
         super.init(frame: .zero)
         
         /// Configure Main Stack View.
@@ -26,14 +28,17 @@ final class IconView: UIStackView {
         addArrangedSubview(imageView)
         addArrangedSubview(label)
 
-        label.font = UIFont.preferredFont(forTextStyle: .footnote)
+        label.font = UIFont.preferredFont(forTextStyle: self.textStyle)
         
         imageView.image = UIImage(systemName: sfSymbol)
-        if let config = config {
-            imageView.preferredSymbolConfiguration = config
+        var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
+        config = config.applying(UIImage.SymbolConfiguration(textStyle: self.textStyle))
+        if let other = symbolConfig {
+            config = config.applying(other)
         }
+        imageView.preferredSymbolConfiguration = config
 
-        // Mute Colors.
+        /// Mute Colors.
         imageView.tintColor = .secondaryLabel
         label.textColor = .secondaryLabel
     }

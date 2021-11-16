@@ -17,7 +17,6 @@ final class CardCell: UITableViewCell {
     /// Component
     let backgroundButton = UIButton()
     let stackView = UIStackView()
-    let replyView = ReplyView()
     let userView = UserView()
     let tweetLabel = UILabel()
     let retweetView = RetweetView()
@@ -58,7 +57,6 @@ final class CardCell: UITableViewCell {
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset * 2),
         ])
 
-        stackView.addArrangedSubview(replyView)
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetLabel)
         stackView.addArrangedSubview(retweetView)
@@ -83,9 +81,8 @@ final class CardCell: UITableViewCell {
     }
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
-        userView.configure(user: author, timestamp: tweet.createdAt)
+        userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
         tweetLabel.text = tweet.text
-        replyView.configure(tweet: tweet, realm: realm)
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
     }
