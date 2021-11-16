@@ -36,7 +36,6 @@ final class TweetCell: UITableViewCell {
         /// Add color bar.
         depthSpacer.addSubview(colorBar)
         colorBar.translatesAutoresizingMaskIntoConstraints = false
-        colorBar.backgroundColor = .systemRed
         colorBar.layer.cornerRadius = colorBarWidth / 2
         NSLayoutConstraint.activate([
             colorBar.widthAnchor.constraint(equalToConstant: colorBarWidth),
@@ -84,15 +83,19 @@ final class TweetCell: UITableViewCell {
         backgroundColor = .flat
     }
 
+    /// Arbitrary number. Test Later.
+    private let maxDepth = 10
     public func configure(node: Node, author: User, realm: Realm) {
         userView.configure(tweet: node.tweet, user: author, timestamp: node.tweet.createdAt)
         tweetLabel.text = node.tweet.text
         retweetView.configure(tweet: node.tweet, realm: realm)
         metricsView.configure(node.tweet)
         
+        let depth = min(maxDepth, node.depth)
         NSLayoutConstraint.activate([
-            depthSpacer.widthAnchor.constraint(equalToConstant: 10 * CGFloat(node.depth))
+            depthSpacer.widthAnchor.constraint(equalToConstant: 10 * CGFloat(depth))
         ])
+        colorBar.backgroundColor = SCColors[(depth - 1) % SCColors.count]
     }
     
     required init?(coder: NSCoder) {
