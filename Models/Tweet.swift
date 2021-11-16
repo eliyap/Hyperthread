@@ -35,15 +35,6 @@ final class PublicMetrics: EmbeddedObject {
     }
 }
 
-/**
-
-public struct RawURL: Codable {
-    public let start: Int
-    public let end: Int
-    public let url: String
-    public let expanded_url: String
-    public let display_url: String
-}*/
 final class URLEntity: EmbeddedObject {
     @Persisted
     var start: Int
