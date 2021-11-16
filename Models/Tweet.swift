@@ -121,6 +121,9 @@ final class Entities: EmbeddedObject {
         mentions = List<Mention>()
         urls = List<URLEntity>()
     }
+
+    /// Represents a case with no entities.
+    public static let empty = Entities()
 }
 
 /// Represents a Hashtag or Cashtag.
