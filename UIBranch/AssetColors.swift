@@ -24,3 +24,12 @@ extension UIColor {
     static let SCPurple = UIColor(named: "SC_Purple")!
     static let SCBlue = UIColor(named: "SC_Blue")!
 }
+
+let SCColors: [UIColor] = [
+    .SCGreen,
+    .SCYellow,
+    .SCOrange,
+    .SCRed,
+    .SCPurple,
+    .SCBlue,
+]
