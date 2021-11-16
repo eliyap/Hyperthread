@@ -112,6 +112,15 @@ final class Entities: EmbeddedObject {
         raw.mentions?.map(Mention.init).forEach(mentions.append)
         raw.urls?.map(URLEntity.init).forEach(urls.append)
     }
+    
+    /// Void differentiates this private init from the public one.
+    private init(_: Void) {
+        super.init()
+        annotations = List<Annotation>()
+        hashtags = List<Tag>()
+        mentions = List<Mention>()
+        urls = List<URLEntity>()
+    }
 }
 
 /// Represents a Hashtag or Cashtag.
