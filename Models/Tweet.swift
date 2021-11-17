@@ -240,6 +240,24 @@ final class Tweet: Object, Identifiable {
     override required init() {
         super.init()
     }
+    
+    /// Create the "canonical" Tweet text from Twitter's encoded / shortened version.
+    private func expandedText(raw: RawHydratedTweet) -> String {
+        var entities: Entities
+        if let rawEntities = raw.entities {
+            entities = Entities(raw: rawEntities)
+        } else {
+            entities = .empty
+        }
+        
+        entities.urls
+            .sorted(by: {$0.start > $1.start})
+            .forEach { url in
+                print(url.url)
+            }
+        
+        return ""
+    }
 }
 
 extension Tweet {
