@@ -18,7 +18,7 @@ final class CardCell: UITableViewCell {
     let backgroundButton = UIButton()
     let stackView = UIStackView()
     let userView = UserView()
-    let tweetLabel = UILabel()
+    let tweetTextView = UITextView()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
@@ -58,7 +58,7 @@ final class CardCell: UITableViewCell {
         ])
 
         stackView.addArrangedSubview(userView)
-        stackView.addArrangedSubview(tweetLabel)
+        stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
         
@@ -69,12 +69,15 @@ final class CardCell: UITableViewCell {
         ])
 
         /// Configure Label
-        tweetLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        tweetLabel.adjustsFontForContentSizeCategory = true
-
-        /// Allow tweet to wrap across lines.
-        tweetLabel.lineBreakMode = .byWordWrapping
-        tweetLabel.numberOfLines = 0 /// Yes, really.
+        tweetTextView.isEditable = false
+        tweetTextView.isScrollEnabled = false
+        tweetTextView.backgroundColor = .clear
+        tweetTextView.contentInset = .zero
+        tweetTextView.textContainerInset = .zero
+        tweetTextView.textContainer.lineFragmentPadding = 0
+        tweetTextView.layoutManager.usesFontLeading = false
+        tweetTextView.adjustsFontForContentSizeCategory = true
+        tweetTextView.isUserInteractionEnabled = false
         
         /// Apply default styling.
         self.resetStyle()
@@ -82,7 +85,7 @@ final class CardCell: UITableViewCell {
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
         userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
-        tweetLabel.attributedText = tweet.fullText()
+        tweetTextView.attributedText = tweet.fullText()
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
     }
