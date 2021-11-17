@@ -107,10 +107,10 @@ final class Entities: EmbeddedObject {
     
     init(raw: RawEntities) {
         super.init()
-        raw.annotations?.map(Annotation.init).forEach(annotations.append)
-        raw.hashtags?.map(Tag.init).forEach(hashtags.append)
-        raw.mentions?.map(Mention.init).forEach(mentions.append)
-        raw.urls?.map(URLEntity.init).forEach(urls.append)
+        raw.annotations?.map(Annotation.init(raw: )).forEach(annotations.append)
+        raw.hashtags?.map(Tag.init(raw: )).forEach(hashtags.append)
+        raw.mentions?.map(Mention.init(raw: )).forEach(mentions.append)
+        raw.urls?.map(URLEntity.init(raw: )).forEach(urls.append)
     }
     
     /// Void differentiates this private init from the public one.
