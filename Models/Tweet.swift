@@ -291,21 +291,35 @@ extension Array where Element == Tweet.ID {
 }
 
 extension Tweet {
-    func fullText() -> NSAttributedString {
-        var text = text
+    func fullText() -> NSMutableAttributedString {
+        let text = text
+            .replacingOccurrences(of: "&gt;", with: ">")
+            .replacingOccurrences(of: "&lt;", with: "<")
         
+        let string = NSMutableAttributedString(string: text)
         if let urls = entities?.urls {
             for url in urls {
                 guard let target = text.range(of: url.url) else {
                     Swift.debugPrint("Could not find \(url.url) in \(text)")
                     continue
                 }
+                guard
+                    let low16 = target.lowerBound.samePosition(in: text.utf16),
+                    let upp16 = target.upperBound.samePosition(in: text.utf16)
+                else {
+                    Swift.debugPrint("Could not cast offsets")
+                    continue
+                }
+                let lowInt = text.utf16.distance(from: text.utf16.startIndex, to: low16)
+                let uppInt = text.utf16.distance(from: text.utf16.startIndex, to: upp16)
+                string.addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
             }
         }
         
-        text = text.replacingOccurrences(of: "&gt;", with: ">")
-        text = text.replacingOccurrences(of: "&lt;", with: "<")
         
-        return NSAttributedString(string: text)
+        return NSMutableAttributedString(string: text, attributes: [
+            .font: UIFont.preferredFont(forTextStyle: .body),
+            .foregroundColor: UIColor.label,
+        ])
     }
 }
