@@ -218,7 +218,7 @@ final class Tweet: Object, Identifiable {
         super.init()
         self.id = raw.id
         self.createdAt = raw.created_at
-        self.text = raw.text
+        self.text = expandedText(raw: raw)
         self.conversation_id = raw.conversation_id
         self.metrics = PublicMetrics(raw: raw.public_metrics)
         self.authorID = raw.author_id
