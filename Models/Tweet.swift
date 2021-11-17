@@ -292,10 +292,13 @@ extension Array where Element == Tweet.ID {
 
 extension Tweet {
     func fullText() -> NSMutableAttributedString {
+        /// Replace encoded characters.
         let text = text
             .replacingOccurrences(of: "&gt;", with: ">")
             .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&amp;", with: "<")
         
+        /// Apply normal text size and color preferences.
         let string = NSMutableAttributedString(string: text, attributes: [
             .font: UIFont.preferredFont(forTextStyle: .body),
             .foregroundColor: UIColor.label,
