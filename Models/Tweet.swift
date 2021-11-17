@@ -296,7 +296,11 @@ extension Tweet {
             .replacingOccurrences(of: "&gt;", with: ">")
             .replacingOccurrences(of: "&lt;", with: "<")
         
-        let string = NSMutableAttributedString(string: text)
+        let string = NSMutableAttributedString(string: text, attributes: [
+            .font: UIFont.preferredFont(forTextStyle: .body),
+            .foregroundColor: UIColor.label,
+        ])
+        
         if let urls = entities?.urls {
             for url in urls {
                 guard let target = text.range(of: url.url) else {
@@ -316,10 +320,6 @@ extension Tweet {
             }
         }
         
-        
-        return NSMutableAttributedString(string: text, attributes: [
-            .font: UIFont.preferredFont(forTextStyle: .body),
-            .foregroundColor: UIColor.label,
-        ])
+        return string
     }
 }
