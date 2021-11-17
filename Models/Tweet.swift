@@ -289,3 +289,9 @@ extension Array where Element == Tweet.ID {
         filter { $0.missingFrom(realm) }
     }
 }
+
+extension Tweet {
+    func fullText() -> AttributedString {
+        AttributedString(text)
+    }
+}
