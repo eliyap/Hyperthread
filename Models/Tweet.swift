@@ -291,7 +291,7 @@ extension Array where Element == Tweet.ID {
 }
 
 extension Tweet {
-    func fullText() -> AttributedString {
-        AttributedString(text)
+    func fullText() -> NSAttributedString {
+        NSAttributedString(string: text)
     }
 }
