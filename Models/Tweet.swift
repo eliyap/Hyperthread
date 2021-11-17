@@ -140,7 +140,7 @@ final class Tag: EmbeddedObject {
     override required init() {
     }
     
-    init?(raw: RawTag) {
+    init(raw: RawTag) {
         super.init()
         start = raw.start
         end = raw.end
