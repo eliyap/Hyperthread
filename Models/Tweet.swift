@@ -295,10 +295,10 @@ extension Tweet {
         var text = text
         
         if let urls = entities?.urls {
-            urls.forEach { url in
-                if let rng = text.range(url.start..<url.end) {
-                    text.replaceSubrange(rng, with: url.display_url)
-                    Swift.debugPrint(url.display_url)
+            for url in urls {
+                guard let target = text.range(of: url.url) else {
+                    Swift.debugPrint("Could not find \(url.url) in \(text)")
+                    continue
                 }
             }
         }
@@ -307,58 +307,5 @@ extension Tweet {
         text = text.replacingOccurrences(of: "&lt;", with: "<")
         
         return NSAttributedString(string: text)
-    }
-}
-
-fileprivate extension String {
-    
-    func range(_ range: Range<Int>) -> Range<String.Index>? {
-        guard let utf16Range = utf16.range(range) else {
-            Swift.debugPrint(utf8.count)
-            return nil
-        }
-        guard let lower = utf16Range.lowerBound.samePosition(in: self) else {
-            Swift.debugPrint("Could not convert lower bound")
-            Swift.debugPrint("upper \(range.upperBound), lower \(range.lowerBound), count \(count), utf16 \(utf16.count)")
-            return nil
-        }
-        guard let upper = utf16Range.upperBound.samePosition(in: self) else {
-            Swift.debugPrint("Could not convert upper bound")
-            return nil
-        }
-        return lower..<upper
-        
-//        guard range.lowerBound <= count, range.upperBound <= count else {
-//            Swift.debugPrint("Could not form range for '\(self)'. upper \(range.upperBound), lower \(range.lowerBound), count \(count)")
-//            Swift.debugPrint(utf16.count)
-//            return nil
-//        }
-//        let start = index(startIndex, offsetBy: range.lowerBound)
-//        let end = index(startIndex, offsetBy: range.upperBound)
-//        return start..<end
-    }
-}
-
-fileprivate extension String.UTF16View {
-    func range(_ range: Range<Int>) -> Range<String.Index>? {
-        guard range.lowerBound <= count, range.upperBound <= count else {
-            Swift.debugPrint("Could not form range for '\(self)'. upper \(range.upperBound), lower \(range.lowerBound), count \(count)")
-            return nil
-        }
-        let start = index(startIndex, offsetBy: range.lowerBound)
-        let end = index(startIndex, offsetBy: range.upperBound)
-        return start..<end
-    }
-}
-
-fileprivate extension String.UTF8View {
-    func range(_ range: Range<Int>) -> Range<String.Index>? {
-        guard range.lowerBound <= count, range.upperBound <= count else {
-            Swift.debugPrint("Could not form range for '\(self)'. upper \(range.upperBound), lower \(range.lowerBound), count \(count)")
-            return nil
-        }
-        let start = index(startIndex, offsetBy: range.lowerBound)
-        let end = index(startIndex, offsetBy: range.upperBound)
-        return start..<end
     }
 }
