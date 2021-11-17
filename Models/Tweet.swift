@@ -292,6 +292,22 @@ extension Array where Element == Tweet.ID {
 
 extension Tweet {
     func fullText() -> NSAttributedString {
-        NSAttributedString(string: text)
+        var text = text
+        if let urls = entities?.urls.sorted(by: {$0.start > $1.start}) {
+            urls.forEach { url in
+                Swift.debugPrint(text[url.start..<url.end])
+            }
+        }
+        return NSAttributedString(string: text)
+    }
+}
+
+fileprivate extension String {
+    /// - Note: cursory testing indicated that `start` and `end` count characters, not code points,
+    ///   and this approach is safe with emoji!
+    subscript(_ range: Range<Int>) -> Substring {
+        let start = index(startIndex, offsetBy: range.lowerBound)
+        let end = index(startIndex, offsetBy: range.upperBound)
+        return self[start..<end]
     }
 }

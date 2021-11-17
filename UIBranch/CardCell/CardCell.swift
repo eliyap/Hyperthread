@@ -82,7 +82,7 @@ final class CardCell: UITableViewCell {
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
         userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
-        tweetLabel.text = tweet.fullText()
+        tweetLabel.attributedText = tweet.fullText()
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
     }
