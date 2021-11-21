@@ -190,6 +190,7 @@ extension MainTable {
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        /// - Note: do not invoke super method here, as it causes a crash (21.11.21)
         /// Style cell.
         guard let cell = tableView.cellForRow(at: indexPath) else {
             Swift.debugPrint("Could not find cell at \(indexPath)")
