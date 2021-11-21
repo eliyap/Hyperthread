@@ -33,10 +33,6 @@ final class CardTeaserCell: UITableViewCell {
         selectionStyle = .none
         backgroundColor = .flat
         
-        let layer = TriangleLayer()
-        cardBackground.layer.masksToBounds = true
-        cardBackground.layer.addSublayer(layer)
-        
         /// Configure background.
         addSubview(cardBackground)
         cardBackground.constrain(to: safeAreaLayoutGuide)

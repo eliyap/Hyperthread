@@ -11,14 +11,19 @@ final class CardBackground: UIButton {
     
     /// How far the view will be inset from its superview.
     private let inset: CGFloat
+    private let triangleLayer = TriangleLayer()
     
     init(inset: CGFloat) {
         self.inset = inset
         super.init(frame: .zero)
         
         /// Round corners.
-        layer.cornerRadius = inset * 2
-        layer.cornerCurve = .continuous
+        triangleLayer.cornerRadius = inset * 2
+        triangleLayer.cornerCurve = .continuous
+        
+        /// Clip triangle to rounded corner.
+        layer.masksToBounds = true
+        layer.addSublayer(triangleLayer)
     }
     
     public func constrain(to guide: UILayoutGuide) -> Void {
@@ -29,6 +34,10 @@ final class CardBackground: UIButton {
             leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: inset),
             trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -inset),
         ])
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
     }
     
     required init?(coder: NSCoder) {
