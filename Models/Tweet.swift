@@ -165,15 +165,26 @@ extension Tweet {
             .replacingOccurrences(of: "&gt;", with: ">")
             .replacingOccurrences(of: "&lt;", with: "<")
             .replacingOccurrences(of: "&amp;", with: "<")
-        
-        /// Replace `t.co` links.
+         
+        /// Replace `t.co` links with truncated links.
         if let urls = entities?.urls {
             for url in urls {
                 guard let target = text.range(of: url.url) else {
                     Swift.debugPrint("Could not find url \(url.url) in \(text)")
                     continue
                 }
-                text.replaceSubrange(target, with: url.display_url)
+                
+                /// By convention(?), quote tweets have the quoted URL at the end.
+                if
+                    quoting != nil,
+                    target.upperBound == text.endIndex,
+                    url.display_url.starts(with: "twitter.com/")
+                {
+                    /// Definitely a quote, can safely remove it.
+                    text.replaceSubrange(target, with: "")
+                } else {
+                    text.replaceSubrange(target, with: url.display_url)
+                }
             }
         }
         
