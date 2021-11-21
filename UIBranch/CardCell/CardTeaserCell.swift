@@ -118,10 +118,10 @@ final class CardTeaserCell: UITableViewCell {
             token.invalidate()
         }
         
-        /// Update color when `readStatus` changes.
         token = discussion.observe(updateReadIcon)
     }
     
+    /// Update color when `readStatus` changes.
     private func updateReadIcon(_ change: ObjectChange<RLMObjectBase>) -> Void {
         guard case let .change(_, properties) = change else { return }
         guard let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) else { return }
