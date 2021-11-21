@@ -224,6 +224,24 @@ extension MainTable {
         markVisibleCells()
     }
     
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        didStopScrolling()
+    }
+    
+    /// Docs: https://developer.apple.com/documentation/uikit/uiscrollviewdelegate/1619436-scrollviewdidenddragging
+    /// > `decelerate`:
+    /// > - `true` if the scrolling movement will continue, but decelerate, after a touch-up gesture during a dragging operation.
+    /// > - If the value is `false`, scrolling stops immediately upon touch-up.
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            didStopScrolling()
+        }
+    }
+    
+    fileprivate func didStopScrolling() -> Void {
+        print("stopped")
+    }
+    
     fileprivate func markVisibleCells() -> Void {
         guard let paths = tableView.indexPathsForVisibleRows else {
             Swift.debugPrint("Could not get paths!")

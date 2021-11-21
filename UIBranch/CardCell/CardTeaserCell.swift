@@ -29,7 +29,7 @@ final class MarkReadDaemon {
     /// Marks the index path as having been seen.
     func mark(_ path: IndexPath) {
         guard indices.keys.contains(path) else {
-            assert(false, "Missing key \(path)")
+            Swift.debugPrint("Missing key \(path)")
             return
         }
         indices[path]?.seen = true
