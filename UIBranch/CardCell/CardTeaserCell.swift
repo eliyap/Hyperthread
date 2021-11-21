@@ -134,9 +134,10 @@ extension CardTeaserCell: UITextViewDelegate {
 
 final class TriangleLayer: CAShapeLayer {
     
-    let size: CGFloat = CardTeaserCell.borderInset * 1.5
+    let size: CGFloat
     
-    override init() {
+    init(size: CGFloat) {
+        self.size = size
         super.init()
         let path = UIBezierPath()
         
@@ -149,6 +150,22 @@ final class TriangleLayer: CAShapeLayer {
         self.path = path.cgPath
         
         fillColor = UIColor.systemRed.cgColor
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class TriangleView: UIView {
+    
+    private let triangleLayer: TriangleLayer
+    
+    init(size: CGFloat) {
+        triangleLayer = TriangleLayer(size: size)
+        super.init(frame: CGRect(origin: .zero, size: CGSize(width: size, height: size)))
+        
+        layer.addSublayer(triangleLayer)
     }
     
     required init?(coder: NSCoder) {

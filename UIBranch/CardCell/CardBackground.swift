@@ -11,7 +11,6 @@ final class CardBackground: UIButton {
     
     /// How far the view will be inset from its superview.
     private let inset: CGFloat
-    private let triangleLayer = TriangleLayer()
     
     init(inset: CGFloat) {
         self.inset = inset
@@ -23,7 +22,17 @@ final class CardBackground: UIButton {
         
         /// Clip triangle to rounded corner.
         layer.masksToBounds = true
-        layer.addSublayer(triangleLayer)
+        
+        let size = inset * 4
+        let triangleView = TriangleView(size: size)
+        addSubview(triangleView)
+        triangleView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            triangleView.topAnchor.constraint(equalTo: topAnchor),
+            triangleView.rightAnchor.constraint(equalTo: rightAnchor),
+            triangleView.heightAnchor.constraint(equalToConstant: size),
+            triangleView.widthAnchor.constraint(equalToConstant: size),
+        ])
     }
     
     public func constrain(to guide: UILayoutGuide) -> Void {
