@@ -32,7 +32,7 @@ final class MainTable: UITableViewController {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
-        dds = DDS(fetcher: fetcher, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
+        dds = DDS(realm: realm, fetcher: fetcher, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
                 fatalError("Failed to create or cast new cell!")
             }
@@ -118,7 +118,7 @@ enum DiscussionSection: Int {
 }
 
 final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion> {
-    private let realm = try! Realm()
+    private let realm: Realm
     private var token: NotificationToken! = nil
 
     private let fetcher: Fetcher
@@ -126,7 +126,9 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
 
-    init(fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider) {
+    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider) {
+        self.realm = realm
+        
         let results = realm.objects(Discussion.self)
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.fetcher = fetcher

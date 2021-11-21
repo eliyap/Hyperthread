@@ -85,6 +85,11 @@ final class CardTeaserCell: UITableViewCell {
             token.invalidate()
         }
         
+        /// Protect against error "Cannot register notification blocks from within write transactions."
+        guard realm.isInWriteTransaction == false else {
+            Swift.debugPrint("realm.isInWriteTransaction true, will cause crash!")
+            return
+        }
         token = discussion.observe(updateReadIcon)
     }
     
