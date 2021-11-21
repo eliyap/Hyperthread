@@ -191,6 +191,7 @@ extension MainTable {
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         /// - Note: do not invoke super method here, as it causes a crash (21.11.21)
+        
         /// Style cell.
         guard let cell = tableView.cellForRow(at: indexPath) else {
             Swift.debugPrint("Could not find cell at \(indexPath)")
@@ -201,6 +202,38 @@ extension MainTable {
             return
         }
         cardCell.style(selected: false)
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        /// - Note: do not invoke super method here, as it causes a crash (21.11.21)
+        
+        guard let cell = cell as? Cell else {
+            Swift.debugPrint("Cell was of unexpected type!")
+            return
+        }
+        
+        // TODO: mark as read?
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        markVisibleCells()
+    }
+    
+    fileprivate func markVisibleCells() -> Void {
+        guard let paths = tableView.indexPathsForVisibleRows else {
+            Swift.debugPrint("Could not get paths!")
+            return
+        }
+        
+        for path in paths {
+            if tableView.bounds.contains(tableView.rectForRow(at: path)) {
+                guard let cell = tableView.cellForRow(at: path) as? Cell else {
+                    Swift.debugPrint("Could not get or cast cell at \(path)")
+                    continue
+                }
+                print(path)
+            }
+        }
     }
 }
 
