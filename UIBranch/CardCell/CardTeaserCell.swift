@@ -33,7 +33,6 @@ final class CardTeaserCell: UITableViewCell {
         backgroundColor = .flat
         
         /// Configure background.
-        backgroundButton.backgroundColor = .secondarySystemBackground
         addSubview(backgroundButton)
         backgroundButton.layer.cornerRadius = inset * 2
         backgroundButton.layer.cornerCurve = .continuous
