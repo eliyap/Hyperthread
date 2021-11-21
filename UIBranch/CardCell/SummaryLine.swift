@@ -29,9 +29,9 @@ final class HairlineView: UIView {
     }
 }
 
-final class SummaryLine: UIStackView {
+final class SummaryView: UIStackView {
 
-    let timestampButton = TimestampButton()
+    public let timestampButton = TimestampButton()
 
     init() {
         super.init(frame: .zero)
