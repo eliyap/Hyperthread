@@ -41,7 +41,8 @@ final class Airport {
                     credentials: credentials,
                     ids: ids,
                     fields: RawHydratedTweet.fields,
-                    expansions: RawHydratedTweet.expansions
+                    expansions: RawHydratedTweet.expansions,
+                    mediaFields: RawHydratedTweet.mediaFields
                 )
             }
             /// Remove from in-flight list.
