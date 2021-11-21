@@ -26,6 +26,8 @@ final class CardBackground: UIButton {
         let size = inset * 4
         let triangleView = TriangleView(size: size)
         addSubview(triangleView)
+        
+        /// Align view to top right, with fixed size.
         triangleView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             triangleView.topAnchor.constraint(equalTo: topAnchor),
@@ -47,6 +49,47 @@ final class CardBackground: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class TriangleLayer: CAShapeLayer {
+    
+    let size: CGFloat
+    
+    init(size: CGFloat) {
+        self.size = size
+        super.init()
+        let path = UIBezierPath()
+        
+        /// Draw Triangle.
+        path.move(to: .zero)
+        path.addLine(to: CGPoint(x: size, y: .zero))
+        path.addLine(to: CGPoint(x: size, y: size))
+        path.close()
+        
+        self.path = path.cgPath
+        
+        fillColor = UIColor.systemRed.cgColor
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class TriangleView: UIView {
+    
+    private let triangleLayer: TriangleLayer
+    
+    init(size: CGFloat) {
+        triangleLayer = TriangleLayer(size: size)
+        super.init(frame: CGRect(origin: .zero, size: CGSize(width: size, height: size)))
+        
+        layer.addSublayer(triangleLayer)
     }
     
     required init?(coder: NSCoder) {
