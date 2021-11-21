@@ -47,6 +47,7 @@
 		22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */; };
 		22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A48274ADFA900F28F0A /* ReadStatus.swift */; };
 		22760A4B274AE63000F28F0A /* SummaryLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4A274AE63000F28F0A /* SummaryLine.swift */; };
+		22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */; };
 		22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DB27404F4200932614 /* DiscussionTable.swift */; };
 		22D127DE2740651C00932614 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DD2740651C00932614 /* TweetCell.swift */; };
 		22D127E12740655900932614 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E02740655900932614 /* IconView.swift */; };
@@ -121,6 +122,7 @@
 		22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkReadDaemon.swift; sourceTree = "<group>"; };
 		22760A48274ADFA900F28F0A /* ReadStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadStatus.swift; sourceTree = "<group>"; };
 		22760A4A274AE63000F28F0A /* SummaryLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryLine.swift; sourceTree = "<group>"; };
+		22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacedSeparator.swift; sourceTree = "<group>"; };
 		22D127DB27404F4200932614 /* DiscussionTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTable.swift; sourceTree = "<group>"; };
 		22D127DD2740651C00932614 /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		22D127E02740655900932614 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 				22D127EB274070CD00932614 /* MetricButtons.swift */,
 				22D127ED2740713500932614 /* TimeDifference.swift */,
 				22D127E02740655900932614 /* IconView.swift */,
+				22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */,
 				22D127E6274065E900932614 /* UserView.swift */,
 				22D127E42740659E00932614 /* RetweetView.swift */,
 				22D127E927406F9700932614 /* RetweetSymbol.swift */,
@@ -553,6 +556,7 @@
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
 				22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */,
+				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
