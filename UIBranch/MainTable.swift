@@ -38,6 +38,7 @@ final class MainTable: UITableViewController {
             let tweet = self!.realm.tweet(id: discussion.id)!
             let author = self!.realm.user(id: tweet.authorID)!
             cell.configure(tweet: tweet, author: author, realm: self!.realm)
+            cell.readModel = DiscussionReadModel(discussion)
             cell.resetStyle()
             
             return cell
