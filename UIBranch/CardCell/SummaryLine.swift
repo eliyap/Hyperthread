@@ -39,6 +39,7 @@ final class SummaryView: UIStackView {
             likeButton.isHidden = false
             iconView.isHidden = true
             
+            /// Simply show the metrics.
             let tweet = discussion.tweets.first!
             replyButton.configure(tweet)
             retweetButton.configure(tweet)
@@ -63,14 +64,18 @@ final class SummaryView: UIStackView {
             } else {
                 assert(false, "Invalid state, should be retweet or reply!")
             }
+            
             iconView.setText(to: realm.user(id: onlyReply.authorID)!.name)
         } else {
             replyButton.isHidden = true
             retweetButton.isHidden = true
             likeButton.isHidden = true
-            iconView.isHidden = true
+            iconView.isHidden = false
             
+            iconView.setImage(to: "bubble.left.and.bubble.right.fill")
             
+            /// Exclude the original from the count.
+            iconView.setText(to: "\(discussion.tweetCount - 1) tweets")
         }
         timestampButton.configure(discussion)
     }
