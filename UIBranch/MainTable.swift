@@ -214,16 +214,6 @@ extension MainTable {
         cardCell.style(selected: false)
     }
     
-    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        /// - Note: do not invoke super method here, as it causes a crash (21.11.21)
-        
-        mrd.didDisappear(indexPath)
-    }
-    
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        markVisibleCells()
-    }
-    
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         didStopScrolling()
     }
@@ -239,7 +229,7 @@ extension MainTable {
     }
     
     fileprivate func didStopScrolling() -> Void {
-        print("stopped")
+        markVisibleCells()
     }
     
     fileprivate func markVisibleCells() -> Void {

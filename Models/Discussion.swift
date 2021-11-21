@@ -34,6 +34,7 @@ final class Discussion: Object, Identifiable {
     
     @Persisted
     var readStatus: ReadStatus.RawValue
+    public static let readStatusPropertyName = "readStatus"
     
     override required init() {
         super.init()

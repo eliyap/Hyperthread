@@ -20,28 +20,19 @@ final class MarkReadDaemon {
     private let realm = try! Realm()
     
     /// `seen` indicates whether the discussion was fully visible for the user to read.
-    var indices: [IndexPath: (discussion: Discussion, seen: Bool)] = [:]
+    var indices: [IndexPath: Discussion] = [:]
     
     func associate(_ path: IndexPath, with discussion: Discussion) {
-        indices[path] = (discussion, false)
+        indices[path] = discussion
     }
     
     /// Marks the index path as having been seen.
     func mark(_ path: IndexPath) {
-        guard indices.keys.contains(path) else {
+        guard let discussion: Discussion = indices[path] else {
             Swift.debugPrint("Missing key \(path)")
             return
         }
-        indices[path]?.seen = true
-    }
-    
-    /// Marks the index path as having scrolled off screen.
-    func didDisappear(_ path: IndexPath) {
-        guard let (discussion, seen): (Discussion, Bool) = indices[path] else {
-            Swift.debugPrint("Missing key \(path)")
-            return
-        }
-        if seen && discussion.tweets.count == 1 {
+        if discussion.tweets.count == 1 {
             do {
                 try realm.write(withoutNotifying: [token]) {
                     discussion.read = .read
@@ -51,7 +42,7 @@ final class MarkReadDaemon {
                 assert(false, "\(error)")
                 return
             }
-        }
+        }   
     }
 }
 
@@ -68,6 +59,8 @@ final class CardTeaserCell: UITableViewCell {
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
+    
+    var token: NotificationToken? = nil
     
     public static let borderInset: CGFloat = 6
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
@@ -119,6 +112,25 @@ final class CardTeaserCell: UITableViewCell {
         tweetTextView.delegate = self
         cardBackground.triangleView.triangleLayer.fillColor = discussion.read.fillColor
         
+        /// Release old observer.
+        if let token = token {
+            token.invalidate()
+        }
+        
+        /// Update color when `readStatus` changes.
+        token = discussion.observe { [weak self] change in
+            guard case let .change(_, properties) = change else { return }
+            guard let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) else { return }
+            guard let newValue = readChange.newValue as? ReadStatus.RawValue else {
+                Swift.debugPrint("Error: unexpected type! \(type(of: readChange.newValue))")
+                return
+            }
+            guard let newRead = ReadStatus(rawValue: newValue) else {
+                assert(false, "Invalid String!")
+                return
+            }
+            self?.cardBackground.triangleView.triangleLayer.fillColor = newRead.fillColor
+        }
     }
     
     func style(selected: Bool) -> Void {
@@ -167,6 +179,10 @@ final class CardTeaserCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        token?.invalidate()
     }
 }
 
