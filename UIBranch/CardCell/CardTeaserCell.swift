@@ -55,19 +55,6 @@ final class MarkReadDaemon {
     }
 }
 
-/** Model for marking read. */
-struct DiscussionReadModel {
-    /// Tweet to mark
-    public var discussion: Discussion
-    
-    /// Whether the tweet was actually seen by the user, and thus may be marked as read.
-    public var seen: Bool = false
-    
-    init(_ discussion: Discussion) {
-        self.discussion = discussion
-    }
-}
-
 final class CardTeaserCell: UITableViewCell {
     
     public static let reuseID = "CardTeaserCell"
@@ -82,8 +69,6 @@ final class CardTeaserCell: UITableViewCell {
     let metricsView = MetricsView()
     // TODO: add profile image
     
-    public var readModel: DiscussionReadModel? = nil
-
     public static let borderInset: CGFloat = 6
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
 
