@@ -28,6 +28,9 @@ final class Discussion: Object, Identifiable {
     var conversations: List<Conversation>
     public static let conversationsPropertyName = "conversations"
     
+    @Persisted
+    var read: Bool
+    
     override required init() {
         super.init()
     }
@@ -38,6 +41,7 @@ final class Discussion: Object, Identifiable {
         self.root = root
         self.conversations = List<Conversation>()
         self.conversations.append(root)
+        self.read = false
         
         /// Safe to force unwrap, `root` must have ≥1 `tweets`.
         self.updatedAt = root.tweets.map(\.createdAt).max()!

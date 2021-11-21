@@ -81,6 +81,10 @@ final class Tweet: Object, Identifiable {
     @Persisted
     var entities: Entities?
     
+    /// Whether the user has read this tweet.
+    @Persisted
+    var read: Bool
+    
     init(raw: RawHydratedTweet) {
         super.init()
         self.id = raw.id
@@ -89,6 +93,7 @@ final class Tweet: Object, Identifiable {
         self.conversation_id = raw.conversation_id
         self.metrics = PublicMetrics(raw: raw.public_metrics)
         self.authorID = raw.author_id
+        self.read = false
         
         if let references = raw.referenced_tweets {
             for reference in references {
