@@ -22,6 +22,12 @@ final class CardTeaserCell: UITableViewCell {
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
+    
+    /** Model for marking read. */
+    /// Tweet to mark
+    private var tweet: Tweet? = nil
+    /// Whether the tweet was actually seen by the user, and thus may be marked as read.
+    private var seen: Bool = false
 
     public static let borderInset: CGFloat = 6
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
