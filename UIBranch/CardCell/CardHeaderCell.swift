@@ -69,7 +69,9 @@ final class CardHeaderCell: UITableViewCell {
         ])
 
         /// Apply default styling.
-        self.resetStyle()
+        backgroundButton.backgroundColor = .card
+        backgroundButton.layer.borderWidth = 1.00
+        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
@@ -79,50 +81,6 @@ final class CardHeaderCell: UITableViewCell {
         metricsView.configure(tweet)
         
         tweetTextView.delegate = self
-    }
-    
-    func style(selected: Bool) -> Void {
-        UIView.animate(withDuration: 0.25) { [weak self] in
-            guard let self = self else {
-                assert(false, "self is nil")
-                return
-            }
-            /// By changing the radius, offset, and transform at the same time, we can grow / shrink the shadow in place,
-            /// creating a "lifting" illusion.
-            if selected {
-                self.styleSelected()
-            } else {
-                self.resetStyle()
-            }
-        }
-    }
-    
-    public func styleSelected() -> Void {
-        let shadowSize = self.inset * 0.75
-        
-        stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        backgroundButton.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        backgroundButton.layer.shadowColor = UIColor.black.cgColor
-        backgroundButton.layer.shadowOpacity = 0.3
-        backgroundButton.layer.shadowRadius = shadowSize
-        backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
-        
-        backgroundButton.backgroundColor = .cardSelected
-        backgroundButton.layer.borderWidth = 0
-        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
-    }
-    
-    public func resetStyle() -> Void {
-        stackView.transform = CGAffineTransform(translationX: 0, y: 0)
-        backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
-        backgroundButton.layer.shadowColor = UIColor.black.cgColor
-        backgroundButton.layer.shadowOpacity = 0
-        backgroundButton.layer.shadowRadius = 0
-        backgroundButton.layer.shadowOffset = CGSize.zero
-        
-        backgroundButton.backgroundColor = .card
-        backgroundButton.layer.borderWidth = 1.00
-        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
     
     required init?(coder: NSCoder) {
