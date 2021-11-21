@@ -35,140 +35,6 @@ final class PublicMetrics: EmbeddedObject {
     }
 }
 
-/**
-
-public struct RawURL: Codable {
-    public let start: Int
-    public let end: Int
-    public let url: String
-    public let expanded_url: String
-    public let display_url: String
-}*/
-final class URLEntity: EmbeddedObject {
-    @Persisted
-    var start: Int
-
-    @Persisted
-    var end: Int
-
-    @Persisted
-    var url: String
-
-    @Persisted
-    var expanded_url: String
-
-    @Persisted
-    var display_url: String
-
-    override required init() {}
-
-    init(raw: RawURL) {
-        start = raw.start
-        end = raw.end
-        url = raw.url
-        expanded_url = raw.expanded_url
-        display_url = raw.display_url
-    }
-}
-
-final class Annotation: EmbeddedObject {
-    
-    @Persisted
-    var start: Int
-
-    @Persisted
-    var end: Int
-
-    @Persisted
-    var text: String
-
-    @Persisted
-    var probability: Double
-
-    @Persisted
-    var type: String
-
-    override required init() {}
-
-    init(raw: RawAnnotation) {
-        start = raw.start
-        end = raw.end
-        text = raw.normalized_text
-        probability = raw.probability
-        type = raw.type
-    }
-}
-
-final class Entities: EmbeddedObject {
-    @Persisted
-    var annotations: List<Annotation>
-    
-    @Persisted
-    var hashtags: List<Tag>
-
-    @Persisted
-    var mentions: List<Mention>
-
-    @Persisted
-    var urls: List<URLEntity>
-
-    override required init() {}
-    
-    init(raw: RawEntities) {
-        super.init()
-        raw.annotations?.map(Annotation.init).forEach(annotations.append)
-        raw.hashtags?.map(Tag.init).forEach(hashtags.append)
-        raw.mentions?.map(Mention.init).forEach(mentions.append)
-        raw.urls?.map(URLEntity.init).forEach(urls.append)
-    }
-}
-
-/// Represents a Hashtag or Cashtag.
-final class Tag: EmbeddedObject {
-    @Persisted
-    public var start: Int
-    
-    @Persisted
-    public var end: Int
-    
-    @Persisted
-    public var tag: String
-    
-    override required init() {
-    }
-    
-    init?(raw: RawTag) {
-        super.init()
-        start = raw.start
-        end = raw.end
-        tag = raw.tag
-    }
-}
-
-final class Mention: EmbeddedObject {
-    @Persisted
-    public var start: Int
-    
-    @Persisted
-    public var end: Int
-    
-    @Persisted
-    public var id: User.ID
-
-    @Persisted
-    public var handle: String
-    
-    override required init() {
-    }
-    
-    init(raw: RawMention) {
-        start = raw.start
-        end = raw.end
-        id = raw.id
-        handle = raw.username
-    }
-}
-
 final class Tweet: Object, Identifiable {
     
     /// Twitter API `id`.
@@ -211,6 +77,10 @@ final class Tweet: Object, Identifiable {
     @Persisted
     var quoting: ID?
     
+    /// - Note: Realm requires embedded objects to be optional.
+    @Persisted
+    var entities: Entities?
+    
     init(raw: RawHydratedTweet) {
         super.init()
         self.id = raw.id
@@ -231,6 +101,12 @@ final class Tweet: Object, Identifiable {
                     retweeting = reference.id
                 }
             }
+        }
+        
+        if let rawEntities = raw.entities {
+            entities = Entities(raw: rawEntities)
+        } else {
+            entities = nil
         }
     }
     
@@ -274,5 +150,55 @@ extension Tweet.ID {
 extension Array where Element == Tweet.ID {
     func missingFrom(_ realm: Realm) -> Self {
         filter { $0.missingFrom(realm) }
+    }
+}
+
+extension Tweet {
+    func fullText() -> NSMutableAttributedString {
+        /// Replace encoded characters.
+        var text = text
+            .replacingOccurrences(of: "&gt;", with: ">")
+            .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&amp;", with: "<")
+        
+        /// Replace `t.co` links.
+        if let urls = entities?.urls {
+            for url in urls {
+                guard let target = text.range(of: url.url) else {
+                    Swift.debugPrint("Could not find \(url.url) in \(text)")
+                    continue
+                }
+                text.replaceSubrange(target, with: url.display_url)
+            }
+        }
+        
+        /// Apply normal text size and color preferences.
+        let string = NSMutableAttributedString(string: text, attributes: [
+            .font: UIFont.preferredFont(forTextStyle: .body),
+            .foregroundColor: UIColor.label,
+        ])
+        
+        /// Hyperlink substituted links.
+        if let urls = entities?.urls {
+            for url in urls {
+                /// - Note: Should never fail! We just put this URL in!
+                guard let target = text.range(of: url.display_url) else {
+                    Swift.debugPrint("Could not find \(url.display_url) in \(text)")
+                    continue
+                }
+                guard
+                    let low16 = target.lowerBound.samePosition(in: text.utf16),
+                    let upp16 = target.upperBound.samePosition(in: text.utf16)
+                else {
+                    Swift.debugPrint("Could not cast offsets")
+                    continue
+                }
+                let lowInt = text.utf16.distance(from: text.utf16.startIndex, to: low16)
+                let uppInt = text.utf16.distance(from: text.utf16.startIndex, to: upp16)
+                string.addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
+            }
+        }
+        
+        return string
     }
 }

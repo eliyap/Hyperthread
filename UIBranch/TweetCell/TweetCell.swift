@@ -87,7 +87,7 @@ final class TweetCell: UITableViewCell {
     private let maxDepth = 10
     public func configure(node: Node, author: User, realm: Realm) {
         userView.configure(tweet: node.tweet, user: author, timestamp: node.tweet.createdAt)
-        tweetLabel.text = node.tweet.text
+        tweetLabel.attributedText = node.tweet.fullText()
         retweetView.configure(tweet: node.tweet, realm: realm)
         metricsView.configure(node.tweet)
         

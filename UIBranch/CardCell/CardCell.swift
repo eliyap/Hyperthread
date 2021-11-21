@@ -18,7 +18,7 @@ final class CardCell: UITableViewCell {
     let backgroundButton = UIButton()
     let stackView = UIStackView()
     let userView = UserView()
-    let tweetLabel = UILabel()
+    let tweetTextView = TweetTextView()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
@@ -58,7 +58,7 @@ final class CardCell: UITableViewCell {
         ])
 
         stackView.addArrangedSubview(userView)
-        stackView.addArrangedSubview(tweetLabel)
+        stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
         
@@ -68,23 +68,17 @@ final class CardCell: UITableViewCell {
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
 
-        /// Configure Label
-        tweetLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        tweetLabel.adjustsFontForContentSizeCategory = true
-
-        /// Allow tweet to wrap across lines.
-        tweetLabel.lineBreakMode = .byWordWrapping
-        tweetLabel.numberOfLines = 0 /// Yes, really.
-        
         /// Apply default styling.
         self.resetStyle()
     }
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
         userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
-        tweetLabel.text = tweet.text
+        tweetTextView.attributedText = tweet.fullText()
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
+        
+        tweetTextView.delegate = self
     }
     
     func style(selected: Bool) -> Void {
@@ -133,5 +127,15 @@ final class CardCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+/**
+ Re-direct URL taps to open link in Safari.
+ */
+extension CardCell: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        UIApplication.shared.open(URL)
+        return false
     }
 }
