@@ -75,7 +75,7 @@ final class CardTeaserCell: UITableViewCell {
         userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
         tweetTextView.attributedText = tweet.fullText()
         retweetView.configure(tweet: tweet, realm: realm)
-        summaryView.configure(discussion)
+        summaryView.configure(discussion, realm: realm)
         
         tweetTextView.delegate = self
         cardBackground.configure(status: discussion.read)
