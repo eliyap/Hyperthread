@@ -18,7 +18,7 @@ final class CardCell: UITableViewCell {
     let backgroundButton = UIButton()
     let stackView = UIStackView()
     let userView = UserView()
-    let tweetTextView = UITextView()
+    let tweetTextView = TweetTextView()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
@@ -69,15 +69,7 @@ final class CardCell: UITableViewCell {
         ])
 
         /// Configure Label
-        tweetTextView.isEditable = false
-        tweetTextView.isScrollEnabled = false
-        tweetTextView.backgroundColor = .clear
-        tweetTextView.contentInset = .zero
-        tweetTextView.textContainerInset = .zero
-        tweetTextView.textContainer.lineFragmentPadding = 0
-        tweetTextView.layoutManager.usesFontLeading = false
-        tweetTextView.adjustsFontForContentSizeCategory = true
-        tweetTextView.isUserInteractionEnabled = false
+        tweetTextView.isUserInteractionEnabled = true
         
         /// Apply default styling.
         self.resetStyle()
