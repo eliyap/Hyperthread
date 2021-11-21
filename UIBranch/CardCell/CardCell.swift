@@ -141,6 +141,9 @@ final class CardCell: UITableViewCell {
     }
 }
 
+/**
+ Re-direct URL taps to open link in Safari.
+ */
 extension CardCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         UIApplication.shared.open(URL)
