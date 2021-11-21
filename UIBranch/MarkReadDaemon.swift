@@ -33,7 +33,7 @@ final class MarkReadDaemon {
             Swift.debugPrint("Missing key \(path)")
             return
         }
-        if discussion.tweets.count == 1 {
+        if discussion.tweetCount == 1 {
             do {
                 try realm.write(withoutNotifying: [token]) {
                     discussion.read = .read

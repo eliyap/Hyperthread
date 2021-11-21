@@ -61,6 +61,11 @@ extension Discussion {
     var tweets: [Tweet] {
         conversations.flatMap(\.tweets)
     }
+    
+    /// Number of tweets, excluding retweets.
+    var tweetCount: Int {
+        conversations.flatMap(\.tweets).filter { $0.retweeting == nil }.count
+    }
 }
 
 extension Discussion {
