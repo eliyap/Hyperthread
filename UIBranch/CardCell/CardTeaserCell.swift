@@ -15,7 +15,7 @@ final class CardTeaserCell: UITableViewCell {
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Component
-    let backgroundButton = UIButton()
+    let cardBackground = CardBackground()
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
@@ -34,19 +34,19 @@ final class CardTeaserCell: UITableViewCell {
         backgroundColor = .flat
         
         let layer = TriangleLayer()
-        backgroundButton.layer.masksToBounds = true
-        backgroundButton.layer.addSublayer(layer)
+        cardBackground.layer.masksToBounds = true
+        cardBackground.layer.addSublayer(layer)
         
         /// Configure background.
-        addSubview(backgroundButton)
-        backgroundButton.layer.cornerRadius = inset * 2
-        backgroundButton.layer.cornerCurve = .continuous
-        backgroundButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(cardBackground)
+        cardBackground.layer.cornerRadius = inset * 2
+        cardBackground.layer.cornerCurve = .continuous
+        cardBackground.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            backgroundButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: inset),
-            backgroundButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -inset),
-            backgroundButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: inset),
-            backgroundButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -inset),
+            cardBackground.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: inset),
+            cardBackground.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -inset),
+            cardBackground.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: inset),
+            cardBackground.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -inset),
         ])
         
         /// Configure Main Stack View
@@ -105,28 +105,28 @@ final class CardTeaserCell: UITableViewCell {
         let shadowSize = self.inset * 0.75
         
         stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        backgroundButton.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        backgroundButton.layer.shadowColor = UIColor.black.cgColor
-        backgroundButton.layer.shadowOpacity = 0.3
-        backgroundButton.layer.shadowRadius = shadowSize
-        backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
+        cardBackground.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
+        cardBackground.layer.shadowColor = UIColor.black.cgColor
+        cardBackground.layer.shadowOpacity = 0.3
+        cardBackground.layer.shadowRadius = shadowSize
+        cardBackground.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
         
-        backgroundButton.backgroundColor = .cardSelected
-        backgroundButton.layer.borderWidth = 0
-        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        cardBackground.backgroundColor = .cardSelected
+        cardBackground.layer.borderWidth = 0
+        cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
     
     public func resetStyle() -> Void {
         stackView.transform = CGAffineTransform(translationX: 0, y: 0)
-        backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
-        backgroundButton.layer.shadowColor = UIColor.black.cgColor
-        backgroundButton.layer.shadowOpacity = 0
-        backgroundButton.layer.shadowRadius = 0
-        backgroundButton.layer.shadowOffset = CGSize.zero
+        cardBackground.transform = CGAffineTransform(translationX: 0, y: 0)
+        cardBackground.layer.shadowColor = UIColor.black.cgColor
+        cardBackground.layer.shadowOpacity = 0
+        cardBackground.layer.shadowRadius = 0
+        cardBackground.layer.shadowOffset = CGSize.zero
         
-        backgroundButton.backgroundColor = .card
-        backgroundButton.layer.borderWidth = 1.00
-        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        cardBackground.backgroundColor = .card
+        cardBackground.layer.borderWidth = 1.00
+        cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
     
     required init?(coder: NSCoder) {
@@ -161,6 +161,16 @@ final class TriangleLayer: CAShapeLayer {
         self.path = path.cgPath
         
         fillColor = UIColor.systemRed.cgColor
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class CardBackground: UIButton {
+    init() {
+        super.init(frame: .zero)
     }
     
     required init?(coder: NSCoder) {
