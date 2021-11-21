@@ -183,10 +183,14 @@ extension MainTable {
         
         splitDelegate.present(discussion)
         
-        /// Mark discussion as read.
+        
         do {
             try realm.write(withoutNotifying: [dds.getToken()]) {
+                /// Mark discussion as read.
                 discussion.read = .read
+                
+                /// Patch updated date, as it can be flaky.
+                discussion.patchUpdatedAt()
             }
         } catch {
             // TODO: log non-critical failure.
