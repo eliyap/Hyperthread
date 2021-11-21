@@ -15,7 +15,7 @@ final class CardTeaserCell: UITableViewCell {
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Component
-    let cardBackground = CardBackground()
+    let cardBackground = CardBackground(inset: CardTeaserCell.borderInset)
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
@@ -24,7 +24,7 @@ final class CardTeaserCell: UITableViewCell {
     // TODO: add profile image
 
     public static let borderInset: CGFloat = 6
-    private lazy var inset: CGFloat = { Self.borderInset }()
+    private lazy var inset: CGFloat = CardTeaserCell.borderInset
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -39,15 +39,7 @@ final class CardTeaserCell: UITableViewCell {
         
         /// Configure background.
         addSubview(cardBackground)
-        cardBackground.layer.cornerRadius = inset * 2
-        cardBackground.layer.cornerCurve = .continuous
-        cardBackground.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            cardBackground.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: inset),
-            cardBackground.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -inset),
-            cardBackground.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: inset),
-            cardBackground.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -inset),
-        ])
+        cardBackground.constrain(to: safeAreaLayoutGuide)
         
         /// Configure Main Stack View
         contentView.addSubview(stackView)
@@ -169,8 +161,27 @@ final class TriangleLayer: CAShapeLayer {
 }
 
 final class CardBackground: UIButton {
-    init() {
+    
+    /// How far the view will be inset from its superview.
+    private let inset: CGFloat
+    
+    init(inset: CGFloat) {
+        self.inset = inset
         super.init(frame: .zero)
+        
+        /// Round corners.
+        layer.cornerRadius = inset * 2
+        layer.cornerCurve = .continuous
+    }
+    
+    public func constrain(to guide: UILayoutGuide) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: guide.topAnchor, constant: inset),
+            bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -inset),
+            leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: inset),
+            trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -inset),
+        ])
     }
     
     required init?(coder: NSCoder) {
