@@ -112,8 +112,7 @@ final class Tag: EmbeddedObject {
     @Persisted
     public var tag: String
     
-    override required init() {
-    }
+    override required init() {}
     
     init(raw: RawTag) {
         super.init()
