@@ -15,7 +15,7 @@ final class CardBackground: UIButton {
     
     init(inset: CGFloat) {
         self.inset = inset
-        let size = inset * 4
+        let size = inset * 3
         self.triangleView = TriangleView(size: size)
         super.init(frame: .zero)
         

@@ -26,12 +26,18 @@ final class TweetCell: UITableViewCell {
     let metricsView = MetricsView()
     // TODO: add profile image
     // TODO: add retweet marker
+    private let triangleView: TriangleView
     
     private let colorBarWidth: CGFloat = 1.5
     private let inset: CGFloat = 8
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        let triangleSize = self.inset * 1.5
+        self.triangleView = TriangleView(size: triangleSize)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        addSubview(triangleView)
+        triangleView.constrain(to: safeAreaLayoutGuide)
         
         /// Add color bar.
         depthSpacer.addSubview(colorBar)
