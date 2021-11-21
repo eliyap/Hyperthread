@@ -21,7 +21,8 @@ final class CardTeaserCell: UITableViewCell {
     let userView = UserView()
     let tweetTextView = TweetTextView()
     let retweetView = RetweetView()
-    let metricsView = MetricsView()
+    let hairlineView = SpacedSeparator(vertical: CardTeaserCell.borderInset, horizontal: CardTeaserCell.borderInset)
+    let summaryView = SummaryView()
     // TODO: add profile image
     
     var token: NotificationToken? = nil
@@ -55,12 +56,15 @@ final class CardTeaserCell: UITableViewCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
-        stackView.addArrangedSubview(metricsView)
+        stackView.addArrangedSubview(hairlineView)
+        stackView.addArrangedSubview(summaryView)
+        
+        hairlineView.constrain(to: stackView)
         
         /// Manually constrain to full width.
         NSLayoutConstraint.activate([
-            metricsView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-            metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+            summaryView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            summaryView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
 
         /// Apply default styling.
@@ -71,7 +75,7 @@ final class CardTeaserCell: UITableViewCell {
         userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
         tweetTextView.attributedText = tweet.fullText()
         retweetView.configure(tweet: tweet, realm: realm)
-        metricsView.configure(tweet)
+        summaryView.configure(discussion, realm: realm)
         
         tweetTextView.delegate = self
         cardBackground.configure(status: discussion.read)
@@ -87,16 +91,24 @@ final class CardTeaserCell: UITableViewCell {
     /// Update color when `readStatus` changes.
     private func updateReadIcon(_ change: ObjectChange<RLMObjectBase>) -> Void {
         guard case let .change(_, properties) = change else { return }
-        guard let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) else { return }
-        guard let newValue = readChange.newValue as? ReadStatus.RawValue else {
-            Swift.debugPrint("Error: unexpected type! \(type(of: readChange.newValue))")
-            return
+        if let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) {
+            guard let newValue = readChange.newValue as? ReadStatus.RawValue else {
+                Swift.debugPrint("Error: unexpected type! \(type(of: readChange.newValue))")
+                return
+            }
+            guard let newRead = ReadStatus(rawValue: newValue) else {
+                assert(false, "Invalid String!")
+                return
+            }
+            cardBackground.configure(status: newRead)
         }
-        guard let newRead = ReadStatus(rawValue: newValue) else {
-            assert(false, "Invalid String!")
-            return
+        if let updatedAtChange = properties.first(where: {$0.name == Discussion.updatedAtPropertyName}) {
+            guard let newDate = updatedAtChange.newValue as? Date else {
+                Swift.debugPrint("Error: unexpected type! \(type(of: updatedAtChange.newValue))")
+                return
+            }
+            summaryView.timestampButton.configure(newDate)
         }
-        cardBackground.configure(status: newRead)
     }
     
     func style(selected: Bool) -> Void {

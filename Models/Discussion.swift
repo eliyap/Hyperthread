@@ -23,6 +23,7 @@ final class Discussion: Object, Identifiable {
     /// The `createdAt` date of the most recent Tweet in this Discussion.
     @Persisted
     var updatedAt: Date
+    public static let updatedAtPropertyName = "updatedAt"
     
     @Persisted
     var conversations: List<Conversation>
@@ -60,6 +61,11 @@ extension Discussion {
 extension Discussion {
     var tweets: [Tweet] {
         conversations.flatMap(\.tweets)
+    }
+    
+    /// Number of tweets, excluding retweets.
+    var tweetCount: Int {
+        conversations.flatMap(\.tweets).filter { $0.retweeting == nil }.count
     }
 }
 
@@ -114,9 +120,15 @@ extension Discussion {
 
 extension Discussion {
     /// Update the last updated date.
+    /// - Note: must take place within a `Realm` write transaction.
     func update(with date: Date?) -> Void {
         if let date = date {
             updatedAt = max(updatedAt, date)
         }
+    }
+    
+    /// - Note: must take place within a `Realm` write transaction.
+    func patchUpdatedAt() -> Void {
+        updatedAt = tweets.map(\.createdAt).max()!
     }
 }
