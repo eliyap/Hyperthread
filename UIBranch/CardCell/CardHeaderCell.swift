@@ -1,5 +1,5 @@
 //
-//  CardCell.swift
+//  CardHeaderCell.swift
 //  UIBranch
 //
 //  Created by Secret Asian Man Dev on 14/11/21.
@@ -9,9 +9,9 @@ import UIKit
 import RealmSwift
 import Twig
 
-final class CardCell: UITableViewCell {
+final class CardHeaderCell: UITableViewCell {
     
-    public static let reuseID = "CardCell"
+    public static let reuseID = "CardHeaderCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Component
@@ -133,7 +133,7 @@ final class CardCell: UITableViewCell {
 /**
  Re-direct URL taps to open link in Safari.
  */
-extension CardCell: UITextViewDelegate {
+extension CardHeaderCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         UIApplication.shared.open(URL)
         return false
