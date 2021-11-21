@@ -21,7 +21,7 @@ final class TweetCell: UITableViewCell {
     /// Component Views
     let stackView = UIStackView()
     let userView = UserView()
-    let tweetLabel = UILabel()
+    let tweetTextView = TweetTextView()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
@@ -62,7 +62,7 @@ final class TweetCell: UITableViewCell {
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(userView)
-        stackView.addArrangedSubview(tweetLabel)
+        stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
         
@@ -72,14 +72,6 @@ final class TweetCell: UITableViewCell {
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
 
-        /// Configure Label
-        tweetLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        tweetLabel.adjustsFontForContentSizeCategory = true
-
-        /// Allow tweet to wrap across lines.
-        tweetLabel.lineBreakMode = .byWordWrapping
-        tweetLabel.numberOfLines = 0 /// Yes, really.
-        
         backgroundColor = .flat
     }
 
@@ -87,7 +79,7 @@ final class TweetCell: UITableViewCell {
     private let maxDepth = 10
     public func configure(node: Node, author: User, realm: Realm) {
         userView.configure(tweet: node.tweet, user: author, timestamp: node.tweet.createdAt)
-        tweetLabel.attributedText = node.tweet.fullText()
+        tweetTextView.attributedText = node.tweet.fullText()
         retweetView.configure(tweet: node.tweet, realm: realm)
         metricsView.configure(node.tweet)
         
