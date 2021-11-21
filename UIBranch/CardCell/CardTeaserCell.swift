@@ -110,13 +110,15 @@ final class CardTeaserCell: UITableViewCell {
         self.resetStyle()
     }
 
-    public func configure(tweet: Tweet, author: User, realm: Realm) {
+    public func configure(discussion: Discussion, tweet: Tweet, author: User, realm: Realm) {
         userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
         tweetTextView.attributedText = tweet.fullText()
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
         
         tweetTextView.delegate = self
+        cardBackground.triangleView.triangleLayer.fillColor = discussion.read.fillColor
+        
     }
     
     func style(selected: Bool) -> Void {

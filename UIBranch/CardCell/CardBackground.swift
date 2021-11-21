@@ -11,7 +11,7 @@ final class CardBackground: UIButton {
     
     /// How far the view will be inset from its superview.
     private let inset: CGFloat
-    private let triangleView: TriangleView
+    public let triangleView: TriangleView
     
     init(inset: CGFloat) {
         self.inset = inset
@@ -53,7 +53,7 @@ final class CardBackground: UIButton {
 
 final class TriangleView: UIView {
     
-    private let triangleLayer: TriangleLayer
+    public let triangleLayer: TriangleLayer
     private let size: CGFloat
     
     init(size: CGFloat) {
@@ -83,9 +83,26 @@ final class TriangleLayer: CAShapeLayer {
     
     let size: CGFloat
     
+    /// A copy initializer which is implicitly invoked, sometimes.
+    /// https://stackoverflow.com/questions/31892986/why-does-cabasicanimation-try-to-initialize-another-instance-of-my-custom-calaye/36017699
+    override init(layer: Any) {
+        if let layer = layer as? Self {
+            self.size = layer.size
+        } else {
+            assert(false, "Init with wrong type!")
+            self.size = .zero
+        }
+        super.init()
+        drawTriangle()
+    }
+    
     init(size: CGFloat) {
         self.size = size
         super.init()
+        drawTriangle()
+    }
+    
+    fileprivate func drawTriangle() {
         let path = UIBezierPath()
         
         /// Draw Triangle.
@@ -95,11 +112,22 @@ final class TriangleLayer: CAShapeLayer {
         path.close()
         
         self.path = path.cgPath
-        
-        fillColor = UIColor.systemRed.cgColor
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension ReadStatus {
+    var fillColor: CGColor {
+        switch self {
+        case .new:
+            return UIColor.red.cgColor
+        case .updated:
+            return UIColor.orange.cgColor
+        case .read:
+            return UIColor.clear.cgColor
+        }
     }
 }
