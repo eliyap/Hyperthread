@@ -17,6 +17,7 @@ final class MainTable: UITableViewController {
 
     private let realm = try! Realm()
     
+    private var mrd: MarkReadDaemon! = nil
     private var dds: DDS! = nil
     
     /// Object to notify when something elsewhere in the `UISplitViewController` should change.
@@ -38,11 +39,14 @@ final class MainTable: UITableViewController {
             let tweet = self!.realm.tweet(id: discussion.id)!
             let author = self!.realm.user(id: tweet.authorID)!
             cell.configure(tweet: tweet, author: author, realm: self!.realm)
-            cell.readModel = DiscussionReadModel(discussion)
             cell.resetStyle()
+            self!.mrd.associate(indexPath, with: discussion)
             
             return cell
         }
+        
+        /// Immediately defuse unwrapped nil `mrd`.
+        mrd = MarkReadDaemon(token: dds.getToken())
         
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
         
@@ -156,6 +160,11 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         
         fetcher.numDiscussions = results.count
     }
+    
+    /// Accessor
+    func getToken() -> NotificationToken {
+        return self.token
+    }
 }
 
 // MARK: - `UITableViewDelegate` Conformance
@@ -208,12 +217,7 @@ extension MainTable {
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         /// - Note: do not invoke super method here, as it causes a crash (21.11.21)
         
-        guard let cell = cell as? Cell else {
-            Swift.debugPrint("Cell was of unexpected type!")
-            return
-        }
-        
-        // TODO: mark as read?
+        mrd.didDisappear(indexPath)
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -228,11 +232,7 @@ extension MainTable {
         
         for path in paths {
             if tableView.bounds.contains(tableView.rectForRow(at: path)) {
-                guard let cell = tableView.cellForRow(at: path) as? Cell else {
-                    Swift.debugPrint("Could not get or cast cell at \(path)")
-                    continue
-                }
-                print(path)
+                mrd.mark(path)
             }
         }
     }

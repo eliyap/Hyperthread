@@ -9,13 +9,59 @@ import UIKit
 import RealmSwift
 import Twig
 
+final class MarkReadDaemon {
+    
+    let token: NotificationToken
+    
+    public init(token: NotificationToken) {
+        self.token = token
+    }
+    
+    private let realm = try! Realm()
+    
+    /// `seen` indicates whether the discussion was fully visible for the user to read.
+    var indices: [IndexPath: (discussion: Discussion, seen: Bool)] = [:]
+    
+    func associate(_ path: IndexPath, with discussion: Discussion) {
+        indices[path] = (discussion, false)
+    }
+    
+    /// Marks the index path as having been seen.
+    func mark(_ path: IndexPath) {
+        guard indices.keys.contains(path) else {
+            assert(false, "Missing key \(path)")
+            return
+        }
+        indices[path]?.seen = true
+    }
+    
+    /// Marks the index path as having scrolled off screen.
+    func didDisappear(_ path: IndexPath) {
+        guard let (discussion, seen): (Discussion, Bool) = indices[path] else {
+            Swift.debugPrint("Missing key \(path)")
+            return
+        }
+        if seen && discussion.tweets.count == 1 {
+            do {
+                try realm.write(withoutNotifying: [token]) {
+                    discussion.read = true
+                }
+            } catch {
+                // TODO: log non-critical failure.
+                assert(false, "\(error)")
+                return
+            }
+        }
+    }
+}
+
 /** Model for marking read. */
 struct DiscussionReadModel {
     /// Tweet to mark
-    private var discussion: Discussion
+    public var discussion: Discussion
     
     /// Whether the tweet was actually seen by the user, and thus may be marked as read.
-    private var seen: Bool = false
+    public var seen: Bool = false
     
     init(_ discussion: Discussion) {
         self.discussion = discussion
