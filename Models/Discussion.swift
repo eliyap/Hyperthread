@@ -10,6 +10,10 @@ import RealmSwift
 import Realm
 import Twig
 
+enum ReadStatus: String {
+    case new = "new", read = "read", updated = "updated"
+}
+
 final class Discussion: Object, Identifiable {
     
     /// The root conversation ID, and thereby the root Tweet ID.
@@ -28,6 +32,10 @@ final class Discussion: Object, Identifiable {
     var conversations: List<Conversation>
     public static let conversationsPropertyName = "conversations"
     
+    @Persisted
+    var readStatus: ReadStatus.RawValue
+    public static let readStatusPropertyName = "readStatus"
+    
     override required init() {
         super.init()
     }
@@ -38,9 +46,18 @@ final class Discussion: Object, Identifiable {
         self.root = root
         self.conversations = List<Conversation>()
         self.conversations.append(root)
+        self.readStatus = ReadStatus.new.rawValue
         
         /// Safe to force unwrap, `root` must have ≥1 `tweets`.
         self.updatedAt = root.tweets.map(\.createdAt).max()!
+    }
+}
+
+extension Discussion {
+    /// Should never have an invalid value.
+    var read: ReadStatus! {
+        get { .init(rawValue: readStatus) }
+        set { readStatus = newValue.rawValue }
     }
 }
 

@@ -17,6 +17,7 @@ final class MainTable: UITableViewController {
 
     private let realm = try! Realm()
     
+    private var mrd: MarkReadDaemon! = nil
     private var dds: DDS! = nil
     
     /// Object to notify when something elsewhere in the `UISplitViewController` should change.
@@ -37,11 +38,15 @@ final class MainTable: UITableViewController {
             }
             let tweet = self!.realm.tweet(id: discussion.id)!
             let author = self!.realm.user(id: tweet.authorID)!
-            cell.configure(tweet: tweet, author: author, realm: self!.realm)
+            cell.configure(discussion: discussion, tweet: tweet, author: author, realm: self!.realm)
             cell.resetStyle()
+            self!.mrd.associate(indexPath, with: discussion)
             
             return cell
         }
+        
+        /// Immediately defuse unwrapped nil `mrd`.
+        mrd = MarkReadDaemon(token: dds.getToken())
         
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
         
@@ -155,6 +160,11 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         
         fetcher.numDiscussions = results.count
     }
+    
+    /// Accessor
+    func getToken() -> NotificationToken {
+        return self.token
+    }
 }
 
 // MARK: - `UITableViewDelegate` Conformance
@@ -190,6 +200,8 @@ extension MainTable {
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        /// - Note: do not invoke super method here, as it causes a crash (21.11.21)
+        
         /// Style cell.
         guard let cell = tableView.cellForRow(at: indexPath) else {
             Swift.debugPrint("Could not find cell at \(indexPath)")
@@ -200,6 +212,37 @@ extension MainTable {
             return
         }
         cardCell.style(selected: false)
+    }
+    
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        didStopScrolling()
+    }
+    
+    /// Docs: https://developer.apple.com/documentation/uikit/uiscrollviewdelegate/1619436-scrollviewdidenddragging
+    /// > `decelerate`:
+    /// > - `true` if the scrolling movement will continue, but decelerate, after a touch-up gesture during a dragging operation.
+    /// > - If the value is `false`, scrolling stops immediately upon touch-up.
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            didStopScrolling()
+        }
+    }
+    
+    fileprivate func didStopScrolling() -> Void {
+        markVisibleCells()
+    }
+    
+    fileprivate func markVisibleCells() -> Void {
+        guard let paths = tableView.indexPathsForVisibleRows else {
+            Swift.debugPrint("Could not get paths!")
+            return
+        }
+        
+        for path in paths {
+            if tableView.bounds.contains(tableView.rectForRow(at: path)) {
+                mrd.mark(path)
+            }
+        }
     }
 }
 

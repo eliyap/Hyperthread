@@ -7,7 +7,45 @@
 
 import UIKit
 import RealmSwift
+import Realm
 import Twig
+
+final class MarkReadDaemon {
+    
+    let token: NotificationToken
+    
+    public init(token: NotificationToken) {
+        self.token = token
+    }
+    
+    private let realm = try! Realm()
+    
+    /// `seen` indicates whether the discussion was fully visible for the user to read.
+    var indices: [IndexPath: Discussion] = [:]
+    
+    func associate(_ path: IndexPath, with discussion: Discussion) {
+        indices[path] = discussion
+    }
+    
+    /// Marks the index path as having been seen.
+    func mark(_ path: IndexPath) {
+        guard let discussion: Discussion = indices[path] else {
+            Swift.debugPrint("Missing key \(path)")
+            return
+        }
+        if discussion.tweets.count == 1 {
+            do {
+                try realm.write(withoutNotifying: [token]) {
+                    discussion.read = .read
+                }
+            } catch {
+                // TODO: log non-critical failure.
+                assert(false, "\(error)")
+                return
+            }
+        }
+    }
+}
 
 final class CardTeaserCell: UITableViewCell {
     
@@ -15,15 +53,18 @@ final class CardTeaserCell: UITableViewCell {
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Component
-    let backgroundButton = UIButton()
+    let cardBackground = CardBackground(inset: CardTeaserCell.borderInset)
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
-
-    private let inset: CGFloat = 6
+    
+    var token: NotificationToken? = nil
+    
+    public static let borderInset: CGFloat = 6
+    private lazy var inset: CGFloat = CardTeaserCell.borderInset
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -33,16 +74,8 @@ final class CardTeaserCell: UITableViewCell {
         backgroundColor = .flat
         
         /// Configure background.
-        addSubview(backgroundButton)
-        backgroundButton.layer.cornerRadius = inset * 2
-        backgroundButton.layer.cornerCurve = .continuous
-        backgroundButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            backgroundButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: inset),
-            backgroundButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -inset),
-            backgroundButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: inset),
-            backgroundButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -inset),
-        ])
+        addSubview(cardBackground)
+        cardBackground.constrain(to: safeAreaLayoutGuide)
         
         /// Configure Main Stack View
         contentView.addSubview(stackView)
@@ -71,13 +104,36 @@ final class CardTeaserCell: UITableViewCell {
         self.resetStyle()
     }
 
-    public func configure(tweet: Tweet, author: User, realm: Realm) {
+    public func configure(discussion: Discussion, tweet: Tweet, author: User, realm: Realm) {
         userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
         tweetTextView.attributedText = tweet.fullText()
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
         
         tweetTextView.delegate = self
+        cardBackground.triangleView.triangleLayer.fillColor = discussion.read.fillColor
+        
+        /// Release old observer.
+        if let token = token {
+            token.invalidate()
+        }
+        
+        token = discussion.observe(updateReadIcon)
+    }
+    
+    /// Update color when `readStatus` changes.
+    private func updateReadIcon(_ change: ObjectChange<RLMObjectBase>) -> Void {
+        guard case let .change(_, properties) = change else { return }
+        guard let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) else { return }
+        guard let newValue = readChange.newValue as? ReadStatus.RawValue else {
+            Swift.debugPrint("Error: unexpected type! \(type(of: readChange.newValue))")
+            return
+        }
+        guard let newRead = ReadStatus(rawValue: newValue) else {
+            assert(false, "Invalid String!")
+            return
+        }
+        cardBackground.triangleView.triangleLayer.fillColor = newRead.fillColor
     }
     
     func style(selected: Bool) -> Void {
@@ -100,32 +156,36 @@ final class CardTeaserCell: UITableViewCell {
         let shadowSize = self.inset * 0.75
         
         stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        backgroundButton.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        backgroundButton.layer.shadowColor = UIColor.black.cgColor
-        backgroundButton.layer.shadowOpacity = 0.3
-        backgroundButton.layer.shadowRadius = shadowSize
-        backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
+        cardBackground.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
+        cardBackground.layer.shadowColor = UIColor.black.cgColor
+        cardBackground.layer.shadowOpacity = 0.3
+        cardBackground.layer.shadowRadius = shadowSize
+        cardBackground.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
         
-        backgroundButton.backgroundColor = .cardSelected
-        backgroundButton.layer.borderWidth = 0
-        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        cardBackground.backgroundColor = .cardSelected
+        cardBackground.layer.borderWidth = 0
+        cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
     
     public func resetStyle() -> Void {
         stackView.transform = CGAffineTransform(translationX: 0, y: 0)
-        backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
-        backgroundButton.layer.shadowColor = UIColor.black.cgColor
-        backgroundButton.layer.shadowOpacity = 0
-        backgroundButton.layer.shadowRadius = 0
-        backgroundButton.layer.shadowOffset = CGSize.zero
+        cardBackground.transform = CGAffineTransform(translationX: 0, y: 0)
+        cardBackground.layer.shadowColor = UIColor.black.cgColor
+        cardBackground.layer.shadowOpacity = 0
+        cardBackground.layer.shadowRadius = 0
+        cardBackground.layer.shadowOffset = CGSize.zero
         
-        backgroundButton.backgroundColor = .card
-        backgroundButton.layer.borderWidth = 1.00
-        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        cardBackground.backgroundColor = .card
+        cardBackground.layer.borderWidth = 1.00
+        cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        token?.invalidate()
     }
 }
 

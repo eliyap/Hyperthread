@@ -83,6 +83,11 @@ final class Split: UISplitViewController {
         preferredSplitBehavior = .tile
         presentsWithGesture = false
         
+        /// Make primary view wider than usual.
+        /// Most discussions are just one tweet, so the primary view should be larger, as the secondary view is not always needed.
+        preferredPrimaryColumnWidthFraction = 0.4
+        maximumPrimaryColumnWidth = .greatestFiniteMagnitude
+        
         setViewController(detailVC, for: .secondary)
         setViewController(mainVC, for: .primary)
         
