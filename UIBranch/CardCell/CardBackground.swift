@@ -118,16 +118,3 @@ final class TriangleLayer: CAShapeLayer {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-extension ReadStatus {
-    var fillColor: CGColor {
-        switch self {
-        case .new:
-            return UIColor.red.cgColor
-        case .updated:
-            return UIColor.orange.cgColor
-        case .read:
-            return UIColor.clear.cgColor
-        }
-    }
-}
