@@ -44,7 +44,7 @@ final class MarkReadDaemon {
         if seen && discussion.tweets.count == 1 {
             do {
                 try realm.write(withoutNotifying: [token]) {
-                    discussion.read = true
+                    discussion.read = .read
                 }
             } catch {
                 // TODO: log non-critical failure.
