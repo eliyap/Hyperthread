@@ -135,8 +135,7 @@ final class Mention: EmbeddedObject {
     @Persisted
     public var handle: String
     
-    override required init() {
-    }
+    override required init() {}
     
     init(raw: RawMention) {
         start = raw.start
