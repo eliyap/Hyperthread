@@ -23,7 +23,8 @@ final class CardTeaserCell: UITableViewCell {
     let metricsView = MetricsView()
     // TODO: add profile image
 
-    private let inset: CGFloat = 6
+    public static let borderInset: CGFloat = 6
+    private lazy var inset: CGFloat = { Self.borderInset }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -31,6 +32,10 @@ final class CardTeaserCell: UITableViewCell {
         /// Do not change color when selected.
         selectionStyle = .none
         backgroundColor = .flat
+        
+        let layer = TriangleLayer()
+        backgroundButton.layer.masksToBounds = true
+        backgroundButton.layer.addSublayer(layer)
         
         /// Configure background.
         addSubview(backgroundButton)
@@ -136,5 +141,29 @@ extension CardTeaserCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         UIApplication.shared.open(URL)
         return false
+    }
+}
+
+final class TriangleLayer: CAShapeLayer {
+    
+    let size: CGFloat = CardTeaserCell.borderInset * 1.5
+    
+    override init() {
+        super.init()
+        let path = UIBezierPath()
+        
+        /// Draw Triangle.
+        path.move(to: .zero)
+        path.addLine(to: CGPoint(x: size, y: .zero))
+        path.addLine(to: CGPoint(x: size, y: size))
+        path.close()
+        
+        self.path = path.cgPath
+        
+        fillColor = UIColor.systemRed.cgColor
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
