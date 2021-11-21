@@ -10,10 +10,6 @@ import RealmSwift
 import Realm
 import Twig
 
-enum ReadStatus: String {
-    case new = "new", read = "read", updated = "updated"
-}
-
 final class Discussion: Object, Identifiable {
     
     /// The root conversation ID, and thereby the root Tweet ID.

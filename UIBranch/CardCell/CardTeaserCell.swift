@@ -10,43 +10,6 @@ import RealmSwift
 import Realm
 import Twig
 
-final class MarkReadDaemon {
-    
-    let token: NotificationToken
-    
-    public init(token: NotificationToken) {
-        self.token = token
-    }
-    
-    private let realm = try! Realm()
-    
-    /// `seen` indicates whether the discussion was fully visible for the user to read.
-    var indices: [IndexPath: Discussion] = [:]
-    
-    func associate(_ path: IndexPath, with discussion: Discussion) {
-        indices[path] = discussion
-    }
-    
-    /// Marks the index path as having been seen.
-    func mark(_ path: IndexPath) {
-        guard let discussion: Discussion = indices[path] else {
-            Swift.debugPrint("Missing key \(path)")
-            return
-        }
-        if discussion.tweets.count == 1 {
-            do {
-                try realm.write(withoutNotifying: [token]) {
-                    discussion.read = .read
-                }
-            } catch {
-                // TODO: log non-critical failure.
-                assert(false, "\(error)")
-                return
-            }
-        }
-    }
-}
-
 final class CardTeaserCell: UITableViewCell {
     
     public static let reuseID = "CardTeaserCell"
@@ -111,7 +74,7 @@ final class CardTeaserCell: UITableViewCell {
         metricsView.configure(tweet)
         
         tweetTextView.delegate = self
-        cardBackground.triangleView.triangleLayer.fillColor = discussion.read.fillColor
+        cardBackground.configure(status: discussion.read)
         
         /// Release old observer.
         if let token = token {
@@ -133,7 +96,7 @@ final class CardTeaserCell: UITableViewCell {
             assert(false, "Invalid String!")
             return
         }
-        cardBackground.triangleView.triangleLayer.fillColor = newRead.fillColor
+        cardBackground.configure(status: newRead)
     }
     
     func style(selected: Bool) -> Void {

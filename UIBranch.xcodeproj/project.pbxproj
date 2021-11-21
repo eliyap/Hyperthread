@@ -44,6 +44,8 @@
 		22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A40274A8B4200F28F0A /* TweetTextView.swift */; };
 		22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A42274A927A00F28F0A /* CardTeaserCell.swift */; };
 		22760A45274AA6ED00F28F0A /* CardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A44274AA6ED00F28F0A /* CardBackground.swift */; };
+		22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */; };
+		22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A48274ADFA900F28F0A /* ReadStatus.swift */; };
 		22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DB27404F4200932614 /* DiscussionTable.swift */; };
 		22D127DE2740651C00932614 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DD2740651C00932614 /* TweetCell.swift */; };
 		22D127E12740655900932614 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E02740655900932614 /* IconView.swift */; };
@@ -115,6 +117,8 @@
 		22760A40274A8B4200F28F0A /* TweetTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetTextView.swift; sourceTree = "<group>"; };
 		22760A42274A927A00F28F0A /* CardTeaserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTeaserCell.swift; sourceTree = "<group>"; };
 		22760A44274AA6ED00F28F0A /* CardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBackground.swift; sourceTree = "<group>"; };
+		22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkReadDaemon.swift; sourceTree = "<group>"; };
+		22760A48274ADFA900F28F0A /* ReadStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadStatus.swift; sourceTree = "<group>"; };
 		22D127DB27404F4200932614 /* DiscussionTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTable.swift; sourceTree = "<group>"; };
 		22D127DD2740651C00932614 /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		22D127E02740655900932614 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
@@ -202,6 +206,7 @@
 				223BBF2E27377BE500375530 /* ViewController.swift */,
 				223BBF852738572C00375530 /* MainTable.swift */,
 				222161F52741D7FF00220F0C /* DiscussionTree.swift */,
+				22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */,
 				222161F02741A8D300220F0C /* CardCell */,
 				22D127DF2740653900932614 /* TweetCell */,
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
@@ -261,6 +266,7 @@
 			children = (
 				223BBF6827377EC000375530 /* Conversation.swift */,
 				223BBF6A27377EC000375530 /* Discussion.swift */,
+				22760A48274ADFA900F28F0A /* ReadStatus.swift */,
 				223BBF6C27377EC300375530 /* Query.swift */,
 				223BBF6B27377EC100375530 /* Tweet.swift */,
 				2248FF4F2745BEA100C6DEF9 /* Entities.swift */,
@@ -539,8 +545,10 @@
 				223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */,
 				223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */,
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
+				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
+				22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,

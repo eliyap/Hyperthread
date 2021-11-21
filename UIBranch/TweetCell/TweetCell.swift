@@ -79,6 +79,9 @@ final class TweetCell: UITableViewCell {
         ])
 
         backgroundColor = .flat
+        
+        /// Hide by default.
+        triangleView.isHidden = true
     }
 
     /// Arbitrary number. Test Later.

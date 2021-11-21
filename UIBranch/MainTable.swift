@@ -182,6 +182,16 @@ extension MainTable {
         splitViewController?.show(.secondary)
         
         splitDelegate.present(discussion)
+        
+        /// Mark discussion as read.
+        do {
+            try realm.write(withoutNotifying: [dds.getToken()]) {
+                discussion.read = .read
+            }
+        } catch {
+            // TODO: log non-critical failure.
+            assert(false, "\(error)")
+        }
 
         /// Style cell.
         guard let cell = tableView.cellForRow(at: indexPath) else {
