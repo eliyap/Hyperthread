@@ -156,10 +156,21 @@ extension Array where Element == Tweet.ID {
 extension Tweet {
     func fullText() -> NSMutableAttributedString {
         /// Replace encoded characters.
-        let text = text
+        var text = text
             .replacingOccurrences(of: "&gt;", with: ">")
             .replacingOccurrences(of: "&lt;", with: "<")
             .replacingOccurrences(of: "&amp;", with: "<")
+        
+        /// Replace `t.co` links.
+        if let urls = entities?.urls {
+            for url in urls {
+                guard let target = text.range(of: url.url) else {
+                    Swift.debugPrint("Could not find \(url.url) in \(text)")
+                    continue
+                }
+                text.replaceSubrange(target, with: url.display_url)
+            }
+        }
         
         /// Apply normal text size and color preferences.
         let string = NSMutableAttributedString(string: text, attributes: [
@@ -167,10 +178,12 @@ extension Tweet {
             .foregroundColor: UIColor.label,
         ])
         
+        /// Hyperlink substituted links.
         if let urls = entities?.urls {
             for url in urls {
-                guard let target = text.range(of: url.url) else {
-                    Swift.debugPrint("Could not find \(url.url) in \(text)")
+                /// - Note: Should never fail! We just put this URL in!
+                guard let target = text.range(of: url.display_url) else {
+                    Swift.debugPrint("Could not find \(url.display_url) in \(text)")
                     continue
                 }
                 guard
