@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import Realm
 import Twig
 
 final class MarkReadDaemon {
@@ -42,7 +43,7 @@ final class MarkReadDaemon {
                 assert(false, "\(error)")
                 return
             }
-        }   
+        }
     }
 }
 
@@ -118,19 +119,21 @@ final class CardTeaserCell: UITableViewCell {
         }
         
         /// Update color when `readStatus` changes.
-        token = discussion.observe { [weak self] change in
-            guard case let .change(_, properties) = change else { return }
-            guard let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) else { return }
-            guard let newValue = readChange.newValue as? ReadStatus.RawValue else {
-                Swift.debugPrint("Error: unexpected type! \(type(of: readChange.newValue))")
-                return
-            }
-            guard let newRead = ReadStatus(rawValue: newValue) else {
-                assert(false, "Invalid String!")
-                return
-            }
-            self?.cardBackground.triangleView.triangleLayer.fillColor = newRead.fillColor
+        token = discussion.observe(updateReadIcon)
+    }
+    
+    private func updateReadIcon(_ change: ObjectChange<RLMObjectBase>) -> Void {
+        guard case let .change(_, properties) = change else { return }
+        guard let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) else { return }
+        guard let newValue = readChange.newValue as? ReadStatus.RawValue else {
+            Swift.debugPrint("Error: unexpected type! \(type(of: readChange.newValue))")
+            return
         }
+        guard let newRead = ReadStatus(rawValue: newValue) else {
+            assert(false, "Invalid String!")
+            return
+        }
+        cardBackground.triangleView.triangleLayer.fillColor = newRead.fillColor
     }
     
     func style(selected: Bool) -> Void {
