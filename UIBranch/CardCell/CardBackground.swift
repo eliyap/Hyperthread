@@ -18,8 +18,8 @@ final class CardBackground: UIButton {
         super.init(frame: .zero)
         
         /// Round corners.
-        triangleLayer.cornerRadius = inset * 2
-        triangleLayer.cornerCurve = .continuous
+        layer.cornerRadius = inset * 2
+        layer.cornerCurve = .continuous
         
         /// Clip triangle to rounded corner.
         layer.masksToBounds = true
