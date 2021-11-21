@@ -21,6 +21,7 @@ final class CardTeaserCell: UITableViewCell {
     let userView = UserView()
     let tweetTextView = TweetTextView()
     let retweetView = RetweetView()
+    let hairlineView = SpacedSeparator(vertical: CardTeaserCell.borderInset, horizontal: CardTeaserCell.borderInset)
     let summaryView = SummaryView()
     // TODO: add profile image
     
@@ -55,7 +56,10 @@ final class CardTeaserCell: UITableViewCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
+        stackView.addArrangedSubview(hairlineView)
         stackView.addArrangedSubview(summaryView)
+        
+        hairlineView.constrain(to: stackView)
         
         /// Manually constrain to full width.
         NSLayoutConstraint.activate([
