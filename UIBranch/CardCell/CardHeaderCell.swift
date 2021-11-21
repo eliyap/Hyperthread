@@ -1,5 +1,5 @@
 //
-//  CardCell.swift
+//  CardHeaderCell.swift
 //  UIBranch
 //
 //  Created by Secret Asian Man Dev on 14/11/21.
@@ -9,9 +9,9 @@ import UIKit
 import RealmSwift
 import Twig
 
-final class CardCell: UITableViewCell {
+final class CardHeaderCell: UITableViewCell {
     
-    public static let reuseID = "CardCell"
+    public static let reuseID = "CardHeaderCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Component
@@ -33,7 +33,6 @@ final class CardCell: UITableViewCell {
         backgroundColor = .flat
         
         /// Configure background.
-        backgroundButton.backgroundColor = .secondarySystemBackground
         addSubview(backgroundButton)
         backgroundButton.layer.cornerRadius = inset * 2
         backgroundButton.layer.cornerCurve = .continuous
@@ -69,7 +68,9 @@ final class CardCell: UITableViewCell {
         ])
 
         /// Apply default styling.
-        self.resetStyle()
+        backgroundButton.backgroundColor = .card
+        backgroundButton.layer.borderWidth = 1.00
+        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
@@ -81,50 +82,6 @@ final class CardCell: UITableViewCell {
         tweetTextView.delegate = self
     }
     
-    func style(selected: Bool) -> Void {
-        UIView.animate(withDuration: 0.25) { [weak self] in
-            guard let self = self else {
-                assert(false, "self is nil")
-                return
-            }
-            /// By changing the radius, offset, and transform at the same time, we can grow / shrink the shadow in place,
-            /// creating a "lifting" illusion.
-            if selected {
-                self.styleSelected()
-            } else {
-                self.resetStyle()
-            }
-        }
-    }
-    
-    public func styleSelected() -> Void {
-        let shadowSize = self.inset * 0.75
-        
-        stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        backgroundButton.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        backgroundButton.layer.shadowColor = UIColor.black.cgColor
-        backgroundButton.layer.shadowOpacity = 0.3
-        backgroundButton.layer.shadowRadius = shadowSize
-        backgroundButton.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
-        
-        backgroundButton.backgroundColor = .cardSelected
-        backgroundButton.layer.borderWidth = 0
-        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
-    }
-    
-    public func resetStyle() -> Void {
-        stackView.transform = CGAffineTransform(translationX: 0, y: 0)
-        backgroundButton.transform = CGAffineTransform(translationX: 0, y: 0)
-        backgroundButton.layer.shadowColor = UIColor.black.cgColor
-        backgroundButton.layer.shadowOpacity = 0
-        backgroundButton.layer.shadowRadius = 0
-        backgroundButton.layer.shadowOffset = CGSize.zero
-        
-        backgroundButton.backgroundColor = .card
-        backgroundButton.layer.borderWidth = 1.00
-        backgroundButton.layer.borderColor = UIColor.secondarySystemFill.cgColor
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -133,7 +90,7 @@ final class CardCell: UITableViewCell {
 /**
  Re-direct URL taps to open link in Safari.
  */
-extension CardCell: UITextViewDelegate {
+extension CardHeaderCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         UIApplication.shared.open(URL)
         return false

@@ -11,6 +11,7 @@ import Realm
 import Twig
 
 final class Entities: EmbeddedObject {
+    
     @Persisted
     var annotations: List<Annotation>
     
@@ -47,6 +48,7 @@ final class Entities: EmbeddedObject {
 }
 
 final class URLEntity: EmbeddedObject {
+    
     @Persisted
     var start: Int
 
@@ -103,6 +105,7 @@ final class Annotation: EmbeddedObject {
 
 /// Represents a Hashtag or Cashtag.
 final class Tag: EmbeddedObject {
+    
     @Persisted
     public var start: Int
     
@@ -123,6 +126,7 @@ final class Tag: EmbeddedObject {
 }
 
 final class Mention: EmbeddedObject {
+    
     @Persisted
     public var start: Int
     

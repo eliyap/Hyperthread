@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		222161F22741A8EA00220F0C /* CardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardCell.swift */; };
+		222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardHeaderCell.swift */; };
 		222161F42741C2F400220F0C /* AssetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F32741C2F400220F0C /* AssetColors.swift */; };
 		222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F52741D7FF00220F0C /* DiscussionTree.swift */; };
 		223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2A27377BE500375530 /* AppDelegate.swift */; };
@@ -42,6 +42,7 @@
 		223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8B27385B0F00375530 /* OptionalCast.swift */; };
 		2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2248FF4F2745BEA100C6DEF9 /* Entities.swift */; };
 		22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A40274A8B4200F28F0A /* TweetTextView.swift */; };
+		22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A42274A927A00F28F0A /* CardTeaserCell.swift */; };
 		22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DB27404F4200932614 /* DiscussionTable.swift */; };
 		22D127DE2740651C00932614 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DD2740651C00932614 /* TweetCell.swift */; };
 		22D127E12740655900932614 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E02740655900932614 /* IconView.swift */; };
@@ -72,7 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		222161F12741A8EA00220F0C /* CardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCell.swift; sourceTree = "<group>"; };
+		222161F12741A8EA00220F0C /* CardHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeaderCell.swift; sourceTree = "<group>"; };
 		222161F32741C2F400220F0C /* AssetColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetColors.swift; sourceTree = "<group>"; };
 		222161F52741D7FF00220F0C /* DiscussionTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DiscussionTree.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/DiscussionTree.swift; sourceTree = "<absolute>"; };
 		223BBF2727377BE500375530 /* UIBranch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIBranch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,6 +112,7 @@
 		223BBF8B27385B0F00375530 /* OptionalCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCast.swift; sourceTree = "<group>"; };
 		2248FF4F2745BEA100C6DEF9 /* Entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entities.swift; sourceTree = "<group>"; };
 		22760A40274A8B4200F28F0A /* TweetTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetTextView.swift; sourceTree = "<group>"; };
+		22760A42274A927A00F28F0A /* CardTeaserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTeaserCell.swift; sourceTree = "<group>"; };
 		22D127DB27404F4200932614 /* DiscussionTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTable.swift; sourceTree = "<group>"; };
 		22D127DD2740651C00932614 /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		22D127E02740655900932614 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
@@ -155,7 +157,8 @@
 		222161F02741A8D300220F0C /* CardCell */ = {
 			isa = PBXGroup;
 			children = (
-				222161F12741A8EA00220F0C /* CardCell.swift */,
+				222161F12741A8EA00220F0C /* CardHeaderCell.swift */,
+				22760A42274A927A00F28F0A /* CardTeaserCell.swift */,
 				22760A40274A8B4200F28F0A /* TweetTextView.swift */,
 			);
 			path = CardCell;
@@ -500,6 +503,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */,
+				22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */,
 				22D127EC274070CD00932614 /* MetricButtons.swift in Sources */,
 				223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */,
 				223BBF6D27377EC300375530 /* Conversation.swift in Sources */,
@@ -525,7 +529,7 @@
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
 				223BBF7627377F2100375530 /* MiscFetch.swift in Sources */,
-				222161F22741A8EA00220F0C /* CardCell.swift in Sources */,
+				222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,
 				223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */,

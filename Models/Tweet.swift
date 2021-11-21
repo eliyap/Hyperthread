@@ -165,7 +165,7 @@ extension Tweet {
         if let urls = entities?.urls {
             for url in urls {
                 guard let target = text.range(of: url.url) else {
-                    Swift.debugPrint("Could not find \(url.url) in \(text)")
+                    Swift.debugPrint("Could not find url \(url.url) in \(text)")
                     continue
                 }
                 text.replaceSubrange(target, with: url.display_url)
@@ -183,7 +183,7 @@ extension Tweet {
             for url in urls {
                 /// - Note: Should never fail! We just put this URL in!
                 guard let target = text.range(of: url.display_url) else {
-                    Swift.debugPrint("Could not find \(url.display_url) in \(text)")
+                    Swift.debugPrint("Could not find display_url \(url.display_url) in \(text)")
                     continue
                 }
                 guard

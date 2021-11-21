@@ -57,7 +57,7 @@ final class DiscussionTable: UITableViewController {
     /// Docs: https://developer.apple.com/documentation/uikit/uitableviewdiffabledatasource
     private func spawnDDS(discussion: Discussion?) {
         self.tableView = UITableView()
-        tableView.register(CardCell.self, forCellReuseIdentifier: CardCell.reuseID)
+        tableView.register(CardHeaderCell.self, forCellReuseIdentifier: CardHeaderCell.reuseID)
         tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
         dds = DDS(followingIDs: followingIDs, discussion: discussion, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, node: Node) -> UITableViewCell? in
             let author = self!.realm.user(id: node.tweet.authorID)!
@@ -65,7 +65,7 @@ final class DiscussionTable: UITableViewController {
                 /// Safety check.
                 assert(node.tweet.id == discussion?.id, "Root tweet ID does not match discussion ID!")
                 
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: CardCell.reuseID) as? CardCell else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: CardHeaderCell.reuseID) as? CardHeaderCell else {
                     fatalError("Failed to create or cast new cell!")
                 }
                 cell.configure(tweet: node.tweet, author: author, realm: self!.realm)

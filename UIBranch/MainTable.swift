@@ -23,7 +23,7 @@ final class MainTable: UITableViewController {
     private weak var splitDelegate: SplitDelegate!
     
     typealias DDS = DiscussionDDS
-    typealias Cell = CardCell
+    typealias Cell = CardTeaserCell
     
     private var observers = Set<AnyCancellable>()
     
@@ -178,7 +178,7 @@ extension MainTable {
             Swift.debugPrint("Could not find cell at \(indexPath)")
             return
         }
-        guard let cardCell = cell as? CardCell else {
+        guard let cardCell = cell as? CardTeaserCell else {
             assert(false, "Could not cast cell to CardCell!")
             return
         }
@@ -195,7 +195,7 @@ extension MainTable {
             Swift.debugPrint("Could not find cell at \(indexPath)")
             return
         }
-        guard let cardCell = cell as? CardCell else {
+        guard let cardCell = cell as? CardTeaserCell else {
             assert(false, "Could not cast cell to CardCell!")
             return
         }
