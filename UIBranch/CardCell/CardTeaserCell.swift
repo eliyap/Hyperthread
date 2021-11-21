@@ -74,7 +74,7 @@ final class CardTeaserCell: UITableViewCell {
         metricsView.configure(tweet)
         
         tweetTextView.delegate = self
-        cardBackground.triangleView.triangleLayer.fillColor = discussion.read.fillColor
+        cardBackground.configure(status: discussion.read)
         
         /// Release old observer.
         if let token = token {
@@ -96,7 +96,7 @@ final class CardTeaserCell: UITableViewCell {
             assert(false, "Invalid String!")
             return
         }
-        cardBackground.triangleView.triangleLayer.fillColor = newRead.fillColor
+        cardBackground.configure(status: newRead)
     }
     
     func style(selected: Bool) -> Void {

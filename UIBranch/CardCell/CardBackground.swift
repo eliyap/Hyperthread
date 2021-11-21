@@ -30,6 +30,9 @@ final class CardBackground: UIButton {
         
         /// Align view to top right, with fixed size.
         triangleView.constrain(to: safeAreaLayoutGuide)
+        
+        /// Hide by default.
+        triangleView.isHidden = true
     }
     
     public func constrain(to guide: UILayoutGuide) -> Void {
@@ -40,6 +43,19 @@ final class CardBackground: UIButton {
             leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: inset),
             trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -inset),
         ])
+    }
+    
+    public func configure(status: ReadStatus) {
+        switch status {
+        case .new:
+            triangleView.triangleLayer.fillColor = UIColor.SCRed.cgColor
+            triangleView.isHidden = false
+        case .updated:
+            triangleView.triangleLayer.fillColor = UIColor.SCYellow.cgColor
+            triangleView.isHidden = false
+        case .read:
+            triangleView.isHidden = true
+        }
     }
     
     override func layoutSubviews() {
