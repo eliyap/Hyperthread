@@ -68,9 +68,6 @@ final class CardCell: UITableViewCell {
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
 
-        /// Configure Label
-        tweetTextView.isUserInteractionEnabled = true
-        
         /// Apply default styling.
         self.resetStyle()
     }
