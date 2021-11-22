@@ -36,8 +36,8 @@ final class TweetCell: UITableViewCell {
         self.triangleView = TriangleView(size: triangleSize)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(triangleView)
-        triangleView.constrain(to: safeAreaLayoutGuide)
+//        addSubview(triangleView)
+//        triangleView.constrain(to: safeAreaLayoutGuide)
         
         /// Add color bar.
         depthSpacer.addSubview(colorBar)

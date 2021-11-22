@@ -20,16 +20,17 @@ final class CardBackground: UIButton {
         super.init(frame: .zero)
         
         /// Round corners.
-        layer.cornerRadius = inset * 2
+        let radius = inset * 2
+        layer.cornerRadius = radius
         layer.cornerCurve = .continuous
         
-        /// Clip triangle to rounded corner.
-        layer.masksToBounds = true
-        
-        addSubview(triangleView)
+        let clipper = CornerClipView()
+        addSubview(clipper)
+        clipper.constrain(to: self, cornerRadius: radius)
         
         /// Align view to top right, with fixed size.
-        triangleView.constrain(to: safeAreaLayoutGuide)
+        clipper.addSubview(triangleView)
+        triangleView.constrain(to: clipper)
         
         /// Hide by default.
         triangleView.isHidden = true
@@ -67,6 +68,30 @@ final class CardBackground: UIButton {
     }
 }
 
+final class CornerClipView: UIView {
+    init() {
+        super.init(frame: .zero)
+        layer.masksToBounds = true
+    }
+    
+    func constrain(to view: UIView, cornerRadius: CGFloat) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
+        layer.cornerRadius = cornerRadius
+        layer.cornerCurve = .continuous
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 final class TriangleView: UIView {
     
     public let triangleLayer: TriangleLayer
@@ -84,11 +109,11 @@ final class TriangleView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func constrain(to guide: UILayoutGuide) -> Void {
+    public func constrain(to view: UIView) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: guide.topAnchor),
-            rightAnchor.constraint(equalTo: guide.rightAnchor),
+            topAnchor.constraint(equalTo: view.topAnchor),
+            rightAnchor.constraint(equalTo: view.rightAnchor),
             heightAnchor.constraint(equalToConstant: size),
             widthAnchor.constraint(equalToConstant: size),
         ])
