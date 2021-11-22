@@ -85,7 +85,10 @@ final class Tweet: Object, Identifiable {
     @Persisted
     var read: Bool
     
-    init(raw: RawHydratedTweet) {
+    @Persisted
+    var media: List<Media>
+    
+    init(raw: RawHydratedTweet, media: [RawIncludeMedia]) {
         super.init()
         self.id = raw.id
         self.createdAt = raw.created_at
@@ -113,6 +116,8 @@ final class Tweet: Object, Identifiable {
         } else {
             entities = nil
         }
+        
+//        if let rawMedia = raw
     }
     
     override required init() {

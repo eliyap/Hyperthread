@@ -46,10 +46,10 @@ final class Airport {
                 )
             }
             /// Remove from in-flight list.
-            .map { [weak self] (tweets: [RawHydratedTweet], users: [RawIncludeUser]) in
+            .map { [weak self] (tweets: [RawHydratedTweet], users: [RawIncludeUser], media: [RawIncludeMedia]) in
                 tweets.forEach { self?.inFlight.remove($0.id) }
                 print("Fetched \(tweets.count) tweets. \(self?.inFlight.count ?? -1) still in flight.")
-                return (tweets, users)
+                return (tweets, users, media)
             }
             .tryMap(furtherFetch)
             .map { ids in
