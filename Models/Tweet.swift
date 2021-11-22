@@ -120,7 +120,11 @@ final class Tweet: Object, Identifiable {
         media = List<Media>()
         if let keys = raw.attachments?.media_keys {
             for key in keys {
-                print(rawMedia.first(where: {$0.media_key == key}))
+                guard let match = rawMedia.first(where: {$0.media_key == key}) else {
+                    Swift.debugPrint("Failed to find match for \(key)")
+                    continue
+                }
+                media.append(Media(raw: match))
             }
         }
     }
