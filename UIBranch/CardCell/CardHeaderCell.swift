@@ -53,7 +53,14 @@ final class CardHeaderCell: UITableViewCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
-        stackView.addArrangedSubview(sdImageView)
+//        stackView.addArrangedSubview(sdImageView)
+        
+        let arv = AspectRatioFrameView()
+        arv.backgroundColor = .systemRed
+        stackView.addArrangedSubview(arv)
+        arv.constrain(to: stackView)
+        arv.addSubview(sdImageView)
+        
         stackView.addArrangedSubview(metricsView)
         
         /// Manually constrain to full width.
@@ -76,6 +83,10 @@ final class CardHeaderCell: UITableViewCell {
         
         if let imgURL = tweet.media.compactMap(\.url).first {
             sdImageView.sd_setImage(with: URL(string: imgURL))
+            sdImageView.contentMode = .scaleAspectFit
+//            NSLayoutConstraint.activate([
+//                sdImageView.heightAnchor.constraint(equalToConstant: 100)
+//            ])
         }
         
         tweetTextView.delegate = self
@@ -93,5 +104,27 @@ extension CardHeaderCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         UIApplication.shared.open(URL)
         return false
+    }
+}
+
+final class AspectRatioFrameView: UIView {
+    init() {
+        super.init(frame: .zero)
+    }
+    
+    private let aspectRatio: CGFloat = 0.667
+    
+    func constrain(to view: UIView) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            widthAnchor.constraint(equalTo: view.widthAnchor),
+            heightAnchor.constraint(equalTo: widthAnchor, multiplier: aspectRatio),
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
