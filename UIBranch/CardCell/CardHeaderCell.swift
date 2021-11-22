@@ -20,8 +20,8 @@ final class CardHeaderCell: UITableViewCell {
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
-    let retweetView = RetweetView()
     let frameView = AspectRatioFrameView()
+    let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
 
@@ -52,8 +52,8 @@ final class CardHeaderCell: UITableViewCell {
 
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
-        stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(frameView)
+        stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
         
         /// Manually constrain to full width.
