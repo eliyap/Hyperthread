@@ -173,7 +173,8 @@ extension Array where Element == Tweet.ID {
 }
 
 extension Tweet {
-    func fullText() -> NSMutableAttributedString {
+    /// If `node` is provided, we can derive some additional context.
+    func fullText(context node: Node? = nil) -> NSMutableAttributedString {
         /// Replace encoded characters.
         var text = text
             .replacingOccurrences(of: "&gt;", with: ">")
@@ -181,6 +182,55 @@ extension Tweet {
             .replacingOccurrences(of: "&amp;", with: "<")
          
         var quotedURL: URLEntity? = nil
+        
+        if let node = node {
+            /// Compile UserIDs in a reply chain.
+            var replyHandles: Set<String> = []
+            var curr: Node? = node
+            while let c = curr {
+                /// Include the author and any accounts they @mention.
+                replyHandles.insert(c.author.handle)
+                if let handles = c.tweet.entities?.mentions.map(\.handle) {
+                    for handle in handles {
+                        replyHandles.insert(handle)
+                    }
+                }
+                
+                /// Move upwards only if tweet was replying.
+                guard
+                    c.tweet.replying_to != nil,
+                    c.tweet.replying_to == c.parent?.id
+                else { break }
+                curr = c.parent
+            }
+            
+            /** Remove replying @mentions.
+                Look for @mentions in the order they appear, advancing `cursor`
+                to the end of each mention.
+                Then, erase everything before cursor.
+             */
+            if let mentions = entities?.mentions {
+                let mentions = mentions.sorted(by: {$0.start < $1.start})
+                var cursor: String.Index = text.startIndex
+                for mention in mentions {
+                    let atHandle = "@" + mention.handle
+                    
+                    /// Ensure @mention is right after the `cursor`.
+                    guard text[cursor..<text.endIndex].starts(with: atHandle) else {
+                        Swift.debugPrint("Mention \(atHandle) not found in \(text)")
+                        break
+                    }
+                    
+                    guard replyHandles.contains(mention.handle) else {
+                        Swift.debugPrint("Mention \(atHandle) not found in \(replyHandles)")
+                        break
+                    }
+                    let range = text.range(of: atHandle + " ") ?? text.range(of: atHandle)!
+                    cursor = range.upperBound
+                }
+                text.removeSubrange(text.startIndex..<cursor)
+            }
+        }
         
         /// Replace `t.co` links with truncated links.
         if let urls = entities?.urls {
