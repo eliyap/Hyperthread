@@ -14,7 +14,11 @@ import Twig
  Returns: Tweet IDs still need to be fetched.
  Also tries to link Tweets to Conversations, and Conversations to Discussions.
  */
-func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) throws -> Set<Tweet.ID> {
+func furtherFetch(
+    rawTweets: [RawHydratedTweet],
+    rawUsers: [RawIncludeUser],
+    rawMedia: [RawIncludeMedia]
+) throws -> Set<Tweet.ID> {
     let realm = try! Realm()
     
     /// IDs for further fetching.
@@ -35,7 +39,7 @@ func furtherFetch(rawTweets: [RawHydratedTweet], rawUsers: [RawIncludeUser]) thr
     /// Insert Tweets into local database.
     try realm.write {
         for rawTweet in rawTweets {
-            let tweet: Tweet = Tweet(raw: rawTweet)
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
             realm.add(tweet, update: .modified)
             tweets.insert(tweet)
             

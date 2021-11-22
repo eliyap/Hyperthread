@@ -85,7 +85,10 @@ final class Tweet: Object, Identifiable {
     @Persisted
     var read: Bool
     
-    init(raw: RawHydratedTweet) {
+    @Persisted
+    var media: List<Media>
+    
+    init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia]) {
         super.init()
         self.id = raw.id
         self.createdAt = raw.created_at
@@ -112,6 +115,17 @@ final class Tweet: Object, Identifiable {
             entities = Entities(raw: rawEntities)
         } else {
             entities = nil
+        }
+        
+        media = List<Media>()
+        if let keys = raw.attachments?.media_keys {
+            for key in Set(keys) {
+                guard let match = rawMedia.first(where: {$0.media_key == key}) else {
+                    Swift.debugPrint("Failed to find match for \(key)")
+                    continue
+                }
+                media.append(Media(raw: match))
+            }
         }
     }
     
@@ -165,15 +179,30 @@ extension Tweet {
             .replacingOccurrences(of: "&gt;", with: ">")
             .replacingOccurrences(of: "&lt;", with: "<")
             .replacingOccurrences(of: "&amp;", with: "<")
+         
+        var quotedURL: URLEntity? = nil
         
-        /// Replace `t.co` links.
+        /// Replace `t.co` links with truncated links.
         if let urls = entities?.urls {
             for url in urls {
                 guard let target = text.range(of: url.url) else {
                     Swift.debugPrint("Could not find url \(url.url) in \(text)")
                     continue
                 }
-                text.replaceSubrange(target, with: url.display_url)
+                
+                /// By convention(?), quote tweets have the quoted URL at the end.
+                /// Definitely a quote, can safely remove it, IF it is not also a reply.
+                if
+                    quoting != nil,
+                    quoting == primaryReference,
+                    target.upperBound == text.endIndex,
+                    url.display_url.starts(with: "twitter.com/")
+                {
+                    quotedURL = url
+                    text.replaceSubrange(target, with: "")
+                } else {
+                    text.replaceSubrange(target, with: url.display_url)
+                }
             }
         }
         
@@ -188,7 +217,9 @@ extension Tweet {
             for url in urls {
                 /// - Note: Should never fail! We just put this URL in!
                 guard let target = text.range(of: url.display_url) else {
-                    Swift.debugPrint("Could not find display_url \(url.display_url) in \(text)")
+                    if url != quotedURL {
+                        Swift.debugPrint("Could not find display_url \(url.display_url) in \(text)")
+                    }
                     continue
                 }
                 guard
@@ -200,7 +231,16 @@ extension Tweet {
                 }
                 let lowInt = text.utf16.distance(from: text.utf16.startIndex, to: low16)
                 let uppInt = text.utf16.distance(from: text.utf16.startIndex, to: upp16)
-                string.addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
+                
+                /// As of November 2021, Twitter truncated URLs.
+                /// They may have changed this, I'm not sure.
+                if url.expanded_url.contains("…") {
+                    Swift.debugPrint("Truncted URL \(url.expanded_url)")
+                    string.addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
+                } else {
+                    string.addAttribute(.link, value: url.expanded_url, range: NSMakeRange(lowInt, uppInt-lowInt))
+                }
+                
             }
         }
         
