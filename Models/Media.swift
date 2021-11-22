@@ -50,6 +50,8 @@ final class Media: EmbeddedObject {
 
     @Persisted
     var url: String?
+    
+    override required init() {}
 
     init(raw: RawIncludeMedia) {
         self.mediaKey = raw.media_key

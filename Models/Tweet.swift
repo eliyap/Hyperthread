@@ -88,7 +88,7 @@ final class Tweet: Object, Identifiable {
     @Persisted
     var media: List<Media>
     
-    init(raw: RawHydratedTweet, media: [RawIncludeMedia]) {
+    init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia]) {
         super.init()
         self.id = raw.id
         self.createdAt = raw.created_at
@@ -117,7 +117,12 @@ final class Tweet: Object, Identifiable {
             entities = nil
         }
         
-//        if let rawMedia = raw
+        media = List<Media>()
+        if let keys = raw.attachments?.media_keys {
+            for key in keys {
+                print(rawMedia.first(where: {$0.media_key == key}))
+            }
+        }
     }
     
     override required init() {

@@ -39,7 +39,7 @@ func furtherFetch(
     /// Insert Tweets into local database.
     try realm.write {
         for rawTweet in rawTweets {
-            let tweet: Tweet = Tweet(raw: rawTweet, media: rawMedia)
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
             realm.add(tweet, update: .modified)
             tweets.insert(tweet)
             
