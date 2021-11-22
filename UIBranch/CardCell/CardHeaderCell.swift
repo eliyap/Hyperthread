@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import Twig
+import SDWebImage
 
 final class CardHeaderCell: UITableViewCell {
     
@@ -20,6 +21,7 @@ final class CardHeaderCell: UITableViewCell {
     let userView = UserView()
     let tweetTextView = TweetTextView()
     let retweetView = RetweetView()
+    let sdImageView = UIImageView()
     let metricsView = MetricsView()
     // TODO: add profile image
 
@@ -51,6 +53,7 @@ final class CardHeaderCell: UITableViewCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
+        stackView.addArrangedSubview(sdImageView)
         stackView.addArrangedSubview(metricsView)
         
         /// Manually constrain to full width.
@@ -70,6 +73,10 @@ final class CardHeaderCell: UITableViewCell {
         tweetTextView.attributedText = tweet.fullText()
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
+        
+        if let imgURL = tweet.media.compactMap(\.url).first {
+            sdImageView.sd_setImage(with: URL(string: imgURL))
+        }
         
         tweetTextView.delegate = self
     }
