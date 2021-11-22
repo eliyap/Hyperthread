@@ -102,30 +102,34 @@ final class AspectRatioFrameView: UIView {
     
     private let imageView = UIImageView()
     
-    private var heightPin: NSLayoutConstraint! = nil
-    private var widthPin: NSLayoutConstraint! = nil
+    /// Allows us to pin the image's height or width to our own.
+    private var heightConstraint: NSLayoutConstraint! = nil
+    private var widthConstraint: NSLayoutConstraint! = nil
+    
+    /// Set's the image aspect ratio.
+    var aspectRatioConstraint: NSLayoutConstraint! = nil
+    
+    /// Maximum frame aspect ratio.
+    private let threshholdAR: CGFloat = 0.667
     
     init() {
         super.init(frame: .zero)
-        /// Defuse implicitly unwrapped `nil`.
-        heightPin = imageView.heightAnchor.constraint(equalTo: self.heightAnchor)
-        widthPin = imageView.widthAnchor.constraint(equalTo: self.widthAnchor)
-        arc = heightAnchor.constraint(equalTo: widthAnchor, multiplier: aspectRatio)
+        /// Defuse implicitly unwrapped `nil`s.
+        heightConstraint = imageView.heightAnchor.constraint(equalTo: self.heightAnchor)
+        widthConstraint = imageView.widthAnchor.constraint(equalTo: self.widthAnchor)
+        aspectRatioConstraint = heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: threshholdAR)
         
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
     }
     
-    private let aspectRatio: CGFloat = 0.667
-    
-    var arc: NSLayoutConstraint! = nil
     func constrain(to view: UIView) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: view.leadingAnchor),
             trailingAnchor.constraint(equalTo: view.trailingAnchor),
             widthAnchor.constraint(equalTo: view.widthAnchor),
-            arc,
+            aspectRatioConstraint,
         ])
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -138,21 +142,22 @@ final class AspectRatioFrameView: UIView {
     func configure(media: Media) -> Void {
         if let urlString = media.url {
             imageView.sd_setImage(with: URL(string: urlString))
-            if media.aspectRatio > self.aspectRatio {
-                heightPin.isActive = true
-                widthPin.isActive = false
-                NSLayoutConstraint.deactivate([arc])
-                arc = heightAnchor.constraint(equalTo: widthAnchor, multiplier: aspectRatio)
-                NSLayoutConstraint.activate([arc])
+            if media.aspectRatio > self.threshholdAR {
+                heightConstraint.isActive = true
+                widthConstraint.isActive = false
+                setAspectRatio(to: threshholdAR)
             } else {
-                heightPin.isActive = false
-                widthPin.isActive = true
-                NSLayoutConstraint.deactivate([arc])
-                arc = heightAnchor.constraint(equalTo: widthAnchor, multiplier: media.aspectRatio)
-                NSLayoutConstraint.activate([arc])
+                heightConstraint.isActive = false
+                widthConstraint.isActive = true
+                setAspectRatio(to: media.aspectRatio)
             }
         }
-        
+    }
+    
+    private func setAspectRatio(to value: CGFloat) -> Void {
+        NSLayoutConstraint.deactivate([aspectRatioConstraint])
+        aspectRatioConstraint = heightAnchor.constraint(equalTo: widthAnchor, multiplier: value)
+        NSLayoutConstraint.activate([aspectRatioConstraint])
     }
     
     required init?(coder: NSCoder) {
