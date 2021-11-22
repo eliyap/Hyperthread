@@ -21,7 +21,7 @@ final class CardHeaderCell: UITableViewCell {
     let userView = UserView()
     let tweetTextView = TweetTextView()
     let retweetView = RetweetView()
-    let sdImageView = UIImageView()
+    let frameView = AspectRatioFrameView()
     let metricsView = MetricsView()
     // TODO: add profile image
 
@@ -53,14 +53,7 @@ final class CardHeaderCell: UITableViewCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
-//        stackView.addArrangedSubview(sdImageView)
-        
-        let arv = AspectRatioFrameView()
-        arv.backgroundColor = .systemRed
-        stackView.addArrangedSubview(arv)
-        arv.constrain(to: stackView)
-        arv.addSubview(sdImageView)
-        
+        stackView.addArrangedSubview(frameView)
         stackView.addArrangedSubview(metricsView)
         
         /// Manually constrain to full width.
@@ -68,6 +61,8 @@ final class CardHeaderCell: UITableViewCell {
             metricsView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
+        
+        frameView.constrain(to: stackView)
 
         /// Apply default styling.
         cardBackground.backgroundColor = .card
@@ -81,12 +76,8 @@ final class CardHeaderCell: UITableViewCell {
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
         
-        if let imgURL = tweet.media.compactMap(\.url).first {
-            sdImageView.sd_setImage(with: URL(string: imgURL))
-            sdImageView.contentMode = .scaleAspectFit
-//            NSLayoutConstraint.activate([
-//                sdImageView.heightAnchor.constraint(equalToConstant: 100)
-//            ])
+        if let media = tweet.media.first(where: {$0.url != nil}) {
+            frameView.configure(media: media)
         }
         
         tweetTextView.delegate = self
@@ -108,20 +99,60 @@ extension CardHeaderCell: UITextViewDelegate {
 }
 
 final class AspectRatioFrameView: UIView {
+    
+    private let imageView = UIImageView()
+    
+    private var heightPin: NSLayoutConstraint! = nil
+    private var widthPin: NSLayoutConstraint! = nil
+    
     init() {
         super.init(frame: .zero)
+        /// Defuse implicitly unwrapped `nil`.
+        heightPin = imageView.heightAnchor.constraint(equalTo: self.heightAnchor)
+        widthPin = imageView.widthAnchor.constraint(equalTo: self.widthAnchor)
+        arc = heightAnchor.constraint(equalTo: widthAnchor, multiplier: aspectRatio)
+        
+        addSubview(imageView)
+        imageView.contentMode = .scaleAspectFit
     }
     
     private let aspectRatio: CGFloat = 0.667
     
+    var arc: NSLayoutConstraint! = nil
     func constrain(to view: UIView) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: view.leadingAnchor),
             trailingAnchor.constraint(equalTo: view.trailingAnchor),
             widthAnchor.constraint(equalTo: view.widthAnchor),
-            heightAnchor.constraint(equalTo: widthAnchor, multiplier: aspectRatio),
+            arc,
         ])
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+    }
+    
+    func configure(media: Media) -> Void {
+        if let urlString = media.url {
+            imageView.sd_setImage(with: URL(string: urlString))
+            if media.aspectRatio > self.aspectRatio {
+                heightPin.isActive = true
+                widthPin.isActive = false
+                NSLayoutConstraint.deactivate([arc])
+                arc = heightAnchor.constraint(equalTo: widthAnchor, multiplier: aspectRatio)
+                NSLayoutConstraint.activate([arc])
+            } else {
+                heightPin.isActive = false
+                widthPin.isActive = true
+                NSLayoutConstraint.deactivate([arc])
+                arc = heightAnchor.constraint(equalTo: widthAnchor, multiplier: media.aspectRatio)
+                NSLayoutConstraint.activate([arc])
+            }
+        }
+        
     }
     
     required init?(coder: NSCoder) {
