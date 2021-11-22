@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import Twig
+import SDWebImage
 
 final class CardHeaderCell: UITableViewCell {
     
@@ -20,6 +21,7 @@ final class CardHeaderCell: UITableViewCell {
     let userView = UserView()
     let tweetTextView = TweetTextView()
     let retweetView = RetweetView()
+    let frameView = AspectRatioFrameView()
     let metricsView = MetricsView()
     // TODO: add profile image
 
@@ -51,6 +53,7 @@ final class CardHeaderCell: UITableViewCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
+        stackView.addArrangedSubview(frameView)
         stackView.addArrangedSubview(metricsView)
         
         /// Manually constrain to full width.
@@ -58,6 +61,8 @@ final class CardHeaderCell: UITableViewCell {
             metricsView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
+        
+        frameView.constrain(to: stackView)
 
         /// Apply default styling.
         cardBackground.backgroundColor = .card
@@ -70,6 +75,10 @@ final class CardHeaderCell: UITableViewCell {
         tweetTextView.attributedText = tweet.fullText()
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
+        
+        if let media = tweet.media.first(where: {$0.url != nil}) {
+            frameView.configure(media: media)
+        }
         
         tweetTextView.delegate = self
     }
@@ -86,5 +95,72 @@ extension CardHeaderCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         UIApplication.shared.open(URL)
         return false
+    }
+}
+
+final class AspectRatioFrameView: UIView {
+    
+    private let imageView = UIImageView()
+    
+    /// Allows us to pin the image's height or width to our own.
+    private var heightConstraint: NSLayoutConstraint! = nil
+    private var widthConstraint: NSLayoutConstraint! = nil
+    
+    /// Set's the image aspect ratio.
+    var aspectRatioConstraint: NSLayoutConstraint! = nil
+    
+    /// Maximum frame aspect ratio.
+    private let threshholdAR: CGFloat = 0.667
+    
+    init() {
+        super.init(frame: .zero)
+        /// Defuse implicitly unwrapped `nil`s.
+        heightConstraint = imageView.heightAnchor.constraint(equalTo: self.heightAnchor)
+        widthConstraint = imageView.widthAnchor.constraint(equalTo: self.widthAnchor)
+        aspectRatioConstraint = heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: threshholdAR)
+        
+        addSubview(imageView)
+        imageView.contentMode = .scaleAspectFit
+    }
+    
+    func constrain(to view: UIView) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            widthAnchor.constraint(equalTo: view.widthAnchor),
+            aspectRatioConstraint,
+        ])
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+    }
+    
+    func configure(media: Media) -> Void {
+        if let urlString = media.url {
+            imageView.sd_setImage(with: URL(string: urlString))
+            if media.aspectRatio > self.threshholdAR {
+                heightConstraint.isActive = true
+                widthConstraint.isActive = false
+                setAspectRatio(to: threshholdAR)
+            } else {
+                heightConstraint.isActive = false
+                widthConstraint.isActive = true
+                setAspectRatio(to: media.aspectRatio)
+            }
+        }
+    }
+    
+    private func setAspectRatio(to value: CGFloat) -> Void {
+        NSLayoutConstraint.deactivate([aspectRatioConstraint])
+        aspectRatioConstraint = heightAnchor.constraint(equalTo: widthAnchor, multiplier: value)
+        NSLayoutConstraint.activate([aspectRatioConstraint])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
