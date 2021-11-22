@@ -64,3 +64,9 @@ final class Media: EmbeddedObject {
         self.url = raw.url
     }
 }
+
+extension Media {
+    var aspectRatio: CGFloat {
+        CGFloat(height) / CGFloat(width)
+    }
+}
