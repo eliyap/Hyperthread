@@ -49,6 +49,7 @@
 		22760A4B274AE63000F28F0A /* SummaryLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4A274AE63000F28F0A /* SummaryLine.swift */; };
 		22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */; };
 		22760A4F274B136200F28F0A /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4E274B136200F28F0A /* Media.swift */; };
+		22760A52274B1CAC00F28F0A /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 22760A51274B1CAC00F28F0A /* SDWebImage */; };
 		22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DB27404F4200932614 /* DiscussionTable.swift */; };
 		22D127DE2740651C00932614 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DD2740651C00932614 /* TweetCell.swift */; };
 		22D127E12740655900932614 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E02740655900932614 /* IconView.swift */; };
@@ -144,6 +145,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22760A52274B1CAC00F28F0A /* SDWebImage in Frameworks */,
 				3579A6A613DCA02DE5BEEC38 /* Pods_UIBranch.framework in Frameworks */,
 				223BBF5D27377E4600375530 /* Twig in Frameworks */,
 			);
@@ -362,6 +364,7 @@
 			name = UIBranch;
 			packageProductDependencies = (
 				223BBF5C27377E4600375530 /* Twig */,
+				22760A51274B1CAC00F28F0A /* SDWebImage */,
 			);
 			productName = UIBranch;
 			productReference = 223BBF2727377BE500375530 /* UIBranch.app */;
@@ -435,6 +438,9 @@
 				Base,
 			);
 			mainGroup = 223BBF1E27377BE500375530;
+			packageReferences = (
+				22760A50274B1BFC00F28F0A /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			productRefGroup = 223BBF2827377BE500375530 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -930,10 +936,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		22760A50274B1BFC00F28F0A /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		223BBF5C27377E4600375530 /* Twig */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Twig;
+		};
+		22760A51274B1CAC00F28F0A /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22760A50274B1BFC00F28F0A /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
