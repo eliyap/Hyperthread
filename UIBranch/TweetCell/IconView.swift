@@ -38,8 +38,6 @@ final class IconView: UIStackView {
         label.text = text
     }
     
-    
-
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -69,7 +67,11 @@ final class IconImageView: UIImageView {
         image = UIImage(systemName: sfSymbol)
     }
     
-    public func setImage(to sfSymbol: String) {
+    public func setImage(to sfSymbol: String) -> Void {
+        /// Prevent redundant setting.
+        guard self.sfSymbol != sfSymbol else { return }
+        
+        self.sfSymbol = sfSymbol
         image = UIImage(systemName: sfSymbol)
     }
     
