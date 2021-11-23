@@ -87,7 +87,14 @@ fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, rea
         let upstream: Discussion = upstreamConvo.discussion.first
     {
         upstream.conversations.append(orphan)
+        
+        /// Bump update time.
         upstream.update(with: orphan.tweets.map(\.createdAt).max())
+        
+        /// Mark as updated (new discussions should stay new).
+        if upstream.read == .read {
+            upstream.read = .updated
+        }
         return
     }
     /** Conclusion: upstream is either missing, or itself has no `Discussion`. **/
