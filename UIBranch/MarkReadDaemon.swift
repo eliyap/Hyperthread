@@ -12,10 +12,11 @@ import RealmSwift
  */
 final class MarkReadDaemon {
     
-    let token: NotificationToken
+    /// Do not notify the `DiffableDataSource`, as it causes a `modification` bump, which causes an animation glitch (observed 21.11.23).
+    let excludeTokens: [NotificationToken]
     
     public init(token: NotificationToken) {
-        self.token = token
+        self.excludeTokens = [token]
     }
     
     private let realm = try! Realm()
@@ -27,22 +28,23 @@ final class MarkReadDaemon {
         indices[path] = discussion
     }
     
-    /// Marks the index path as having been seen.
-    func mark(_ path: IndexPath) {
-        guard let discussion: Discussion = indices[path] else {
-            Swift.debugPrint("Missing key \(path)")
-            return
-        }
-        if discussion.tweetCount == 1 {
-            do {
-                try realm.write(withoutNotifying: [token]) {
-                    discussion.read = .read
+    /// Mark the discussion at this index path as `read`.
+    func mark(_ paths: [IndexPath]) -> Void {
+        do {
+            try realm.write(withoutNotifying: excludeTokens) {
+                for path in paths {
+                    guard let discussion: Discussion = indices[path] else {
+                        TableLog.debug("Mark Daemon missing key \(path)")
+                        continue
+                    }
+                    if discussion.tweetCount == 1 {
+                        discussion.read = .read
+                    }
                 }
-            } catch {
-                // TODO: log non-critical failure.
-                assert(false, "\(error)")
-                return
             }
+        } catch {
+            ModelLog.error("\(error)")
+            return
         }
     }
 }

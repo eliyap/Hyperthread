@@ -217,12 +217,14 @@ extension Tweet {
                     
                     /// Ensure @mention is right after the `cursor`.
                     guard text[cursor..<text.endIndex].starts(with: atHandle) else {
-                        Swift.debugPrint("Mention \(atHandle) not found in \(text)")
+                        if text.contains(atHandle) == false {
+                            ModelLog.warning("Mention \(atHandle) not found in \(text)")
+                        }
                         break
                     }
                     
                     guard replyHandles.contains(mention.handle) else {
-                        Swift.debugPrint("Mention \(atHandle) not found in \(replyHandles)")
+                        ModelLog.warning("Mention \(atHandle) not found in \(replyHandles)")
                         break
                     }
                     let range = text.range(of: atHandle + " ") ?? text.range(of: atHandle)!
@@ -291,7 +293,6 @@ extension Tweet {
                 } else {
                     string.addAttribute(.link, value: url.expanded_url, range: NSMakeRange(lowInt, uppInt-lowInt))
                 }
-                
             }
         }
         

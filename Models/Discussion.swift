@@ -26,7 +26,12 @@ final class Discussion: Object, Identifiable {
     public static let updatedAtPropertyName = "updatedAt"
     
     @Persisted
-    var conversations: List<Conversation>
+    var conversations: List<Conversation> {
+        didSet {
+            /// Wipe memoized storage.
+            _tweets = nil
+        }
+    }
     public static let conversationsPropertyName = "conversations"
     
     @Persisted
@@ -48,6 +53,21 @@ final class Discussion: Object, Identifiable {
         /// Safe to force unwrap, `root` must have ≥1 `tweets`.
         self.updatedAt = root.tweets.map(\.createdAt).max()!
     }
+    
+    // MARK: - Ephemeral Variables
+    
+    /// Memoized Storage.
+    var _tweets: [Tweet]?
+    var tweets: [Tweet] {
+        get {
+            if let tweets = _tweets { return tweets }
+            else {
+                let result: [Tweet] = conversations.flatMap(\.tweets)
+                _tweets = result
+                return result
+            }
+        }
+    }
 }
 
 extension Discussion {
@@ -59,13 +79,9 @@ extension Discussion {
 }
 
 extension Discussion {
-    var tweets: [Tweet] {
-        conversations.flatMap(\.tweets)
-    }
-    
     /// Number of tweets, excluding retweets.
     var tweetCount: Int {
-        conversations.flatMap(\.tweets).filter { $0.retweeting == nil }.count
+        tweets.filter { $0.retweeting == nil }.count
     }
 }
 

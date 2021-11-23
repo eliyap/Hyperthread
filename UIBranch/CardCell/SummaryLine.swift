@@ -58,9 +58,9 @@ final class SummaryView: UIStackView {
             }
             let onlyReply = discussion.tweets[1]
             if onlyReply.primaryReference == onlyReply.replying_to {
-                iconView.setImage(to: "arrowshape.turn.up.left.fill")
+                iconView.imageView.setImage(to: "arrowshape.turn.up.left.fill")
             } else if onlyReply.primaryReference == onlyReply.quoting {
-                iconView.setImage(to: "quote.bubble.fill")
+                iconView.imageView.setImage(to: "quote.bubble.fill")
             } else {
                 assert(false, "Invalid state, should be retweet or reply!")
             }
@@ -72,7 +72,7 @@ final class SummaryView: UIStackView {
             likeButton.isHidden = true
             iconView.isHidden = false
             
-            iconView.setImage(to: "bubble.left.and.bubble.right.fill")
+            iconView.imageView.setImage(to: "bubble.left.and.bubble.right.fill")
             
             /// Exclude the original from the count.
             iconView.setText(to: "\(discussion.tweetCount - 1) tweets")

@@ -11,31 +11,26 @@ import Twig
 
 final class IconView: UIStackView {
     
-    private let imageView = UIImageView()
+    public let imageView: IconImageView
     private let label = UILabel()
     
-    private let textStyle = UIFont.TextStyle.footnote
-    private let symbolConfig: UIImage.SymbolConfiguration?
+    public static let textStyle = UIFont.TextStyle.footnote
     
     init(sfSymbol: String, symbolConfig: UIImage.SymbolConfiguration? = nil) {
-        self.symbolConfig = symbolConfig
+        imageView = IconImageView(sfSymbol: sfSymbol, symbolConfig: symbolConfig)
         super.init(frame: .zero)
         
         /// Configure Main Stack View.
         axis = .horizontal
         alignment = .leading
         spacing = 4
-        imageView.contentMode = .scaleAspectFit
         
         addArrangedSubview(imageView)
         addArrangedSubview(label)
 
-        label.font = UIFont.preferredFont(forTextStyle: self.textStyle)
+        label.font = UIFont.preferredFont(forTextStyle: Self.textStyle)
         
-        setImage(to: sfSymbol)
-
         /// Mute Colors.
-        imageView.tintColor = .secondaryLabel
         label.textColor = .secondaryLabel
     }
 
@@ -43,17 +38,44 @@ final class IconView: UIStackView {
         label.text = text
     }
     
-    public func setImage(to sfSymbol: String) {
-        imageView.image = UIImage(systemName: sfSymbol)
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class IconImageView: UIImageView {
+    
+    public private(set) var sfSymbol: String
+    
+    public init(sfSymbol: String, symbolConfig: UIImage.SymbolConfiguration? = nil) {
+        self.sfSymbol = sfSymbol
+        super.init(frame: .zero)
+        tintColor = .secondaryLabel
+        contentMode = .scaleAspectFit
+        
+        /// Applying a text style causes image to scale with Dynamic Type.
         var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
-        config = config.applying(UIImage.SymbolConfiguration(textStyle: self.textStyle))
+        config = config.applying(UIImage.SymbolConfiguration(textStyle: IconView.textStyle))
+        
+        /// Combine with other configuration.
         if let other = symbolConfig {
             config = config.applying(other)
         }
-        imageView.preferredSymbolConfiguration = config
+        
+        preferredSymbolConfiguration = config
+        
+        image = UIImage(systemName: sfSymbol)
     }
-
-    required init(coder: NSCoder) {
+    
+    public func setImage(to sfSymbol: String) -> Void {
+        /// Prevent redundant setting.
+        guard self.sfSymbol != sfSymbol else { return }
+        
+        self.sfSymbol = sfSymbol
+        image = UIImage(systemName: sfSymbol)
+    }
+    
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

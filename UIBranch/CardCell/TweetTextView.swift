@@ -24,7 +24,6 @@ final class TweetTextView: UITextView {
         isUserInteractionEnabled = true
     }
     
-    
     /// Reject touches that aren't tapping a URL.
     /// Source: https://stackoverflow.com/a/44878203/12395667
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
