@@ -217,7 +217,9 @@ extension Tweet {
                     
                     /// Ensure @mention is right after the `cursor`.
                     guard text[cursor..<text.endIndex].starts(with: atHandle) else {
-                        Swift.debugPrint("Mention \(atHandle) not found in \(text)")
+                        if text.contains(atHandle) == false {
+                            ModelLog.warning("Mention \(atHandle) not found in \(text)")
+                        }
                         break
                     }
                     
