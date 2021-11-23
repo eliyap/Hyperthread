@@ -277,7 +277,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             let numDiscussions = numDiscussions,
             (numDiscussions - indexPaths.max()!.row) < threshhold
         {
-            TableLog.log(items: "Row \(indexPaths.max()!.row) requested, prefetching items...")
+            TableLog.debug("Row \(indexPaths.max()!.row) requested, prefetching items...")
             fetchOldTweets()
         }
     }
@@ -308,7 +308,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 return
             }
             if rawTweets.isEmpty {
-                NetLog.log(items: "No new tweets found!")
+                NetLog.debug("No new tweets found!", print: true)
             } else {
                 /// Allow further requests.
                 isFetching = false
