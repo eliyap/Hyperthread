@@ -11,13 +11,13 @@ import Twig
 
 final class IconView: UIStackView {
     
-    private let imageView: IconImageView
+    public let imageView: IconImageView
     private let label = UILabel()
     
     public static let textStyle = UIFont.TextStyle.footnote
     
     init(sfSymbol: String, symbolConfig: UIImage.SymbolConfiguration? = nil) {
-        imageView = IconImageView(symbolConfig: symbolConfig)
+        imageView = IconImageView(sfSymbol: sfSymbol, symbolConfig: symbolConfig)
         super.init(frame: .zero)
         
         /// Configure Main Stack View.
@@ -30,8 +30,6 @@ final class IconView: UIStackView {
 
         label.font = UIFont.preferredFont(forTextStyle: Self.textStyle)
         
-        setImage(to: sfSymbol)
-
         /// Mute Colors.
         label.textColor = .secondaryLabel
     }
@@ -40,9 +38,7 @@ final class IconView: UIStackView {
         label.text = text
     }
     
-    public func setImage(to sfSymbol: String) {
-        imageView.image = UIImage(systemName: sfSymbol)
-    }
+    
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -51,7 +47,10 @@ final class IconView: UIStackView {
 
 final class IconImageView: UIImageView {
     
-    public init(symbolConfig: UIImage.SymbolConfiguration? = nil) {
+    public private(set) var sfSymbol: String
+    
+    public init(sfSymbol: String, symbolConfig: UIImage.SymbolConfiguration? = nil) {
+        self.sfSymbol = sfSymbol
         super.init(frame: .zero)
         tintColor = .secondaryLabel
         contentMode = .scaleAspectFit
@@ -66,9 +65,13 @@ final class IconImageView: UIImageView {
         }
         
         preferredSymbolConfiguration = config
+        
+        image = UIImage(systemName: sfSymbol)
     }
     
-    
+    public func setImage(to sfSymbol: String) {
+        image = UIImage(systemName: sfSymbol)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
