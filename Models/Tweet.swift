@@ -224,7 +224,7 @@ extension Tweet {
                     }
                     
                     guard replyHandles.contains(mention.handle) else {
-                        Swift.debugPrint("Mention \(atHandle) not found in \(replyHandles)")
+                        ModelLog.warning("Mention \(atHandle) not found in \(replyHandles)")
                         break
                     }
                     let range = text.range(of: atHandle + " ") ?? text.range(of: atHandle)!
