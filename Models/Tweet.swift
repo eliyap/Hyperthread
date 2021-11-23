@@ -237,6 +237,7 @@ extension Tweet {
             for url in urls {
                 guard let target = text.range(of: url.url) else {
                     Swift.debugPrint("Could not find url \(url.url) in \(text)")
+                    Swift.debugPrint("URLs: ", urls.map(\.url))
                     continue
                 }
                 
