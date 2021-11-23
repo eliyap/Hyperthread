@@ -78,6 +78,9 @@ final class CardHeaderCell: UITableViewCell {
         
         if let media = tweet.media.first(where: {$0.url != nil}) {
             frameView.configure(media: media)
+            frameView.isHidden = false
+        } else {
+            frameView.isHidden = true
         }
         
         tweetTextView.delegate = self
