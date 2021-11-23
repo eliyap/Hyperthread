@@ -181,7 +181,7 @@ extension Tweet {
             .replacingOccurrences(of: "&lt;", with: "<")
             .replacingOccurrences(of: "&amp;", with: "&")
          
-        var quotedURL: URLEntity? = nil
+        var quotedDisplayURL: String? = nil
         
         if let node = node {
             /// Compile UserIDs in a reply chain.
@@ -248,7 +248,7 @@ extension Tweet {
                     target.upperBound == text.endIndex,
                     url.display_url.starts(with: "twitter.com/")
                 {
-                    quotedURL = url
+                    quotedDisplayURL = url.display_url
                     text.replaceSubrange(target, with: "")
                 } else {
                     text.replaceSubrange(target, with: url.display_url)
@@ -267,7 +267,7 @@ extension Tweet {
             for url in urls {
                 /// - Note: Should never fail! We just put this URL in!
                 guard let target = text.range(of: url.display_url) else {
-                    if url != quotedURL {
+                    if url.display_url != quotedDisplayURL {
                         Swift.debugPrint("Could not find display_url \(url.display_url) in \(text)")
                     }
                     continue
