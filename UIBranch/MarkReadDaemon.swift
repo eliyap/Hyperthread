@@ -40,8 +40,7 @@ final class MarkReadDaemon {
                     discussion.read = .read
                 }
             } catch {
-                // TODO: log non-critical failure.
-                assert(false, "\(error)")
+                ModelLog.error("\(error)")
                 return
             }
         }
