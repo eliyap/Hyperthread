@@ -11,7 +11,7 @@ import Twig
 
 final class IconView: UIStackView {
     
-    private let imageView = UIImageView()
+    private let imageView = IconImageView()
     private let label = UILabel()
     
     private let textStyle = UIFont.TextStyle.footnote
@@ -25,7 +25,6 @@ final class IconView: UIStackView {
         axis = .horizontal
         alignment = .leading
         spacing = 4
-        imageView.contentMode = .scaleAspectFit
         
         addArrangedSubview(imageView)
         addArrangedSubview(label)
@@ -35,7 +34,6 @@ final class IconView: UIStackView {
         setImage(to: sfSymbol)
 
         /// Mute Colors.
-        imageView.tintColor = .secondaryLabel
         label.textColor = .secondaryLabel
     }
 
@@ -54,6 +52,18 @@ final class IconView: UIStackView {
     }
 
     required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class IconImageView: UIImageView {
+    init() {
+        super.init(frame: .zero)
+        tintColor = .secondaryLabel
+        contentMode = .scaleAspectFit
+    }
+    
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
