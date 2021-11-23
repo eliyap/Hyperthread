@@ -36,7 +36,7 @@ final class Airport {
             .buffer(size: 100, timer)
             .filter(\.isNotEmpty)
             .asyncMap { (ids: [Tweet.ID]) in
-                NetLog.log(items: "Fetching \(ids.count) IDs")
+                NetLog.debug("Fetching \(ids.count) IDs")
                 return try await hydratedTweets(
                     credentials: credentials,
                     ids: ids,

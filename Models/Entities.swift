@@ -28,6 +28,7 @@ final class Entities: EmbeddedObject {
     
     init(raw: RawEntities) {
         super.init()
+        let raw = raw.discardingDuplicates()
         raw.annotations?.map(Annotation.init(raw: )).forEach(annotations.append)
         raw.hashtags?.map(Tag.init(raw: )).forEach(hashtags.append)
         raw.mentions?.map(Mention.init(raw: )).forEach(mentions.append)
@@ -45,6 +46,33 @@ final class Entities: EmbeddedObject {
 
     /// Represents a case with no entities.
     public static let empty = Entities()
+}
+
+extension RawEntities {
+    
+    /**
+     Account for Twitter returning duplicate entities,
+     and discard the literally identical ones.
+     */
+    func discardingDuplicates() -> Self {
+        var result = self
+        
+        /// Use `Hashable` to unique values.
+        if let annotations = annotations {
+            result.annotations = Array(Set(annotations))
+        }
+        if let hashtags = hashtags {
+            result.hashtags = Array(Set(hashtags))
+        }
+        if let mentions = mentions {
+            result.mentions = Array(Set(mentions))
+        }
+        if let urls = urls {
+            result.urls = Array(Set(urls))
+        }
+        
+        return result
+    }
 }
 
 final class URLEntity: EmbeddedObject {

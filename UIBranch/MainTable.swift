@@ -157,7 +157,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         var snapshot = Snapshot()
         snapshot.appendSections([.Main])
         snapshot.appendItems(Array(results), toSection: .Main)
-        Swift.debugPrint("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.")
+        TableLog.debug("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.", print: true)
         apply(snapshot, animatingDifferences: animated)
         
         fetcher.numDiscussions = results.count
@@ -201,7 +201,7 @@ extension MainTable {
 
         /// Style cell.
         guard let cell = tableView.cellForRow(at: indexPath) else {
-            Swift.debugPrint("Could not find cell at \(indexPath)")
+            TableLog.warning("`didSelect` Could not find cell at \(indexPath)")
             return
         }
         guard let cardCell = cell as? CardTeaserCell else {
@@ -220,7 +220,7 @@ extension MainTable {
         
         /// Style cell.
         guard let cell = tableView.cellForRow(at: indexPath) else {
-            Swift.debugPrint("Could not find cell at \(indexPath)")
+            TableLog.warning("`didDeselect` Could not find cell at \(indexPath)")
             return
         }
         guard let cardCell = cell as? CardTeaserCell else {
@@ -250,7 +250,7 @@ extension MainTable {
     
     fileprivate func markVisibleCells() -> Void {
         guard let paths = tableView.indexPathsForVisibleRows else {
-            Swift.debugPrint("Could not get paths!")
+            TableLog.warning("Could not get paths!")
             return
         }
         
@@ -277,7 +277,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             let numDiscussions = numDiscussions,
             (numDiscussions - indexPaths.max()!.row) < threshhold
         {
-            TableLog.log(items: "Row \(indexPaths.max()!.row) requested, prefetching items...")
+            TableLog.debug("Row \(indexPaths.max()!.row) requested, prefetching items...")
             fetchOldTweets()
         }
     }
@@ -294,7 +294,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     public func fetchOldTweets() {
         Task {
             guard let credentials = Auth.shared.credentials else {
-                Swift.debugPrint("Tried to load tweets with nil credentials!")
+                NetLog.warning("Tried to load tweets with nil credentials!")
                 return
             }
             
@@ -304,11 +304,11 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Perform a simple `home_timelime` fetch.
             let maxID = UserDefaults.groupSuite.maxID
             guard let rawTweets = try? await timeline(credentials: credentials, sinceID: nil, maxID: maxID) else {
-                Swift.debugPrint("Failed to fetch timeline!")
+                NetLog.warning("Failed to fetch timeline!")
                 return
             }
             if rawTweets.isEmpty {
-                NetLog.log(items: "No new tweets found!")
+                NetLog.debug("No new tweets found!", print: true)
             } else {
                 /// Allow further requests.
                 isFetching = false
@@ -321,8 +321,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Update boundaries.
             let newMaxID = min(rawTweets.map(\.id).min(), Int64?(maxID))
             UserDefaults.groupSuite.maxID = newMaxID.string
-            Swift.debugPrint("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
-            Swift.debugPrint(rawTweets.map(\.id))
+            NetLog.debug("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
         }
     }
     
@@ -330,7 +329,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     public func fetchNewTweets(onFetched: @escaping () -> Void) {
         Task {
             guard let credentials = Auth.shared.credentials else {
-                Swift.debugPrint("Tried to load tweets with nil credentials!")
+                NetLog.warning("Tried to load tweets with nil credentials!")
                 return
             }
             
@@ -340,7 +339,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Perform a simple `home_timelime` fetch.
             let sinceID = UserDefaults.groupSuite.sinceID
             guard let rawTweets = try? await timeline(credentials: credentials, sinceID: sinceID, maxID: nil) else {
-                Swift.debugPrint("Failed to fetch timeline!")
+                NetLog.warning("Failed to fetch timeline!")
                 return
             }
             /// Allow further requests.
@@ -353,7 +352,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Update boundaries.
             let newSinceID = max(rawTweets.map(\.id).max(), Int64?(sinceID))
             UserDefaults.groupSuite.sinceID = newSinceID.string
-            Swift.debugPrint("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
+            NetLog.debug("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
             
             onFetched()
         }

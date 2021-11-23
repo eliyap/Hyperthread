@@ -59,6 +59,8 @@
 		22D127EC274070CD00932614 /* MetricButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127EB274070CD00932614 /* MetricButtons.swift */; };
 		22D127EE2740713500932614 /* TimeDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127ED2740713500932614 /* TimeDifference.swift */; };
 		22D127F02740A17B00932614 /* Following.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127EF2740A17B00932614 /* Following.swift */; };
+		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
+		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		3579A6A613DCA02DE5BEEC38 /* Pods_UIBranch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9C6048D65B067C8D0766FEB /* Pods_UIBranch.framework */; };
 /* End PBXBuildFile section */
@@ -136,6 +138,8 @@
 		22D127EB274070CD00932614 /* MetricButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricButtons.swift; sourceTree = "<group>"; };
 		22D127ED2740713500932614 /* TimeDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeDifference.swift; sourceTree = "<group>"; };
 		22D127EF2740A17B00932614 /* Following.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Following.swift; sourceTree = "<group>"; };
+		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
+		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -149,6 +153,7 @@
 			files = (
 				22760A52274B1CAC00F28F0A /* SDWebImage in Frameworks */,
 				3579A6A613DCA02DE5BEEC38 /* Pods_UIBranch.framework in Frameworks */,
+				22F2463D274CA41800AE17AD /* BlackBox in Frameworks */,
 				223BBF5D27377E4600375530 /* Twig in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,6 +263,7 @@
 			isa = PBXGroup;
 			children = (
 				223BBF5B27377E3E00375530 /* Twig */,
+				22F2463B274CA40100AE17AD /* BlackBox */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -309,6 +315,7 @@
 			isa = PBXGroup;
 			children = (
 				223BBF81273847C300375530 /* Adopt.swift */,
+				22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */,
 				223BBF8927385AFA00375530 /* OptionalCompare.swift */,
 				223BBF8B27385B0F00375530 /* OptionalCast.swift */,
 			);
@@ -368,6 +375,7 @@
 			packageProductDependencies = (
 				223BBF5C27377E4600375530 /* Twig */,
 				22760A51274B1CAC00F28F0A /* SDWebImage */,
+				22F2463C274CA41800AE17AD /* BlackBox */,
 			);
 			productName = UIBranch;
 			productReference = 223BBF2727377BE500375530 /* UIBranch.app */;
@@ -571,6 +579,7 @@
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
 				22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */,
 				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
+				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
@@ -960,6 +969,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 22760A50274B1BFC00F28F0A /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		22F2463C274CA41800AE17AD /* BlackBox */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BlackBox;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -148,19 +148,13 @@ final class AspectRatioFrameView: UIView {
             if media.aspectRatio > self.threshholdAR {
                 heightConstraint.isActive = true
                 widthConstraint.isActive = false
-                setAspectRatio(to: threshholdAR)
+                replace(object: self, on: \.aspectRatioConstraint, with: heightAnchor.constraint(equalTo: widthAnchor, multiplier: threshholdAR))
             } else {
                 heightConstraint.isActive = false
                 widthConstraint.isActive = true
-                setAspectRatio(to: media.aspectRatio)
+                replace(object: self, on: \.aspectRatioConstraint, with: heightAnchor.constraint(equalTo: widthAnchor, multiplier: media.aspectRatio))
             }
         }
-    }
-    
-    private func setAspectRatio(to value: CGFloat) -> Void {
-        NSLayoutConstraint.deactivate([aspectRatioConstraint])
-        aspectRatioConstraint = heightAnchor.constraint(equalTo: widthAnchor, multiplier: value)
-        NSLayoutConstraint.activate([aspectRatioConstraint])
     }
     
     required init?(coder: NSCoder) {
