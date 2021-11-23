@@ -330,7 +330,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     public func fetchNewTweets(onFetched: @escaping () -> Void) {
         Task {
             guard let credentials = Auth.shared.credentials else {
-                Swift.debugPrint("Tried to load tweets with nil credentials!")
+                NetLog.warning("Tried to load tweets with nil credentials!")
                 return
             }
             
@@ -340,7 +340,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Perform a simple `home_timelime` fetch.
             let sinceID = UserDefaults.groupSuite.sinceID
             guard let rawTweets = try? await timeline(credentials: credentials, sinceID: sinceID, maxID: nil) else {
-                Swift.debugPrint("Failed to fetch timeline!")
+                NetLog.warning("Failed to fetch timeline!")
                 return
             }
             /// Allow further requests.
@@ -353,7 +353,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             /// Update boundaries.
             let newSinceID = max(rawTweets.map(\.id).max(), Int64?(sinceID))
             UserDefaults.groupSuite.sinceID = newSinceID.string
-            Swift.debugPrint("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
+            NetLog.debug("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
             
             onFetched()
         }
