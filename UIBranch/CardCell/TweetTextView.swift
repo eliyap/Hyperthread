@@ -51,7 +51,7 @@ final class TweetTextView: UITextView {
              Since we only want to return URL taps, require taps fall within some threshhold of the identified closest character.
              Threshhold determined experimentally.
              */
-            let distanceThreshhold: CGFloat = 50
+            let distanceThreshhold: CGFloat = 20
             
             let textCenter = firstRect(for: range).center
             let distance = textCenter.distance(to: point)
