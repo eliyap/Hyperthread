@@ -179,7 +179,7 @@ extension Tweet {
         var text = text
             .replacingOccurrences(of: "&gt;", with: ">")
             .replacingOccurrences(of: "&lt;", with: "<")
-            .replacingOccurrences(of: "&amp;", with: "<")
+            .replacingOccurrences(of: "&amp;", with: "&")
          
         var quotedURL: URLEntity? = nil
         
