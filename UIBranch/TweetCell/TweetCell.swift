@@ -28,12 +28,19 @@ final class TweetCell: UITableViewCell {
     // TODO: add retweet marker
     private let triangleView: TriangleView
     
+    /// Variable Constraint.
+    var indentConstraint: NSLayoutConstraint
+    
     private let colorBarWidth: CGFloat = 1.5
     private let inset: CGFloat = 8
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         let triangleSize = self.inset * 1.5
         self.triangleView = TriangleView(size: triangleSize)
+        
+        /// Create inactive constraint.
+        self.indentConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: .zero)
+        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
 //        addSubview(triangleView)
@@ -54,7 +61,7 @@ final class TweetCell: UITableViewCell {
         contentView.addSubview(depthStack)
         depthStack.axis = .horizontal
         depthStack.translatesAutoresizingMaskIntoConstraints = false
-        depthStack.addArrangedSubview(depthSpacer)
+        depthStack.addArrangedSubview(depthSpacer); NSLayoutConstraint.activate([indentConstraint])
         depthStack.addArrangedSubview(stackView)
         NSLayoutConstraint.activate([
             depthStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
@@ -82,6 +89,7 @@ final class TweetCell: UITableViewCell {
         
         /// Hide by default.
         triangleView.isHidden = true
+        
     }
 
     /// Arbitrary number. Test Later.
@@ -92,10 +100,11 @@ final class TweetCell: UITableViewCell {
         retweetView.configure(tweet: node.tweet, realm: realm)
         metricsView.configure(node.tweet)
         
+        /// Set indentation depth.
         let depth = min(maxDepth, node.depth)
-        NSLayoutConstraint.activate([
-            depthSpacer.widthAnchor.constraint(equalToConstant: 10 * CGFloat(depth))
-        ])
+        let newConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: 10 * CGFloat(depth))
+        replace(object: self, on: \.indentConstraint, with: newConstraint)
+        
         colorBar.backgroundColor = SCColors[(depth - 1) % SCColors.count]
     }
     
