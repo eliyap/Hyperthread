@@ -29,20 +29,22 @@ final class MarkReadDaemon {
     }
     
     /// Mark the discussion at this index path as `read`.
-    func mark(_ path: IndexPath) {
-        guard let discussion: Discussion = indices[path] else {
-            Swift.debugPrint("Missing key \(path)")
-            return
-        }
-        if discussion.tweetCount == 1 {
-            do {
-                try realm.write(withoutNotifying: excludeTokens) {
-                    discussion.read = .read
+    func mark(_ paths: [IndexPath]) -> Void {
+        do {
+            try realm.write(withoutNotifying: excludeTokens) {
+                for path in paths {
+                    guard let discussion: Discussion = indices[path] else {
+                        TableLog.debug("Mark Daemon missing key \(path)")
+                        continue
+                    }
+                    if discussion.tweetCount == 1 {
+                        discussion.read = .read
+                    }
                 }
-            } catch {
-                ModelLog.error("\(error)")
-                return
             }
+        } catch {
+            ModelLog.error("\(error)")
+            return
         }
     }
 }

@@ -254,11 +254,12 @@ extension MainTable {
             return
         }
         
-        for path in paths {
-            if tableView.bounds.contains(tableView.rectForRow(at: path)) {
-                mrd.mark(path)
-            }
+        /// Only mark `read` if tweet is fully on screen.
+        /// Perform writes as a batch operation.
+        let visiblePaths = paths.filter { path in
+            tableView.bounds.contains(tableView.rectForRow(at: path))
         }
+        mrd.mark(visiblePaths)
     }
 }
 
