@@ -293,7 +293,6 @@ extension Tweet {
                 } else {
                     string.addAttribute(.link, value: url.expanded_url, range: NSMakeRange(lowInt, uppInt-lowInt))
                 }
-                
             }
         }
         
