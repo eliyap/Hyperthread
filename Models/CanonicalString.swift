@@ -27,25 +27,8 @@ extension Tweet {
         var quotedDisplayURL: String? = nil
         
         if let node = node {
-            /// Compile UserIDs in a reply chain.
-            var replyHandles: Set<String> = []
-            var curr: Node? = node
-            while let c = curr {
-                /// Include the author and any accounts they @mention.
-                replyHandles.insert(c.author.handle)
-                if let handles = c.tweet.entities?.mentions.map(\.handle) {
-                    for handle in handles {
-                        replyHandles.insert(handle)
-                    }
-                }
-                
-                /// Move upwards only if tweet was replying.
-                guard
-                    c.tweet.replying_to != nil,
-                    c.tweet.replying_to == c.parent?.id
-                else { break }
-                curr = c.parent
-            }
+            /// The user @handles in the reply chain.
+            let replyHandles: Set<String> = node.getReplyHandles()
             
             /** Remove replying @mentions.
                 Look for @mentions in the order they appear, advancing `cursor`

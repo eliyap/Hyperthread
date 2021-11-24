@@ -86,3 +86,32 @@ extension Discussion {
         return root
     }
 }
+
+extension Node {
+    /// When there is a chain of replies, by Twitter convention, the users in the chain are @mentioned at the start of the tweet's text.
+    /// Find and return the user handles upstream (in the reply chain) from this node, if any.
+    func getReplyHandles() -> Set<String> {
+        var result: Set<String> = []
+        
+        var curr: Node? = self
+        
+        while let c = curr {
+            /// Include the author and any accounts they @mention.
+            result.insert(c.author.handle)
+            if let handles = c.tweet.entities?.mentions.map(\.handle) {
+                for handle in handles {
+                    result.insert(handle)
+                }
+            }
+            
+            /// Move upwards only if tweet was replying.
+            guard
+                c.tweet.isReply,
+                c.tweet.replying_to == c.parent?.id
+            else { break }
+            curr = c.parent
+        }
+        
+        return result
+    }
+}
