@@ -124,6 +124,7 @@ extension NSMutableAttributedString {
         guard let urls = tweet.entities?.urls else { return }
         
         for url in urls {
+            /// Obtain URL substring range.
             /// - Note: Should never fail! We just put this URL in!
             guard let target = string.range(of: url.display_url) else {
                 if quotedDisplayURL != nil && url.display_url != quotedDisplayURL {
@@ -131,6 +132,8 @@ extension NSMutableAttributedString {
                 }
                 continue
             }
+            
+            /// Transform substring range to `NSRange` boundaries.
             guard
                 let low16 = target.lowerBound.samePosition(in: string.utf16),
                 let upp16 = target.upperBound.samePosition(in: string.utf16)
