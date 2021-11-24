@@ -78,30 +78,7 @@ extension Tweet {
         }
         
         /// Replace `t.co` links with truncated links.
-        if let urls = entities?.urls {
-            for url in urls {
-                guard let target = text.range(of: url.url) else {
-                    Swift.debugPrint("Could not find url \(url.url) in \(text)")
-                    Swift.debugPrint("URLs: ", urls.map(\.url))
-                    continue
-                }
-                
-                /// By convention(?), quote tweets have the quoted URL at the end.
-                /// If URL references the quote, we can safely remove it, IF it is not also a reply.
-                if
-                    quoting != nil,
-                    quoting == primaryReference,
-                    target.upperBound == text.endIndex,
-                    url.display_url.starts(with: "twitter.com/")
-                {
-                    /// Set variable so we know not to look for this URL in the future.
-                    quotedDisplayURL = url.display_url
-                    text.replaceSubrange(target, with: "")
-                } else {
-                    text.replaceSubrange(target, with: url.display_url)
-                }
-            }
-        }
+        text.expandURLs(from: self, quotedDisplayURL: &quotedDisplayURL)
         
         /// Apply normal text size and color preferences.
         let string = NSMutableAttributedString(string: text, attributes: [
@@ -113,6 +90,36 @@ extension Tweet {
         string.addHyperlinks(from: self, quotedDisplayURL: quotedDisplayURL)
         
         return string
+    }
+}
+
+extension String {
+    /// Replace `t.co` links with truncated links.
+    mutating func expandURLs(from tweet: Tweet, quotedDisplayURL: inout String?) -> Void {
+        guard let urls = tweet.entities?.urls else { return }
+        
+        for url in urls {
+            guard let target = range(of: url.url) else {
+                Swift.debugPrint("Could not find url \(url.url) in \(self)")
+                Swift.debugPrint("URLs: ", urls.map(\.url))
+                continue
+            }
+            
+            /// By convention(?), quote tweets have the quoted URL at the end.
+            /// If URL references the quote, we can safely remove it, IF it is not also a reply.
+            if
+                tweet.quoting != nil,
+                tweet.quoting == tweet.primaryReference,
+                target.upperBound == endIndex,
+                url.display_url.starts(with: "twitter.com/")
+            {
+                /// Set variable so we know not to look for this URL in the future.
+                quotedDisplayURL = url.display_url
+                replaceSubrange(target, with: "")
+            } else {
+                replaceSubrange(target, with: url.display_url)
+            }
+        }
     }
 }
 
