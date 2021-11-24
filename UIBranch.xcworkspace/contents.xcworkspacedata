@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/SAM/Documents/UIBranch/Models/CanonicalString.swift">
+   </FileRef>
+   <FileRef
       location = "group:UIBranch.xcodeproj">
    </FileRef>
    <FileRef
