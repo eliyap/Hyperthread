@@ -87,13 +87,14 @@ extension Tweet {
                 }
                 
                 /// By convention(?), quote tweets have the quoted URL at the end.
-                /// Definitely a quote, can safely remove it, IF it is not also a reply.
+                /// If URL references the quote, we can safely remove it, IF it is not also a reply.
                 if
                     quoting != nil,
                     quoting == primaryReference,
                     target.upperBound == text.endIndex,
                     url.display_url.starts(with: "twitter.com/")
                 {
+                    /// Set variable so we know not to look for this URL in the future.
                     quotedDisplayURL = url.display_url
                     text.replaceSubrange(target, with: "")
                 } else {
