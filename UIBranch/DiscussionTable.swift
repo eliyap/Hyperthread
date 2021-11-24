@@ -117,6 +117,8 @@ final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
         token = discussion?.observe { change in
             switch change {
             case .change(let object, let properties):
+                /// Discard values.
+                (_, _) = (object, properties)
                 break
             case .deleted:
                 break
