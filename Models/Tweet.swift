@@ -132,6 +132,20 @@ final class Tweet: Object, Identifiable {
     override required init() {
         super.init()
     }
+    
+    // MARK: - Ephemeral Variables
+    
+    /**
+     Memoize the canonical display `NSAttributedString` for teaser & header displays (where there is no `context`).
+     This should never change because it is calculated using
+     - `entities`
+     - `text`
+     
+     These should never change, so we can safely memoize.
+     */
+    lazy var attributedString: NSAttributedString = {
+        fullText(context: nil)
+    }()
 }
 
 extension Tweet {
