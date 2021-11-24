@@ -121,7 +121,7 @@ extension Discussion {
         /// Remove retweets, but add an ephemeral mark for displaying.
         var toRemove = Set<Tweet>()
         for tweet in result {
-            if let rtID = tweet.retweeting {
+            if tweet.isRetweet {
                 toRemove.insert(tweet)
             }
         }
