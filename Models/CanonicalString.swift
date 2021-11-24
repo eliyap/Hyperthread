@@ -141,10 +141,11 @@ extension NSMutableAttributedString {
             let lowInt = string.utf16.distance(from: string.utf16.startIndex, to: low16)
             let uppInt = string.utf16.distance(from: string.utf16.startIndex, to: upp16)
             
-            /// As of November 2021, Twitter truncated URLs.
-            /// They may have changed this, I'm not sure.
+            /// As of November 2021, Twitter truncated URLs. They *may* have changed this.
             if url.expanded_url.contains("…") {
                 Swift.debugPrint("Truncted URL \(url.expanded_url)")
+                
+                /// Fall back to the `t.co` link.
                 addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
             } else {
                 addAttribute(.link, value: url.expanded_url, range: NSMakeRange(lowInt, uppInt-lowInt))
