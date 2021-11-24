@@ -143,6 +143,7 @@ final class Tweet: Object, Identifiable {
      
      These should never change, so we can safely memoize.
      */
+    /// Memoized display string.
     lazy var attributedString: NSAttributedString = {
         fullText(context: nil)
     }()
