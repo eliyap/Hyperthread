@@ -7,6 +7,7 @@
 
 import Foundation
 import Twig
+import UIKit
 
 extension Tweet {
     /**
@@ -108,36 +109,46 @@ extension Tweet {
         ])
         
         /// Hyperlink substituted links.
-        if let urls = entities?.urls {
-            for url in urls {
-                /// - Note: Should never fail! We just put this URL in!
-                guard let target = text.range(of: url.display_url) else {
-                    if url.display_url != quotedDisplayURL {
-                        Swift.debugPrint("Could not find display_url \(url.display_url) in \(text)")
-                    }
-                    continue
-                }
-                guard
-                    let low16 = target.lowerBound.samePosition(in: text.utf16),
-                    let upp16 = target.upperBound.samePosition(in: text.utf16)
-                else {
-                    Swift.debugPrint("Could not cast offsets")
-                    continue
-                }
-                let lowInt = text.utf16.distance(from: text.utf16.startIndex, to: low16)
-                let uppInt = text.utf16.distance(from: text.utf16.startIndex, to: upp16)
-                
-                /// As of November 2021, Twitter truncated URLs.
-                /// They may have changed this, I'm not sure.
-                if url.expanded_url.contains("…") {
-                    Swift.debugPrint("Truncted URL \(url.expanded_url)")
-                    string.addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
-                } else {
-                    string.addAttribute(.link, value: url.expanded_url, range: NSMakeRange(lowInt, uppInt-lowInt))
-                }
-            }
-        }
+        string.addHyperlinks(from: self, quotedDisplayURL: quotedDisplayURL)
         
         return string
+    }
+}
+
+extension NSMutableAttributedString {
+    
+    /// Hyperlink substituted links.
+    /// - Parameters:
+    ///   - quotedDisplayURL: optional, for debugging. The URL of the quoted tweet (if any), which is appended to the tweet text by convention.
+    func addHyperlinks(from tweet: Tweet, quotedDisplayURL: String? = nil) -> Void {
+        guard let urls = tweet.entities?.urls else { return }
+        
+        for url in urls {
+            /// - Note: Should never fail! We just put this URL in!
+            guard let target = string.range(of: url.display_url) else {
+                if quotedDisplayURL != nil && url.display_url != quotedDisplayURL {
+                    Swift.debugPrint("Could not find display_url \(url.display_url) in \(string)")
+                }
+                continue
+            }
+            guard
+                let low16 = target.lowerBound.samePosition(in: string.utf16),
+                let upp16 = target.upperBound.samePosition(in: string.utf16)
+            else {
+                Swift.debugPrint("Could not cast offsets")
+                continue
+            }
+            let lowInt = string.utf16.distance(from: string.utf16.startIndex, to: low16)
+            let uppInt = string.utf16.distance(from: string.utf16.startIndex, to: upp16)
+            
+            /// As of November 2021, Twitter truncated URLs.
+            /// They may have changed this, I'm not sure.
+            if url.expanded_url.contains("…") {
+                Swift.debugPrint("Truncted URL \(url.expanded_url)")
+                addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
+            } else {
+                addAttribute(.link, value: url.expanded_url, range: NSMakeRange(lowInt, uppInt-lowInt))
+            }
+        }
     }
 }
