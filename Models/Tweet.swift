@@ -173,6 +173,12 @@ extension Array where Element == Tweet.ID {
 }
 
 extension Tweet {
+    var isRetweet: Bool { retweeting != nil }
+    var isQuote: Bool { quoting != nil }
+    var isReply: Bool { replying_to != nil }
+}
+
+extension Tweet {
     /// If `node` is provided, we can derive some additional context.
     func fullText(context node: Node? = nil) -> NSMutableAttributedString {
         /// Replace encoded characters.
