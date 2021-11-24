@@ -30,34 +30,8 @@ extension Tweet {
             /// The user @handles in the reply chain.
             let replyHandles: Set<String> = node.getReplyHandles()
             
-            /** Remove replying @mentions.
-                Look for @mentions in the order they appear, advancing `cursor`
-                to the end of each mention.
-                Then, erase everything before cursor.
-             */
-            if let mentions = entities?.mentions {
-                let mentions = mentions.sorted(by: {$0.start < $1.start})
-                var cursor: String.Index = text.startIndex
-                for mention in mentions {
-                    let atHandle = "@" + mention.handle
-                    
-                    /// Ensure @mention is right after the `cursor`.
-                    guard text[cursor..<text.endIndex].starts(with: atHandle) else {
-                        if text.contains(atHandle) == false {
-                            ModelLog.warning("Mention \(atHandle) not found in \(text)")
-                        }
-                        break
-                    }
-                    
-                    guard replyHandles.contains(mention.handle) else {
-                        ModelLog.warning("Mention \(atHandle) not found in \(replyHandles)")
-                        break
-                    }
-                    let range = text.range(of: atHandle + " ") ?? text.range(of: atHandle)!
-                    cursor = range.upperBound
-                }
-                text.removeSubrange(text.startIndex..<cursor)
-            }
+            /** Remove replying @mentions. */
+            text.removeReplyAtMentions(in: self, replyHandles: replyHandles)
         }
         
         /// Replace `t.co` links with truncated links.
@@ -77,6 +51,38 @@ extension Tweet {
 }
 
 extension String {
+    
+    /** Remove replying @mentions. */
+    mutating func removeReplyAtMentions(in tweet: Tweet, replyHandles: Set<String>) -> Void {
+        guard let mentions = tweet.entities?.mentions else { return }
+        
+        let sortedMentions = mentions.sorted(by: {$0.start < $1.start})
+        var cursor: String.Index = startIndex
+        
+        /// Look for @mentions in the order they appear, advancing `cursor` to the end of each mention.
+        for mention in sortedMentions {
+            let atHandle = "@" + mention.handle
+            
+            /// Ensure @mention is right after the `cursor`.
+            guard self[cursor..<endIndex].starts(with: atHandle) else {
+                if contains(atHandle) == false {
+                    ModelLog.warning("Mention \(atHandle) not found in \(self)")
+                }
+                break
+            }
+            
+            guard replyHandles.contains(mention.handle) else {
+                ModelLog.warning("Mention \(atHandle) not found in \(replyHandles)")
+                break
+            }
+            let range = range(of: atHandle + " ") ?? range(of: atHandle)!
+            cursor = range.upperBound
+        }
+        
+        /// Erase everything before cursor.
+        removeSubrange(startIndex..<cursor)
+    }
+    
     /// Replace `t.co` links with truncated links.
     mutating func expandURLs(from tweet: Tweet, quotedDisplayURL: inout String?) -> Void {
         guard let urls = tweet.entities?.urls else { return }
