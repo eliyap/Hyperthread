@@ -32,6 +32,18 @@ final class PublicMetrics: EmbeddedObject {
         reply_count = raw.reply_count
         quote_count = raw.quote_count    
     }
+
+    internal init(
+        like_count: Int,
+        retweet_count: Int,
+        reply_count: Int,
+        quote_count: Int
+    ) {
+        self.like_count = like_count
+        self.retweet_count = retweet_count
+        self.reply_count = reply_count
+        self.quote_count = quote_count
+    }
 }
 
 final class Tweet: Object, Identifiable {
@@ -146,6 +158,22 @@ final class Tweet: Object, Identifiable {
     lazy var attributedString: NSAttributedString = {
         fullText(context: nil)
     }()
+    
+    private init(_: Void) {
+        super.init()
+        
+        self.id = UUID().uuidString
+        self.createdAt = Date()
+        self.text = "This is a fake tweet."
+        self.conversation_id = id
+        self.metrics = PublicMetrics(like_count: 0, retweet_count: 0, reply_count: 0, quote_count: 0)
+        self.authorID = OwnUserID
+        self.read = false
+    }
+    
+    public static func generateFake() -> Tweet {
+        .init(Void())
+    }
 }
 
 extension Tweet {
