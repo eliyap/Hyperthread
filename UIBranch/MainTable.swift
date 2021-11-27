@@ -32,18 +32,13 @@ final class MainTable: UITableViewController {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
-        dds = DDS(realm: realm, fetcher: fetcher, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
-                fatalError("Failed to create or cast new cell!")
-            }
-            let tweet = self!.realm.tweet(id: discussion.id)!
-            let author = self!.realm.user(id: tweet.authorID)!
-            cell.configure(discussion: discussion, tweet: tweet, author: author, realm: self!.realm)
-            cell.resetStyle()
-            self!.mrd.associate(indexPath, with: discussion)
-            
-            return cell
-        }
+        dds = DDS(
+            realm: realm,
+            fetcher: fetcher,
+            tableView: tableView,
+            cellProvider: cellProvider,
+            action: setScroll
+        )
         
         /// Immediately defuse unwrapped nil `mrd`.
         mrd = MarkReadDaemon(token: dds.getToken())
@@ -108,6 +103,30 @@ final class MainTable: UITableViewController {
         /// Cancel to prevent leak.
         observers.forEach { $0.cancel() }
     }
+    
+    private func cellProvider(tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
+            fatalError("Failed to create or cast new cell!")
+        }
+        let tweet = realm.tweet(id: discussion.id)!
+        let author = realm.user(id: tweet.authorID)!
+        cell.configure(discussion: discussion, tweet: tweet, author: author, realm: realm)
+        cell.resetStyle()
+        mrd.associate(indexPath, with: discussion)
+        
+        return cell
+    }
+    
+    private func setScroll(_ action: () -> ()) -> Void {
+        guard let row = UserDefaults.groupSuite.scrollPosition else {
+            TableLog.debug("Could not obtain saved scroll position!", print: true, true)
+            return
+        }
+        
+        let path = IndexPath(row: row, section: 1)
+        action()
+        tableView.scrollToRow(at: path, at: .top, animated: false)
+    }
 }
 
 enum DiscussionSection: Int {
@@ -121,15 +140,18 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
 
     private let fetcher: Fetcher
     
+    private let scrollAction: (() -> ()) -> Void
+    
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
 
-    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider) {
+    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider, action: @escaping (() -> ()) -> Void) {
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.fetcher = fetcher
+        self.scrollAction = action
         super.init(tableView: tableView, cellProvider: cellProvider)
         /// Immediately register token.
         token = results.observe { [weak self] (changes: RealmCollectionChange) in
