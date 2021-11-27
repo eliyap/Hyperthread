@@ -261,6 +261,10 @@ extension MainTable {
         }
         mrd.mark(visiblePaths)
     }
+    
+    fileprivate func saveScrollPosition() -> Void {
+        /// TODO
+    }
 }
 
 final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
