@@ -68,8 +68,18 @@ extension UserDefaults {
             set(newValue, forKey: Self.followingIDsKey)
         }
     }
-    
-    
+
+    /// - Note: use `object(forKey: )` instead of `integer(forKey: )` because it returns `nil` instead of `0`.
+    /// Docs: https://developer.apple.com/documentation/foundation/nsdictionary/1414347-object
+    fileprivate static let scrollPositionID = "scrollPosition"
+    var scrollPosition: Int? {
+        get {
+            return object(forKey: Self.scrollPositionID) as? Int
+        }
+        set {
+            set(newValue, forKey: Self.scrollPositionID)
+        }
+    }
 }
 
 final class SharedAuth: ObservableObject {

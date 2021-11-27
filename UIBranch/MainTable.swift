@@ -262,17 +262,17 @@ extension MainTable {
     }
     
     fileprivate func saveScrollPosition() -> Void {
-//        guard let paths = tableView.indexPathsForVisibleRows else {
-//            TableLog.warning("Could not get paths!")
-//            return
-//        }
-//
-//        guard let topPath = paths.min() else {
-//            TableLog.warning("Empty paths!")
-//            return
-//        }
-//
-//        guard let
+        guard let paths = tableView.indexPathsForVisibleRows else {
+            TableLog.warning("Could not get paths!")
+            return
+        }
+
+        guard let topPath = paths.min() else {
+            TableLog.warning("Empty paths!")
+            return
+        }
+
+        UserDefaults.groupSuite.scrollPosition = topPath.row
     }
 }
 
