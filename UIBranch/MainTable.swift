@@ -90,9 +90,7 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod() {
-        let rted = realm.objects(Tweet.self)
-            .filter("retweetedBy.length > 0")
-        Swift.debugPrint(rted.count)
+        fetcher.fetchFakeTweet()
     }
     
     required init?(coder: NSCoder) {
@@ -268,12 +266,12 @@ extension MainTable {
 //            TableLog.warning("Could not get paths!")
 //            return
 //        }
-//        
+//
 //        guard let topPath = paths.min() else {
 //            TableLog.warning("Empty paths!")
 //            return
 //        }
-//        
+//
 //        guard let
     }
 }
@@ -349,6 +347,8 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 return
             }
             
+            NetLog.debug("UserID is \(credentials.user_id)", print: true, true)
+            
             /// Prevent repeated requests.
             isFetching = true
             
@@ -371,6 +371,20 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             NetLog.debug("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
             
             onFetched()
+        }
+    }
+    
+    /// DEBUG FUNCTION
+    public func fetchFakeTweet() {
+        let realm = try! Realm()
+        try! realm.write {
+            let t = Tweet.generateFake()
+            realm.add(t)
+            let c = Conversation(id: t.conversation_id)
+            c.insert(t)
+            realm.add(c)
+            let d = Discussion(root: c)
+            realm.add(d)
         }
     }
 }
