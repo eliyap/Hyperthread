@@ -246,6 +246,7 @@ extension MainTable {
     
     fileprivate func didStopScrolling() -> Void {
         markVisibleCells()
+        saveScrollPosition()
     }
     
     fileprivate func markVisibleCells() -> Void {
@@ -263,7 +264,17 @@ extension MainTable {
     }
     
     fileprivate func saveScrollPosition() -> Void {
-        /// TODO
+//        guard let paths = tableView.indexPathsForVisibleRows else {
+//            TableLog.warning("Could not get paths!")
+//            return
+//        }
+//        
+//        guard let topPath = paths.min() else {
+//            TableLog.warning("Empty paths!")
+//            return
+//        }
+//        
+//        guard let
     }
 }
 
