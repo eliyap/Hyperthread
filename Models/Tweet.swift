@@ -24,8 +24,7 @@ final class PublicMetrics: EmbeddedObject {
     @Persisted
     var quote_count: Int
     
-    override required init() {
-    }
+    override required init() {}
     
     init(raw: RawPublicMetrics) {
         like_count = raw.like_count
