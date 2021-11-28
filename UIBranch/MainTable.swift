@@ -120,10 +120,11 @@ final class MainTable: UITableViewController {
     private func setScroll(_ action: () -> ()) -> Void {
         guard let row = UserDefaults.groupSuite.scrollPosition else {
             TableLog.debug("Could not obtain saved scroll position!", print: true, true)
+            action()
             return
         }
         
-        let path = IndexPath(row: row, section: 1)
+        let path = IndexPath(row: row, section: 0)
         action()
         tableView.scrollToRow(at: path, at: .top, animated: false)
     }
@@ -161,11 +162,15 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
             }
             switch changes {
             case .initial(let results):
-                self.setContents(to: results, animated: false)
+                self.scrollAction { [weak self] in
+                    self?.setContents(to: results, animated: false)
+                }
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 print("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
-                self.setContents(to: results, animated: true)
+                self.scrollAction { [weak self] in
+                    self?.setContents(to: results, animated: false)
+                }
             
             case .error(let error):
                 fatalError("\(error)")
@@ -204,7 +209,6 @@ extension MainTable {
         splitViewController?.show(.secondary)
         
         splitDelegate.present(discussion)
-        
         
         do {
             try realm.write(withoutNotifying: [dds.getToken()]) {
