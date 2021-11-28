@@ -125,11 +125,18 @@ final class MainTable: UITableViewController {
         
         let path = tablePos.indexPath
         tableView.scrollToRow(at: path, at: .top, animated: false)
-        tableView.contentOffset.y += tablePos.offset
+        toScroll = tablePos.offset
     }
     
+    var toScroll: CGFloat? = nil
+    
     override func viewWillLayoutSubviews() {
+        if let offset = toScroll {
+            tableView.contentOffset.y += offset
+            toScroll = nil
+        }
         super.viewWillLayoutSubviews()
+        print("Layout with contentoffset \(tableView.contentOffset.y)")
     }
 }
 
