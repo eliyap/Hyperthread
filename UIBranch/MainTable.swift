@@ -298,7 +298,7 @@ extension MainTable {
             return
         }
         
-        guard let topPath = paths.first(where: {offset(at: $0) > 0}) else {
+        guard let topPath = paths.first else {
             TableLog.warning("Empty paths!")
             return
         }
