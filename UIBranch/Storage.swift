@@ -70,8 +70,6 @@ extension UserDefaults {
         }
     }
 
-    /// - Note: use `object(forKey: )` instead of `integer(forKey: )` because it returns `nil` instead of `0`.
-    /// Docs: https://developer.apple.com/documentation/foundation/nsdictionary/1414347-object
     fileprivate static let scrollPositionKey = "scrollPosition"
     var scrollPosition: TableScrollPosition? {
         get {
@@ -114,6 +112,7 @@ final class SharedAuth: ObservableObject {
     }
 }
 
+/// A "bookmark" for saving scroll position.
 struct TableScrollPosition: Codable, Hashable {
     let indexPath: IndexPath
     let offset: CGFloat

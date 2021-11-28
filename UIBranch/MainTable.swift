@@ -83,7 +83,6 @@ final class MainTable: UITableViewController {
         #if DEBUG
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
-            UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(scrollMethod)),
         ]
         #endif
         
@@ -93,11 +92,6 @@ final class MainTable: UITableViewController {
     @objc
     func debugMethod() {
         fetcher.fetchFakeTweet()
-    }
-    
-    @objc
-    func scrollMethod() {
-        tableView.contentOffset.y += 100
     }
     
     required init?(coder: NSCoder) {
@@ -116,6 +110,7 @@ final class MainTable: UITableViewController {
         observers.forEach { $0.cancel() }
     }
     
+    /// Method that provides Diffable Data Source with cells.
     private func cellProvider(tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
             fatalError("Failed to create or cast new cell!")
@@ -129,6 +124,7 @@ final class MainTable: UITableViewController {
         return cell
     }
     
+    /// Restores the saved scroll position.
     private func setScroll() -> Void {
         guard let tablePos = UserDefaults.groupSuite.scrollPosition else {
             TableLog.debug("Could not obtain saved scroll position!", print: true, true)
@@ -137,20 +133,7 @@ final class MainTable: UITableViewController {
         
         let path = tablePos.indexPath
         tableView.scrollToRow(at: path, at: .top, animated: false)
-        toScroll = tablePos.offset
-    }
-    
-    var toScroll: CGFloat? = nil
-    
-    override func viewDidLayoutSubviews() {
-        if let offset = toScroll {
-            print("Layout with contentoffset \(self.tableView.contentOffset.y)")
-            print("Adjusting by \(offset)")
-            self.tableView.contentOffset.y -= offset
-            self.toScroll = nil
-            print("Layout with contentoffset \(self.tableView.contentOffset.y)")
-        }
-        super.viewWillLayoutSubviews()
+        tableView.contentOffset.y -= tablePos.offset
     }
 }
 
