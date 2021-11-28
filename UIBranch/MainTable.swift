@@ -28,22 +28,23 @@ final class MainTable: UITableViewController {
     
     private var observers = Set<AnyCancellable>()
     
+    /// Default is an observed value as a decent guess.
+    var navBarHeight: CGFloat { navigationController?.navigationBar.frame.height ?? 50 }
+    
+    /// Default is an observed value as a decent guess.
+    var statusBarHeight: CGFloat { UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.windowScene?.statusBarManager?.statusBarFrame.height ?? 20 }
+    
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
-        dds = DDS(realm: realm, fetcher: fetcher, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
-                fatalError("Failed to create or cast new cell!")
-            }
-            let tweet = self!.realm.tweet(id: discussion.id)!
-            let author = self!.realm.user(id: tweet.authorID)!
-            cell.configure(discussion: discussion, tweet: tweet, author: author, realm: self!.realm)
-            cell.resetStyle()
-            self!.mrd.associate(indexPath, with: discussion)
-            
-            return cell
-        }
+        dds = DDS(
+            realm: realm,
+            fetcher: fetcher,
+            tableView: tableView,
+            cellProvider: cellProvider,
+            action: setScroll
+        )
         
         /// Immediately defuse unwrapped nil `mrd`.
         mrd = MarkReadDaemon(token: dds.getToken())
@@ -81,7 +82,8 @@ final class MainTable: UITableViewController {
         /// DEBUG
         #if DEBUG
         navigationItem.leftBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod))
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
+            UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(scrollMethod)),
         ]
         #endif
         
@@ -90,9 +92,12 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod() {
-        let rted = realm.objects(Tweet.self)
-            .filter("retweetedBy.length > 0")
-        Swift.debugPrint(rted.count)
+        fetcher.fetchFakeTweet()
+    }
+    
+    @objc
+    func scrollMethod() {
+        tableView.contentOffset.y += 100
     }
     
     required init?(coder: NSCoder) {
@@ -110,6 +115,43 @@ final class MainTable: UITableViewController {
         /// Cancel to prevent leak.
         observers.forEach { $0.cancel() }
     }
+    
+    private func cellProvider(tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
+            fatalError("Failed to create or cast new cell!")
+        }
+        let tweet = realm.tweet(id: discussion.id)!
+        let author = realm.user(id: tweet.authorID)!
+        cell.configure(discussion: discussion, tweet: tweet, author: author, realm: realm)
+        cell.resetStyle()
+        mrd.associate(indexPath, with: discussion)
+        
+        return cell
+    }
+    
+    private func setScroll() -> Void {
+        guard let tablePos = UserDefaults.groupSuite.scrollPosition else {
+            TableLog.debug("Could not obtain saved scroll position!", print: true, true)
+            return
+        }
+        
+        let path = tablePos.indexPath
+        tableView.scrollToRow(at: path, at: .top, animated: false)
+        toScroll = tablePos.offset
+    }
+    
+    var toScroll: CGFloat? = nil
+    
+    override func viewDidLayoutSubviews() {
+        if let offset = toScroll {
+            print("Layout with contentoffset \(self.tableView.contentOffset.y)")
+            print("Adjusting by \(offset)")
+            self.tableView.contentOffset.y -= offset
+            self.toScroll = nil
+            print("Layout with contentoffset \(self.tableView.contentOffset.y)")
+        }
+        super.viewWillLayoutSubviews()
+    }
 }
 
 enum DiscussionSection: Int {
@@ -123,15 +165,18 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
 
     private let fetcher: Fetcher
     
+    private let scrollAction: () -> ()
+    
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
 
-    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider) {
+    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider, action: @escaping () -> ()) {
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.fetcher = fetcher
+        self.scrollAction = action
         super.init(tableView: tableView, cellProvider: cellProvider)
         /// Immediately register token.
         token = results.observe { [weak self] (changes: RealmCollectionChange) in
@@ -142,10 +187,12 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
             switch changes {
             case .initial(let results):
                 self.setContents(to: results, animated: false)
+                self.scrollAction()
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 print("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
-                self.setContents(to: results, animated: true)
+                self.setContents(to: results, animated: false)
+                self.scrollAction()
             
             case .error(let error):
                 fatalError("\(error)")
@@ -184,7 +231,6 @@ extension MainTable {
         splitViewController?.show(.secondary)
         
         splitDelegate.present(discussion)
-        
         
         do {
             try realm.write(withoutNotifying: [dds.getToken()]) {
@@ -246,6 +292,7 @@ extension MainTable {
     
     fileprivate func didStopScrolling() -> Void {
         markVisibleCells()
+        saveScrollPosition()
     }
     
     fileprivate func markVisibleCells() -> Void {
@@ -260,6 +307,27 @@ extension MainTable {
             tableView.bounds.contains(tableView.rectForRow(at: path))
         }
         mrd.mark(visiblePaths)
+    }
+    
+    fileprivate func saveScrollPosition() -> Void {
+        guard let paths = tableView.indexPathsForVisibleRows else {
+            TableLog.warning("Could not get paths!")
+            return
+        }
+        
+        guard let topPath = paths.first(where: {offset(at: $0) > 0}) else {
+            TableLog.warning("Empty paths!")
+            return
+        }
+
+        let topOffset = offset(at: topPath)
+        
+        UserDefaults.groupSuite.scrollPosition = TableScrollPosition(indexPath: topPath, offset: topOffset)
+    }
+    
+    /// Find the distance between the top of a cell at `path` and the bottom of the navigation bar.
+    fileprivate func offset(at path: IndexPath) -> CGFloat {
+        tableView.rectForRow(at: path).origin.y - tableView.contentOffset.y - navBarHeight - statusBarHeight
     }
 }
 
@@ -334,6 +402,8 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 return
             }
             
+            NetLog.debug("UserID is \(credentials.user_id)", print: true, true)
+            
             /// Prevent repeated requests.
             isFetching = true
             
@@ -356,6 +426,23 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             NetLog.debug("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
             
             onFetched()
+        }
+    }
+    
+    /// DEBUG FUNCTION
+    public func fetchFakeTweet() {
+        let realm = try! Realm()
+        try! realm.write {
+            let t = Tweet.generateFake()
+            realm.add(t)
+            let c = Conversation(id: t.conversation_id)
+            c.insert(t)
+            realm.add(c)
+            let d = Discussion(root: c)
+            realm.add(d)
+            
+            /// Note a new discussion above the fold.
+            UserDefaults.groupSuite.incrementScrollPositionRow()
         }
     }
 }
