@@ -80,6 +80,14 @@ extension UserDefaults {
             set(newValue, forKey: Self.scrollPositionID)
         }
     }
+    
+    /// Returns whether the operation was successful.
+    @discardableResult
+    func incrementScrollPosition() -> Bool {
+        guard let val = scrollPosition else { return false }
+        scrollPosition = val + 1
+        return true
+    }
 }
 
 final class SharedAuth: ObservableObject {
