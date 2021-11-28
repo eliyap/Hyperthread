@@ -135,10 +135,7 @@ final class MainTable: UITableViewController {
             return
         }
         
-        var path = tablePos.indexPath
-        if path.row > 0 {
-//            path.row += 1
-        }
+        let path = tablePos.indexPath
         tableView.scrollToRow(at: path, at: .top, animated: false)
         toScroll = tablePos.offset
     }
@@ -149,8 +146,7 @@ final class MainTable: UITableViewController {
         if let offset = toScroll {
             print("Layout with contentoffset \(self.tableView.contentOffset.y)")
             print("Adjusting by \(offset)")
-//            self.tableView.contentOffset.y += offset
-//            self.tableView.contentOffset.y -= tableView.contentInset.top
+            self.tableView.contentOffset.y -= offset
             self.toScroll = nil
             print("Layout with contentoffset \(self.tableView.contentOffset.y)")
         }
@@ -319,23 +315,17 @@ extension MainTable {
             return
         }
         
-        let pathOffsetsFromNavBar = paths.map {
-            tableView.rectForRow(at: $0).origin.y - tableView.contentOffset.y - navBarHeight - statusBarHeight
-        }
-        print(UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.windowScene?.statusBarManager?.statusBarFrame.height)
-        print(pathOffsetsFromNavBar)
-
         guard let topPath = paths.first(where: {offset(at: $0) > 0}) else {
             TableLog.warning("Empty paths!")
             return
         }
 
-        let topOffset = tableView.rectForRow(at: topPath).origin.y - tableView.contentOffset.y
-        print("Found top offset of \(topOffset)")
+        let topOffset = offset(at: topPath)
         
         UserDefaults.groupSuite.scrollPosition = TableScrollPosition(indexPath: topPath, offset: topOffset)
     }
     
+    /// Find the distance between the top of a cell at `path` and the bottom of the navigation bar.
     fileprivate func offset(at path: IndexPath) -> CGFloat {
         tableView.rectForRow(at: path).origin.y - tableView.contentOffset.y - navBarHeight - statusBarHeight
     }
