@@ -127,6 +127,10 @@ final class MainTable: UITableViewController {
         tableView.scrollToRow(at: path, at: .top, animated: false)
         tableView.contentOffset.y += tablePos.offset
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+    }
 }
 
 enum DiscussionSection: Int {
