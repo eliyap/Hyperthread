@@ -83,7 +83,6 @@ final class MainTable: UITableViewController {
         #if DEBUG
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
-            UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(scrollMethod)),
         ]
         #endif
         
@@ -93,11 +92,6 @@ final class MainTable: UITableViewController {
     @objc
     func debugMethod() {
         fetcher.fetchFakeTweet()
-    }
-    
-    @objc
-    func scrollMethod() {
-        tableView.contentOffset.y += 100
     }
     
     required init?(coder: NSCoder) {
@@ -138,7 +132,7 @@ final class MainTable: UITableViewController {
         let path = tablePos.indexPath
         tableView.scrollToRow(at: path, at: .top, animated: false)
         tableView.contentOffset.y -= tablePos.offset
-    }    
+    }
 }
 
 enum DiscussionSection: Int {
