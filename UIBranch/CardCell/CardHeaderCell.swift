@@ -122,7 +122,7 @@ final class AspectRatioFrameView: UIView {
         /// Defuse implicitly unwrapped `nil`s.
         heightConstraint = imageView.heightAnchor.constraint(equalTo: self.heightAnchor)
         widthConstraint = imageView.widthAnchor.constraint(equalTo: self.widthAnchor)
-        aspectRatioConstraint = heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: threshholdAR)
+        aspectRatioConstraint = ARConstraint(threshholdAR)
         imageHeightConstraint = heightAnchor.constraint(lessThanOrEqualToConstant: .zero)
         
         addSubview(imageView)
@@ -163,18 +163,26 @@ final class AspectRatioFrameView: UIView {
                 heightConstraint.isActive = true
                 heightConstraint.priority = UILayoutPriority(800)
                 widthConstraint.isActive = false
-                replace(object: self, on: \.aspectRatioConstraint, with: heightAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: threshholdAR))
+                replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(threshholdAR))
             } else {
                 heightConstraint.isActive = false
                 widthConstraint.isActive = true
-                replace(object: self, on: \.aspectRatioConstraint, with: heightAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: media.aspectRatio))
+                replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(media.aspectRatio))
             }
             replace(object: self, on: \.imageHeightConstraint, with: heightAnchor.constraint(lessThanOrEqualToConstant: CGFloat(media.height)))
-            imageHeightConstraint.priority = .required
         }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - NSLayoutConstraint Generation
+extension AspectRatioFrameView {
+    /// Constrain height to be within a certain aspect ratio.
+    func ARConstraint(_ aspectRatio: CGFloat) -> NSLayoutConstraint {
+        heightAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: aspectRatio)
+    }
+    
 }
