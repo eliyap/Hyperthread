@@ -118,6 +118,10 @@ fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, rea
         /// Recognize conversation as its own discussion.
         orphan.upstream = root.id
         realm.add(Discussion(root: orphan))
+        
+        /// Note a new discussion above the fold.
+        UserDefaults.groupSuite.incrementScrollPosition()
+        
         return
     }
     

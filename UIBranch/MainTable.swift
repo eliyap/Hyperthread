@@ -411,6 +411,9 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             realm.add(c)
             let d = Discussion(root: c)
             realm.add(d)
+            
+            /// Note a new discussion above the fold.
+            UserDefaults.groupSuite.incrementScrollPosition()
         }
     }
 }
