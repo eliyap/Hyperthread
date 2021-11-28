@@ -83,6 +83,11 @@ final class CardHeaderCell: UITableViewCell {
             frameView.isHidden = true
         }
         
+        if tweet.media.count > 1 {
+            #warning("TODO: show all.")
+            Swift.debugPrint("\(tweet.media.count) media items found.")
+        }
+        
         tweetTextView.delegate = self
     }
     
