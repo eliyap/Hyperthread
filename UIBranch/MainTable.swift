@@ -137,21 +137,8 @@ final class MainTable: UITableViewController {
         
         let path = tablePos.indexPath
         tableView.scrollToRow(at: path, at: .top, animated: false)
-        toScroll = tablePos.offset
-    }
-    
-    var toScroll: CGFloat? = nil
-    
-    override func viewDidLayoutSubviews() {
-        if let offset = toScroll {
-            print("Layout with contentoffset \(self.tableView.contentOffset.y)")
-            print("Adjusting by \(offset)")
-            self.tableView.contentOffset.y -= offset
-            self.toScroll = nil
-            print("Layout with contentoffset \(self.tableView.contentOffset.y)")
-        }
-        super.viewWillLayoutSubviews()
-    }
+        tableView.contentOffset.y -= tablePos.offset
+    }    
 }
 
 enum DiscussionSection: Int {
