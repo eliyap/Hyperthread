@@ -160,7 +160,6 @@ final class AspectRatioFrameView: UIView {
     func configure(media: Media) -> Void {
         if let urlString = media.url {
             imageView.sd_setImage(with: URL(string: urlString))
-            print("Loading image with \(media.height) x \(media.width)")
             if media.aspectRatio > self.threshholdAR {
                 heightConstraint.isActive = true
                 widthConstraint.isActive = false
@@ -185,5 +184,4 @@ extension AspectRatioFrameView {
     func ARConstraint(_ aspectRatio: CGFloat) -> NSLayoutConstraint {
         heightAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: aspectRatio)
     }
-    
 }
