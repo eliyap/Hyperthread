@@ -161,7 +161,6 @@ final class AspectRatioFrameView: UIView {
             print("Loading image with \(media.height) x \(media.width)")
             if media.aspectRatio > self.threshholdAR {
                 heightConstraint.isActive = true
-                heightConstraint.priority = UILayoutPriority(800)
                 widthConstraint.isActive = false
                 replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(threshholdAR))
             } else {
