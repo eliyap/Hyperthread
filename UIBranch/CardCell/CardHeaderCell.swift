@@ -163,7 +163,11 @@ final class AspectRatioFrameView: UIView {
     
     func configure(media: Media) -> Void {
         if let urlString = media.url {
-            imageView.sd_setImage(with: URL(string: urlString))
+            imageView.sd_setImage(with: URL(string: urlString)) { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+                if let error = error {
+                    NetLog.warning("Image Loading Error \(error)")
+                }
+            }
             if media.aspectRatio > self.threshholdAR {
                 heightConstraint.isActive = true
                 widthConstraint.isActive = false
