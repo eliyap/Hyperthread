@@ -132,22 +132,24 @@ final class AspectRatioFrameView: UIView {
     func constrain(to view: UIView) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+            /// Pin Edges.
             leadingAnchor.constraint(equalTo: view.leadingAnchor),
             trailingAnchor.constraint(equalTo: view.trailingAnchor),
             widthAnchor.constraint(equalTo: view.widthAnchor),
+            
+            /// Activate custom constraints.
             aspectRatioConstraint,
             imageHeightConstraint,
         ])
         
-        let embiggenConstraint = imageView.heightAnchor.constraint(equalToConstant: .greatestFiniteMagnitude)
-        embiggenConstraint.priority = .defaultLow
-        NSLayoutConstraint.activate([embiggenConstraint])
+        /// Make image and frame "as large as possible".
+        let embiggenImage = imageView.heightAnchor.constraint(equalToConstant: .greatestFiniteMagnitude)
+        embiggenImage.priority = .defaultLow
+        let embiggenFrame = heightAnchor.constraint(equalToConstant: .greatestFiniteMagnitude)
+        embiggenFrame.priority = .defaultLow
+        NSLayoutConstraint.activate([embiggenImage, embiggenFrame])
         
-        let embiggenConstraint2 = heightAnchor.constraint(equalToConstant: .greatestFiniteMagnitude)
-        embiggenConstraint2.priority = .defaultLow
-        NSLayoutConstraint.activate([embiggenConstraint2])
-        
-        
+        /// Center Image.
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
