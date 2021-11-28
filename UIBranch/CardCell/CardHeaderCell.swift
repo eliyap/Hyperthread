@@ -139,11 +139,11 @@ final class AspectRatioFrameView: UIView {
             imageHeightConstraint,
         ])
         
-        let embiggenConstraint = imageView.heightAnchor.constraint(equalToConstant: 10000)
+        let embiggenConstraint = imageView.heightAnchor.constraint(equalToConstant: .greatestFiniteMagnitude)
         embiggenConstraint.priority = .defaultLow
         NSLayoutConstraint.activate([embiggenConstraint])
         
-        let embiggenConstraint2 = heightAnchor.constraint(equalToConstant: 10000)
+        let embiggenConstraint2 = heightAnchor.constraint(equalToConstant: .greatestFiniteMagnitude)
         embiggenConstraint2.priority = .defaultLow
         NSLayoutConstraint.activate([embiggenConstraint2])
         
