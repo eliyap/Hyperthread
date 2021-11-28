@@ -118,15 +118,16 @@ final class MainTable: UITableViewController {
     }
     
     private func setScroll(_ action: () -> ()) -> Void {
-        guard let row = UserDefaults.groupSuite.scrollPosition else {
+        guard let tablePos = UserDefaults.groupSuite.scrollPosition else {
             TableLog.debug("Could not obtain saved scroll position!", print: true, true)
             action()
             return
         }
         
-        let path = IndexPath(row: row, section: 0)
         action()
+        let path = tablePos.indexPath
         tableView.scrollToRow(at: path, at: .top, animated: false)
+        tableView.contentOffset.y += tablePos.offset
     }
 }
 
@@ -298,7 +299,9 @@ extension MainTable {
             return
         }
 
-        UserDefaults.groupSuite.scrollPosition = topPath.row
+        let topOffset = tableView.rectForRow(at: topPath).height
+        
+        UserDefaults.groupSuite.scrollPosition = TableScrollPosition(indexPath: topPath, offset: topOffset)
     }
 }
 
@@ -413,7 +416,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             realm.add(d)
             
             /// Note a new discussion above the fold.
-            UserDefaults.groupSuite.incrementScrollPosition()
+            UserDefaults.groupSuite.incrementScrollPositionRow()
         }
     }
 }

@@ -120,7 +120,7 @@ fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, rea
         realm.add(Discussion(root: orphan))
         
         /// Note a new discussion above the fold.
-        UserDefaults.groupSuite.incrementScrollPosition()
+        UserDefaults.groupSuite.incrementScrollPositionRow()
         
         return
     }
