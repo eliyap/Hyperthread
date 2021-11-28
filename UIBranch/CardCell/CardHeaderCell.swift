@@ -142,10 +142,14 @@ final class AspectRatioFrameView: UIView {
             imageHeightConstraint,
         ])
         
+        /// Using `greatestFiniteMagnitude` triggers "NSLayoutConstraint is being configured with a constant that exceeds internal limits" warning.
+        /// Instead, use a height far exceeding any screen in 2021.
+        let effectivelyInfinite: CGFloat = 30000
+        
         /// Make image and frame "as large as possible".
-        let embiggenImage = imageView.heightAnchor.constraint(equalToConstant: .greatestFiniteMagnitude)
+        let embiggenImage = imageView.heightAnchor.constraint(equalToConstant: effectivelyInfinite)
         embiggenImage.priority = .defaultLow
-        let embiggenFrame = heightAnchor.constraint(equalToConstant: .greatestFiniteMagnitude)
+        let embiggenFrame = heightAnchor.constraint(equalToConstant: effectivelyInfinite)
         embiggenFrame.priority = .defaultLow
         NSLayoutConstraint.activate([embiggenImage, embiggenFrame])
         
