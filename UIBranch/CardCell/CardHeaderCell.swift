@@ -112,6 +112,8 @@ final class AspectRatioFrameView: UIView {
     /// Set's the image aspect ratio.
     var aspectRatioConstraint: NSLayoutConstraint! = nil
     
+    var imageHeightConstraint: NSLayoutConstraint! = nil
+    
     /// Maximum frame aspect ratio.
     private let threshholdAR: CGFloat = 0.667
     
@@ -121,6 +123,7 @@ final class AspectRatioFrameView: UIView {
         heightConstraint = imageView.heightAnchor.constraint(equalTo: self.heightAnchor)
         widthConstraint = imageView.widthAnchor.constraint(equalTo: self.widthAnchor)
         aspectRatioConstraint = heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: threshholdAR)
+        imageHeightConstraint = heightAnchor.constraint(lessThanOrEqualToConstant: .zero)
         
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
@@ -133,7 +136,17 @@ final class AspectRatioFrameView: UIView {
             trailingAnchor.constraint(equalTo: view.trailingAnchor),
             widthAnchor.constraint(equalTo: view.widthAnchor),
             aspectRatioConstraint,
+            imageHeightConstraint,
         ])
+        
+        let embiggenConstraint = imageView.heightAnchor.constraint(equalToConstant: 10000)
+        embiggenConstraint.priority = .defaultLow
+        NSLayoutConstraint.activate([embiggenConstraint])
+        
+        let embiggenConstraint2 = heightAnchor.constraint(equalToConstant: 10000)
+        embiggenConstraint2.priority = .defaultLow
+        NSLayoutConstraint.activate([embiggenConstraint2])
+        
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -145,15 +158,19 @@ final class AspectRatioFrameView: UIView {
     func configure(media: Media) -> Void {
         if let urlString = media.url {
             imageView.sd_setImage(with: URL(string: urlString))
+            print("Loading image with \(media.height) x \(media.width)")
             if media.aspectRatio > self.threshholdAR {
                 heightConstraint.isActive = true
+                heightConstraint.priority = UILayoutPriority(800)
                 widthConstraint.isActive = false
-                replace(object: self, on: \.aspectRatioConstraint, with: heightAnchor.constraint(equalTo: widthAnchor, multiplier: threshholdAR))
+                replace(object: self, on: \.aspectRatioConstraint, with: heightAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: threshholdAR))
             } else {
                 heightConstraint.isActive = false
                 widthConstraint.isActive = true
-                replace(object: self, on: \.aspectRatioConstraint, with: heightAnchor.constraint(equalTo: widthAnchor, multiplier: media.aspectRatio))
+                replace(object: self, on: \.aspectRatioConstraint, with: heightAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: media.aspectRatio))
             }
+            replace(object: self, on: \.imageHeightConstraint, with: heightAnchor.constraint(lessThanOrEqualToConstant: CGFloat(media.height)))
+            imageHeightConstraint.priority = .required
         }
     }
     
