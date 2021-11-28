@@ -28,6 +28,12 @@ final class MainTable: UITableViewController {
     
     private var observers = Set<AnyCancellable>()
     
+    /// Default is an observed value as a decent guess.
+    var navBarHeight: CGFloat { navigationController?.navigationBar.frame.height ?? 50 }
+    
+    /// Default is an observed value as a decent guess.
+    var statusBarHeight: CGFloat { UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.windowScene?.statusBarManager?.statusBarFrame.height ?? 20 }
+    
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
@@ -76,7 +82,8 @@ final class MainTable: UITableViewController {
         /// DEBUG
         #if DEBUG
         navigationItem.leftBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod))
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
+            UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(scrollMethod)),
         ]
         #endif
         
@@ -86,6 +93,11 @@ final class MainTable: UITableViewController {
     @objc
     func debugMethod() {
         fetcher.fetchFakeTweet()
+    }
+    
+    @objc
+    func scrollMethod() {
+        tableView.contentOffset.y += 100
     }
     
     required init?(coder: NSCoder) {
@@ -123,20 +135,26 @@ final class MainTable: UITableViewController {
             return
         }
         
-        let path = tablePos.indexPath
+        var path = tablePos.indexPath
+        if path.row > 0 {
+//            path.row += 1
+        }
         tableView.scrollToRow(at: path, at: .top, animated: false)
         toScroll = tablePos.offset
     }
     
     var toScroll: CGFloat? = nil
     
-    override func viewWillLayoutSubviews() {
+    override func viewDidLayoutSubviews() {
         if let offset = toScroll {
-            tableView.contentOffset.y += offset
-            toScroll = nil
+            print("Layout with contentoffset \(self.tableView.contentOffset.y)")
+            print("Adjusting by \(offset)")
+//            self.tableView.contentOffset.y += offset
+//            self.tableView.contentOffset.y -= tableView.contentInset.top
+            self.toScroll = nil
+            print("Layout with contentoffset \(self.tableView.contentOffset.y)")
         }
         super.viewWillLayoutSubviews()
-        print("Layout with contentoffset \(tableView.contentOffset.y)")
     }
 }
 
@@ -300,15 +318,26 @@ extension MainTable {
             TableLog.warning("Could not get paths!")
             return
         }
+        
+        let pathOffsetsFromNavBar = paths.map {
+            tableView.rectForRow(at: $0).origin.y - tableView.contentOffset.y - navBarHeight - statusBarHeight
+        }
+        print(UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.windowScene?.statusBarManager?.statusBarFrame.height)
+        print(pathOffsetsFromNavBar)
 
-        guard let topPath = paths.min() else {
+        guard let topPath = paths.first(where: {offset(at: $0) > 0}) else {
             TableLog.warning("Empty paths!")
             return
         }
 
-        let topOffset = tableView.rectForRow(at: topPath).height
+        let topOffset = tableView.rectForRow(at: topPath).origin.y - tableView.contentOffset.y
+        print("Found top offset of \(topOffset)")
         
         UserDefaults.groupSuite.scrollPosition = TableScrollPosition(indexPath: topPath, offset: topOffset)
+    }
+    
+    fileprivate func offset(at path: IndexPath) -> CGFloat {
+        tableView.rectForRow(at: path).origin.y - tableView.contentOffset.y - navBarHeight - statusBarHeight
     }
 }
 
