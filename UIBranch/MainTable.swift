@@ -117,14 +117,12 @@ final class MainTable: UITableViewController {
         return cell
     }
     
-    private func setScroll(_ action: () -> ()) -> Void {
+    private func setScroll() -> Void {
         guard let tablePos = UserDefaults.groupSuite.scrollPosition else {
             TableLog.debug("Could not obtain saved scroll position!", print: true, true)
-            action()
             return
         }
         
-        action()
         let path = tablePos.indexPath
         tableView.scrollToRow(at: path, at: .top, animated: false)
         tableView.contentOffset.y += tablePos.offset
@@ -142,12 +140,12 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
 
     private let fetcher: Fetcher
     
-    private let scrollAction: (() -> ()) -> Void
+    private let scrollAction: () -> ()
     
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
 
-    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider, action: @escaping (() -> ()) -> Void) {
+    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider, action: @escaping () -> ()) {
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
@@ -163,15 +161,13 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
             }
             switch changes {
             case .initial(let results):
-                self.scrollAction { [weak self] in
-                    self?.setContents(to: results, animated: false)
-                }
+                self.setContents(to: results, animated: false)
+                self.scrollAction()
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 print("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
-                self.scrollAction { [weak self] in
-                    self?.setContents(to: results, animated: false)
-                }
+                self.setContents(to: results, animated: false)
+                self.scrollAction()
             
             case .error(let error):
                 fatalError("\(error)")
