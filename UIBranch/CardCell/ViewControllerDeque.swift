@@ -19,14 +19,14 @@ struct ExpandableDeque<Element> {
         deque.append(element)
     }
     
-    mutating func popFirst(_ generator: @escaping () -> Element) -> Element {
+    mutating func popFirst(generator: @escaping () -> Element) -> Element {
         if deque.isEmpty {
             deque.prepend(generator())
         }
         return deque.removeFirst()
     }
     
-    mutating func popLast(_ generator: @escaping () -> Element) -> Element {
+    mutating func popLast(generator: @escaping () -> Element) -> Element {
         if deque.isEmpty {
             deque.append(generator())
         }
