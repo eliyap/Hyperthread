@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		220101D2275401D2005C1385 /* AspectRatioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D1275401D2005C1385 /* AspectRatioView.swift */; };
+		220101D427545B94005C1385 /* ViewControllerDequeue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDequeue.swift */; };
 		222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardHeaderCell.swift */; };
 		222161F42741C2F400220F0C /* AssetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F32741C2F400220F0C /* AssetColors.swift */; };
 		222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F52741D7FF00220F0C /* DiscussionTree.swift */; };
@@ -86,6 +87,7 @@
 
 /* Begin PBXFileReference section */
 		220101D1275401D2005C1385 /* AspectRatioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioView.swift; sourceTree = "<group>"; };
+		220101D327545B94005C1385 /* ViewControllerDequeue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDequeue.swift; sourceTree = "<group>"; };
 		222161F12741A8EA00220F0C /* CardHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeaderCell.swift; sourceTree = "<group>"; };
 		222161F32741C2F400220F0C /* AssetColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetColors.swift; sourceTree = "<group>"; };
 		222161F52741D7FF00220F0C /* DiscussionTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DiscussionTree.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/DiscussionTree.swift; sourceTree = "<absolute>"; };
@@ -183,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				222161F12741A8EA00220F0C /* CardHeaderCell.swift */,
+				220101D327545B94005C1385 /* ViewControllerDequeue.swift */,
 				220101D1275401D2005C1385 /* AspectRatioView.swift */,
 				22760A42274A927A00F28F0A /* CardTeaserCell.swift */,
 				22760A4A274AE63000F28F0A /* SummaryLine.swift */,
@@ -563,6 +566,7 @@
 				223BBF6627377E8900375530 /* Buffer.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
+				220101D427545B94005C1385 /* ViewControllerDequeue.swift in Sources */,
 				222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
 				22D127F02740A17B00932614 /* Following.swift in Sources */,
