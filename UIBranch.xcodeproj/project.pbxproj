@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		220101D2275401D2005C1385 /* AspectRatioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D1275401D2005C1385 /* AspectRatioView.swift */; };
 		220101D427545B94005C1385 /* ViewControllerDequeue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDequeue.swift */; };
+		220101D727545E0D005C1385 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 220101D627545E0D005C1385 /* DequeModule */; };
 		222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardHeaderCell.swift */; };
 		222161F42741C2F400220F0C /* AssetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F32741C2F400220F0C /* AssetColors.swift */; };
 		222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F52741D7FF00220F0C /* DiscussionTree.swift */; };
@@ -159,6 +160,7 @@
 			files = (
 				22760A52274B1CAC00F28F0A /* SDWebImage in Frameworks */,
 				3579A6A613DCA02DE5BEEC38 /* Pods_UIBranch.framework in Frameworks */,
+				220101D727545E0D005C1385 /* DequeModule in Frameworks */,
 				22F2463D274CA41800AE17AD /* BlackBox in Frameworks */,
 				223BBF5D27377E4600375530 /* Twig in Frameworks */,
 			);
@@ -385,6 +387,7 @@
 				223BBF5C27377E4600375530 /* Twig */,
 				22760A51274B1CAC00F28F0A /* SDWebImage */,
 				22F2463C274CA41800AE17AD /* BlackBox */,
+				220101D627545E0D005C1385 /* DequeModule */,
 			);
 			productName = UIBranch;
 			productReference = 223BBF2727377BE500375530 /* UIBranch.app */;
@@ -460,6 +463,7 @@
 			mainGroup = 223BBF1E27377BE500375530;
 			packageReferences = (
 				22760A50274B1BFC00F28F0A /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				220101D527545E0D005C1385 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 223BBF2827377BE500375530 /* Products */;
 			projectDirPath = "";
@@ -962,6 +966,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		220101D527545E0D005C1385 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.0.3;
+			};
+		};
 		22760A50274B1BFC00F28F0A /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
@@ -973,6 +985,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		220101D627545E0D005C1385 /* DequeModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 220101D527545E0D005C1385 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = DequeModule;
+		};
 		223BBF5C27377E4600375530 /* Twig */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Twig;
