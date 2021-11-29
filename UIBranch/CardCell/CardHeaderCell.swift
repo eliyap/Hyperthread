@@ -23,6 +23,8 @@ final class CardHeaderCell: UITableViewCell {
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
+    
+    var vcDeque = ExpandableDeque<ViewController>()
 
     private let inset: CGFloat = 6
 
@@ -93,6 +95,8 @@ final class CardHeaderCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    var contentViewController: UIViewController! = nil
 }
 
 /**
@@ -102,5 +106,21 @@ extension CardHeaderCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         UIApplication.shared.open(URL)
         return false
+    }
+}
+
+/// View controller containment functions.
+/// Source: https://khanlou.com/2015/04/view-controllers-in-cells/
+extension CardHeaderCell {
+    func addViewControllerToParentViewController(parentViewController: UIViewController) -> Void {
+        parentViewController.addChild(contentViewController)
+        contentViewController.didMove(toParent: parentViewController)
+        contentView.addSubview(contentViewController.view)
+    }
+
+    func removeViewControllerFromParentViewController() -> Void {
+        contentViewController.view.removeFromSuperview()
+        contentViewController.willMove(toParent: nil)
+        contentViewController.removeFromParent()
     }
 }
