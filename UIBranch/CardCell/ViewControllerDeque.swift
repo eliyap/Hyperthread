@@ -7,3 +7,29 @@
 
 import Foundation
 import DequeModule
+
+struct ExpandableDeque<Element> {
+    private var deque = Deque<Element>()
+    
+    mutating func prepend(_ element: Element) -> Void {
+        deque.prepend(element)
+    }
+    
+    mutating func append(_ element: Element) -> Void {
+        deque.append(element)
+    }
+    
+    mutating func popFirst(_ generator: @escaping () -> Element) -> Element {
+        if deque.isEmpty {
+            deque.prepend(generator())
+        }
+        return deque.removeFirst()
+    }
+    
+    mutating func popLast(_ generator: @escaping () -> Element) -> Element {
+        if deque.isEmpty {
+            deque.append(generator())
+        }
+        return deque.removeLast()
+    }
+}
