@@ -112,13 +112,13 @@ extension CardHeaderCell: UITextViewDelegate {
 /// View controller containment functions.
 /// Source: https://khanlou.com/2015/04/view-controllers-in-cells/
 extension CardHeaderCell {
-    func addViewControllerToParentViewController(parentViewController: UIViewController) -> Void {
-        parentViewController.addChild(contentViewController)
-        contentViewController.didMove(toParent: parentViewController)
+    func addViewController(to parent: UIViewController) -> Void {
+        parent.addChild(contentViewController)
+        contentViewController.didMove(toParent: parent)
         contentView.addSubview(contentViewController.view)
     }
 
-    func removeViewControllerFromParentViewController() -> Void {
+    func removeViewControllerFromParent() -> Void {
         contentViewController.view.removeFromSuperview()
         contentViewController.willMove(toParent: nil)
         contentViewController.removeFromParent()

@@ -146,3 +146,17 @@ final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
         }
     }
 }
+
+extension DiscussionTable {
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let header = cell as? CardHeaderCell {
+            header.addViewController(to: self)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let header = cell as? CardHeaderCell {
+            header.removeViewControllerFromParent()
+        }
+    }
+}
