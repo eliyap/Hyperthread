@@ -10,7 +10,7 @@ import RealmSwift
 import Realm
 import Twig
 
-final class CardTeaserCell: UITableViewCell {
+final class CardTeaserCell: ControlledCell {
     
     public static let reuseID = "CardTeaserCell"
     override var reuseIdentifier: String? { Self.reuseID }
@@ -30,31 +30,19 @@ final class CardTeaserCell: UITableViewCell {
     public static let borderInset: CGFloat = 6
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
 
-    var contentViewController: UIViewController
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        self.contentViewController = UIViewController()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        contentView.addSubview(contentViewController.view)
-        contentViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            contentViewController.view.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentViewController.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            contentViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            contentViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        ])
         
         /// Do not change color when selected.
         selectionStyle = .none
         backgroundColor = .flat
         
         /// Configure background.
-        contentViewController.view.addSubview(cardBackground)
+        controller.view.addSubview(cardBackground)
         cardBackground.constrain(to: safeAreaLayoutGuide)
         
         /// Configure Main Stack View
-        contentViewController.view.addSubview(stackView)
+        controller.view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,7 +69,7 @@ final class CardTeaserCell: UITableViewCell {
         
         let test = TestPVC()
         stackView.addArrangedSubview(test.view)
-        test.didMove(toParent: contentViewController)
+        test.didMove(toParent: controller)
         test.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             test.view.widthAnchor.constraint(equalToConstant: 200),

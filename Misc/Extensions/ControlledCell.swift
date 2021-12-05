@@ -11,7 +11,7 @@ import UIKit
  A `UITableViewCell` which owns a `UIViewController`.
  Though this runs against the spirit of Cocoa, it is our method to include child View Controllers.
  */
-final class ControlledCell: UITableViewCell {
+class ControlledCell: UITableViewCell {
 
     /// Internal view controller.
     public let controller = UIViewController()
