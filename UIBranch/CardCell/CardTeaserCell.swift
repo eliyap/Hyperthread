@@ -209,44 +209,28 @@ func randomColor() -> UIColor {
 //
 //import UIKit
 
-class YViewController: UIViewController {
+class YViewController: UIPageViewController {
     
-    var viewControllers = [
+    var _viewControllers = [
         UIViewController(),
         UIViewController(),
         UIViewController(),
         UIViewController(),
     ]
-    var pageViewController: UIPageViewController!
     
     init() {
-        super.init(nibName: nil, bundle: nil)
-        setupPageController()
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        delegate = self
+        for vc in _viewControllers {
+            vc.view.backgroundColor = randomColor()
+        }
+        
+        setViewControllers([_viewControllers[0]], direction: .forward, animated: true, completion: nil)
+        dataSource = self
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupPageController() {
-        pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        pageViewController.delegate = self
-        for vc in viewControllers {
-            vc.view.backgroundColor = randomColor()
-        }
-        
-        
-        pageViewController.setViewControllers([viewControllers[0]], direction: .forward, animated: true, completion: nil)
-        pageViewController.dataSource = self
-        
-        addChild(pageViewController)
-        view.addSubview(pageViewController.view)
-        
-        pageViewController!.view.frame = view.bounds
-        pageViewController.didMove(toParent: self)
-        
-        // Add the page view controller's gesture recognizers to the view controller's view so that the gestures are started more easily.
-        view.gestureRecognizers = pageViewController.gestureRecognizers
     }
 }
 
@@ -254,19 +238,19 @@ class YViewController: UIViewController {
 extension YViewController: UIPageViewControllerDataSource {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = viewControllers.firstIndex(of: viewController), index > 0 else { return nil }
-        return viewControllers[index - 1]
+        guard let index = _viewControllers.firstIndex(of: viewController), index > 0 else { return nil }
+        return _viewControllers[index - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = viewControllers.firstIndex(of: viewController), index < viewControllers.count - 1 else { return nil }
-        return viewControllers[index + 1]
+        guard let index = _viewControllers.firstIndex(of: viewController), index < _viewControllers.count - 1 else { return nil }
+        return _viewControllers[index + 1]
     }
 }
 
 extension YViewController: UIPageViewControllerDelegate {
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return viewControllers.count
+        return _viewControllers.count
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
