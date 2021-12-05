@@ -251,7 +251,7 @@ class YViewController: UIViewController {
 }
 
 // MARK: - UIPageViewController DataSource and Delegate
-extension YViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+extension YViewController: UIPageViewControllerDataSource {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index = viewControllers.firstIndex(of: viewController), index > 0 else { return nil }
@@ -262,7 +262,9 @@ extension YViewController: UIPageViewControllerDataSource, UIPageViewControllerD
         guard let index = viewControllers.firstIndex(of: viewController), index < viewControllers.count - 1 else { return nil }
         return viewControllers[index + 1]
     }
-    
+}
+
+extension YViewController: UIPageViewControllerDelegate {
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return viewControllers.count
     }
