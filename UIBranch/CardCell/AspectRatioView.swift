@@ -76,14 +76,18 @@ final class AspectRatioFrameView: UIView {
                 }
             }
             if media.aspectRatio > self.threshholdAR {
+                /// Reject the aspect ratio and impose a height constraint.
                 heightConstraint.isActive = true
                 widthConstraint.isActive = false
                 replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(threshholdAR))
             } else {
+                /// Accept the aspect ratio and request full width.
                 heightConstraint.isActive = false
                 widthConstraint.isActive = true
                 replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(media.aspectRatio))
             }
+            
+            /// Limit image to intrinsic height.
             replace(object: self, on: \.imageHeightConstraint, with: heightAnchor.constraint(lessThanOrEqualToConstant: CGFloat(media.height)))
         }
     }
