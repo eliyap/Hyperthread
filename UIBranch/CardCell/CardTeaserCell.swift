@@ -23,6 +23,7 @@ final class CardTeaserCell: ControlledCell {
     let retweetView = RetweetView()
     let hairlineView = SpacedSeparator(vertical: CardTeaserCell.borderInset, horizontal: CardTeaserCell.borderInset)
     let summaryView = SummaryView()
+    let albumVC = AlbumController()
     // TODO: add profile image
     
     var token: NotificationToken? = nil
@@ -67,15 +68,14 @@ final class CardTeaserCell: ControlledCell {
             summaryView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
 
-        let vc = AlbumController() //
-        controller.addChild(vc)
-        stackView.addArrangedSubview(vc.view)
-        vc.didMove(toParent: controller)
-        vc.view.translatesAutoresizingMaskIntoConstraints = false
+        controller.addChild(albumVC)
+        stackView.addArrangedSubview(albumVC.view)
+        albumVC.didMove(toParent: controller)
+        albumVC.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            vc.view.heightAnchor.constraint(equalToConstant: 100),
-            vc.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-            vc.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+            albumVC.view.heightAnchor.constraint(equalToConstant: 100),
+            albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
 
         /// Apply default styling.
