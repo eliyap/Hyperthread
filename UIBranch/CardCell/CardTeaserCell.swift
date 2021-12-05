@@ -57,25 +57,24 @@ final class CardTeaserCell: ControlledCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(retweetView)
-        stackView.addArrangedSubview(hairlineView)
-        stackView.addArrangedSubview(summaryView)
         
-        hairlineView.constrain(to: stackView)
-        
-        /// Manually constrain to full width.
-        NSLayoutConstraint.activate([
-            summaryView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-            summaryView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-        ])
-
         controller.addChild(albumVC)
         stackView.addArrangedSubview(albumVC.view)
         albumVC.didMove(toParent: controller)
         albumVC.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            albumVC.view.heightAnchor.constraint(equalToConstant: 100),
             albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+        ])
+        
+        stackView.addArrangedSubview(hairlineView)
+        hairlineView.constrain(to: stackView)
+        
+        stackView.addArrangedSubview(summaryView)
+        /// Manually constrain to full width.
+        NSLayoutConstraint.activate([
+            summaryView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            summaryView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
 
         /// Apply default styling.
@@ -90,6 +89,8 @@ final class CardTeaserCell: ControlledCell {
         
         tweetTextView.delegate = self
         cardBackground.configure(status: discussion.read)
+        
+        albumVC.configure(tweet: tweet)
         
         /// Release old observer.
         if let token = token {
