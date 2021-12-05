@@ -16,7 +16,7 @@ class AlbumController: UIPageViewController {
         delegate = source
         dataSource = source
         
-        setViewControllers([source._viewControllers[0]], direction: .forward, animated: true, completion: nil)
+        setViewControllers([source.controllers[0]], direction: .forward, animated: true, completion: nil)
         
     }
     
@@ -27,7 +27,7 @@ class AlbumController: UIPageViewController {
 
 final class AlbumControllerDataSource: NSObject, UIPageViewControllerDataSource {
     
-    var _viewControllers = [
+    var controllers = [
         UIViewController(),
         UIViewController(),
         UIViewController(),
@@ -36,25 +36,25 @@ final class AlbumControllerDataSource: NSObject, UIPageViewControllerDataSource 
     
     override init() {
         super.init()
-        for vc in _viewControllers {
+        for vc in controllers {
             vc.view.backgroundColor = randomColor()
         }
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = _viewControllers.firstIndex(of: viewController), index > 0 else { return nil }
-        return _viewControllers[index - 1]
+        guard let index = controllers.firstIndex(of: viewController), index > 0 else { return nil }
+        return controllers[index - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = _viewControllers.firstIndex(of: viewController), index < _viewControllers.count - 1 else { return nil }
-        return _viewControllers[index + 1]
+        guard let index = controllers.firstIndex(of: viewController), index < controllers.count - 1 else { return nil }
+        return controllers[index + 1]
     }
 }
 
 extension AlbumControllerDataSource: UIPageViewControllerDelegate {
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return _viewControllers.count
+        return controllers.count
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
