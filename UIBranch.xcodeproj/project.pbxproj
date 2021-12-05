@@ -10,6 +10,7 @@
 		220101D2275401D2005C1385 /* AspectRatioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D1275401D2005C1385 /* AspectRatioView.swift */; };
 		220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDeque.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
+		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
 		222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardHeaderCell.swift */; };
 		222161F42741C2F400220F0C /* AssetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F32741C2F400220F0C /* AssetColors.swift */; };
 		222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F52741D7FF00220F0C /* DiscussionTree.swift */; };
@@ -88,6 +89,7 @@
 /* Begin PBXFileReference section */
 		220101D1275401D2005C1385 /* AspectRatioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioView.swift; sourceTree = "<group>"; };
 		220101D327545B94005C1385 /* ViewControllerDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDeque.swift; sourceTree = "<group>"; };
+		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
 		222161F12741A8EA00220F0C /* CardHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeaderCell.swift; sourceTree = "<group>"; };
 		222161F32741C2F400220F0C /* AssetColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetColors.swift; sourceTree = "<group>"; };
 		222161F52741D7FF00220F0C /* DiscussionTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DiscussionTree.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/DiscussionTree.swift; sourceTree = "<absolute>"; };
@@ -324,6 +326,7 @@
 			isa = PBXGroup;
 			children = (
 				223BBF81273847C300375530 /* Adopt.swift */,
+				221A296F275D533D00C283FE /* ControlledCell.swift */,
 				22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */,
 				223BBF8927385AFA00375530 /* OptionalCompare.swift */,
 				223BBF8B27385B0F00375530 /* OptionalCast.swift */,
@@ -575,6 +578,7 @@
 				22D127DE2740651C00932614 /* TweetCell.swift in Sources */,
 				22760A4B274AE63000F28F0A /* SummaryLine.swift in Sources */,
 				223BBF6327377E8900375530 /* Airport.swift in Sources */,
+				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
 				223BBF7627377F2100375530 /* MiscFetch.swift in Sources */,
