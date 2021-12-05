@@ -67,7 +67,7 @@ final class CardTeaserCell: ControlledCell {
             summaryView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
 
-        let vc = YViewController()
+        let vc = YViewController() //
         controller.addChild(vc)
         stackView.addArrangedSubview(vc.view)
         vc.didMove(toParent: controller)
@@ -211,29 +211,26 @@ func randomColor() -> UIColor {
 
 class YViewController: UIViewController {
     
-    var viewControllers: [UIViewController]!
+    var viewControllers = [
+        UIViewController(),
+        UIViewController(),
+        UIViewController(),
+        UIViewController(),
+    ]
     var pageViewController: UIPageViewController!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    init() {
+        super.init(nibName: nil, bundle: nil)
         setupPageController()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func setupPageController() {
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         pageViewController.delegate = self
-        
-        viewControllers = [
-            UIViewController(),
-            UIViewController(),
-            UIViewController(),
-            UIViewController(),
-        ]
         for vc in viewControllers {
             vc.view.backgroundColor = randomColor()
         }
@@ -257,11 +254,7 @@ class YViewController: UIViewController {
 extension YViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        var index = indexOfViewController(viewController)
-        
-        if (index == 0) || (index == NSNotFound) {
-            return nil
-        }
+        guard var index = viewControllers.firstIndex(of: viewController), index > 0 else { return nil }
         
         index -= 1
         
@@ -269,11 +262,7 @@ extension YViewController: UIPageViewControllerDataSource, UIPageViewControllerD
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        var index = indexOfViewController(viewController)
-        
-        if index == NSNotFound {
-            return nil
-        }
+        guard var index = viewControllers.firstIndex(of: viewController) else { return nil }
         
         index += 1
         
@@ -300,9 +289,5 @@ extension YViewController {
             return nil
         }
         return viewControllers[index]
-    }
-    
-    fileprivate func indexOfViewController(_ viewController: UIViewController) -> Int {
-        return viewControllers.index(of: viewController) ?? NSNotFound
     }
 }
