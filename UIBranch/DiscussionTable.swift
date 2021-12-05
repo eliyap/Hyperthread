@@ -33,8 +33,6 @@ final class DiscussionTable: UITableViewController {
     
     typealias DDS = NodeDDS
     
-    var vcDeque = ExpandableDeque<ViewController>()
-
     init() {
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
@@ -151,8 +149,11 @@ final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
     }
 }
 
+/// Containment functions.
+/// Source: https://khanlou.com/2015/04/view-controllers-in-cells/
 extension DiscussionTable {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        #warning("In future, perform containment for non header cells also!")
         if let header = cell as? CardHeaderCell {
             header.addViewController(to: self)
         }
