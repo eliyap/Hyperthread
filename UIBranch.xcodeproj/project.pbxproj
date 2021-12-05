@@ -11,7 +11,7 @@
 		220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDeque.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
 		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
-		221A2992275D680900C283FE /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A2991275D680900C283FE /* PageViewController.swift */; };
+		221A2992275D680900C283FE /* AlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A2991275D680900C283FE /* AlbumController.swift */; };
 		222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardHeaderCell.swift */; };
 		222161F42741C2F400220F0C /* AssetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F32741C2F400220F0C /* AssetColors.swift */; };
 		222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F52741D7FF00220F0C /* DiscussionTree.swift */; };
@@ -91,7 +91,7 @@
 		220101D1275401D2005C1385 /* AspectRatioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioView.swift; sourceTree = "<group>"; };
 		220101D327545B94005C1385 /* ViewControllerDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDeque.swift; sourceTree = "<group>"; };
 		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
-		221A2991275D680900C283FE /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
+		221A2991275D680900C283FE /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
 		222161F12741A8EA00220F0C /* CardHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeaderCell.swift; sourceTree = "<group>"; };
 		222161F32741C2F400220F0C /* AssetColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetColors.swift; sourceTree = "<group>"; };
 		222161F52741D7FF00220F0C /* DiscussionTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DiscussionTree.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/DiscussionTree.swift; sourceTree = "<absolute>"; };
@@ -192,7 +192,7 @@
 				220101D327545B94005C1385 /* ViewControllerDeque.swift */,
 				220101D1275401D2005C1385 /* AspectRatioView.swift */,
 				22760A42274A927A00F28F0A /* CardTeaserCell.swift */,
-				221A2991275D680900C283FE /* PageViewController.swift */,
+				221A2991275D680900C283FE /* AlbumController.swift */,
 				22760A4A274AE63000F28F0A /* SummaryLine.swift */,
 				22760A44274AA6ED00F28F0A /* CardBackground.swift */,
 				22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */,
@@ -594,7 +594,7 @@
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
-				221A2992275D680900C283FE /* PageViewController.swift in Sources */,
+				221A2992275D680900C283FE /* AlbumController.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
 				22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */,
 				220101D2275401D2005C1385 /* AspectRatioView.swift in Sources */,
