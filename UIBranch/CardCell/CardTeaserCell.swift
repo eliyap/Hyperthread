@@ -36,11 +36,11 @@ final class CardTeaserCell: ControlledCell {
         /// Do not change color when selected.
         selectionStyle = .none
         backgroundColor = .flat
-        
+
         /// Configure background.
         controller.view.addSubview(cardBackground)
         cardBackground.constrain(to: safeAreaLayoutGuide)
-        
+
         /// Configure Main Stack View
         controller.view.addSubview(stackView)
         stackView.axis = .vertical
@@ -66,14 +66,16 @@ final class CardTeaserCell: ControlledCell {
             summaryView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             summaryView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
-        
-        let test = TestPVC()
-        stackView.addArrangedSubview(test.view)
-        test.didMove(toParent: controller)
-        test.view.translatesAutoresizingMaskIntoConstraints = false
+
+        let vc = YViewController()
+        controller.addChild(vc)
+        stackView.addArrangedSubview(vc.view)
+        vc.didMove(toParent: controller)
+        vc.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            test.view.widthAnchor.constraint(equalToConstant: 200),
-            test.view.heightAnchor.constraint(equalToConstant: 200),
+            vc.view.heightAnchor.constraint(equalToConstant: 100),
+            vc.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            vc.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
 
         /// Apply default styling.
@@ -189,43 +191,118 @@ extension CardTeaserCell: UITextViewDelegate {
     }
 }
 
-final class TestPVC: UIPageViewController {
+func randomCGFloat() -> CGFloat {
+    return CGFloat(arc4random()) / CGFloat(UInt32.max)
+}
+
+func randomColor() -> UIColor {
+    return UIColor(red: randomCGFloat(), green: randomCGFloat(), blue: randomCGFloat(), alpha: 1)
+}
+
+
+//
+//  ViewController.swift
+//  PageViewController
+//
+//  Created by Miguel Fermin on 5/8/17.
+//  Copyright © 2017 MAF Software LLC. All rights reserved.
+//
+//import UIKit
+
+class YViewController: UIViewController {
     
-    let childrenVCs: [UIViewController] = [
-        UIViewController(),
-        UIViewController(),
-    ]
+    var viewControllers: [UIViewController]!
+    var pageViewController: UIPageViewController!
     
-    init() {
-        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        childrenVCs[0].view.backgroundColor = .red
-        childrenVCs[0].view.frame = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
-        childrenVCs[1].view.backgroundColor = .blue
-        childrenVCs[1].view.frame = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
-        setViewControllers([childrenVCs[0]], direction: .forward, animated: true, completion: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupPageController()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    private func setupPageController() {
+        pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        pageViewController.delegate = self
+        
+        viewControllers = [
+            UIViewController(),
+            UIViewController(),
+            UIViewController(),
+            UIViewController(),
+        ]
+        for vc in viewControllers {
+            vc.view.backgroundColor = randomColor()
+        }
+        
+        
+        pageViewController.setViewControllers([viewControllerAtIndex(0)!], direction: .forward, animated: true, completion: nil)
+        pageViewController.dataSource = self
+        
+        addChild(pageViewController)
+        view.addSubview(pageViewController.view)
+        
+        pageViewController!.view.frame = view.bounds
+        pageViewController.didMove(toParent: self)
+        
+        // Add the page view controller's gesture recognizers to the view controller's view so that the gestures are started more easily.
+        view.gestureRecognizers = pageViewController.gestureRecognizers
     }
 }
 
-extension TestPVC: UIPageViewControllerDataSource {
+// MARK: - UIPageViewController DataSource and Delegate
+extension YViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        for (idx, vc) in childrenVCs.enumerated() {
-            if vc === viewController && idx > 0 {
-                return childrenVCs[idx - 1]
-            }
+        var index = indexOfViewController(viewController)
+        
+        if (index == 0) || (index == NSNotFound) {
+            return nil
         }
-        return nil
+        
+        index -= 1
+        
+        return viewControllerAtIndex(index)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        for (idx, vc) in childrenVCs.enumerated() {
-            if vc === viewController && idx < childrenVCs.count - 1 {
-                return childrenVCs[idx + 1]
-            }
+        var index = indexOfViewController(viewController)
+        
+        if index == NSNotFound {
+            return nil
         }
-        return nil
+        
+        index += 1
+        
+        if index == viewControllers.count {
+            return nil
+        }
+        
+        return viewControllerAtIndex(index)
+    }
+    
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return viewControllers.count
+    }
+    
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        return 0
+    }
+}
+
+// MARK: - Helpers
+extension YViewController {
+    fileprivate func viewControllerAtIndex(_ index: Int) -> UIViewController? {
+        if viewControllers.count == 0 || index >= viewControllers.count {
+            return nil
+        }
+        return viewControllers[index]
+    }
+    
+    fileprivate func indexOfViewController(_ viewController: UIViewController) -> Int {
+        return viewControllers.index(of: viewController) ?? NSNotFound
     }
 }
