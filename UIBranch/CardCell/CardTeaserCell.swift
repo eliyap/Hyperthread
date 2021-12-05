@@ -236,7 +236,7 @@ class YViewController: UIViewController {
         }
         
         
-        pageViewController.setViewControllers([viewControllerAtIndex(0)!], direction: .forward, animated: true, completion: nil)
+        pageViewController.setViewControllers([viewControllers[0]], direction: .forward, animated: true, completion: nil)
         pageViewController.dataSource = self
         
         addChild(pageViewController)
@@ -255,12 +255,12 @@ extension YViewController: UIPageViewControllerDataSource, UIPageViewControllerD
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index = viewControllers.firstIndex(of: viewController), index > 0 else { return nil }
-        return viewControllerAtIndex(index - 1)
+        return viewControllers[index - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let index = viewControllers.firstIndex(of: viewController), index < viewControllers.count - 1 else { return nil }
-        return viewControllerAtIndex(index + 1)
+        return viewControllers[index + 1]
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
@@ -269,15 +269,5 @@ extension YViewController: UIPageViewControllerDataSource, UIPageViewControllerD
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         return 0
-    }
-}
-
-// MARK: - Helpers
-extension YViewController {
-    fileprivate func viewControllerAtIndex(_ index: Int) -> UIViewController? {
-        if viewControllers.count == 0 || index >= viewControllers.count {
-            return nil
-        }
-        return viewControllers[index]
     }
 }
