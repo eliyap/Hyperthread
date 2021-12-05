@@ -25,7 +25,9 @@ final class CardHeaderCell: UITableViewCell {
     // TODO: add profile image
     
     private let inset: CGFloat = 6
-
+    
+    var contentViewController: UIViewController! = nil
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -93,8 +95,6 @@ final class CardHeaderCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    var contentViewController: UIViewController! = nil
 }
 
 /**
