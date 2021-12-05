@@ -201,22 +201,6 @@ extension CardTeaserCell: UITextViewDelegate {
     }
 }
 
-/// View controller containment functions.
-/// Source: https://khanlou.com/2015/04/view-controllers-in-cells/
-extension CardTeaserCell {
-    func addViewController(to parent: UIViewController) -> Void {
-        parent.addChild(contentViewController)
-        contentViewController.didMove(toParent: parent)
-        contentView.addSubview(contentViewController.view)
-    }
-
-    func removeViewControllerFromParent() -> Void {
-        contentViewController.view.removeFromSuperview()
-        contentViewController.willMove(toParent: nil)
-        contentViewController.removeFromParent()
-    }
-}
-
 final class TestPVC: UIPageViewController {
     
     let childrenVCs: [UIViewController] = [
