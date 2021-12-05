@@ -9,22 +9,15 @@ import UIKit
 
 class AlbumController: UIPageViewController {
     
-    var _viewControllers = [
-        UIViewController(),
-        UIViewController(),
-        UIViewController(),
-        UIViewController(),
-    ]
+    let source = AlbumControllerDataSource()
     
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        delegate = self
-        for vc in _viewControllers {
-            vc.view.backgroundColor = randomColor()
-        }
+        delegate = source
+        dataSource = source
         
-        setViewControllers([_viewControllers[0]], direction: .forward, animated: true, completion: nil)
-        dataSource = self
+        setViewControllers([source._viewControllers[0]], direction: .forward, animated: true, completion: nil)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -32,8 +25,21 @@ class AlbumController: UIPageViewController {
     }
 }
 
-// MARK: - UIPageViewController DataSource and Delegate
-extension AlbumController: UIPageViewControllerDataSource {
+final class AlbumControllerDataSource: NSObject, UIPageViewControllerDataSource {
+    
+    var _viewControllers = [
+        UIViewController(),
+        UIViewController(),
+        UIViewController(),
+        UIViewController(),
+    ]
+    
+    override init() {
+        super.init()
+        for vc in _viewControllers {
+            vc.view.backgroundColor = randomColor()
+        }
+    }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index = _viewControllers.firstIndex(of: viewController), index > 0 else { return nil }
@@ -46,7 +52,7 @@ extension AlbumController: UIPageViewControllerDataSource {
     }
 }
 
-extension AlbumController: UIPageViewControllerDelegate {
+extension AlbumControllerDataSource: UIPageViewControllerDelegate {
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return _viewControllers.count
     }
