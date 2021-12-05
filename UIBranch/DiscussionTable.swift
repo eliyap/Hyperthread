@@ -61,27 +61,7 @@ final class DiscussionTable: UITableViewController {
         self.tableView = UITableView()
         tableView.register(CardHeaderCell.self, forCellReuseIdentifier: CardHeaderCell.reuseID)
         tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
-        dds = DDS(followingIDs: followingIDs, discussion: discussion, tableView: tableView) { [weak self] (tableView: UITableView, indexPath: IndexPath, node: Node) -> UITableViewCell? in
-            let author = self!.realm.user(id: node.tweet.authorID)!
-            if indexPath == IndexPath(row: 0, section: 0) {
-                /// Safety check.
-                assert(node.tweet.id == discussion?.id, "Root tweet ID does not match discussion ID!")
-                
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: CardHeaderCell.reuseID) as? CardHeaderCell else {
-                    fatalError("Failed to create or cast new cell!")
-                }
-                cell.configure(tweet: node.tweet, author: author, realm: self!.realm)
-
-                return cell
-            } else {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TweetCell.reuseID) as? TweetCell else {
-                    fatalError("Failed to create or cast new cell!")
-                }
-                cell.configure(node: node, author: author, realm: self!.realm)
-
-                return cell
-            }
-        }
+        dds = DDS(followingIDs: followingIDs, discussion: discussion, tableView: tableView, cellProvider: cellProvider)
     }
     
     private func cellProvider(tableView: UITableView, indexPath: IndexPath, node: Node) -> UITableViewCell? {
