@@ -19,7 +19,9 @@ final class AspectRatioFrameView: UIView {
     /// Set's the image aspect ratio.
     var aspectRatioConstraint: NSLayoutConstraint! = nil
     
+    /// Limit image & frame to the image's intrinsic height.
     var imageHeightConstraint: NSLayoutConstraint! = nil
+    var frameHeightConstraint: NSLayoutConstraint! = nil
     
     /// Maximum frame aspect ratio.
     private let threshholdAR: CGFloat = 0.667
@@ -30,7 +32,8 @@ final class AspectRatioFrameView: UIView {
         heightConstraint = imageView.heightAnchor.constraint(equalTo: self.heightAnchor)
         widthConstraint = imageView.widthAnchor.constraint(equalTo: self.widthAnchor)
         aspectRatioConstraint = ARConstraint(threshholdAR)
-        imageHeightConstraint = heightAnchor.constraint(lessThanOrEqualToConstant: .zero)
+        imageHeightConstraint = imageView.heightAnchor.constraint(lessThanOrEqualToConstant: .zero)
+        frameHeightConstraint = self.heightAnchor.constraint(lessThanOrEqualToConstant: .zero)
         
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
@@ -47,6 +50,7 @@ final class AspectRatioFrameView: UIView {
             /// Activate custom constraints.
             aspectRatioConstraint,
             imageHeightConstraint,
+            frameHeightConstraint,
         ])
         
         /// Using `greatestFiniteMagnitude` triggers "NSLayoutConstraint is being configured with a constant that exceeds internal limits" warning.
@@ -87,8 +91,10 @@ final class AspectRatioFrameView: UIView {
                 replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(media.aspectRatio))
             }
             
-            /// Limit image to intrinsic height.
-            replace(object: self, on: \.imageHeightConstraint, with: heightAnchor.constraint(lessThanOrEqualToConstant: CGFloat(media.height)))
+            /// Limit image and frame to intrinsic height.
+            replace(object: self, on: \.imageHeightConstraint, with: imageView.heightAnchor.constraint(lessThanOrEqualToConstant: CGFloat(media.height)))
+            replace(object: self, on: \.frameHeightConstraint, with: self.heightAnchor.constraint(lessThanOrEqualToConstant: CGFloat(media.height)))
+            print("Height \(media.height)")
         }
     }
     
