@@ -26,10 +26,14 @@ final class CardHeaderCell: UITableViewCell {
     
     private let inset: CGFloat = 6
     
-    var contentViewController: UIViewController! = nil
+    var contentViewController: UIViewController
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.contentViewController = UIViewController()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        contentViewController.view.layer.borderWidth = 2
+        contentViewController.view.layer.borderColor = UIColor.red.cgColor
         
         /// Do not change color when selected.
         selectionStyle = .none
