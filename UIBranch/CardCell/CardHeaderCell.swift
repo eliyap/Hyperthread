@@ -24,8 +24,6 @@ final class CardHeaderCell: UITableViewCell {
     let metricsView = MetricsView()
     // TODO: add profile image
     
-    var vcDeque = ExpandableDeque<ViewController>()
-
     private let inset: CGFloat = 6
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

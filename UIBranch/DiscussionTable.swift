@@ -33,6 +33,8 @@ final class DiscussionTable: UITableViewController {
     
     typealias DDS = NodeDDS
     
+    var vcDeque = ExpandableDeque<ViewController>()
+
     init() {
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
