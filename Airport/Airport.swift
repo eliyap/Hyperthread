@@ -84,7 +84,7 @@ final class Airport {
     }
 }
 
-extension Array {
+extension Collection {
     var isNotEmpty: Bool {
         !isEmpty
     }
