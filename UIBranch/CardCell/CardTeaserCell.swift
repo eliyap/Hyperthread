@@ -254,23 +254,13 @@ class YViewController: UIViewController {
 extension YViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard var index = viewControllers.firstIndex(of: viewController), index > 0 else { return nil }
-        
-        index -= 1
-        
-        return viewControllerAtIndex(index)
+        guard let index = viewControllers.firstIndex(of: viewController), index > 0 else { return nil }
+        return viewControllerAtIndex(index - 1)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard var index = viewControllers.firstIndex(of: viewController) else { return nil }
-        
-        index += 1
-        
-        if index == viewControllers.count {
-            return nil
-        }
-        
-        return viewControllerAtIndex(index)
+        guard let index = viewControllers.firstIndex(of: viewController), index < viewControllers.count - 1 else { return nil }
+        return viewControllerAtIndex(index + 1)
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
