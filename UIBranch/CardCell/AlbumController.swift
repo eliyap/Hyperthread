@@ -51,6 +51,17 @@ class AlbumController: UIPageViewController {
             
             view.isHidden = false
             presentFirst()
+            
+            /** Credit: https://stackoverflow.com/a/24847685/12395667
+             *  Removing the data source "prevents scrolling" as a logical (if unintuitive) consequence.
+             *  - Subview diving to set `isScrollEnabled` to `false` is risky and undocumented.
+             *  - `isUserInteractionEnabled` would prevent tap gestures.
+             */
+            if tweet.media.count > 1 {
+                dataSource = self
+            } else {
+                dataSource = nil
+            }
         } else {
             view.isHidden = true
         }
