@@ -18,8 +18,6 @@ class AlbumController: UIPageViewController {
     /// Maximum frame aspect ratio, so that tall images don't stretch the cell.
     private let threshholdAR: CGFloat = 0.667
     
-    let animator = AlbumAnimator()
-    
     private let _delegate = FakePageDelegate()
     
     init() {
@@ -35,7 +33,6 @@ class AlbumController: UIPageViewController {
         /// Disable paging dots, as we re-use components and there is no good way to update the page count.
         delegate = _delegate
         dataSource = self
-        transitioningDelegate = self
     }
     
     public func configure(tweet: Tweet) -> Void {

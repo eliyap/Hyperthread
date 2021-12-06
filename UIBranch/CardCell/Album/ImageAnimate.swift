@@ -7,18 +7,6 @@
 
 import UIKit
 
-extension AlbumController: UIViewControllerTransitioningDelegate {
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.mode = .presenting
-        return animator
-    }
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.mode = .dismissing
-        return animator
-    }
-}
-
 final class AlbumAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     public enum Mode { case presenting, dismissing }
     private let duration = 0.25
@@ -47,14 +35,33 @@ final class AlbumAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 }
 
 final class LargeImageViewController: UIViewController {
+    
+    let animator = AlbumAnimator()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
         
         view.backgroundColor = .systemRed
+        
+        /// Request a custom animation.
+        modalPresentationStyle = .custom
+        transitioningDelegate = self
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension LargeImageViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        animator.mode = .presenting
+        return animator
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        animator.mode = .dismissing
+        return animator
     }
 }
