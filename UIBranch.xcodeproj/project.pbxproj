@@ -48,6 +48,7 @@
 		223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8B27385B0F00375530 /* OptionalCast.swift */; };
 		2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2248FF4F2745BEA100C6DEF9 /* Entities.swift */; };
 		224F88D3275E5BBC00085678 /* FakePageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224F88D2275E5BBC00085678 /* FakePageDelegate.swift */; };
+		224F88D5275E5C8700085678 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224F88D4275E5C8700085678 /* ImageViewController.swift */; };
 		22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A40274A8B4200F28F0A /* TweetTextView.swift */; };
 		22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A42274A927A00F28F0A /* CardTeaserCell.swift */; };
 		22760A45274AA6ED00F28F0A /* CardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A44274AA6ED00F28F0A /* CardBackground.swift */; };
@@ -134,6 +135,7 @@
 		223BBF8B27385B0F00375530 /* OptionalCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCast.swift; sourceTree = "<group>"; };
 		2248FF4F2745BEA100C6DEF9 /* Entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entities.swift; sourceTree = "<group>"; };
 		224F88D2275E5BBC00085678 /* FakePageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakePageDelegate.swift; sourceTree = "<group>"; };
+		224F88D4275E5C8700085678 /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImageViewController.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/CardCell/Album/ImageViewController.swift; sourceTree = "<absolute>"; };
 		22760A40274A8B4200F28F0A /* TweetTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetTextView.swift; sourceTree = "<group>"; };
 		22760A42274A927A00F28F0A /* CardTeaserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTeaserCell.swift; sourceTree = "<group>"; };
 		22760A44274AA6ED00F28F0A /* CardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBackground.swift; sourceTree = "<group>"; };
@@ -347,6 +349,7 @@
 			children = (
 				221A2991275D680900C283FE /* AlbumController.swift */,
 				224F88D2275E5BBC00085678 /* FakePageDelegate.swift */,
+				224F88D4275E5C8700085678 /* ImageViewController.swift */,
 			);
 			path = Album;
 			sourceTree = "<group>";
@@ -576,6 +579,7 @@
 				22D127E7274065E900932614 /* UserView.swift in Sources */,
 				2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */,
 				22D127E12740655900932614 /* IconView.swift in Sources */,
+				224F88D5275E5C8700085678 /* ImageViewController.swift in Sources */,
 				223BBF862738572C00375530 /* MainTable.swift in Sources */,
 				223BBF6F27377EC300375530 /* Discussion.swift in Sources */,
 				22D127EE2740713500932614 /* TimeDifference.swift in Sources */,
