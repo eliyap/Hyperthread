@@ -20,10 +20,10 @@ final class CardTeaserCell: ControlledCell {
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
+    let albumVC = AlbumController()
     let retweetView = RetweetView()
     let hairlineView = SpacedSeparator(vertical: CardTeaserCell.borderInset, horizontal: CardTeaserCell.borderInset)
     let summaryView = SummaryView()
-    let albumVC = AlbumController()
     // TODO: add profile image
     
     var token: NotificationToken? = nil
@@ -56,7 +56,6 @@ final class CardTeaserCell: ControlledCell {
 
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
-        stackView.addArrangedSubview(retweetView)
         
         controller.addChild(albumVC)
         stackView.addArrangedSubview(albumVC.view)
@@ -67,6 +66,7 @@ final class CardTeaserCell: ControlledCell {
             albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
         
+        stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(hairlineView)
         hairlineView.constrain(to: stackView)
         
