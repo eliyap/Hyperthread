@@ -122,7 +122,9 @@ final class ImageViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        /// Image image as tall as possible.
+        /// Make image as tall as possible.
+        /// Using `greatestFiniteMagnitude` triggers "NSLayoutConstraint is being configured with a constant that exceeds internal limits" warning.
+        /// Instead, use a height far exceeding any screen in 2021.
         let superTall = imageView.heightAnchor.constraint(equalToConstant: 30000)
         superTall.isActive = true
         superTall.priority = .defaultLow
