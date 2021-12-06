@@ -153,6 +153,25 @@ final class ImageViewController: UIViewController {
             }
         }
     }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        
+        if let b = view.window?.bounds {
+            view.bounds = b
+        }
+        view.window?.rootViewController?.view.addSubview(view)
+        
+        
+//        let modal = LargeImageViewController()
+//        guard let root = view.window?.rootViewController else {
+//            assert(false, "Could not obtain root view controller!")
+//            return
+//        }
+//        root.present(modal, animated: true) {
+//            print("Done!")
+//        }
+    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -160,5 +179,20 @@ final class ImageViewController: UIViewController {
     
     deinit {
         TableLog.debug("\(Self.description()) de-initialized", print: true, false)
+    }
+}
+
+final class LargeImageViewController: UIViewController {
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .overFullScreen
+        
+        view.backgroundColor = .systemRed
+    }
+    
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
