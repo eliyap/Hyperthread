@@ -194,7 +194,7 @@
 				220101D327545B94005C1385 /* ViewControllerDeque.swift */,
 				220101D1275401D2005C1385 /* AspectRatioView.swift */,
 				22760A42274A927A00F28F0A /* CardTeaserCell.swift */,
-				221A2991275D680900C283FE /* AlbumController.swift */,
+				224F88D1275E5B8600085678 /* Album */,
 				22760A4A274AE63000F28F0A /* SummaryLine.swift */,
 				22760A44274AA6ED00F28F0A /* CardBackground.swift */,
 				22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */,
@@ -338,6 +338,14 @@
 				223BBF8B27385B0F00375530 /* OptionalCast.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		224F88D1275E5B8600085678 /* Album */ = {
+			isa = PBXGroup;
+			children = (
+				221A2991275D680900C283FE /* AlbumController.swift */,
+			);
+			path = Album;
 			sourceTree = "<group>";
 		};
 		22D127DF2740653900932614 /* TweetCell */ = {

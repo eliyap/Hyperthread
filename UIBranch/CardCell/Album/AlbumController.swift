@@ -19,6 +19,8 @@ class AlbumController: UIPageViewController {
     /// Maximum frame aspect ratio, so that tall images don't stretch the cell.
     private let threshholdAR: CGFloat = 0.667
     
+    let animator = AlbumAnimator()
+    
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
@@ -31,6 +33,7 @@ class AlbumController: UIPageViewController {
         
         delegate = self
         dataSource = self
+        transitioningDelegate = self
     }
     
     public func configure(tweet: Tweet) -> Void {
@@ -123,6 +126,8 @@ final class ImageViewController: UIViewController {
     
     private let imageView = UIImageView()
     
+    private let test = UIView()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         view.addSubview(imageView)
@@ -142,6 +147,13 @@ final class ImageViewController: UIViewController {
         
         /// Constrain image height.
         imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor).isActive = true
+        
+//        view.addSubview(test)
+//        view.bringSubviewToFront(test)
+//        test.backgroundColor = .red
+//        test.layer.borderColor = UIColor.blue.cgColor
+//        test.layer.borderWidth = 2
+//        test.frame = view.bounds
     }
     
     func configure(media: Media) -> Void {
@@ -157,20 +169,25 @@ final class ImageViewController: UIViewController {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
-        if let b = view.window?.bounds {
-            view.bounds = b
+//        self.view.window?.rootViewController?.view.addSubview(self.test)
+//        UIView.animate(withDuration: 0.25) {
+//            if let b = self.view.window?.bounds {
+//                self.test.frame.origin.x = b.origin.x
+//                self.test.frame.origin.y = b.origin.y
+//            }
+//
+//        }
+        
+        
+        
+        let modal = LargeImageViewController()
+        guard let root = view.window?.rootViewController else {
+            assert(false, "Could not obtain root view controller!")
+            return
         }
-        view.window?.rootViewController?.view.addSubview(view)
-        
-        
-//        let modal = LargeImageViewController()
-//        guard let root = view.window?.rootViewController else {
-//            assert(false, "Could not obtain root view controller!")
-//            return
-//        }
-//        root.present(modal, animated: true) {
-//            print("Done!")
-//        }
+        root.present(modal, animated: true) {
+            print("Done!")
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -182,12 +199,53 @@ final class ImageViewController: UIViewController {
     }
 }
 
+extension AlbumController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        animator.mode = .presenting
+        return animator
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        animator.mode = .dismissing
+        return animator
+    }
+}
+
+final class AlbumAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    public enum Mode { case presenting, dismissing }
+    private let duration = 0.25
+    public var mode: Mode = .presenting
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return duration
+    }
+    
+    func animateTransition(using context: UIViewControllerContextTransitioning) {
+        guard let toView = context.view(forKey: .to) else {
+            assert(false, "Could not obtain to view!")
+            return
+        }
+        context.containerView.addSubview(toView)
+        toView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+        UIView.animate(
+            withDuration: duration,
+            animations: {
+                toView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            },
+            completion: { _ in
+                context.completeTransition(true)
+            }
+        )
+    }
+}
+
 final class LargeImageViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
         
         view.backgroundColor = .systemRed
+        
+        
     }
     
     
