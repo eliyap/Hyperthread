@@ -38,11 +38,14 @@ class AlbumController: UIPageViewController {
             let maxAR = tweet.media.map(\.aspectRatio).max()!
             replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(min(threshholdAR, maxAR)))
             
-            /// Correct the number of controllers.
+            /// Discard old views, just in case.
+            controllers.forEach { $0.view.removeFromSuperview() }
+            
+            /// Get new views.
             controllers = Array(tweet.media).map { media in
                 let vc = ImageViewController()
                 vc.configure(media: media)
-                vc.view.backgroundColor = randomColor()
+                vc.view.backgroundColor = .flat
                 return vc
             }
             
@@ -58,7 +61,7 @@ class AlbumController: UIPageViewController {
             assert(false, "Failed to get first controller!")
             return
         }
-        setViewControllers([first], direction: .forward, animated: true, completion: nil)
+        setViewControllers([first], direction: .forward, animated: false, completion: nil)
     }
     
     /// Constrain height to be within a certain aspect ratio.
@@ -111,12 +114,21 @@ final class ImageViewController: UIViewController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        view = imageView
+        view.addSubview(imageView)
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        /// Image image as tall as possible.
         let superTall = imageView.heightAnchor.constraint(equalToConstant: 30000)
         superTall.isActive = true
         superTall.priority = .defaultLow
+        
+        /// Constrain image height.
+        imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor).isActive = true
     }
     
     func configure(media: Media) -> Void {
@@ -131,5 +143,9 @@ final class ImageViewController: UIViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        TableLog.debug("\(Self.description()) de-initialized", print: true, false)
     }
 }
