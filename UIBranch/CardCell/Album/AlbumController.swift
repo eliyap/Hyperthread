@@ -21,6 +21,8 @@ class AlbumController: UIPageViewController {
     
     let animator = AlbumAnimator()
     
+    private let _delegate = FakePageDelegate()
+    
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
@@ -31,7 +33,8 @@ class AlbumController: UIPageViewController {
         superTall.isActive = true
         superTall.priority = .defaultLow
         
-        delegate = self
+        /// Disable paging dots, as we re-use components and there is no good way to update the page count.
+        delegate = _delegate
         dataSource = self
         transitioningDelegate = self
     }
@@ -104,21 +107,6 @@ extension AlbumController: UIPageViewControllerDataSource {
         }
         guard let index = controllers.firstIndex(of: imageController), index < controllers.count - 1 else { return nil }
         return controllers[index + 1]
-    }
-}
-
-extension AlbumController: UIPageViewControllerDelegate {
-    
-    /** Paging Dots deliberately disabled.
-        We re-use these components and there is no good way to update the count.
-     */
-    
-    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return 0
-    }
-    
-    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return 0
     }
 }
 
