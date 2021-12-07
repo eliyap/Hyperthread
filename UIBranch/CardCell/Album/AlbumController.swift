@@ -42,9 +42,9 @@ class AlbumController: UIPageViewController {
     public func configure(tweet: Tweet) -> Void {
         if tweet.media.isNotEmpty {
             let maxAR = tweet.media.map(\.aspectRatio).max()!
-            let minHeight = CGFloat(tweet.media.map(\.height).min()!)
+            let maxHeight = CGFloat(tweet.media.map(\.height).max()!)
             replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(min(threshholdAR, maxAR)))
-            replace(object: self, on: \.intrinsicHeightConstraint, with: view.heightAnchor.constraint(lessThanOrEqualToConstant: minHeight))
+            replace(object: self, on: \.intrinsicHeightConstraint, with: view.heightAnchor.constraint(lessThanOrEqualToConstant: maxHeight))
             
             /// Discard old views, just in case.
             controllers.forEach { $0.view.removeFromSuperview() }
