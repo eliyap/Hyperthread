@@ -106,8 +106,7 @@ final class CardTeaserCell: ControlledCell {
     }
     
     private func updateTeaser(_ change: ObjectChange<Discussion>) -> Void {
-        guard case let .change(updated, properties) = change else { return }
-        
+        guard case let .change(oldDiscussion, properties) = change else { return }
         
         /// Update color when `readStatus` changes.
         if let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) {
@@ -129,6 +128,14 @@ final class CardTeaserCell: ControlledCell {
                 return
             }
             summaryView.timestampButton.configure(newDate)
+        }
+        
+        
+        if properties.contains(where: {$0.name == Discussion.conversationsPropertyName}) {
+            /// Fetch discussion anew to get updated tweet count.
+            let realm = try! Realm()
+            let updated = realm.discussion(id: oldDiscussion.id)!
+            summaryView.configure(updated, realm: realm)
         }
     }
     
