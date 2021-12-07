@@ -9,7 +9,7 @@ import UIKit
 import RealmSwift
 import Twig
 
-final class TweetCell: UITableViewCell {
+final class TweetCell: ControlledCell {
     
     public static let reuseID = "TweetCell"
     override var reuseIdentifier: String? { Self.reuseID }
@@ -58,16 +58,16 @@ final class TweetCell: UITableViewCell {
         ])
         
         /// Configure Depth Stack View.
-        contentView.addSubview(depthStack)
+        controller.view.addSubview(depthStack)
         depthStack.axis = .horizontal
         depthStack.translatesAutoresizingMaskIntoConstraints = false
         depthStack.addArrangedSubview(depthSpacer); NSLayoutConstraint.activate([indentConstraint])
         depthStack.addArrangedSubview(stackView)
         NSLayoutConstraint.activate([
-            depthStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
-            depthStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
-            depthStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
-            depthStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
+            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: inset),
+            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: inset),
+            depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -inset),
+            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -inset),
         ])
 
         /// Configure Main Stack View.
