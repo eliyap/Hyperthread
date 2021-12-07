@@ -1,6 +1,6 @@
 //
 //  Entities.swift
-//  UIBranch
+//  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 17/11/21.
 //

@@ -1,6 +1,6 @@
 //
 //  ImageAnimate.swift
-//  UIBranch
+//  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 6/12/21.
 //

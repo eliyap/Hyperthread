@@ -1,6 +1,6 @@
 //
 //  AspectRatioView.swift
-//  UIBranch
+//  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 28/11/21.
 //

@@ -1,6 +1,6 @@
 //
-//  UIBranchTests.swift
-//  UIBranchTests
+//  HyperthreadTests.swift
+//  HyperthreadTests
 //
 //  Created by Secret Asian Man Dev on 6/11/21.
 //

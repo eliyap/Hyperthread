@@ -1,6 +1,6 @@
 //
 //  LoginState.swift
-//  UIBranch
+//  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 7/11/21.
 //
