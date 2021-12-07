@@ -78,6 +78,9 @@ final class AspectRatioFrameView: UIView {
                 if let error = error {
                     NetLog.warning("Image Loading Error \(error)")
                 }
+                if image == nil {
+                    NetLog.error("Failed to load image! \(#file)")
+                }
             }
             if media.aspectRatio > self.threshholdAR {
                 /// Reject the aspect ratio and impose a height constraint.

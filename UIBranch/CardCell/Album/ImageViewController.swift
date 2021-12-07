@@ -31,15 +31,9 @@ final class ImageViewController: UIViewController {
         superTall.isActive = true
         superTall.priority = .defaultLow
         
-        /// Constrain image height.
+        /// Constrain image height and width.
         imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor).isActive = true
-        
-//        view.addSubview(test)
-//        view.bringSubviewToFront(test)
-//        test.backgroundColor = .red
-//        test.layer.borderColor = UIColor.blue.cgColor
-//        test.layer.borderWidth = 2
-//        test.frame = view.bounds
+        imageView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor).isActive = true
     }
     
     func configure(media: Media) -> Void {
@@ -48,6 +42,9 @@ final class ImageViewController: UIViewController {
                 if let error = error {
                     NetLog.warning("Image Loading Error \(error)")
                 }
+                if image == nil {
+                    NetLog.error("Failed to load image! \(#file)")
+                }
             }
         }
     }
@@ -55,17 +52,8 @@ final class ImageViewController: UIViewController {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
-//        self.view.window?.rootViewController?.view.addSubview(self.test)
-//        UIView.animate(withDuration: 0.25) {
-//            if let b = self.view.window?.bounds {
-//                self.test.frame.origin.x = b.origin.x
-//                self.test.frame.origin.y = b.origin.y
-//            }
-//
-//        }
-        
-        
-        
+        /// Code stub for future big-image zoom and pan view.
+        /*
         let modal = LargeImageViewController()
         guard let root = view.window?.rootViewController else {
             assert(false, "Could not obtain root view controller!")
@@ -74,6 +62,7 @@ final class ImageViewController: UIViewController {
         root.present(modal, animated: true) {
             print("Done!")
         }
+         */
     }
 
     required init?(coder: NSCoder) {

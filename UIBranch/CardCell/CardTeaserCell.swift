@@ -102,12 +102,13 @@ final class CardTeaserCell: ControlledCell {
             Swift.debugPrint("realm.isInWriteTransaction true, will cause crash!")
             return
         }
-        token = discussion.observe(updateReadIcon)
+        token = discussion.observe(updateTeaser)
     }
     
-    /// Update color when `readStatus` changes.
-    private func updateReadIcon(_ change: ObjectChange<RLMObjectBase>) -> Void {
-        guard case let .change(_, properties) = change else { return }
+    private func updateTeaser(_ change: ObjectChange<Discussion>) -> Void {
+        guard case let .change(oldDiscussion, properties) = change else { return }
+        
+        /// Update color when `readStatus` changes.
         if let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) {
             guard let newValue = readChange.newValue as? ReadStatus.RawValue else {
                 Swift.debugPrint("Error: unexpected type! \(type(of: readChange.newValue))")
@@ -119,12 +120,22 @@ final class CardTeaserCell: ControlledCell {
             }
             cardBackground.configure(status: newRead)
         }
+        
+        /// Update `updatedAt` timestamp.
         if let updatedAtChange = properties.first(where: {$0.name == Discussion.updatedAtPropertyName}) {
             guard let newDate = updatedAtChange.newValue as? Date else {
                 Swift.debugPrint("Error: unexpected type! \(type(of: updatedAtChange.newValue))")
                 return
             }
             summaryView.timestampButton.configure(newDate)
+        }
+        
+        
+        if properties.contains(where: {$0.name == Discussion.conversationsPropertyName}) {
+            /// Fetch discussion anew to get updated tweet count.
+            let realm = try! Realm()
+            let updated = realm.discussion(id: oldDiscussion.id)!
+            summaryView.configure(updated, realm: realm)
         }
     }
     
