@@ -31,8 +31,9 @@ final class ImageViewController: UIViewController {
         superTall.isActive = true
         superTall.priority = .defaultLow
         
-        /// Constrain image height.
+        /// Constrain image height and width.
         imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor).isActive = true
+        imageView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor).isActive = true
     }
     
     func configure(media: Media) -> Void {
