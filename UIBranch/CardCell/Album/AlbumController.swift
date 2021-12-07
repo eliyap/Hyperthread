@@ -13,10 +13,10 @@ class AlbumController: UIPageViewController {
     
     /// Constrains the view's height to below some aspect ratio.
     /// Value is subject to change.
-    var aspectRatioConstraint: NSLayoutConstraint! = nil
+    var aspectRatioConstraint: NSLayoutConstraint? = nil
     
     /// Constrains the album to the largest intrinsic media height so small images aren't black-barred.
-    var intrinsicHeightConstraint: NSLayoutConstraint! = nil
+    var intrinsicHeightConstraint: NSLayoutConstraint? = nil
     
     /// Maximum frame aspect ratio, so that tall images don't stretch the cell.
     private let threshholdAR: CGFloat = 0.667
@@ -25,10 +25,6 @@ class AlbumController: UIPageViewController {
     
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        
-        /// Defuse implicitly unwrapped `nil`s.
-        aspectRatioConstraint = ARConstraint(threshholdAR)
-        intrinsicHeightConstraint = view.heightAnchor.constraint(lessThanOrEqualToConstant: .zero)
         
         let superTall = view.heightAnchor.constraint(equalToConstant: 30000)
         superTall.isActive = true
