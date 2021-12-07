@@ -9,7 +9,7 @@ import UIKit
 import RealmSwift
 import Twig
 
-final class CardHeaderCell: UITableViewCell {
+final class CardHeaderCell: ControlledCell {
     
     public static let reuseID = "CardHeaderCell"
     override var reuseIdentifier: String? { Self.reuseID }
@@ -26,33 +26,27 @@ final class CardHeaderCell: UITableViewCell {
     
     private let inset: CGFloat = 6
     
-    var contentViewController: UIViewController
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        self.contentViewController = UIViewController()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        contentViewController.view.layer.borderWidth = 2
-        contentViewController.view.layer.borderColor = UIColor.red.cgColor
         
         /// Do not change color when selected.
         selectionStyle = .none
         backgroundColor = .flat
         
         /// Configure background.
-        addSubview(cardBackground)
+        controller.view.addSubview(cardBackground)
         cardBackground.constrain(to: safeAreaLayoutGuide)
         
         /// Configure Main Stack View
-        contentView.addSubview(stackView)
+        controller.view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset * 2),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset * 2),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset * 2),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset * 2),
+            stackView.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: inset * 2),
+            stackView.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: inset * 2),
+            stackView.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -inset * 2),
+            stackView.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -inset * 2),
         ])
 
         stackView.addArrangedSubview(userView)
