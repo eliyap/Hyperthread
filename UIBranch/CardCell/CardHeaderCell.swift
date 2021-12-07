@@ -19,7 +19,6 @@ final class CardHeaderCell: ControlledCell {
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
-    let frameView = AspectRatioFrameView()
     let albumVC = AlbumController()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
@@ -52,7 +51,6 @@ final class CardHeaderCell: ControlledCell {
 
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
-        stackView.addArrangedSubview(frameView)
         
         controller.addChild(albumVC)
         stackView.addArrangedSubview(albumVC.view)
@@ -72,8 +70,6 @@ final class CardHeaderCell: ControlledCell {
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
         
-        frameView.constrain(to: stackView)
-
         /// Apply default styling.
         cardBackground.backgroundColor = .card
         cardBackground.layer.borderWidth = 1.00
@@ -86,18 +82,6 @@ final class CardHeaderCell: ControlledCell {
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
         albumVC.configure(tweet: tweet)
-        
-        if let media = tweet.media.first(where: {$0.url != nil}) {
-            frameView.configure(media: media)
-            frameView.isHidden = false
-        } else {
-            frameView.isHidden = true
-        }
-        
-        if tweet.media.count > 1 {
-            #warning("TODO: show all.")
-            Swift.debugPrint("\(tweet.media.count) media items found.")
-        }
         
         tweetTextView.delegate = self
     }
