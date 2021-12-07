@@ -31,6 +31,11 @@ final class MarkReadDaemon {
     /// Mark the discussion at this index path as `read`.
     func mark(_ paths: [IndexPath]) -> Void {
         do {
+            guard realm.isInWriteTransaction == false else {
+                /// Observed some kind of recusrive call here, ignore it and simply skip the write.
+                TableLog.error("Realm already in write transaction!")
+                return
+            }
             try realm.write(withoutNotifying: excludeTokens) {
                 for path in paths {
                     guard let discussion: Discussion = indices[path] else {
