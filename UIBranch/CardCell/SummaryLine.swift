@@ -62,7 +62,7 @@ final class SummaryView: UIStackView {
             } else if onlyReply.primaryReference == onlyReply.quoting {
                 iconView.imageView.setImage(to: "quote.bubble.fill")
             } else {
-                assert(false, "Invalid state, should be retweet or reply!")
+                TableLog.error("Invalid state, should be retweet or reply!")
             }
             
             iconView.setText(to: realm.user(id: onlyReply.authorID)!.name)

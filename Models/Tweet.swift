@@ -130,7 +130,8 @@ final class Tweet: Object, Identifiable {
         
         media = List<Media>()
         if let keys = raw.attachments?.media_keys {
-            for key in Set(keys) {
+            /// - Note: order of images is significant, so we MUST NOT use the `Set` trick for de-duping!
+            for key in keys.removingDuplicates() {
                 guard let match = rawMedia.first(where: {$0.media_key == key}) else {
                     Swift.debugPrint("Failed to find match for \(key)")
                     continue

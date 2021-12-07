@@ -10,7 +10,7 @@ import RealmSwift
 import Realm
 import Twig
 
-final class CardTeaserCell: UITableViewCell {
+final class CardTeaserCell: ControlledCell {
     
     public static let reuseID = "CardTeaserCell"
     override var reuseIdentifier: String? { Self.reuseID }
@@ -20,6 +20,7 @@ final class CardTeaserCell: UITableViewCell {
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
+    let albumVC = AlbumController()
     let retweetView = RetweetView()
     let hairlineView = SpacedSeparator(vertical: CardTeaserCell.borderInset, horizontal: CardTeaserCell.borderInset)
     let summaryView = SummaryView()
@@ -36,13 +37,13 @@ final class CardTeaserCell: UITableViewCell {
         /// Do not change color when selected.
         selectionStyle = .none
         backgroundColor = .flat
-        
+
         /// Configure background.
-        addSubview(cardBackground)
+        controller.view.addSubview(cardBackground)
         cardBackground.constrain(to: safeAreaLayoutGuide)
-        
+
         /// Configure Main Stack View
-        contentView.addSubview(stackView)
+        controller.view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,12 +56,21 @@ final class CardTeaserCell: UITableViewCell {
 
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
+        
+        controller.addChild(albumVC)
+        stackView.addArrangedSubview(albumVC.view)
+        albumVC.didMove(toParent: controller)
+        albumVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+        ])
+        
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(hairlineView)
-        stackView.addArrangedSubview(summaryView)
-        
         hairlineView.constrain(to: stackView)
         
+        stackView.addArrangedSubview(summaryView)
         /// Manually constrain to full width.
         NSLayoutConstraint.activate([
             summaryView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
@@ -79,6 +89,8 @@ final class CardTeaserCell: UITableViewCell {
         
         tweetTextView.delegate = self
         cardBackground.configure(status: discussion.read)
+        
+        albumVC.configure(tweet: tweet)
         
         /// Release old observer.
         if let token = token {
@@ -166,6 +178,7 @@ final class CardTeaserCell: UITableViewCell {
     
     deinit {
         token?.invalidate()
+        TableLog.debug("\(Self.description()) de-initialized.", print: true, true)
     }
 }
 
@@ -177,4 +190,12 @@ extension CardTeaserCell: UITextViewDelegate {
         UIApplication.shared.open(URL)
         return false
     }
+}
+
+func randomCGFloat() -> CGFloat {
+    return CGFloat(arc4random()) / CGFloat(UInt32.max)
+}
+
+func randomColor() -> UIColor {
+    return UIColor(red: randomCGFloat(), green: randomCGFloat(), blue: randomCGFloat(), alpha: 1)
 }
