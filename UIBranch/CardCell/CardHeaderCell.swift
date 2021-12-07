@@ -20,6 +20,7 @@ final class CardHeaderCell: ControlledCell {
     let userView = UserView()
     let tweetTextView = TweetTextView()
     let frameView = AspectRatioFrameView()
+    let albumVC = AlbumController()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
@@ -52,6 +53,16 @@ final class CardHeaderCell: ControlledCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         stackView.addArrangedSubview(frameView)
+        
+        controller.addChild(albumVC)
+        stackView.addArrangedSubview(albumVC.view)
+        albumVC.didMove(toParent: controller)
+        albumVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+        ])
+        
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
         
@@ -74,6 +85,7 @@ final class CardHeaderCell: ControlledCell {
         tweetTextView.attributedText = tweet.attributedString
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
+        albumVC.configure(tweet: tweet)
         
         if let media = tweet.media.first(where: {$0.url != nil}) {
             frameView.configure(media: media)
