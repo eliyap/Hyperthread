@@ -42,6 +42,9 @@ final class ImageViewController: UIViewController {
                 if let error = error {
                     NetLog.warning("Image Loading Error \(error)")
                 }
+                if image == nil {
+                    NetLog.error("Failed to load image! \(#file)")
+                }
             }
         }
     }
