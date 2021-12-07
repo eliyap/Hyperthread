@@ -102,12 +102,14 @@ final class CardTeaserCell: ControlledCell {
             Swift.debugPrint("realm.isInWriteTransaction true, will cause crash!")
             return
         }
-        token = discussion.observe(updateReadIcon)
+        token = discussion.observe(updateTeaser)
     }
     
-    /// Update color when `readStatus` changes.
-    private func updateReadIcon(_ change: ObjectChange<RLMObjectBase>) -> Void {
+    private func updateTeaser(_ change: ObjectChange<RLMObjectBase>) -> Void {
         guard case let .change(_, properties) = change else { return }
+        
+        
+        /// Update color when `readStatus` changes.
         if let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) {
             guard let newValue = readChange.newValue as? ReadStatus.RawValue else {
                 Swift.debugPrint("Error: unexpected type! \(type(of: readChange.newValue))")
@@ -119,6 +121,8 @@ final class CardTeaserCell: ControlledCell {
             }
             cardBackground.configure(status: newRead)
         }
+        
+        /// Update `updatedAt` timestamp.
         if let updatedAtChange = properties.first(where: {$0.name == Discussion.updatedAtPropertyName}) {
             guard let newDate = updatedAtChange.newValue as? Date else {
                 Swift.debugPrint("Error: unexpected type! \(type(of: updatedAtChange.newValue))")
