@@ -74,7 +74,6 @@ extension UserDefaults {
     var scrollPosition: TableScrollPosition? {
         get {
             guard let data = object(forKey: Self.scrollPositionKey) as? Data else {
-                Swift.debugPrint("No scroll position found.")
                 return nil
             }
             guard let loaded = try? JSONDecoder().decode(TableScrollPosition.self, from: data) else {
