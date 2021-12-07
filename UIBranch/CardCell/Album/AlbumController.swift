@@ -15,6 +15,9 @@ class AlbumController: UIPageViewController {
     /// Value is subject to change.
     var aspectRatioConstraint: NSLayoutConstraint! = nil
     
+    /// Constrains the album to the largest intrinsic media height so small images aren't black-barred.
+    var intrinsicHeightConstraint: NSLayoutConstraint! = nil
+    
     /// Maximum frame aspect ratio, so that tall images don't stretch the cell.
     private let threshholdAR: CGFloat = 0.667
     
@@ -25,6 +28,7 @@ class AlbumController: UIPageViewController {
         
         /// Defuse implicitly unwrapped `nil`s.
         aspectRatioConstraint = ARConstraint(threshholdAR)
+        intrinsicHeightConstraint = view.heightAnchor.constraint(lessThanOrEqualToConstant: .zero)
         
         let superTall = view.heightAnchor.constraint(equalToConstant: 30000)
         superTall.isActive = true
@@ -38,7 +42,9 @@ class AlbumController: UIPageViewController {
     public func configure(tweet: Tweet) -> Void {
         if tweet.media.isNotEmpty {
             let maxAR = tweet.media.map(\.aspectRatio).max()!
+            let minHeight = CGFloat(tweet.media.map(\.height).min()!)
             replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(min(threshholdAR, maxAR)))
+            replace(object: self, on: \.intrinsicHeightConstraint, with: view.heightAnchor.constraint(lessThanOrEqualToConstant: minHeight))
             
             /// Discard old views, just in case.
             controllers.forEach { $0.view.removeFromSuperview() }
