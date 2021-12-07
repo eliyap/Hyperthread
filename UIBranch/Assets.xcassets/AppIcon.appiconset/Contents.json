@@ -1,169 +1,169 @@
 {
   "images" : [
     {
-      "filename" : "Asset 10ipadNotification40-1.png",
+      "filename" : "Asset 11ipadSpotlight40-2.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "Asset 10notification60.png",
+      "filename" : "Asset 11notification60.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "filename" : "Asset 10ipadSettings58-1.png",
+      "filename" : "Asset 11ipadSettings58-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "Asset 10settings87.png",
+      "filename" : "Asset 11settings87.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "Asset 10ipadSpotlight80-1.png",
+      "filename" : "Asset 11ipadSpotlight80-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "Asset 10iphone120.png",
+      "filename" : "Asset 11spotlight120.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "Asset 10iphone120-1.png",
+      "filename" : "Asset 11spotlight120-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "Asset 10iphone180.png",
+      "filename" : "Asset 11iphone180.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "Asset 10ipadNotification20.png",
+      "filename" : "Asset 11ipadNotification20.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
     },
     {
-      "filename" : "Asset 10ipadNotification40.png",
+      "filename" : "Asset 11ipadSpotlight40-1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "Asset 10ipadSettings29.png",
+      "filename" : "Asset 11ipadSettings29.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "29x29"
     },
     {
-      "filename" : "Asset 10ipadSettings58.png",
+      "filename" : "Asset 11ipadSettings58.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "Asset 10ipadSpotlight40.png",
+      "filename" : "Asset 11ipadSpotlight40.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "40x40"
     },
     {
-      "filename" : "Asset 10ipadSpotlight80.png",
+      "filename" : "Asset 11ipadSpotlight80.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "Asset 10ipad76.png",
+      "filename" : "Asset 11ipad76.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
-      "filename" : "Asset 10ipad152.png",
+      "filename" : "Asset 11ipad152.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "filename" : "Asset 10ipadPro167.png",
+      "filename" : "Asset 11ipadPro167.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "Asset 10mac1024.png",
+      "filename" : "Asset 11mac1024.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
     },
     {
-      "filename" : "Asset 10mac16.png",
+      "filename" : "Asset 11mac16.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
     },
     {
-      "filename" : "Asset 10mac32-1.png",
+      "filename" : "Asset 11mac32-1.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "16x16"
     },
     {
-      "filename" : "Asset 10mac32.png",
+      "filename" : "Asset 11mac32.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "32x32"
     },
     {
-      "filename" : "Asset 10mac64.png",
+      "filename" : "Asset 11mac64.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
-      "filename" : "Asset 10mac128.png",
+      "filename" : "Asset 11mac128.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
-      "filename" : "Asset 10mac256-1.png",
+      "filename" : "Asset 11mac256-1.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
-      "filename" : "Asset 10mac256.png",
+      "filename" : "Asset 11mac256.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
-      "filename" : "Asset 10mac512-1.png",
+      "filename" : "Asset 11mac512-1.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
-      "filename" : "Asset 10mac512.png",
+      "filename" : "Asset 11mac512.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
-      "filename" : "Asset 10appstore1024.png",
+      "filename" : "Asset 11appstore1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"
