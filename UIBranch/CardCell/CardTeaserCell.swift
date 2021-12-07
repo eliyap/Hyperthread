@@ -105,8 +105,8 @@ final class CardTeaserCell: ControlledCell {
         token = discussion.observe(updateTeaser)
     }
     
-    private func updateTeaser(_ change: ObjectChange<RLMObjectBase>) -> Void {
-        guard case let .change(_, properties) = change else { return }
+    private func updateTeaser(_ change: ObjectChange<Discussion>) -> Void {
+        guard case let .change(updated, properties) = change else { return }
         
         
         /// Update color when `readStatus` changes.
