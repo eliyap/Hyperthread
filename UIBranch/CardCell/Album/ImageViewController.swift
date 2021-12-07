@@ -33,13 +33,6 @@ final class ImageViewController: UIViewController {
         
         /// Constrain image height.
         imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor).isActive = true
-        
-//        view.addSubview(test)
-//        view.bringSubviewToFront(test)
-//        test.backgroundColor = .red
-//        test.layer.borderColor = UIColor.blue.cgColor
-//        test.layer.borderWidth = 2
-//        test.frame = view.bounds
     }
     
     func configure(media: Media) -> Void {
