@@ -10,6 +10,9 @@ import UIKit
 /**
  A `UITableViewCell` which owns a `UIViewController`.
  Though this runs against the spirit of Cocoa, it is our method to include child View Controllers.
+ 
+ - Note: treat `controller.view` as `contentView`,
+         that is, add subviews to it and constrain against it.
  */
 class ControlledCell: UITableViewCell {
 
