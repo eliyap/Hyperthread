@@ -22,6 +22,7 @@ final class TweetCell: ControlledCell {
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
+    let albumVC = AlbumController()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
@@ -76,6 +77,16 @@ final class TweetCell: ControlledCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
+        
+        controller.addChild(albumVC)
+        stackView.addArrangedSubview(albumVC.view)
+        albumVC.didMove(toParent: controller)
+        albumVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+        ])
+        
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
         
@@ -99,6 +110,7 @@ final class TweetCell: ControlledCell {
         tweetTextView.attributedText = node.tweet.fullText(context: node)
         retweetView.configure(tweet: node.tweet, realm: realm)
         metricsView.configure(node.tweet)
+        albumVC.configure(tweet: node.tweet)
         
         /// Set indentation depth.
         let depth = min(maxDepth, node.depth)
