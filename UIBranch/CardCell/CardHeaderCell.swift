@@ -74,11 +74,22 @@ final class CardHeaderCell: ControlledCell {
         cardBackground.backgroundColor = .card
         cardBackground.layer.borderWidth = 1.00
         cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustTextSize), name: UIContentSizeCategory.didChangeNotification, object: nil)
+    }
+    
+    @objc
+    private func adjustTextSize(_: Notification) -> Void {
+        tweetTextView.attributedText = NSAttributedString(string: "", attributes: [:])
+        tweetTextView.isHidden = true
+        tweetTextView.textColor = .SCYellow
+        print("BOOP")
     }
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
         userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
         tweetTextView.attributedText = tweet.attributedString
+        tweetTextView.textColor = .SCYellow
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
         albumVC.configure(tweet: tweet)
