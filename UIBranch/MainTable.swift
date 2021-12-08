@@ -132,6 +132,10 @@ final class MainTable: UITableViewController {
         }
         
         let path = tablePos.indexPath
+        guard path.row < tableView.numberOfRows(inSection: 0) else {
+            TableLog.error("Out of bounds index path! \(path)")
+            return
+        }
         tableView.scrollToRow(at: path, at: .top, animated: false)
         tableView.contentOffset.y -= tablePos.offset
     }
