@@ -21,9 +21,27 @@ class AlbumController: UIPageViewController {
     /// Maximum frame aspect ratio, so that tall images don't stretch the cell.
     private let threshholdAR: CGFloat = 0.667
     
+    private let countButton: UIButton
+    
     private let _delegate = FakePageDelegate()
     
+    private static var countButtonConfig: UIButton.Configuration = {
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = .systemGray6
+        config.cornerStyle = .capsule
+        config.titleTextAttributesTransformer = .init { incoming in
+            var outgoing = incoming
+            outgoing.foregroundColor = .label
+            outgoing.font = .preferredFont(forTextStyle: .footnote)
+            return outgoing
+        }
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
+        return config
+    }()
+    
     init() {
+        self.countButton = UIButton(configuration: Self.countButtonConfig, primaryAction: nil)
+        
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
         let superTall = view.heightAnchor.constraint(equalToConstant: 30000)
@@ -33,6 +51,16 @@ class AlbumController: UIPageViewController {
         /// Disable paging dots, as we re-use components and there is no good way to update the page count.
         delegate = _delegate
         dataSource = self
+        
+        view.addSubview(countButton)
+        view.bringSubviewToFront(countButton)
+        countButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            countButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -CardTeaserCell.borderInset),
+            countButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -CardTeaserCell.borderInset),
+        ])
+        
+        countButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
     }
     
     public func configure(tweet: Tweet) -> Void {
@@ -63,8 +91,11 @@ class AlbumController: UIPageViewController {
              */
             if tweet.media.count > 1 {
                 dataSource = self
+                countButton.isHidden = false
+                countButton.setTitle("1/\(tweet.media.count)", for: .normal)
             } else {
                 dataSource = nil
+                countButton.isHidden = true
             }
         } else {
             view.isHidden = true
