@@ -23,7 +23,8 @@ class AlbumController: UIPageViewController {
     
     private let countButton: UIButton
     
-    private let _delegate = FakePageDelegate()
+    /// The upcoming page number.
+    private var pendingIndex: Int = 1
     
     private static var countButtonConfig: UIButton.Configuration = {
         var config = UIButton.Configuration.filled()
@@ -49,7 +50,7 @@ class AlbumController: UIPageViewController {
         superTall.priority = .defaultLow
         
         /// Disable paging dots, as we re-use components and there is no good way to update the page count.
-        delegate = _delegate
+        delegate = self
         dataSource = self
         
         view.addSubview(countButton)
@@ -136,5 +137,40 @@ extension AlbumController: UIPageViewControllerDataSource {
         }
         guard let index = controllers.firstIndex(of: imageController), index < controllers.count - 1 else { return nil }
         return controllers[index + 1]
+    }
+    
+    /// Acknowledge existence of paging dots, but deliberately disable them.
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return 0
+    }
+    
+    /// Acknowledge existence of paging dots, but deliberately disable them.
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        return 0
+    }
+}
+
+extension AlbumController: UIPageViewControllerDelegate {
+    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+        guard pendingViewControllers.count == 1, let pending = pendingViewControllers.first else {
+            assert(false, "Unexpected controller count!")
+            return
+        }
+        guard let img = pending as? ImageViewController else {
+            assert(false, "Unexpected Type!")
+            return
+        }
+        guard let index = controllers.firstIndex(of: img) else {
+            assert(false, "Could not locate pending controller!")
+            return
+        }
+        pendingIndex = index + 1
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        guard finished && completed else { return }
+        
+        /// Update page number.
+        countButton.setTitle("\(pendingIndex)/\(controllers.count)", for: .normal)
     }
 }
