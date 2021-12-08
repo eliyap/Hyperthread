@@ -9,7 +9,7 @@ import UIKit
 import RealmSwift
 import Twig
 
-final class CardHeaderCell: UITableViewCell {
+final class CardHeaderCell: ControlledCell {
     
     public static let reuseID = "CardHeaderCell"
     override var reuseIdentifier: String? { Self.reuseID }
@@ -19,45 +19,48 @@ final class CardHeaderCell: UITableViewCell {
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
-    let frameView = AspectRatioFrameView()
+    let albumVC = AlbumController()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
     
     private let inset: CGFloat = 6
     
-    var contentViewController: UIViewController
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        self.contentViewController = UIViewController()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        contentViewController.view.layer.borderWidth = 2
-        contentViewController.view.layer.borderColor = UIColor.red.cgColor
         
         /// Do not change color when selected.
         selectionStyle = .none
         backgroundColor = .flat
         
         /// Configure background.
-        addSubview(cardBackground)
+        controller.view.addSubview(cardBackground)
         cardBackground.constrain(to: safeAreaLayoutGuide)
         
         /// Configure Main Stack View
-        contentView.addSubview(stackView)
+        controller.view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset * 2),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset * 2),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset * 2),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset * 2),
+            stackView.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: inset * 2),
+            stackView.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: inset * 2),
+            stackView.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -inset * 2),
+            stackView.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -inset * 2),
         ])
 
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
-        stackView.addArrangedSubview(frameView)
+        
+        controller.addChild(albumVC)
+        stackView.addArrangedSubview(albumVC.view)
+        albumVC.didMove(toParent: controller)
+        albumVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+        ])
+        
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
         
@@ -67,8 +70,6 @@ final class CardHeaderCell: UITableViewCell {
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
         
-        frameView.constrain(to: stackView)
-
         /// Apply default styling.
         cardBackground.backgroundColor = .card
         cardBackground.layer.borderWidth = 1.00
@@ -80,18 +81,7 @@ final class CardHeaderCell: UITableViewCell {
         tweetTextView.attributedText = tweet.attributedString
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
-        
-        if let media = tweet.media.first(where: {$0.url != nil}) {
-            frameView.configure(media: media)
-            frameView.isHidden = false
-        } else {
-            frameView.isHidden = true
-        }
-        
-        if tweet.media.count > 1 {
-            #warning("TODO: show all.")
-            Swift.debugPrint("\(tweet.media.count) media items found.")
-        }
+        albumVC.configure(tweet: tweet)
         
         tweetTextView.delegate = self
     }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		220101D2275401D2005C1385 /* AspectRatioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D1275401D2005C1385 /* AspectRatioView.swift */; };
 		220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDeque.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
 		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
@@ -92,7 +91,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		220101D1275401D2005C1385 /* AspectRatioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectRatioView.swift; sourceTree = "<group>"; };
 		220101D327545B94005C1385 /* ViewControllerDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDeque.swift; sourceTree = "<group>"; };
 		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
 		221A2991275D680900C283FE /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
@@ -198,7 +196,6 @@
 			children = (
 				222161F12741A8EA00220F0C /* CardHeaderCell.swift */,
 				220101D327545B94005C1385 /* ViewControllerDeque.swift */,
-				220101D1275401D2005C1385 /* AspectRatioView.swift */,
 				22760A42274A927A00F28F0A /* CardTeaserCell.swift */,
 				224F88D1275E5B8600085678 /* Album */,
 				22760A4A274AE63000F28F0A /* SummaryLine.swift */,
@@ -621,7 +618,6 @@
 				221A2992275D680900C283FE /* AlbumController.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
 				22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */,
-				220101D2275401D2005C1385 /* AspectRatioView.swift in Sources */,
 				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,

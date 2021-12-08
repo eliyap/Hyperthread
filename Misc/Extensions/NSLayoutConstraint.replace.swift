@@ -21,3 +21,13 @@ func replace<Object: AnyObject>(
     object[keyPath: keyPath] = other
     NSLayoutConstraint.activate([other])
 }
+
+func replace<Object: AnyObject>(
+    object: Object,
+    on keyPath: ReferenceWritableKeyPath<Object, NSLayoutConstraint?>,
+    with other: NSLayoutConstraint?
+) -> Void {
+    object[keyPath: keyPath]?.isActive = false
+    object[keyPath: keyPath] = other
+    other?.isActive = true
+}

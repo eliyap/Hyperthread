@@ -9,7 +9,7 @@ import UIKit
 import RealmSwift
 import Twig
 
-final class TweetCell: UITableViewCell {
+final class TweetCell: ControlledCell {
     
     public static let reuseID = "TweetCell"
     override var reuseIdentifier: String? { Self.reuseID }
@@ -22,6 +22,7 @@ final class TweetCell: UITableViewCell {
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
+    let albumVC = AlbumController()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     // TODO: add profile image
@@ -58,16 +59,16 @@ final class TweetCell: UITableViewCell {
         ])
         
         /// Configure Depth Stack View.
-        contentView.addSubview(depthStack)
+        controller.view.addSubview(depthStack)
         depthStack.axis = .horizontal
         depthStack.translatesAutoresizingMaskIntoConstraints = false
         depthStack.addArrangedSubview(depthSpacer); NSLayoutConstraint.activate([indentConstraint])
         depthStack.addArrangedSubview(stackView)
         NSLayoutConstraint.activate([
-            depthStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
-            depthStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
-            depthStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
-            depthStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
+            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: inset),
+            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: inset),
+            depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -inset),
+            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -inset),
         ])
 
         /// Configure Main Stack View.
@@ -76,6 +77,16 @@ final class TweetCell: UITableViewCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
+        
+        controller.addChild(albumVC)
+        stackView.addArrangedSubview(albumVC.view)
+        albumVC.didMove(toParent: controller)
+        albumVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+        ])
+        
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
         
@@ -99,6 +110,7 @@ final class TweetCell: UITableViewCell {
         tweetTextView.attributedText = node.tweet.fullText(context: node)
         retweetView.configure(tweet: node.tweet, realm: realm)
         metricsView.configure(node.tweet)
+        albumVC.configure(tweet: node.tweet)
         
         /// Set indentation depth.
         let depth = min(maxDepth, node.depth)
