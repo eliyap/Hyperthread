@@ -46,7 +46,6 @@
 		223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8927385AFA00375530 /* OptionalCompare.swift */; };
 		223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8B27385B0F00375530 /* OptionalCast.swift */; };
 		2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2248FF4F2745BEA100C6DEF9 /* Entities.swift */; };
-		224F88D3275E5BBC00085678 /* FakePageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224F88D2275E5BBC00085678 /* FakePageDelegate.swift */; };
 		224F88D5275E5C8700085678 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224F88D4275E5C8700085678 /* ImageViewController.swift */; };
 		224F88D7275E5CD300085678 /* ImageAnimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224F88D6275E5CD300085678 /* ImageAnimate.swift */; };
 		22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A40274A8B4200F28F0A /* TweetTextView.swift */; };
@@ -133,7 +132,6 @@
 		223BBF8927385AFA00375530 /* OptionalCompare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCompare.swift; sourceTree = "<group>"; };
 		223BBF8B27385B0F00375530 /* OptionalCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCast.swift; sourceTree = "<group>"; };
 		2248FF4F2745BEA100C6DEF9 /* Entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entities.swift; sourceTree = "<group>"; };
-		224F88D2275E5BBC00085678 /* FakePageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakePageDelegate.swift; sourceTree = "<group>"; };
 		224F88D4275E5C8700085678 /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImageViewController.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/CardCell/Album/ImageViewController.swift; sourceTree = "<absolute>"; };
 		224F88D6275E5CD300085678 /* ImageAnimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnimate.swift; sourceTree = "<group>"; };
 		22760A40274A8B4200F28F0A /* TweetTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetTextView.swift; sourceTree = "<group>"; };
@@ -347,7 +345,6 @@
 			isa = PBXGroup;
 			children = (
 				221A2991275D680900C283FE /* AlbumController.swift */,
-				224F88D2275E5BBC00085678 /* FakePageDelegate.swift */,
 				224F88D4275E5C8700085678 /* ImageViewController.swift */,
 				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
 			);
@@ -613,7 +610,6 @@
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
 				221A2994275D943E00C283FE /* RemoveDuplicates.swift in Sources */,
-				224F88D3275E5BBC00085678 /* FakePageDelegate.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				221A2992275D680900C283FE /* AlbumController.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,

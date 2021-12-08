@@ -59,7 +59,20 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: ASWebAuthenticationPresentationContextProviding {
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return UIApplication.shared.windows.filter { $0.isKeyWindow }.first!
+        getKeyWindow()!
     }
 }
 
+/// Source: https://stackoverflow.com/a/68989580/12395667
+func getKeyWindow() -> UIWindow? {
+    getWindowScene()?.keyWindow
+}
+
+func getWindowScene() -> UIWindowScene? {
+    UIApplication.shared.connectedScenes
+        /// Keep only active scenes, onscreen and visible to the user
+        .filter { $0.activationState == .foregroundActive }
+        /// Keep only the first `UIWindowScene`
+        .compactMap{ $0 as? UIWindowScene }
+        .first
+}

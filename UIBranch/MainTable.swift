@@ -32,7 +32,7 @@ final class MainTable: UITableViewController {
     var navBarHeight: CGFloat { navigationController?.navigationBar.frame.height ?? 50 }
     
     /// Default is an observed value as a decent guess.
-    var statusBarHeight: CGFloat { UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.windowScene?.statusBarManager?.statusBarFrame.height ?? 20 }
+    var statusBarHeight: CGFloat { getWindowScene()?.statusBarManager?.statusBarFrame.height ?? 20 }
     
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
