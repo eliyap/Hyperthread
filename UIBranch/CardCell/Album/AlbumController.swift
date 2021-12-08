@@ -9,14 +9,14 @@ import UIKit
 
 class AlbumController: UIPageViewController {
     
-    var controllers: [ImageViewController] = []
+    public var controllers: [ImageViewController] = []
     
     /// Constrains the view's height to below some aspect ratio.
     /// Value is subject to change.
-    var aspectRatioConstraint: NSLayoutConstraint? = nil
+    private var aspectRatioConstraint: NSLayoutConstraint? = nil
     
     /// Constrains the album to the largest intrinsic media height so small images aren't black-barred.
-    var intrinsicHeightConstraint: NSLayoutConstraint? = nil
+    private var intrinsicHeightConstraint: NSLayoutConstraint? = nil
     
     /// Maximum frame aspect ratio, so that tall images don't stretch the cell.
     private let threshholdAR: CGFloat = 0.667
