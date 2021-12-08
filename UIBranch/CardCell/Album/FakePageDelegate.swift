@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// Acknowledges existene of paging dots, but deliberately disables them.
+/// Acknowledges existence of paging dots, but deliberately disables them.
 final class FakePageDelegate: NSObject, UIPageViewControllerDelegate {
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return 0
