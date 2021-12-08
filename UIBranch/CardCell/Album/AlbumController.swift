@@ -45,7 +45,7 @@ class AlbumController: UIPageViewController {
         
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
-        let superTall = view.heightAnchor.constraint(equalToConstant: 30000)
+        let superTall = view.heightAnchor.constraint(equalToConstant: .superTall)
         superTall.isActive = true
         superTall.priority = .defaultLow
         

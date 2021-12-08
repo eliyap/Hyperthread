@@ -87,6 +87,11 @@ final class TweetCell: ControlledCell {
             albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
         
+        /// Special case: must request album be "as tall as possible".
+        let atap = albumVC.view.heightAnchor.constraint(equalToConstant: .superTall)
+        atap.isActive = true
+        atap.priority = .defaultLow
+        
         stackView.addArrangedSubview(retweetView)
         stackView.addArrangedSubview(metricsView)
         
