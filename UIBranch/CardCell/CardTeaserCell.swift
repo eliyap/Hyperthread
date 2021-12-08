@@ -81,7 +81,7 @@ final class CardTeaserCell: ControlledCell {
         self.resetStyle()
     }
 
-    public func configure(discussion: Discussion, tweet: Tweet, author: User, realm: Realm) {
+    public func configure(discussion: Discussion, tweet: Tweet, author: User?, realm: Realm) {
         userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
         tweetTextView.attributedText = tweet.attributedString
         retweetView.configure(tweet: tweet, realm: realm)

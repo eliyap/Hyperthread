@@ -36,6 +36,20 @@ func furtherFetch(
         }
     }
     
+    /// First, pick out tweets with missing media keys.
+    let mediaKeys = rawMedia.map(\.media_key)
+    let rawTweets = rawTweets.filter { rawTweet in
+        /// Pass on anything without media keys.
+        guard let keys = rawTweet.attachments?.media_keys, keys.isNotEmpty else { return true }
+        if keys.allSatisfy({ mediaKeys.contains($0) }) {
+            return true
+        } else {
+            /// Request these tweets again.
+            idsToFetch.insert(rawTweet.id)
+            return false
+        }
+    }
+    
     /// Insert Tweets into local database.
     try realm.write {
         for rawTweet in rawTweets {

@@ -45,9 +45,15 @@ final class UserView: UIStackView {
         symbolButton.setPreferredSymbolConfiguration(config, forImageIn: .normal)
     }
 
-    public func configure(tweet: Tweet, user: User, timestamp: Date) {
-        nameLabel.text = user.name
-        handleLabel.text = "@" + user.handle
+    public func configure(tweet: Tweet, user: User?, timestamp: Date) {
+        if let user = user {
+            nameLabel.text = user.name
+            handleLabel.text = "@" + user.handle
+        } else {
+            TableLog.error("Received nil user!")
+            nameLabel.text = "⚠️ UNKNOWN USER"
+            handleLabel.text = "@⚠️"
+        }
         
         switch tweet.primaryReferenceType {
         case .replied_to:

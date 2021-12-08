@@ -116,7 +116,7 @@ final class MainTable: UITableViewController {
             fatalError("Failed to create or cast new cell!")
         }
         let tweet = realm.tweet(id: discussion.id)!
-        let author = realm.user(id: tweet.authorID)!
+        let author = realm.user(id: tweet.authorID)
         cell.configure(discussion: discussion, tweet: tweet, author: author, realm: realm)
         cell.resetStyle()
         mrd.associate(indexPath, with: discussion)
@@ -132,6 +132,10 @@ final class MainTable: UITableViewController {
         }
         
         let path = tablePos.indexPath
+        guard path.row < tableView.numberOfRows(inSection: 0) else {
+            TableLog.error("Out of bounds index path! \(path)")
+            return
+        }
         tableView.scrollToRow(at: path, at: .top, animated: false)
         tableView.contentOffset.y -= tablePos.offset
     }
