@@ -48,6 +48,7 @@
 		2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2248FF4F2745BEA100C6DEF9 /* Entities.swift */; };
 		224F88D5275E5C8700085678 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224F88D4275E5C8700085678 /* ImageViewController.swift */; };
 		224F88D7275E5CD300085678 /* ImageAnimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224F88D6275E5CD300085678 /* ImageAnimate.swift */; };
+		2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */; };
 		2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C927616FDA0099477D /* GetHeight.swift */; };
 		22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A40274A8B4200F28F0A /* TweetTextView.swift */; };
 		22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A42274A927A00F28F0A /* CardTeaserCell.swift */; };
@@ -136,6 +137,7 @@
 		2248FF4F2745BEA100C6DEF9 /* Entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entities.swift; sourceTree = "<group>"; };
 		224F88D4275E5C8700085678 /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImageViewController.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/CardCell/Album/ImageViewController.swift; sourceTree = "<absolute>"; };
 		224F88D6275E5CD300085678 /* ImageAnimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnimate.swift; sourceTree = "<group>"; };
+		2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowRefreshControl.swift; sourceTree = "<group>"; };
 		2266D0C927616FDA0099477D /* GetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetHeight.swift; sourceTree = "<group>"; };
 		22760A40274A8B4200F28F0A /* TweetTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetTextView.swift; sourceTree = "<group>"; };
 		22760A42274A927A00F28F0A /* CardTeaserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTeaserCell.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				223BBF2C27377BE500375530 /* SceneDelegate.swift */,
 				223BBF2E27377BE500375530 /* ViewController.swift */,
 				223BBF852738572C00375530 /* MainTable.swift */,
+				2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */,
 				222161F52741D7FF00220F0C /* DiscussionTree.swift */,
 				22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */,
 				222161F02741A8D300220F0C /* CardCell */,
@@ -342,6 +345,7 @@
 				22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */,
 				223BBF8927385AFA00375530 /* OptionalCompare.swift */,
 				223BBF8B27385B0F00375530 /* OptionalCast.swift */,
+				2266D0C927616FDA0099477D /* GetHeight.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -624,6 +628,7 @@
 				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
+				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
 			);
