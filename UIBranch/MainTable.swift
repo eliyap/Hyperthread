@@ -28,12 +28,6 @@ final class MainTable: UITableViewController {
     
     private var observers = Set<AnyCancellable>()
     
-    /// Default is an observed value as a decent guess.
-    var navBarHeight: CGFloat { navigationController?.navigationBar.frame.height ?? 50 }
-    
-    /// Default is an observed value as a decent guess.
-    var statusBarHeight: CGFloat { getWindowScene()?.statusBarManager?.statusBarFrame.height ?? 20 }
-    
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
@@ -314,7 +308,7 @@ extension MainTable {
     
     /// Find the distance between the top of a cell at `path` and the bottom of the navigation bar.
     fileprivate func offset(at path: IndexPath) -> CGFloat {
-        tableView.rectForRow(at: path).origin.y - tableView.contentOffset.y - navBarHeight - statusBarHeight
+        tableView.rectForRow(at: path).origin.y - tableView.contentOffset.y - getNavBarHeight() - getStatusBarHeight()
     }
 }
 
