@@ -49,6 +49,14 @@ final class ArrowRefreshView: UIView {
         styleInactivated()
     }
     
+    public func constrain(to view: UIView) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            bottomAnchor.constraint(equalTo: view.topAnchor, constant: -ArrowRefreshView.offset),
+        ])
+    }
+    
     public func didScroll(offset: CGFloat) -> Void {
         /// Prevent scrolling causing a style during refresh animation.
         guard isRefreshing == false else { return }

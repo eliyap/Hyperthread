@@ -76,18 +76,10 @@ final class MainTable: UITableViewController {
             .store(in: &observers)
         
         /// Configure Refresh.
-//        tableView.refreshControl = ArrowRefreshControl()
-//        tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        
         let arrow = ArrowRefreshView(scrollView: tableView, onRefresh: refresh)
         self.arrowView = arrow
         tableView.addSubview(arrow)
-        arrow.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            arrow.centerXAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.centerXAnchor),
-            arrow.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -ArrowRefreshView.offset),
-        ])
-        tableView.sendSubviewToBack(arrow)
+        arrow.constrain(to: tableView)
         
         /// DEBUG
         #if DEBUG
