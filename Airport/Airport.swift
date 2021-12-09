@@ -51,6 +51,7 @@ final class Airport {
                 print("Fetched \(tweets.count) tweets. \(self?.inFlight.count ?? -1) still in flight.")
                 return (tweets, users, media)
             }
+            .receive(on: DispatchQueue.main, options: nil)
             .tryMap(furtherFetch)
             .map { ids in
                 self.enqueue(ids) /// Recursive step.
