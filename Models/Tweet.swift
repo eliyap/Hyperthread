@@ -160,6 +160,7 @@ final class Tweet: Object, Identifiable {
         fullText(context: nil)
     }()
     
+    /// Test method for creating a fake tweet.
     private init(_: Void) {
         super.init()
         

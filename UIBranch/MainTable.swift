@@ -28,15 +28,12 @@ final class MainTable: UITableViewController {
     
     private var observers = Set<AnyCancellable>()
     
-    /// Default is an observed value as a decent guess.
-    var navBarHeight: CGFloat { navigationController?.navigationBar.frame.height ?? 50 }
-    
-    /// Default is an observed value as a decent guess.
-    var statusBarHeight: CGFloat { getWindowScene()?.statusBarManager?.statusBarFrame.height ?? 20 }
+    private var arrowView: ArrowRefreshView? = nil
     
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
+        
         /// Immediately defuse unwrapped nil `dds`.
         dds = DDS(
             realm: realm,
@@ -61,14 +58,17 @@ final class MainTable: UITableViewController {
         tableView.prefetchDataSource = fetcher
         
         /// Refresh timeline at app startup.
-        fetcher.fetchNewTweets { /* do nothing */ }
+        #warning("Disabled startup refresh")
+//        fetcher.fetchNewTweets { /* do nothing */ }
         
         /// Refresh timeline at login.
         Auth.shared.$state
             .sink { [weak self] state in
                 switch state {
                 case .loggedIn:
-                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                    break
+                    #warning("Disabled startup refresh")
+//                    self?.fetcher.fetchNewTweets { /* do nothing */ }
                 default:
                     break
                 }
@@ -76,8 +76,18 @@ final class MainTable: UITableViewController {
             .store(in: &observers)
         
         /// Configure Refresh.
-        tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+//        tableView.refreshControl = ArrowRefreshControl()
+//        tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        
+        let arrow = ArrowRefreshView(scrollView: tableView, onRefresh: refresh)
+        self.arrowView = arrow
+        tableView.addSubview(arrow)
+        arrow.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            arrow.centerXAnchor.constraint(equalTo: tableView.safeAreaLayoutGuide.centerXAnchor),
+            arrow.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -ArrowRefreshView.offset),
+        ])
+        tableView.sendSubviewToBack(arrow)
         
         /// DEBUG
         #if DEBUG
@@ -100,9 +110,26 @@ final class MainTable: UITableViewController {
     
     @objc
     public func refresh() {
-        fetcher.fetchNewTweets { [weak self] in
-            self?.tableView.refreshControl?.endRefreshing()
+        let offset = self.getNavBarHeight() + self.getStatusBarHeight()
+        
+        UIView.animate(withDuration: 0.25) { [weak self] in
+            self?.arrowView?.beginRefreshing()
+            let bumped = -offset - 1.5 * ArrowRefreshView.offset
+            self?.tableView.setContentOffset(CGPoint(x: .zero, y: bumped), animated: true)
         }
+        
+        fetcher.fetchNewTweets {
+            UIView.animate(withDuration: 0.25) { [weak self] in
+                self?.arrowView?.endRefreshing()
+                self?.tableView.setContentOffset(CGPoint(x: .zero, y: -offset), animated: true)
+            }
+        }
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        /// - Note: do not invoke `super`.
+        let offset = scrollView.contentOffset.y + getNavBarHeight() + getStatusBarHeight()
+        arrowView?.didScroll(offset: offset)
     }
     
     deinit {
@@ -275,6 +302,8 @@ extension MainTable {
         if !decelerate {
             didStopScrolling()
         }
+        let offset = scrollView.contentOffset.y + getNavBarHeight() + getStatusBarHeight()
+        arrowView?.didStopScrolling(offset: offset)
     }
     
     fileprivate func didStopScrolling() -> Void {
@@ -314,7 +343,7 @@ extension MainTable {
     
     /// Find the distance between the top of a cell at `path` and the bottom of the navigation bar.
     fileprivate func offset(at path: IndexPath) -> CGFloat {
-        tableView.rectForRow(at: path).origin.y - tableView.contentOffset.y - navBarHeight - statusBarHeight
+        tableView.rectForRow(at: path).origin.y - tableView.contentOffset.y - getNavBarHeight() - getStatusBarHeight()
     }
 }
 
