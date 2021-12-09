@@ -98,6 +98,7 @@ final class ReplyButton: LabelledButton {
     @objc
     override func onTap() -> Void {
         print("Reply Not Implemented!")
+        NOT_IMPLEMENTED()
     }
 
     func configure(_ tweet: Tweet) {
@@ -117,6 +118,7 @@ final class RetweetButton: LabelledButton {
     @objc
     override func onTap() -> Void {
         print("Retweet Not Implemented!")
+        NOT_IMPLEMENTED()
     }
 
     func configure(_ tweet: Tweet) {
@@ -136,6 +138,7 @@ final class LikeButton: LabelledButton {
     @objc
     override func onTap() -> Void {
         print("Like Not Implemented!")
+        NOT_IMPLEMENTED()
     }
 
     func configure(_ tweet: Tweet) {
