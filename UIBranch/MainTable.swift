@@ -196,10 +196,15 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 self.scrollAction()
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                print("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.")
+                TableLog.debug("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.", print: true, true)
+                TableLog.debug("Insertion indices: \(insertions)", print: true, true)
                 self.setContents(to: results, animated: false)
-                self.scrollAction()
-            
+                
+                /// Only restore scroll position if items were added to the top of the queue.
+                if insertions.contains(0) {
+                    self.scrollAction()
+                }
+                
             case .error(let error):
                 fatalError("\(error)")
             } 
