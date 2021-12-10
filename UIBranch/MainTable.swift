@@ -85,6 +85,7 @@ final class MainTable: UITableViewController {
         #if DEBUG
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
         ]
         #endif
         
@@ -94,6 +95,11 @@ final class MainTable: UITableViewController {
     @objc
     func debugMethod() {
         fetcher.fetchFakeTweet()
+    }
+    
+    @objc
+    func debugMethod2() {
+        fetcher.fetchNewTweets { /* do nothing */ }
     }
     
     required init?(coder: NSCoder) {
