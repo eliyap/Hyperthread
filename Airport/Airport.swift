@@ -29,10 +29,11 @@ final class Airport {
     
     private let queue = PassthroughSubject<Tweet.ID, Never>()
     
-    private var x: AnyCancellable? = nil
+    /// The core of the object. Represents our data flow.
+    private var pipeline: AnyCancellable? = nil
     
     init(credentials: OAuthCredentials) {
-        x = queue
+        pipeline = queue
             .buffer(size: 100, timer)
             .filter(\.isNotEmpty)
             .asyncMap { (ids: [Tweet.ID]) in
