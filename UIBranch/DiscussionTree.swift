@@ -59,6 +59,7 @@ extension Node: Hashable {
 }
 
 extension Discussion {
+    /// Returns the root node of a discussion tree data structure.
     func makeTree() -> Node {
         let realm = try! Realm()
         
