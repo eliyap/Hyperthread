@@ -124,7 +124,9 @@ extension NSMutableAttributedString {
             /// Obtain URL substring range.
             /// - Note: Should never fail! We just put this URL in!
             guard let target = string.range(of: url.display_url) else {
-                if quotedDisplayURL != nil && url.display_url != quotedDisplayURL {
+                if quotedDisplayURL != nil && url.display_url == quotedDisplayURL {
+                    /** ignore quote URL, which is intentionally omitted. **/
+                } else {
                     ModelLog.warning("Could not find display_url \(url.display_url) in \(string)")
                 }
                 continue
