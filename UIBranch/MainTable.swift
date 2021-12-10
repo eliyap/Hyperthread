@@ -228,7 +228,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         fetcher.numDiscussions = results.count
     }
     
-    /// Accessor
+    /// Accessor.
     func getToken() -> NotificationToken {
         return self.token
     }
