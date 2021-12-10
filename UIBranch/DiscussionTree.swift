@@ -74,6 +74,8 @@ extension Discussion {
             the referenced tweet *must* be older (otherwise that would violate causality!).
          
             By iterating chronologically, we guarantee each node *will* find its parent somewhere on the tree.
+         
+            Ignore the first node, which is the root, and is already in the tree with no parent.
          */
         let chron = self.tweets.sorted { $0.createdAt < $1.createdAt }
         for t: Tweet in chron[1...] {
