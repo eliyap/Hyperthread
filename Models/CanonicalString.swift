@@ -120,22 +120,36 @@ extension NSMutableAttributedString {
     func addHyperlinks(from tweet: Tweet, quotedDisplayURL: String? = nil) -> Void {
         guard let urls = tweet.entities?.urls else { return }
         
-        for url in urls {
+        /**
+         Iterate from beginning to end, taking care to attach a new link _after_ the previous link.
+         `lastTarget` tracks the previous URL range.
+         
+         This helps us avoid attaching a link to the same range twice,
+         e.g. in the Tweet "How long has google.com owned the domain google.com?"
+         
+         Observed this edge case here: https://twitter.com/apollographql/status/1469067842658185226
+         */
+        var lastTarget: Range<String.Index> = string.startIndex..<string.startIndex
+        let sorted = urls.sorted(by: {$0.start < $1.start})
+        for url in sorted {
             /// Obtain URL substring range.
             /// - Note: Should never fail! We just put this URL in!
-            guard let target = string.range(of: url.display_url) else {
-                if quotedDisplayURL != nil && url.display_url != quotedDisplayURL {
-                    Swift.debugPrint("Could not find display_url \(url.display_url) in \(string)")
+            guard let target = string.range(of: url.display_url, range: lastTarget.upperBound..<string.endIndex) else {
+                if quotedDisplayURL != nil && url.display_url == quotedDisplayURL {
+                    /** ignore quote URL, which is intentionally omitted. **/
+                } else {
+                    ModelLog.warning("Could not find display_url \(url.display_url) in \(string)")
                 }
                 continue
             }
+            lastTarget = target
             
             /// Transform substring range to `NSRange` boundaries.
             guard
                 let low16 = target.lowerBound.samePosition(in: string.utf16),
                 let upp16 = target.upperBound.samePosition(in: string.utf16)
             else {
-                Swift.debugPrint("Could not cast offsets")
+                ModelLog.warning("Could not cast offsets")
                 continue
             }
             let lowInt = string.utf16.distance(from: string.utf16.startIndex, to: low16)
@@ -143,7 +157,7 @@ extension NSMutableAttributedString {
             
             /// As of November 2021, Twitter truncated URLs. They *may* have changed this.
             if url.expanded_url.contains("…") {
-                Swift.debugPrint("Truncted URL \(url.expanded_url)")
+                ModelLog.warning("Truncted URL \(url.expanded_url)")
                 
                 /// Fall back to the `t.co` link.
                 addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
