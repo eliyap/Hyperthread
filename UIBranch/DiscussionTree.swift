@@ -61,12 +61,21 @@ extension Node: Hashable {
 extension Discussion {
     func makeTree() -> Node {
         let realm = try! Realm()
+        
+        /// Initialize the root node.
         let tweet = realm.tweet(id: self.id)!
         let root = Node(tweet, depth: 0, parent: nil, user: realm.user(id: tweet.authorID)!)
-        let chron = self.tweets.sorted { $0.createdAt < $1.createdAt }
+        
+        /// Track nodes in the tree so far.
         var nodes = [root]
         
-        
+        /** Iterate over tweets chronologically.
+            If a tweet "references" another tweet (quoting it, retweeting it, or replying to it),
+            the referenced tweet *must* be older (otherwise that would violate causality!).
+         
+            By iterating chronologically, we guarantee each node *will* find its parent somewhere on the tree.
+         */
+        let chron = self.tweets.sorted { $0.createdAt < $1.createdAt }
         for t: Tweet in chron[1...] {
             /// Discard retweets.
             guard t.retweeting == nil else { continue }
