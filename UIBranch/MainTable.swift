@@ -63,7 +63,7 @@ final class MainTable: UITableViewController {
         
         /// Refresh timeline at login.
         Auth.shared.$state
-            .dropFirst() /// Ignore publication that occurs on initialization
+            .dropFirst() /// Ignore publication that occurs on initialization, when loading from `UserDefaults`.
             .sink { [weak self] state in
                 switch state {
                 case .loggedIn:
