@@ -122,7 +122,8 @@ final class TweetCell: ControlledCell {
         let newConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: 10 * CGFloat(depth))
         replace(object: self, on: \.indentConstraint, with: newConstraint)
         
-        colorBar.backgroundColor = SCColors[(depth - 1) % SCColors.count]
+        /// Use non-capped depth to determine color.
+        colorBar.backgroundColor = SCColors[(node.depth - 1) % SCColors.count]
     }
     
     required init?(coder: NSCoder) {
