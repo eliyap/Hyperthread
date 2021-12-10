@@ -78,7 +78,7 @@ extension Discussion {
          
             Ignore the first node, which is the root, and is already in the tree with no parent.
          */
-        let chron = self.tweets.sorted { $0.createdAt < $1.createdAt }
+        let chron = self.tweets.sorted(by: Tweet.chronologicalSort)
         for t: Tweet in chron[1...] {
             /// Discard retweets.
             guard t.retweeting == nil else { continue }

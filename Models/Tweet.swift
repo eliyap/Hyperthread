@@ -221,3 +221,15 @@ extension Tweet {
     var isQuote: Bool { quoting != nil }
     var isReply: Bool { replying_to != nil }
 }
+
+extension Tweet {
+    static let chronologicalSort: (Tweet, Tweet) -> Bool = { (lhs: Tweet, rhs: Tweet) in
+        /// Tie break by ID.
+        /// I have observed tied timestamps. (see https://twitter.com/ChristianSelig/status/1469028219441623049)
+        if lhs.createdAt != rhs.createdAt {
+            return lhs.createdAt < rhs.createdAt
+        } else {
+            return lhs.id < rhs.id
+        }
+    }
+}
