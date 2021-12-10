@@ -38,6 +38,21 @@ final class Discussion: Object, Identifiable {
     var readStatus: ReadStatus.RawValue
     public static let readStatusPropertyName = "readStatus"
     
+    /** "Bell value" for observing changes to Discussion's tweets.
+        Problem:
+        - we cannot use Realm to observe `tweets`, as it is not persisted.
+        - `conversations` is not flagged as changing when tweets are added to an existing conversation.
+        - how can we use Realm to observe tweets?
+
+        Workaround:
+        - declare an inaccessible, but KVO-compliant, boolean
+        - toggle the boolean to trigger `observe` when our tweets change
+     */
+    @Persisted
+    private var tweetsBellValue: Bool = false
+    public static let tweetsDidChangeKey = "tweetsBellValue"
+    public func notifyTweetsDidChange() -> Void { tweetsBellValue.toggle() }
+    
     override required init() {
         super.init()
     }
