@@ -421,7 +421,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 return
             }
             
-            NetLog.debug("UserID is \(credentials.user_id)", print: true, true)
+            NetLog.debug("UserID is \(credentials.user_id)", print: false, true)
             
             /// Prevent repeated requests.
             isFetching = true
