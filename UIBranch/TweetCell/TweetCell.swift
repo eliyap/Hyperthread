@@ -109,7 +109,8 @@ final class TweetCell: ControlledCell {
     }
 
     /// Arbitrary number. Test Later.
-    private let maxDepth = 10
+    private let maxDepth = 14
+    private let indentSize: CGFloat = 10
     public func configure(node: Node, author: User, realm: Realm) {
         userView.configure(tweet: node.tweet, user: author, timestamp: node.tweet.createdAt)
         tweetTextView.attributedText = node.tweet.fullText(context: node)
@@ -119,10 +120,14 @@ final class TweetCell: ControlledCell {
         
         /// Set indentation depth.
         let depth = min(maxDepth, node.depth)
-        let newConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: 10 * CGFloat(depth))
+        let indent = indentSize * CGFloat(depth)
+        let newConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: indent)
         replace(object: self, on: \.indentConstraint, with: newConstraint)
         
-        colorBar.backgroundColor = SCColors[(depth - 1) % SCColors.count]
+        separatorInset = UIEdgeInsets(top: 0, left: indent + indentSize, bottom: 0, right: 0)
+        
+        /// Use non-capped depth to determine color.
+        colorBar.backgroundColor = SCColors[(node.depth - 1) % SCColors.count]
     }
     
     required init?(coder: NSCoder) {
