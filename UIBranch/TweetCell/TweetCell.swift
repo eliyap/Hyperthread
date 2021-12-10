@@ -110,6 +110,7 @@ final class TweetCell: ControlledCell {
 
     /// Arbitrary number. Test Later.
     private let maxDepth = 10
+    private let indentSize: CGFloat = 10
     public func configure(node: Node, author: User, realm: Realm) {
         userView.configure(tweet: node.tweet, user: author, timestamp: node.tweet.createdAt)
         tweetTextView.attributedText = node.tweet.fullText(context: node)
@@ -119,7 +120,7 @@ final class TweetCell: ControlledCell {
         
         /// Set indentation depth.
         let depth = min(maxDepth, node.depth)
-        let newConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: 10 * CGFloat(depth))
+        let newConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: indentSize * CGFloat(depth))
         replace(object: self, on: \.indentConstraint, with: newConstraint)
         
         /// Use non-capped depth to determine color.
