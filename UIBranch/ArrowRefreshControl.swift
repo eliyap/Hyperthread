@@ -58,8 +58,13 @@ final class ArrowRefreshView: UIView {
     }
     
     public func didScroll(offset: CGFloat) -> Void {
-        /// Prevent scrolling causing a style during refresh animation.
+        /// Ignore scrolling during the  refresh animation.
         guard isRefreshing == false else { return }
+        
+        /// Ignore scrolling if the user's finger isn't down.
+        /// This prevents the arrow flipping when the view "bounces" against the top, which might cause confusion.
+        guard (scrollView?.isTracking ?? false) else { return }
+        
         style(selected: -offset > threshhold)
     }
     
