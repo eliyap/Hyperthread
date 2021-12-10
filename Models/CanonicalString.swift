@@ -120,10 +120,21 @@ extension NSMutableAttributedString {
     func addHyperlinks(from tweet: Tweet, quotedDisplayURL: String? = nil) -> Void {
         guard let urls = tweet.entities?.urls else { return }
         
-        for url in urls {
+        /**
+         Iterate from beginning to end, taking care to attach a new link _after_ the previous link.
+         `lastTarget` tracks the previous URL range.
+         
+         This helps us avoid attaching a link to the same range twice,
+         e.g. in the Tweet "How long has google.com owned the domain google.com?"
+         
+         Observed this edge case here: https://twitter.com/apollographql/status/1469067842658185226
+         */
+        var lastTarget: Range<String.Index> = string.startIndex..<string.startIndex
+        let sorted = urls.sorted(by: {$0.start < $1.start})
+        for url in sorted {
             /// Obtain URL substring range.
             /// - Note: Should never fail! We just put this URL in!
-            guard let target = string.range(of: url.display_url) else {
+            guard let target = string.range(of: url.display_url, range: lastTarget.upperBound..<string.endIndex) else {
                 if quotedDisplayURL != nil && url.display_url == quotedDisplayURL {
                     /** ignore quote URL, which is intentionally omitted. **/
                 } else {
@@ -131,6 +142,7 @@ extension NSMutableAttributedString {
                 }
                 continue
             }
+            lastTarget = target
             
             /// Transform substring range to `NSRange` boundaries.
             guard
