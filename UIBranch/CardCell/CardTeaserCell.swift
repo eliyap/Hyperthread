@@ -97,12 +97,28 @@ final class CardTeaserCell: ControlledCell {
             token.invalidate()
         }
         
-        /// Protect against error "Cannot register notification blocks from within write transactions."
-        guard realm.isInWriteTransaction == false else {
-            Swift.debugPrint("realm.isInWriteTransaction true, will cause crash!")
-            return
+        /**
+         `observe` cannot be called in a `write` transaction, which primarily occurs when `Airport` adds objects.
+         See discussion https://github.com/realm/realm-cocoa/issues/4818
+         
+         To avoid conflicting with `Airport`, we **use the same scheduler**,
+         so that by the time our work comes up, the write is guaranteed to be complete.
+         Source: https://github.com/realm/realm-cocoa/issues/4818#issuecomment-489889711
+         */
+        Airport.scheduler.async { [weak self] in
+            guard let self = self else {
+                assert(false, "Self is nil!")
+                return
+            }
+            
+            /// Protect against error "Cannot register notification blocks from within write transactions."
+            guard realm.isInWriteTransaction == false else {
+                assert(false, "realm.isInWriteTransaction true, if not avoided, this will crash!")
+                return
+            }
+            
+            self.token = discussion.observe(self.updateTeaser)
         }
-        token = discussion.observe(updateTeaser)
     }
     
     private func updateTeaser(_ change: ObjectChange<Discussion>) -> Void {
