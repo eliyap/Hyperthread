@@ -125,7 +125,7 @@ extension NSMutableAttributedString {
             /// - Note: Should never fail! We just put this URL in!
             guard let target = string.range(of: url.display_url) else {
                 if quotedDisplayURL != nil && url.display_url != quotedDisplayURL {
-                    Swift.debugPrint("Could not find display_url \(url.display_url) in \(string)")
+                    ModelLog.warning("Could not find display_url \(url.display_url) in \(string)")
                 }
                 continue
             }
@@ -135,7 +135,7 @@ extension NSMutableAttributedString {
                 let low16 = target.lowerBound.samePosition(in: string.utf16),
                 let upp16 = target.upperBound.samePosition(in: string.utf16)
             else {
-                Swift.debugPrint("Could not cast offsets")
+                ModelLog.warning("Could not cast offsets")
                 continue
             }
             let lowInt = string.utf16.distance(from: string.utf16.startIndex, to: low16)
@@ -143,7 +143,7 @@ extension NSMutableAttributedString {
             
             /// As of November 2021, Twitter truncated URLs. They *may* have changed this.
             if url.expanded_url.contains("…") {
-                Swift.debugPrint("Truncted URL \(url.expanded_url)")
+                ModelLog.warning("Truncted URL \(url.expanded_url)")
                 
                 /// Fall back to the `t.co` link.
                 addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
