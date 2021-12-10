@@ -67,9 +67,9 @@ final class MainTable: UITableViewController {
             .sink { [weak self] state in
                 switch state {
                 case .loggedIn:
-                    break
                     #warning("Disabled startup refresh")
 //                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                    break
                 default:
                     break
                 }
