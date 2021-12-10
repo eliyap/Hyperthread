@@ -147,7 +147,10 @@ final class CardTeaserCell: ControlledCell {
         }
         
         
-        if properties.contains(where: {$0.name == Discussion.conversationsPropertyName}) {
+        if properties.contains(where: {
+            $0.name == Discussion.conversationsPropertyName
+            || $0.name == Discussion.tweetsDidChangeKey
+        }) {
             /// Fetch discussion anew to get updated tweet count.
             let realm = try! Realm()
             let updated = realm.discussion(id: oldDiscussion.id)!

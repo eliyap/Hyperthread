@@ -72,6 +72,9 @@ func furtherFetch(
                 realm.add(conversation)
             }
             conversation.insert(tweet)
+            if let discussion = conversation.discussion.first {
+                discussion.notifyTweetsDidChange()
+            }
             
             /// Check if referenced tweets are in local database.
             for id in tweet.referenced.missingFrom(realm) {
@@ -109,6 +112,8 @@ fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, rea
         if upstream.read == .read {
             upstream.read = .updated
         }
+        
+        upstream.notifyTweetsDidChange()
         return
     }
     /** Conclusion: upstream is either missing, or itself has no `Discussion`. **/
@@ -157,6 +162,7 @@ fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, rea
     {
         upstreamDiscussion.conversations.append(orphan)
         upstreamDiscussion.update(with: orphan.tweets.map(\.createdAt).max())
+        upstreamDiscussion.notifyTweetsDidChange()
     } else {
         /// Go fetch the upstream conversation root.
         idsToFetch.insert(upstreamID)
