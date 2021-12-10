@@ -29,10 +29,21 @@ final class Airport {
     
     private let queue = PassthroughSubject<Tweet.ID, Never>()
     
-    private var x: AnyCancellable? = nil
+    /// The core of the object. Represents our data flow.
+    private var pipeline: AnyCancellable? = nil
+    
+    /** The scheduler on which work is done.
+        
+        Because `Realm` write transactions are done in our pipeline,
+        and write transactions block other work,
+        it is critical that we allow other threads to avoid conflict with `Airport`.
+     
+        Chosen based on article: https://www.avanderlee.com/combine/runloop-main-vs-dispatchqueue-main/
+     */
+    public static let scheduler = DispatchQueue.main
     
     init(credentials: OAuthCredentials) {
-        x = queue
+        pipeline = queue
             .buffer(size: 100, timer)
             .filter(\.isNotEmpty)
             .asyncMap { (ids: [Tweet.ID]) in
@@ -51,7 +62,7 @@ final class Airport {
                 print("Fetched \(tweets.count) tweets. \(self?.inFlight.count ?? -1) still in flight.")
                 return (tweets, users, media)
             }
-            .receive(on: DispatchQueue.main, options: nil)
+            .receive(on: Self.scheduler, options: nil)
             .tryMap(furtherFetch)
             .map { ids in
                 self.enqueue(ids) /// Recursive step.

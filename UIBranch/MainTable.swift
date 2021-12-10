@@ -63,12 +63,13 @@ final class MainTable: UITableViewController {
         
         /// Refresh timeline at login.
         Auth.shared.$state
+            .dropFirst() /// Ignore publication that occurs on initialization, when loading from `UserDefaults`.
             .sink { [weak self] state in
                 switch state {
                 case .loggedIn:
-                    break
                     #warning("Disabled startup refresh")
 //                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                    break
                 default:
                     break
                 }
@@ -203,7 +204,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 TableLog.debug("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.", print: true, true)
-                TableLog.debug("Insertion indices: \(insertions)", print: true, true)
+                TableLog.debug("Insertion indices: \(insertions)", print: true, false)
                 self.setContents(to: results, animated: false)
                 
                 /// Only restore scroll position if items were added to the top of the queue.
@@ -227,7 +228,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         fetcher.numDiscussions = results.count
     }
     
-    /// Accessor
+    /// Accessor.
     func getToken() -> NotificationToken {
         return self.token
     }
@@ -421,7 +422,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 return
             }
             
-            NetLog.debug("UserID is \(credentials.user_id)", print: true, true)
+            NetLog.debug("UserID is \(credentials.user_id)", print: false, true)
             
             /// Prevent repeated requests.
             isFetching = true
