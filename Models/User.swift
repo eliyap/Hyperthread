@@ -28,6 +28,11 @@ final class User: Object, Identifiable {
     var tweets: RealmSwift.List<Tweet>
     static let tweetsPropertyName = "tweets"
     
+    /// Whether our user follows this Twitter user.
+    /// - Note: not included in `RawUser` object, hence we default initialize it.
+    @Persisted
+    var following: Bool = false
+    
     init(raw: RawUser) {
         super.init()
         self.id = "\(raw.id)"
