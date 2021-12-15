@@ -18,10 +18,10 @@ class DeferCombine<Input, Output, Failure: Error> {
     
     /// Where we publish downstream values.
     typealias Emitter = PassthroughSubject<(Input, Output), Failure>
-    weak var emitter: Emitter?
+    private weak var emitter: Emitter?
     
     /// Memoized output.
-    var sealed: Sealed<Output>
+    private var sealed: Sealed<Output>
     
     required init(emitter: Emitter, timer: TimeInterval) {
         self.emitter = emitter
