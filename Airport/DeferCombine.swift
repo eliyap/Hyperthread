@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class DeferCombine<Input, Output, Failure: Error> {
+class DeferredBuffer<Input, Output, Failure: Error> {
     
     /// Stores input values waiting for an output to be paired with.
     private var storage: [Input] = []
