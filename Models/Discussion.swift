@@ -127,7 +127,7 @@ extension Discussion {
             if let tweet = tweets.first(where: {id == $0.id}) {
                 return tweet
             } else {
-                Swift.debugPrint("Referenced tweet not in discussion with id \(id)")
+                ModelLog.warning("Referenced tweet not in discussion with id \(id)")
                 return nil
             }
         }
