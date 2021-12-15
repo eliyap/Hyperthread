@@ -54,10 +54,8 @@ class DeferCombine<Input, Output, Failure: Error> {
     
     public func store(_ input: Input) -> Void {
         if let fresh = sealed.value {
-            Swift.debugPrint("FRESH!")
             emitter?.send((input, fresh))
         } else {
-            Swift.debugPrint("Stale, fetching...")
             storage.append(input)
             requestFetch()
         }
