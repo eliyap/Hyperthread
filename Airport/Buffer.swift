@@ -72,3 +72,56 @@ extension Publisher {
             .eraseToAnyPublisher()
     }
 }
+
+extension Publisher {
+    /// Notes: `Output` is the output associated-type of `Publisher`, similarly `Failure` is the `Publisher`'s error type.
+
+    /// Collects elements from the source sequence until `boundary` emits a value, or buffer reachers`size`.
+    /// Then it emits the collected elements as an array and the boundary value, and begins collecting again.
+    func bufferZipper<BoundaryPublisher: Publisher, BoundaryItem>(
+        size: UInt,
+        _ boundary: BoundaryPublisher
+    ) -> AnyPublisher<([Output], BoundaryItem), Failure> where
+        BoundaryPublisher.Output == BoundaryItem
+    {
+        let subject = PassthroughSubject<([Output], BoundaryItem), Failure>()
+
+        var buffer: [Output] = []
+        let lock = NSRecursiveLock()
+
+        let boundaryDisposable: AnyCancellable = boundary.sink(
+            receiveCompletion: { _ in },
+            receiveValue: { (boundaryValue: BoundaryItem) in
+                lock.lock();
+                defer { lock.unlock() }
+                
+                /// Emit the buffer and value, then empty the buffer.
+                subject.send((buffer, boundaryValue))
+                buffer = []
+        })
+
+        let disposable: AnyCancellable = self.sink(
+            receiveCompletion: { _ in
+                /// We do not expect this to ever complete.
+                fatalError("Not designed to complete!")
+            },
+            receiveValue: { element in
+                lock.lock();
+                defer { lock.unlock() }
+                
+                buffer.append(element)
+                #warning("TODO: Warn for excessive accumulation of elements.")
+            }
+        )
+
+        /// Combine `cancel` events.
+        let completion = AnyCancellable {
+            boundaryDisposable.cancel()
+            disposable.cancel()
+        }
+
+        return subject
+            .handleEvents(receiveCancel: completion.cancel)
+            .eraseToAnyPublisher()
+    }
+}
