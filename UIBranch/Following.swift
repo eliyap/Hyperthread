@@ -44,6 +44,7 @@ final class Following {
     }
 }
 
+// MARK: - Storage
 fileprivate extension UserDefaults {
     /** UserIDs of the Twitter users our user follows.
      */
