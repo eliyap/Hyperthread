@@ -119,11 +119,13 @@ extension Discussion {
         result.formUnion(followingTweets)
         
         /// Include tweets that they referenced.
-        var refIDs = Set<Tweet.ID>()
+        var referencedIDs = Set<Tweet.ID>()
         for tweet in followingTweets {
-            refIDs.formUnion(tweet.referenced)
+            referencedIDs.formUnion(tweet.referenced)
         }
-        let refTweets: [Tweet] = refIDs.compactMap { id in
+        
+        /// Discard un-retrieved tweets.
+        let referencedTweets: [Tweet] = referencedIDs.compactMap { id in
             if let tweet = tweets.first(where: {id == $0.id}) {
                 return tweet
             } else {
@@ -131,7 +133,7 @@ extension Discussion {
                 return nil
             }
         }
-        result.formUnion(refTweets)
+        result.formUnion(referencedTweets)
         
         /// Remove retweets, but add an ephemeral mark for displaying.
         var toRemove = Set<Tweet>()
