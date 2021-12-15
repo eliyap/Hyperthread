@@ -87,6 +87,7 @@ final class MainTable: UITableViewController {
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
         ]
         #endif
         
@@ -101,6 +102,18 @@ final class MainTable: UITableViewController {
     @objc
     func debugMethod2() {
         fetcher.fetchNewTweets { /* do nothing */ }
+    }
+    
+    @objc
+    func debugMethod3() {
+        Task {
+            try! await userTimeline(
+                userID: OwnUserID,
+                credentials: Auth.shared.credentials!,
+                startTime: nil,
+                endTime: nil
+            )
+        }
     }
     
     required init?(coder: NSCoder) {

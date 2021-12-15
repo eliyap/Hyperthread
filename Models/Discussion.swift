@@ -101,55 +101,6 @@ extension Discussion {
 }
 
 extension Discussion {
-    func relevantTweets(followingUserIDs: [String]?) -> [Tweet] {
-        let tweets = self.tweets
-        guard let followingUserIDs = followingUserIDs else { 
-            Swift.debugPrint("No followingUserIDs, returning list unaltered.")
-            return tweets 
-        }
-        var result = Set<Tweet>()
-
-        /// Include tweets from following users.
-        var followingTweets = [Tweet]()
-        for tweet in tweets {
-            if followingUserIDs.contains(tweet.authorID) {
-                followingTweets.append(tweet)
-            }
-        }
-        result.formUnion(followingTweets)
-        
-        /// Include tweets that they referenced.
-        var refIDs = Set<Tweet.ID>()
-        for tweet in followingTweets {
-            refIDs.formUnion(tweet.referenced)
-        }
-        let refTweets: [Tweet] = refIDs.compactMap { id in
-            if let tweet = tweets.first(where: {id == $0.id}) {
-                return tweet
-            } else {
-                Swift.debugPrint("Referenced tweet not in discussion with id \(id)")
-                return nil
-            }
-        }
-        result.formUnion(refTweets)
-        
-        /// Remove retweets, but add an ephemeral mark for displaying.
-        var toRemove = Set<Tweet>()
-        for tweet in result {
-            if tweet.isRetweet {
-                toRemove.insert(tweet)
-            }
-        }
-        result.formSymmetricDifference(toRemove)
-        
-        /// Exclude root tweet.
-        result.remove(tweets.first(where: {$0.id == self.id})!)
-        
-        return result.sorted(by: {$0.id < $1.id})
-    }
-}
-
-extension Discussion {
     /// Update the last updated date.
     /// - Note: must take place within a `Realm` write transaction.
     func update(with date: Date?) -> Void {

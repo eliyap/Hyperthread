@@ -11,7 +11,7 @@ import Twig
 func updateFollowing(credentials: OAuthCredentials) async -> Void {
     do {
         let rawUsers = try await requestFollowing(credentials: credentials)
-        NetLog.debug("Successfully fetched \(rawUsers.count) following users.")
+        NetLog.debug("Successfully fetched \(rawUsers.count) following users.", print: true, true)
         
         /// Store on disk.
         UserDefaults.groupSuite.followingIDs = rawUsers.map(\.id)
