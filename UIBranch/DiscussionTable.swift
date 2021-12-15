@@ -20,9 +20,6 @@ enum TweetSection: Int {
 
 final class DiscussionTable: UITableViewController {
     
-    /// Freeze fetch so that there is no ambiguity.
-    private var followingIDs = Following.shared.ids
-    
     private let realm = try! Realm()
     
     private var dds: DDS! = nil
@@ -37,10 +34,6 @@ final class DiscussionTable: UITableViewController {
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
         spawnDDS(discussion: nil)
-        
-        Following.shared.$ids
-            .assign(to: \DiscussionTable.followingIDs, on: self)
-            .store(in: &observers)
     }
     
     required init?(coder: NSCoder) {
@@ -59,7 +52,7 @@ final class DiscussionTable: UITableViewController {
         self.tableView = UITableView()
         tableView.register(CardHeaderCell.self, forCellReuseIdentifier: CardHeaderCell.reuseID)
         tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
-        dds = DDS(followingIDs: followingIDs, discussion: discussion, tableView: tableView, cellProvider: cellProvider)
+        dds = DDS(discussion: discussion, tableView: tableView, cellProvider: cellProvider)
     }
     
     private func cellProvider(tableView: UITableView, indexPath: IndexPath, node: Node) -> UITableViewCell? {
@@ -109,8 +102,7 @@ final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
     typealias Snapshot = NSDiffableDataSourceSnapshot<TweetSection, Node>
     
     init(
-        followingIDs: [User.ID]?,
-        discussion: Discussion?, 
+        discussion: Discussion?,
         tableView: UITableView, 
         cellProvider: @escaping CellProvider
     ) {
