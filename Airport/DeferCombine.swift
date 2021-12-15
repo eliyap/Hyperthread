@@ -9,12 +9,27 @@ import Foundation
 import Combine
 
 extension Publisher {
-    /// Notes: `Output` is the output associated-type of `Publisher`, similarly `Failure` is the `Publisher`'s error type.
-
-    /// Collects elements from the source sequence until `boundary` fires, or buffer reachers`size`.
-    /// Then it emits the elements as an array and begins collecting again.
+    /**
+     Custom `Combine` operator which joins upstream values with `BufferType`'s sealed value.
+     When sealed values go stale, upstream values are buffered until the sealed value is refreshed,
+     then buffered values are emitted.
+     
+     Example printout:
+     ```txt
+     1 // @1s
+     2 // @2s
+     3 // @3s
+     // value goes stale, takes 3s to refresh
+     4 // @6s
+     5 // @6s
+     6 // @6s
+     ...
+     ```
+     - Parameter bufferType: `DeferredBuffer` subclass with a custom `fetch` method.
+     - Parameter timer: number of seconds after a fetch before a value is declate "stale".
+     */
     func deferredBuffer<BufferType, BufferItem>(
-        _ zipperType: BufferType.Type,
+        _ bufferType: BufferType.Type,
         timer: TimeInterval
     ) -> AnyPublisher<(Output, BufferItem), Failure> where
         BufferType: DeferredBuffer<Output, BufferItem, Failure>
@@ -39,9 +54,10 @@ extension Publisher {
 
 
 /**
- A custom `Combine` operator which
+ Enables the `deferredBuffer` operator.
+ Subclass and override the `fetch` method.
  */
-class DeferredBuffer<Input, Output, Failure: Error> {
+internal class DeferredBuffer<Input, Output, Failure: Error> {
     
     /// Stores input values waiting for an output to be paired with.
     private var storage: [Input] = []
