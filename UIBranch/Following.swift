@@ -25,9 +25,17 @@ final class Following {
      */
     static let stalenessThreshhold: TimeInterval = 90
     var isStale: Bool {
+        /// If no data is available, consider the data **very** stale.
+        guard self.ids != nil else { return true }
         let lastFetched = UserDefaults.groupSuite.followingUpdated ?? Date.distantPast
+        
         let timeSinceFetch = Date().timeIntervalSince(lastFetched)
         return timeSinceFetch > Self.stalenessThreshhold
+    }
+    
+    /// "Invalidate" UserIDs by marking the value as very stale.
+    public func forceStale() -> Void {
+        UserDefaults.groupSuite.followingUpdated = .distantPast
     }
     
     private init() {
