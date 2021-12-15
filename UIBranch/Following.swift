@@ -13,8 +13,10 @@ final class Following {
     public static let shared = Following()
     
     public var ids: [User.ID]? {
+        /// Store values locally.
         didSet {
             UserDefaults.groupSuite.followingIDs = ids
+            UserDefaults.groupSuite.followingUpdated = Date()
         }
     }
     
@@ -35,16 +37,18 @@ final class Following {
 }
 
 fileprivate extension UserDefaults {
-    static let followingIDsKey = "followingIDs"
+    /** UserIDs of the Twitter users our user follows.
+     */
     var followingIDs: [String]? {
         get {
-            return array(forKey: Self.followingIDsKey) as? [String]
+            return array(forKey: #function) as? [String]
         }
         set {
-            set(newValue, forKey: Self.followingIDsKey)
+            set(newValue, forKey: #function)
         }
     }
     
+    /** Tracks the last time the following list was updated. */
     var followingUpdated: Date? {
         get {
             guard let data = object(forKey: #function) as? Data else {
