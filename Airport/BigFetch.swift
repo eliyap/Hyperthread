@@ -11,8 +11,8 @@ import Twig
 
 /**
  Accepts raw data from the Twitter v2 API.
- Returns: Tweet IDs still need to be fetched.
- Also tries to link Tweets to Conversations, and Conversations to Discussions.
+ Links Tweets to Conversations, and Conversations to Discussions.
+ - Returns: IDs of Tweets which need to be fetched.
  */
 func furtherFetch(
     rawTweets: [RawHydratedTweet],
