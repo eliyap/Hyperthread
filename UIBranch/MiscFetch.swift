@@ -13,9 +13,6 @@ func updateFollowing(credentials: OAuthCredentials) async -> Void {
         let rawUsers = try await requestFollowing(credentials: credentials)
         NetLog.debug("Successfully fetched \(rawUsers.count) following users.", print: true, true)
         
-        /// Store on disk.
-        UserDefaults.groupSuite.followingIDs = rawUsers.map(\.id)
-        
         /// Update in-memory store.
         Following.shared.ids = rawUsers.map(\.id)
     } catch {

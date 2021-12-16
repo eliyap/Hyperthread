@@ -106,14 +106,11 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod3() {
-        Task {
-            try! await userTimeline(
-                userID: OwnUserID,
-                credentials: Auth.shared.credentials!,
-                startTime: nil,
-                endTime: nil
-            )
-        }
+        fetcher.timelineConduit.request(.init(
+            id: OwnUserID,
+            startTime: Date().advanced(by: -.pi * pow(10, 7)),
+            endTime: Date()
+        ))
     }
     
     required init?(coder: NSCoder) {
@@ -210,6 +207,12 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 assert(false, "No self!")
                 return 
             }
+            
+            /** - Note: animated is `false` so that when new tweet's are added via
+                        "pull to refresh", the "inserted above" Twitterific-style effect is as
+                        seamless as possible.
+             */
+            
             switch changes {
             case .initial(let results):
                 self.setContents(to: results, animated: false)
@@ -372,6 +375,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     
     /// Laziness prevents attempting to load nil IDs.
     public lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
+    public lazy var timelineConduit = { TimelineConduit(credentials: Auth.shared.credentials!) }()
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
         if

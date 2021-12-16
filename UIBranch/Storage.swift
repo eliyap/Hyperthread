@@ -60,16 +60,6 @@ extension UserDefaults {
         }
     }
 
-    fileprivate static let followingIDsKey = "followingIDs"
-    var followingIDs: [String]? {
-        get { 
-            return array(forKey: Self.followingIDsKey) as? [String]
-        }
-        set {
-            set(newValue, forKey: Self.followingIDsKey)
-        }
-    }
-
     fileprivate static let scrollPositionKey = "scrollPosition"
     var scrollPosition: TableScrollPosition? {
         get {

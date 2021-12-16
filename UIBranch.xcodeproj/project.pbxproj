@@ -51,6 +51,10 @@
 		2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */; };
 		2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C927616FDA0099477D /* GetHeight.swift */; };
 		2266D0CC276197E20099477D /* ShowAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0CB276197E20099477D /* ShowAlert.swift */; };
+		22680A84276AA651008827F8 /* Sealed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A83276AA651008827F8 /* Sealed.swift */; };
+		22680A8A276AA710008827F8 /* DeferCombine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A89276AA710008827F8 /* DeferCombine.swift */; };
+		22680A8C276ADF91008827F8 /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8B276ADF91008827F8 /* DateWindow.swift */; };
+		22680A8E276AFCD4008827F8 /* TimelineConduit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8D276AFCD4008827F8 /* TimelineConduit.swift */; };
 		22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A40274A8B4200F28F0A /* TweetTextView.swift */; };
 		22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A42274A927A00F28F0A /* CardTeaserCell.swift */; };
 		22760A45274AA6ED00F28F0A /* CardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A44274AA6ED00F28F0A /* CardBackground.swift */; };
@@ -141,6 +145,10 @@
 		2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowRefreshControl.swift; sourceTree = "<group>"; };
 		2266D0C927616FDA0099477D /* GetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetHeight.swift; sourceTree = "<group>"; };
 		2266D0CB276197E20099477D /* ShowAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAlert.swift; sourceTree = "<group>"; };
+		22680A83276AA651008827F8 /* Sealed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sealed.swift; sourceTree = "<group>"; };
+		22680A89276AA710008827F8 /* DeferCombine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferCombine.swift; sourceTree = "<group>"; };
+		22680A8B276ADF91008827F8 /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
+		22680A8D276AFCD4008827F8 /* TimelineConduit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineConduit.swift; sourceTree = "<group>"; };
 		22760A40274A8B4200F28F0A /* TweetTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetTextView.swift; sourceTree = "<group>"; };
 		22760A42274A927A00F28F0A /* CardTeaserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTeaserCell.swift; sourceTree = "<group>"; };
 		22760A44274AA6ED00F28F0A /* CardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBackground.swift; sourceTree = "<group>"; };
@@ -300,6 +308,10 @@
 				223BBF6027377E8800375530 /* AsyncMap.swift */,
 				223BBF6127377E8800375530 /* BigFetch.swift */,
 				223BBF6227377E8900375530 /* Buffer.swift */,
+				22680A83276AA651008827F8 /* Sealed.swift */,
+				22680A89276AA710008827F8 /* DeferCombine.swift */,
+				22680A8B276ADF91008827F8 /* DateWindow.swift */,
+				22680A8D276AFCD4008827F8 /* TimelineConduit.swift */,
 			);
 			path = Airport;
 			sourceTree = "<group>";
@@ -591,6 +603,7 @@
 				22BE9C0D27606A280080E475 /* Supertall.swift in Sources */,
 				22D127E12740655900932614 /* IconView.swift in Sources */,
 				224F88D5275E5C8700085678 /* ImageViewController.swift in Sources */,
+				22680A8A276AA710008827F8 /* DeferCombine.swift in Sources */,
 				2266D0CC276197E20099477D /* ShowAlert.swift in Sources */,
 				223BBF862738572C00375530 /* MainTable.swift in Sources */,
 				223BBF6F27377EC300375530 /* Discussion.swift in Sources */,
@@ -630,9 +643,12 @@
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
 				22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */,
 				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
+				22680A8E276AFCD4008827F8 /* TimelineConduit.swift in Sources */,
+				22680A8C276ADF91008827F8 /* DateWindow.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
 				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
+				22680A84276AA651008827F8 /* Sealed.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
 			);
