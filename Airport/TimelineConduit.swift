@@ -19,8 +19,11 @@ final class TimelineConduit {
     public init(credentials: OAuthCredentials) {
         pipeline = intake
             .flatMap { (request: Request) -> AnyPublisher in
+                /// We place data here as it pages in asynchronously.
                 let publisher = PassthroughSubject<([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]), Error>()
+                
                 Task {
+                    /// Fetch asynchronously until there are no more pages.
                     var nextToken: String? = nil
                     repeat {
                         let (tweets, users, media, token) = try await userTimeline(
@@ -31,11 +34,10 @@ final class TimelineConduit {
                             nextToken: nextToken
                         )
                         publisher.send((tweets, users, media))
-                        Swift.debugPrint("\(tweets.count) Tweets", tweets.map(\.text))
                         nextToken = token
                     } while (nextToken != nil)
-                    
                 }
+                
                 return publisher.eraseToAnyPublisher()
             }
             .sink(receiveCompletion: { (completion: Subscribers.Completion<Error>) in
