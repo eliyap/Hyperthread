@@ -65,7 +65,7 @@ final class Airport {
             .receive(on: Self.scheduler, options: nil)
             .eraseToAnyPublisher()
         
-        /// - Note: breaking the pipeline prevents an inscrutable error where
+        /// - Note: Splitting the pipeline prevents an inscrutable error where
         ///         Swift's type inference appeared to collapse. (21.12.16)
         pipeline = chunkPublisher
             .tryMap({ (tweets, users, media) -> Set<Tweet.ID> in
