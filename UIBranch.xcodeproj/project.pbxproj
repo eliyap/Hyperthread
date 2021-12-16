@@ -55,6 +55,7 @@
 		22680A8A276AA710008827F8 /* DeferCombine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A89276AA710008827F8 /* DeferCombine.swift */; };
 		22680A8C276ADF91008827F8 /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8B276ADF91008827F8 /* DateWindow.swift */; };
 		22680A8E276AFCD4008827F8 /* TimelineConduit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8D276AFCD4008827F8 /* TimelineConduit.swift */; };
+		22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8F276B4159008827F8 /* PublicMetrics.swift */; };
 		22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A40274A8B4200F28F0A /* TweetTextView.swift */; };
 		22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A42274A927A00F28F0A /* CardTeaserCell.swift */; };
 		22760A45274AA6ED00F28F0A /* CardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A44274AA6ED00F28F0A /* CardBackground.swift */; };
@@ -149,6 +150,7 @@
 		22680A89276AA710008827F8 /* DeferCombine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferCombine.swift; sourceTree = "<group>"; };
 		22680A8B276ADF91008827F8 /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		22680A8D276AFCD4008827F8 /* TimelineConduit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineConduit.swift; sourceTree = "<group>"; };
+		22680A8F276B4159008827F8 /* PublicMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicMetrics.swift; sourceTree = "<group>"; };
 		22760A40274A8B4200F28F0A /* TweetTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetTextView.swift; sourceTree = "<group>"; };
 		22760A42274A927A00F28F0A /* CardTeaserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTeaserCell.swift; sourceTree = "<group>"; };
 		22760A44274AA6ED00F28F0A /* CardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBackground.swift; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 				22760A48274ADFA900F28F0A /* ReadStatus.swift */,
 				223BBF6C27377EC300375530 /* Query.swift */,
 				223BBF6B27377EC100375530 /* Tweet.swift */,
+				22680A8F276B4159008827F8 /* PublicMetrics.swift */,
 				22F24640274DC20200AE17AD /* CanonicalString.swift */,
 				22760A4E274B136200F28F0A /* Media.swift */,
 				2248FF4F2745BEA100C6DEF9 /* Entities.swift */,
@@ -618,6 +621,7 @@
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
 				220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */,
 				222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */,
+				22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
 				22D127F02740A17B00932614 /* Following.swift in Sources */,
 				22760A4F274B136200F28F0A /* Media.swift in Sources */,

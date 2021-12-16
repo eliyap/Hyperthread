@@ -11,8 +11,8 @@ import Twig
 
 /**
  Accepts raw data from the Twitter v2 API.
- Returns: Tweet IDs still need to be fetched.
- Also tries to link Tweets to Conversations, and Conversations to Discussions.
+ Links Tweets to Conversations, and Conversations to Discussions.
+ - Returns: IDs of Tweets which need to be fetched.
  */
 func furtherFetch(
     rawTweets: [RawHydratedTweet],
@@ -57,11 +57,10 @@ func furtherFetch(
             realm.add(tweet, update: .modified)
             tweets.insert(tweet)
             
-            /// Attach to user.
-            guard let user: User = realm.user(id: rawTweet.author_id) else {
+            /// Safety check: we count on the user never being missing!
+            if realm.user(id: rawTweet.author_id) == nil {
                 fatalError("Could not find user with id \(rawTweet.author_id)")
             }
-            user.insert(tweet)
             
             /// Attach to conversation (create one if necessary).
             var conversation: Conversation
