@@ -73,8 +73,8 @@ final class Airport {
                 let setB = try linkOrphans()
                 return setA.union(setB)
             })
-            .map { ids in
-                self.enqueue(ids) /// Recursive step.
+            .map { [weak self] ids in
+                self?.enqueue(ids) /// Recursive step.
                 return ids
             }
             .sink(receiveCompletion: { completion in
