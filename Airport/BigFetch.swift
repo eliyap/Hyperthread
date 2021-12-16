@@ -14,7 +14,7 @@ import Twig
  Links Tweets to Conversations, and Conversations to Discussions.
  - Returns: IDs of Tweets which need to be fetched.
  */
-func furtherFetch(
+func ingestRaw(
     rawTweets: [RawHydratedTweet],
     rawUsers: [RawIncludeUser],
     rawMedia: [RawIncludeMedia]

@@ -69,7 +69,7 @@ final class Airport {
         ///         Swift's type inference appeared to collapse. (21.12.16)
         pipeline = chunkPublisher
             .tryMap({ (tweets, users, media) -> Set<Tweet.ID> in
-                let setA = try furtherFetch(rawTweets: tweets, rawUsers: users, rawMedia: media)
+                let setA = try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media)
                 let setB = try linkOrphans()
                 return setA.union(setB)
             })
