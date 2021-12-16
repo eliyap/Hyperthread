@@ -93,6 +93,22 @@ func furtherFetch(
     return idsToFetch
 }
 
+internal func linkOrphans() throws -> Set<Tweet.ID> {
+    var idsToFetch = Set<Tweet.ID>()
+    
+    let realm = try! Realm()
+    
+    /// Check orphaned conversations.
+    let orphans = realm.orphanConversations()
+    try realm.write {
+        for orphan: Conversation in orphans {
+            link(orphan: orphan, idsToFetch: &idsToFetch, realm: realm)
+        }
+    }
+    
+    return idsToFetch
+}
+
 /// Tries to link Tweets to Conversations, and Conversations to Discussions.
 /// - Important: MUST take place within a Realm `write` transaction!
 fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, realm: Realm) -> Void {
