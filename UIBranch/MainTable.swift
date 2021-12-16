@@ -108,7 +108,7 @@ final class MainTable: UITableViewController {
     func debugMethod3() {
         fetcher.timelineConduit.request(.init(
             id: OwnUserID,
-            startTime: .distantPast,
+            startTime: Date().advanced(by: -.pi * pow(10, 7)),
             endTime: Date()
         ))
     }
