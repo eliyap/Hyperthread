@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-internal enum Relevance: Int, RealmEnum {
+internal enum Relevance: Int {
     /// As-yet-unused.
     /// Indicates blocked, filtered, or muffled content.
     case blocked = -1
