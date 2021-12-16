@@ -7,21 +7,25 @@
 
 import Combine
 import Foundation
+import Twig
 
 final class TimelineConduit {
     
-    
-    public static let shared = TimelineConduit()
     
     private var pipeline: AnyCancellable? = nil
     
     private let intake = PassthroughSubject<Request, Never>()
     
-    private init() {
-//        pipeline = intake
-//            .map {
-//                
-//            }
+    public init(credentials: OAuthCredentials) {
+        pipeline = intake
+            .flatMap {
+                userTimelinePublisher(userID: $0.id, credentials: credentials, startTime: $0.startTime, endTime: $0.endTime)
+            }
+            .sink(receiveCompletion: { (completion: Subscribers.Completion<URLError>) in
+                ///
+            }, receiveValue: { (data: Data) in
+                ///
+            })
     }
     
     public func request(_ req: Request) -> Void {
