@@ -82,14 +82,6 @@ func furtherFetch(
         }
     }
     
-    /// Check orphaned conversations.
-    let orphans = realm.orphanConversations()
-    try realm.write {
-        for orphan: Conversation in orphans {
-            link(orphan: orphan, idsToFetch: &idsToFetch, realm: realm)
-        }
-    }
-    
     return idsToFetch
 }
 

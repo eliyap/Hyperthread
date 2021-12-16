@@ -69,8 +69,9 @@ final class Airport {
         ///         Swift's type inference appeared to collapse. (21.12.16)
         pipeline = chunkPublisher
             .tryMap({ (tweets, users, media) -> Set<Tweet.ID> in
-                let ids = try furtherFetch(rawTweets: tweets, rawUsers: users, rawMedia: media)
-                return ids
+                let setA = try furtherFetch(rawTweets: tweets, rawUsers: users, rawMedia: media)
+                let setB = try linkOrphans()
+                return setA.union(setB)
             })
             .map { ids in
                 self.enqueue(ids) /// Recursive step.
