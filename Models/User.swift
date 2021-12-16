@@ -24,10 +24,6 @@ final class User: Object, Identifiable {
     @Persisted 
     var handle: String
     
-    @Persisted 
-    var tweets: RealmSwift.List<Tweet>
-    static let tweetsPropertyName = "tweets"
-    
     /// Whether our user follows this Twitter user.
     /// - Note: not included in `RawUser` object, hence we default initialize it.
     @Persisted
@@ -38,7 +34,6 @@ final class User: Object, Identifiable {
         self.id = "\(raw.id)"
         self.name = raw.name
         self.handle = raw.screen_name
-        self.tweets = RealmSwift.List<Tweet>()
     }
     
     init(raw: RawIncludeUser) {
@@ -46,7 +41,6 @@ final class User: Object, Identifiable {
         self.id = raw.id
         self.name = raw.name
         self.handle = raw.username
-        self.tweets = RealmSwift.List<Tweet>()
     }
     
     override required init() {
@@ -56,13 +50,4 @@ final class User: Object, Identifiable {
 
 public extension Int64 {
     static let NSNotFound = Int64(Foundation.NSNotFound)
-}
-
-
-extension User {
-    public func insert(_ tweet: Tweet) {
-        if tweets.contains(where: {$0.id == tweet.id}) == false {
-            tweets.append(tweet)
-        }
-    }
 }

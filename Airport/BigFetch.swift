@@ -61,7 +61,6 @@ func furtherFetch(
             guard let user: User = realm.user(id: rawTweet.author_id) else {
                 fatalError("Could not find user with id \(rawTweet.author_id)")
             }
-            user.insert(tweet)
             
             /// Attach to conversation (create one if necessary).
             var conversation: Conversation
