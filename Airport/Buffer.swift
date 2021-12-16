@@ -110,7 +110,11 @@ extension Publisher {
                 defer { lock.unlock() }
                 
                 buffer.append(element)
-                #warning("TODO: Warn for excessive accumulation of elements.")
+                
+                /// Buffer count should not grow very large if the network request is fast.
+                if buffer.count > 100 {
+                    NetLog.warning("100 elements accumulated, possible failure?")
+                }
             }
         )
 
