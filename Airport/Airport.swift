@@ -43,7 +43,7 @@ final class Airport {
     public static let scheduler = DispatchQueue.main
     
     init(credentials: OAuthCredentials) {
-        pipeline = queue
+        let chunkPublisher: AnyPublisher<([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]), Error> = queue
             .buffer(size: 100, timer)
             .filter(\.isNotEmpty)
             .asyncMap { (ids: [Tweet.ID]) in
@@ -63,7 +63,13 @@ final class Airport {
                 return (tweets, users, media)
             }
             .receive(on: Self.scheduler, options: nil)
-            .tryMap(furtherFetch)
+            .eraseToAnyPublisher()
+        
+        pipeline = chunkPublisher
+            .tryMap({ (tweets, users, media) -> Set<Tweet.ID> in
+                let ids = try furtherFetch(rawTweets: tweets, rawUsers: users, rawMedia: media)
+                return ids
+            })
             .map { ids in
                 self.enqueue(ids) /// Recursive step.
                 return ids
