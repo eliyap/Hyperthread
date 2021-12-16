@@ -106,14 +106,11 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod3() {
-        Task {
-            try! await userTimeline(
-                userID: OwnUserID,
-                credentials: Auth.shared.credentials!,
-                startTime: nil,
-                endTime: nil
-            )
-        }
+        fetcher.timelineConduit.request(.init(
+            id: OwnUserID,
+            startTime: .distantPast,
+            endTime: Date()
+        ))
     }
     
     required init?(coder: NSCoder) {
@@ -378,6 +375,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     
     /// Laziness prevents attempting to load nil IDs.
     public lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
+    public lazy var timelineConduit = { TimelineConduit(credentials: Auth.shared.credentials!) }()
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
         if
