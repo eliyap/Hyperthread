@@ -32,6 +32,9 @@ extension Publisher {
         _ bufferType: BufferType.Type,
         timer: TimeInterval
     ) -> AnyPublisher<(Output, BufferItem), Failure> where
+        /// Note that
+        /// - `Publisher.Output == BufferType.Input`
+        /// - `Publisher.Failure == BufferType.Failure`
         BufferType: DeferredBuffer<Output, BufferItem, Failure>
     {
         let subject = PassthroughSubject<(Output, BufferItem), Failure>()
@@ -56,6 +59,8 @@ extension Publisher {
 /**
  Enables the `deferredBuffer` operator.
  Subclass and override the `fetch` method.
+ - Parameter Input: upstream publisher output type.
+ - Parameter Failure: upstream publisher error type.
  */
 internal class DeferredBuffer<Input, Output, Failure: Error> {
     
