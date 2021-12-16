@@ -55,7 +55,6 @@ extension Publisher {
     }
 }
 
-
 /**
  Enables the `deferredBuffer` operator.
  Subclass and override the `fetch` method.
