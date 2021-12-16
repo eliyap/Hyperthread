@@ -57,8 +57,8 @@ func furtherFetch(
             realm.add(tweet, update: .modified)
             tweets.insert(tweet)
             
-            /// Attach to user.
-            guard let user: User = realm.user(id: rawTweet.author_id) else {
+            /// Safety check: we count on the user never being missing!
+            if realm.user(id: rawTweet.author_id) == nil {
                 fatalError("Could not find user with id \(rawTweet.author_id)")
             }
             
