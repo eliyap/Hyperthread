@@ -34,11 +34,12 @@ final class Airport {
     
     /** The scheduler on which work is done.
         
-        Because `Realm` write transactions are done in our pipeline,
-        and write transactions block other work,
-        it is critical that we allow other threads to avoid conflict with `Airport`.
+        `Realm` write transactions are performed in our pipeline, which blocks other `Realm` work.
+        Therefore, we must allow other threads to avoid conflict with `Airport`, by running on the same
+        scheduler.
      
-        Chosen based on article: https://www.avanderlee.com/combine/runloop-main-vs-dispatchqueue-main/
+        Scheduler chosen based on:
+        https://www.avanderlee.com/combine/runloop-main-vs-dispatchqueue-main/
      */
     public static let scheduler = DispatchQueue.main
     
