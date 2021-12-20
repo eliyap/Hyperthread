@@ -162,16 +162,21 @@ fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, rea
     let upstreamID: Conversation.ID = orphanRootReferenced.conversation_id
     orphan.upstream = upstreamID
         
-    /// Inherit discussion, if possible.
+    /// Check if the upstream Conversation is part of a Discussion.
     if
         let upstreamConvo = realm.conversation(id: upstreamID),
         let upstreamDiscussion = upstreamConvo.discussion.first
     {
+        /// Add this Conversation to that discussion.
         upstreamDiscussion.conversations.append(orphan)
+        
+        /// Bump the Discussion's "last updated" timestamp.
         upstreamDiscussion.update(with: orphan.tweets.map(\.createdAt).max())
+        
+        /// Manually inform the Discussion that its contents changed.
         upstreamDiscussion.notifyTweetsDidChange()
     } else {
-        /// Go fetch the upstream conversation root.
+        /// Otherwise, fetch the upstream Conversation's root Tweet.
         idsToFetch.insert(upstreamID)
     }
 }
