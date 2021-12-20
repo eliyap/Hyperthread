@@ -36,8 +36,33 @@ final class Conversation: Object, Identifiable {
     var root: Tweet?
     
     @Persisted
-    var tweets: List<Tweet>
+    var tweets: List<Tweet> {
+        /// Invalidate value.
+        didSet { _maxRelevance = nil }
+    }
     public static let tweetsPropertyName = "tweets"
+    
+    /**
+     A SQL-Query friendly variable which exposes the maximum relevance in `tweets`.
+     Invalidated whenever `tweets` is modified by setting the stored value to `nil`.
+     */
+    @Persisted
+    private var _maxRelevance: Relevance.RawValue? = nil
+    public var maxRelevance: Relevance! {
+        get {
+            if let raw = _maxRelevance {
+                return .init(rawValue: raw)
+            } else if tweets.isNotEmpty {
+                /// Find and memoize result.
+                let max = tweets.map(\.relevance).max()!
+                _maxRelevance = max.rawValue
+                return max
+            } else {
+                return .irrelevant
+            }
+        }
+        /** Should never be `set`. **/
+    }
 
     init(id: String) {
         super.init()
