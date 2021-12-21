@@ -92,15 +92,6 @@ extension UserDefaults {
     }
 }
 
-/// `ObservableObject` wrapper around my credentials object.
-final class SharedAuth: ObservableObject {
-    @Published public var cred: OAuthCredentials? = nil
-    
-    init() {
-        cred = UserDefaults.groupSuite.oAuthCredentials
-    }
-}
-
 /// A "bookmark" for saving scroll position.
 struct TableScrollPosition: Codable, Hashable {
     let indexPath: IndexPath
