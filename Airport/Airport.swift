@@ -21,7 +21,7 @@ final class Airport {
     
     /// - Note: tolerance set to 100% to prevent performance hits.
     /// Docs: https://developer.apple.com/documentation/foundation/timer/1415085-tolerance
-    private let timer = Timer.publish(every: 0.2, tolerance: 0.2, on: .main, in: .default)
+    private let timer = Timer.publish(every: 0.05, tolerance: 0.05, on: .main, in: .default)
         .autoconnect()
     
     /// Tweets currently being requested.
