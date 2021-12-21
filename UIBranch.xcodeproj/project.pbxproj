@@ -65,6 +65,8 @@
 		22760A4B274AE63000F28F0A /* SummaryLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4A274AE63000F28F0A /* SummaryLine.swift */; };
 		22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */; };
 		22760A4F274B136200F28F0A /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4E274B136200F28F0A /* Media.swift */; };
+		22A9E900276EA90B00C4EE99 /* AssemblyLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E8FF276EA90B00C4EE99 /* AssemblyLine.swift */; };
+		22A9E902277143E800C4EE99 /* TweetLinker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E901277143E800C4EE99 /* TweetLinker.swift */; };
 		22BE9C0D27606A280080E475 /* Supertall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BE9C0C27606A280080E475 /* Supertall.swift */; };
 		22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DB27404F4200932614 /* DiscussionTable.swift */; };
 		22D127DE2740651C00932614 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DD2740651C00932614 /* TweetCell.swift */; };
@@ -161,6 +163,8 @@
 		22760A4A274AE63000F28F0A /* SummaryLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryLine.swift; sourceTree = "<group>"; };
 		22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacedSeparator.swift; sourceTree = "<group>"; };
 		22760A4E274B136200F28F0A /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		22A9E8FF276EA90B00C4EE99 /* AssemblyLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssemblyLine.swift; sourceTree = "<group>"; };
+		22A9E901277143E800C4EE99 /* TweetLinker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetLinker.swift; sourceTree = "<group>"; };
 		22BE9C0C27606A280080E475 /* Supertall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supertall.swift; sourceTree = "<group>"; };
 		22D127DB27404F4200932614 /* DiscussionTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTable.swift; sourceTree = "<group>"; };
 		22D127DD2740651C00932614 /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
@@ -309,8 +313,10 @@
 			isa = PBXGroup;
 			children = (
 				223BBF5F27377E8700375530 /* Airport.swift */,
+				22A9E8FF276EA90B00C4EE99 /* AssemblyLine.swift */,
 				223BBF6027377E8800375530 /* AsyncMap.swift */,
 				223BBF6127377E8800375530 /* BigFetch.swift */,
+				22A9E901277143E800C4EE99 /* TweetLinker.swift */,
 				223BBF6227377E8900375530 /* Buffer.swift */,
 				22680A83276AA651008827F8 /* Sealed.swift */,
 				22680A89276AA710008827F8 /* DeferCombine.swift */,
@@ -641,6 +647,7 @@
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,
 				223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */,
+				22A9E902277143E800C4EE99 /* TweetLinker.swift in Sources */,
 				223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */,
 				22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */,
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
@@ -649,6 +656,7 @@
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				221A2992275D680900C283FE /* AlbumController.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
+				22A9E900276EA90B00C4EE99 /* AssemblyLine.swift in Sources */,
 				22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */,
 				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
 				22680A8E276AFCD4008827F8 /* TimelineConduit.swift in Sources */,
