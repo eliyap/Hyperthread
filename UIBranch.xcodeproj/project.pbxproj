@@ -317,8 +317,6 @@
 				22A9E8FF276EA90B00C4EE99 /* AssemblyLine.swift */,
 				223BBF6127377E8800375530 /* BigFetch.swift */,
 				22A9E901277143E800C4EE99 /* TweetLinker.swift */,
-				22680A83276AA651008827F8 /* Sealed.swift */,
-				22680A89276AA710008827F8 /* DeferredBuffer.swift */,
 				22680A8B276ADF91008827F8 /* DateWindow.swift */,
 				22680A8D276AFCD4008827F8 /* TimelineConduit.swift */,
 			);
@@ -391,6 +389,8 @@
 			children = (
 				223BBF6227377E8900375530 /* LatchBuffer.swift */,
 				223BBF6027377E8800375530 /* AsyncMap.swift */,
+				22680A83276AA651008827F8 /* Sealed.swift */,
+				22680A89276AA710008827F8 /* DeferredBuffer.swift */,
 			);
 			path = Operators;
 			sourceTree = "<group>";
