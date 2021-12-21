@@ -312,12 +312,12 @@
 		223BBF5E27377E6E00375530 /* Airport */ = {
 			isa = PBXGroup;
 			children = (
+				22A9E9032771D76500C4EE99 /* Operators */,
 				223BBF5F27377E8700375530 /* Airport.swift */,
 				22A9E8FF276EA90B00C4EE99 /* AssemblyLine.swift */,
 				223BBF6027377E8800375530 /* AsyncMap.swift */,
 				223BBF6127377E8800375530 /* BigFetch.swift */,
 				22A9E901277143E800C4EE99 /* TweetLinker.swift */,
-				223BBF6227377E8900375530 /* Buffer.swift */,
 				22680A83276AA651008827F8 /* Sealed.swift */,
 				22680A89276AA710008827F8 /* DeferCombine.swift */,
 				22680A8B276ADF91008827F8 /* DateWindow.swift */,
@@ -385,6 +385,14 @@
 				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
 			);
 			path = Album;
+			sourceTree = "<group>";
+		};
+		22A9E9032771D76500C4EE99 /* Operators */ = {
+			isa = PBXGroup;
+			children = (
+				223BBF6227377E8900375530 /* Buffer.swift */,
+			);
+			path = Operators;
 			sourceTree = "<group>";
 		};
 		22D127DF2740653900932614 /* TweetCell */ = {
