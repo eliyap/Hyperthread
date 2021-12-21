@@ -48,6 +48,7 @@ final class Conversation: Object, Identifiable {
      */
     @Persisted
     private var _maxRelevance: Relevance.RawValue? = nil
+    public static let _maxRelevancePropertyName = "_maxRelevance"
     public var maxRelevance: Relevance! {
         get {
             if let raw = _maxRelevance {
