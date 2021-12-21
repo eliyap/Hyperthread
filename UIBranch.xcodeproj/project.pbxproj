@@ -28,7 +28,7 @@
 		223BBF6327377E8900375530 /* Airport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF5F27377E8700375530 /* Airport.swift */; };
 		223BBF6427377E8900375530 /* AsyncMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6027377E8800375530 /* AsyncMap.swift */; };
 		223BBF6527377E8900375530 /* BigFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6127377E8800375530 /* BigFetch.swift */; };
-		223BBF6627377E8900375530 /* Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6227377E8900375530 /* Buffer.swift */; };
+		223BBF6627377E8900375530 /* LatchBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6227377E8900375530 /* LatchBuffer.swift */; };
 		223BBF6D27377EC300375530 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6827377EC000375530 /* Conversation.swift */; };
 		223BBF6E27377EC300375530 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6927377EC000375530 /* User.swift */; };
 		223BBF6F27377EC300375530 /* Discussion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6A27377EC000375530 /* Discussion.swift */; };
@@ -52,7 +52,7 @@
 		2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C927616FDA0099477D /* GetHeight.swift */; };
 		2266D0CC276197E20099477D /* ShowAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0CB276197E20099477D /* ShowAlert.swift */; };
 		22680A84276AA651008827F8 /* Sealed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A83276AA651008827F8 /* Sealed.swift */; };
-		22680A8A276AA710008827F8 /* DeferCombine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A89276AA710008827F8 /* DeferCombine.swift */; };
+		22680A8A276AA710008827F8 /* DeferredBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A89276AA710008827F8 /* DeferredBuffer.swift */; };
 		22680A8C276ADF91008827F8 /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8B276ADF91008827F8 /* DateWindow.swift */; };
 		22680A8E276AFCD4008827F8 /* TimelineConduit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8D276AFCD4008827F8 /* TimelineConduit.swift */; };
 		22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8F276B4159008827F8 /* PublicMetrics.swift */; };
@@ -126,7 +126,7 @@
 		223BBF5F27377E8700375530 /* Airport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Airport.swift; sourceTree = "<group>"; };
 		223BBF6027377E8800375530 /* AsyncMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncMap.swift; sourceTree = "<group>"; };
 		223BBF6127377E8800375530 /* BigFetch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BigFetch.swift; sourceTree = "<group>"; };
-		223BBF6227377E8900375530 /* Buffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buffer.swift; sourceTree = "<group>"; };
+		223BBF6227377E8900375530 /* LatchBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LatchBuffer.swift; sourceTree = "<group>"; };
 		223BBF6827377EC000375530 /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		223BBF6927377EC000375530 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		223BBF6A27377EC000375530 /* Discussion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Discussion.swift; sourceTree = "<group>"; };
@@ -150,7 +150,7 @@
 		2266D0C927616FDA0099477D /* GetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetHeight.swift; sourceTree = "<group>"; };
 		2266D0CB276197E20099477D /* ShowAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAlert.swift; sourceTree = "<group>"; };
 		22680A83276AA651008827F8 /* Sealed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sealed.swift; sourceTree = "<group>"; };
-		22680A89276AA710008827F8 /* DeferCombine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferCombine.swift; sourceTree = "<group>"; };
+		22680A89276AA710008827F8 /* DeferredBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferredBuffer.swift; sourceTree = "<group>"; };
 		22680A8B276ADF91008827F8 /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		22680A8D276AFCD4008827F8 /* TimelineConduit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineConduit.swift; sourceTree = "<group>"; };
 		22680A8F276B4159008827F8 /* PublicMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicMetrics.swift; sourceTree = "<group>"; };
@@ -315,11 +315,10 @@
 				22A9E9032771D76500C4EE99 /* Operators */,
 				223BBF5F27377E8700375530 /* Airport.swift */,
 				22A9E8FF276EA90B00C4EE99 /* AssemblyLine.swift */,
-				223BBF6027377E8800375530 /* AsyncMap.swift */,
 				223BBF6127377E8800375530 /* BigFetch.swift */,
 				22A9E901277143E800C4EE99 /* TweetLinker.swift */,
 				22680A83276AA651008827F8 /* Sealed.swift */,
-				22680A89276AA710008827F8 /* DeferCombine.swift */,
+				22680A89276AA710008827F8 /* DeferredBuffer.swift */,
 				22680A8B276ADF91008827F8 /* DateWindow.swift */,
 				22680A8D276AFCD4008827F8 /* TimelineConduit.swift */,
 			);
@@ -390,7 +389,8 @@
 		22A9E9032771D76500C4EE99 /* Operators */ = {
 			isa = PBXGroup;
 			children = (
-				223BBF6227377E8900375530 /* Buffer.swift */,
+				223BBF6227377E8900375530 /* LatchBuffer.swift */,
+				223BBF6027377E8800375530 /* AsyncMap.swift */,
 			);
 			path = Operators;
 			sourceTree = "<group>";
@@ -623,7 +623,7 @@
 				22BE9C0D27606A280080E475 /* Supertall.swift in Sources */,
 				22D127E12740655900932614 /* IconView.swift in Sources */,
 				224F88D5275E5C8700085678 /* ImageViewController.swift in Sources */,
-				22680A8A276AA710008827F8 /* DeferCombine.swift in Sources */,
+				22680A8A276AA710008827F8 /* DeferredBuffer.swift in Sources */,
 				2266D0CC276197E20099477D /* ShowAlert.swift in Sources */,
 				223BBF862738572C00375530 /* MainTable.swift in Sources */,
 				223BBF6F27377EC300375530 /* Discussion.swift in Sources */,
@@ -633,7 +633,7 @@
 				223BBF6527377E8900375530 /* BigFetch.swift in Sources */,
 				2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */,
 				223BBF7127377EC300375530 /* Query.swift in Sources */,
-				223BBF6627377E8900375530 /* Buffer.swift in Sources */,
+				223BBF6627377E8900375530 /* LatchBuffer.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
 				220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */,
