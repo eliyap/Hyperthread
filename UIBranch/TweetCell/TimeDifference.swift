@@ -35,6 +35,8 @@ extension Elapsed: CustomStringConvertible {
     }
 }
 
+extension Elapsed: Equatable { }
+
 func approximateTimeSince(_ date: Date) -> Elapsed {
     let seconds = date.distance(to: Date())
     if seconds < 60 {
