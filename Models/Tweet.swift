@@ -204,3 +204,22 @@ extension Tweet {
         }
     }
 }
+
+extension Realm {
+    func linkConversation(_: TransactionToken, tweet: Tweet) -> Void {
+        /// Attach to conversation (create one if necessary).
+        var conversation: Conversation
+        if let local = self.conversation(id: tweet.conversation_id) {
+            conversation = local
+        } else {
+            conversation = Conversation(id: tweet.conversation_id)
+            self.add(conversation)
+        }
+        
+        /// Add tweet to conversation.
+        conversation.insert(tweet)
+        if let discussion = conversation.discussion.first {
+            discussion.notifyTweetsDidChange()
+        }
+    }
+}
