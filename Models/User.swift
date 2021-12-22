@@ -10,7 +10,7 @@ import RealmSwift
 import Realm
 import Twig
 
-final class User: Object, Identifiable {
+final class User: Object, Identifiable, UserIdentifiable {
     
     @Persisted(primaryKey: true) 
     var id: ID
