@@ -194,7 +194,7 @@ extension Tweet {
 }
 
 extension Tweet {
-    static let chronologicalSort: (Tweet, Tweet) -> Bool = { (lhs: Tweet, rhs: Tweet) in
+    static let chronologicalSort = { (lhs: Tweet, rhs: Tweet) -> Bool in
         /// Tie break by ID.
         /// I have observed tied timestamps. (see https://twitter.com/ChristianSelig/status/1469028219441623049)
         if lhs.createdAt != rhs.createdAt {
