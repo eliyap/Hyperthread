@@ -24,8 +24,6 @@ func ingestRaw(
     /// IDs for further fetching.
     var idsToFetch = Set<Tweet.ID>()
     
-    var tweets = Set<Tweet>()
-    
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
@@ -53,7 +51,6 @@ func ingestRaw(
         for rawTweet in rawTweets {
             let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
             realm.add(tweet, update: .modified)
-            tweets.insert(tweet)
             
             /// Safety check: we count on the user never being missing!
             if realm.user(id: rawTweet.author_id) == nil {
