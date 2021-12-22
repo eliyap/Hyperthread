@@ -10,7 +10,7 @@ import RealmSwift
 import Realm
 import Twig
 
-final class Tweet: Object, Identifiable {
+final class Tweet: Object, Identifiable, AuthorIdentifiable {
     
     /// Twitter API `id`.
     @Persisted(primaryKey: true) 
@@ -223,4 +223,8 @@ extension Realm {
             discussion.notifyTweetsDidChange()
         }
     }
+}
+
+extension Tweet: ReplyIdentifiable {
+    var replyID: String? { replying_to }
 }
