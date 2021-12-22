@@ -16,6 +16,25 @@ enum Elapsed {
     case years(Int)
 }
 
+extension Elapsed: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .seconds(let seconds):
+            return "\(seconds)s"
+        case .minutes(let minutes):
+            return "\(minutes)m"
+        case .hours(let hours):
+            return "\(hours)h"
+        case .days(let days):
+            return "\(days)d"
+        case .weeks(let weeks):
+            return "\(weeks)w"
+        case .years(let years):
+            return "\(years)y"
+        }
+    }
+}
+
 func approximateTimeSince(_ date: Date) -> Elapsed {
     let seconds = date.distance(to: Date())
     if seconds < 60 {
