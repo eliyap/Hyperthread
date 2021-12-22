@@ -15,7 +15,7 @@ import Twig
  - Returns: IDs of Tweets which need to be fetched.
  */
 @discardableResult
-func _ingestRawWithFollowUp(
+func ingestRawWithFollowUp(
     rawTweets: [RawHydratedTweet],
     rawUsers: [RawIncludeUser],
     rawMedia: [RawIncludeMedia],
@@ -54,6 +54,7 @@ func _ingestRawWithFollowUp(
         for rawTweet in rawTweets {
             let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
             realm.add(tweet, update: .modified)
+            tweet.relevance = Relevance(tweet: tweet, users: following)
             
             /// Safety check: we count on the user never being missing!
             if realm.user(id: rawTweet.author_id) == nil {
