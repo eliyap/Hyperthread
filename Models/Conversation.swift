@@ -38,7 +38,7 @@ final class Conversation: Object, Identifiable {
     @Persisted
     var tweets: List<Tweet> {
         /// Update value.
-        didSet { maxRelevance = tweets.map(\._relevance).max() ?? Relevance.irrelevant.rawValue }
+        didSet { updateMaxRelevance() }
     }
     public static let tweetsPropertyName = "tweets"
     
@@ -51,6 +51,9 @@ final class Conversation: Object, Identifiable {
         didSet { discussion.forEach { $0.updateMaxRelevance() } }
     }
     public static let maxRelevancePropertyName = "maxRelevance"
+    public func updateMaxRelevance() -> Void {
+        maxRelevance = tweets.map(\._relevance).max() ?? Relevance.irrelevant.rawValue
+    }
     
     init(id: String) {
         super.init()
