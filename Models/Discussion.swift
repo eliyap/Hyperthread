@@ -53,6 +53,13 @@ final class Discussion: Object, Identifiable {
     public static let tweetsDidChangeKey = "tweetsBellValue"
     public func notifyTweetsDidChange() -> Void { tweetsBellValue.toggle() }
     
+    @Persisted
+    public var maxRelevance: Relevance.RawValue = Relevance.irrelevant.rawValue
+    public static let maxRelevancePropertyName = "maxRelevance"
+    public func updateMaxRelevance() -> Void {
+        maxRelevance = tweets.map(\._relevance).max() ?? Relevance.irrelevant.rawValue
+    }
+    
     override required init() {
         super.init()
     }
