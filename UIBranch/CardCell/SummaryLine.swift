@@ -56,14 +56,18 @@ final class SummaryView: UIStackView {
                 Usually this occurs someone you follow quotes someone you don't.
                 In this case, this shows the person who "pushed" this to your feed.
              */
-            let nonRetweets = discussion.tweets.filter { $0.retweeting == nil }
+            let nonRetweets = discussion.tweets
+                /// - Note: Unsorted `tweets` can be out of order, resulting in mis-attributing the reply.
+                .sorted(by: Tweet.chronologicalSort)
+                .filter { $0.retweeting == nil }
+                
             guard nonRetweets.count == 2 else {
                 assert(false, "Wrong number of tweets!")
                 return
             }
             
             /// Configure with an appropriate symbol.
-            let onlyResponse = discussion.tweets[1]
+            let onlyResponse = nonRetweets[1]
             if onlyResponse.primaryReference == onlyResponse.replying_to {
                 iconView.imageView.setImage(to: "arrowshape.turn.up.left.fill")
             } else if onlyResponse.primaryReference == onlyResponse.quoting {
