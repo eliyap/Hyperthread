@@ -275,7 +275,7 @@ extension MainTable {
                 discussion.patchUpdatedAt(token)
             }
         } catch {
-            // TODO: log non-critical failure.
+            TableLog.error("\(error)")
             assert(false, "\(error)")
         }
 
