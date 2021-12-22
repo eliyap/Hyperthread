@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import Twig
 
 internal enum Relevance: Int {
     /// As-yet-unused.
@@ -24,6 +25,23 @@ internal enum Relevance: Int {
     /// Indicates content that "surfaces" a `Discussion`,
     /// i.e. this Tweet is why you see this `Discussion`.
     case discussion = 999
+    
+    init(tweet: RawHydratedTweet, users: [RawIncludeUser]) {
+        /// If the user is not followed, it is irrelevant (for now).
+        /// - Note: in future, we may wish to include say, the originator of the discussion.
+        guard users.contains(where: { $0.id == tweet.author_id }) else {
+            self = .irrelevant
+            return
+        }
+        
+        if tweet.replyID != nil {
+            self = .reply
+            return
+        } else {
+            self = .discussion
+            return
+        }
+    }
 }
 
 /** Permit us to find the "maximum" enum.
