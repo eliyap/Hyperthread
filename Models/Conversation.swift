@@ -37,8 +37,8 @@ final class Conversation: Object, Identifiable {
     
     @Persisted
     var tweets: List<Tweet> {
-        /// Invalidate value.
-        didSet { _maxRelevance = nil }
+        /// Update value.
+        didSet { maxRelevance = tweets.map(\._relevance).max() ?? Relevance.irrelevant.rawValue }
     }
     public static let tweetsPropertyName = "tweets"
     
@@ -47,24 +47,9 @@ final class Conversation: Object, Identifiable {
      Invalidated whenever `tweets` is modified by setting the stored value to `nil`.
      */
     @Persisted
-    private var _maxRelevance: Relevance.RawValue? = nil
-    public static let _maxRelevancePropertyName = "_maxRelevance"
-    public var maxRelevance: Relevance! {
-        get {
-            if let raw = _maxRelevance {
-                return .init(rawValue: raw)
-            } else if tweets.isNotEmpty {
-                /// Find and memoize result.
-                let max = tweets.map(\.relevance).max()!
-                _maxRelevance = max.rawValue
-                return max
-            } else {
-                return .irrelevant
-            }
-        }
-        /** Should never be `set`. **/
-    }
-
+    public var maxRelevance: Relevance.RawValue
+    public static let maxRelevancePropertyName = "maxRelevance"
+    
     init(id: String) {
         super.init()
         self.id = id
