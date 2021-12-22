@@ -14,15 +14,15 @@ final class TimestampButton: LabelledButton {
         super.init(symbolName: "clock")
     }
     
-    func configure(_ tweet: Tweet) {
+    public func configure(_ tweet: Tweet) {
         setTitle(approximateTimeSince(tweet.createdAt), for: .normal)
     }
     
-    func configure(_ discussion: Discussion) {
+    public func configure(_ discussion: Discussion) {
         setTitle(approximateTimeSince(discussion.updatedAt), for: .normal)
     }
     
-    func configure(_ date: Date) {
+    public func configure(_ date: Date) {
         setTitle(approximateTimeSince(date), for: .normal)
     }
 
