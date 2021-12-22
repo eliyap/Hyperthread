@@ -267,7 +267,7 @@ extension MainTable {
         splitDelegate.present(discussion)
         
         do {
-            try realm.write(withoutNotifying: [dds.getToken()]) {
+            try realm.writeWithToken(withoutNotifying: [dds.getToken()]) { token in
                 /// Mark discussion as read.
                 discussion.read = .read
                 
