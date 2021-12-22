@@ -47,7 +47,7 @@ final class Conversation: Object, Identifiable {
      Invalidated whenever `tweets` is modified by setting the stored value to `nil`.
      */
     @Persisted
-    public var maxRelevance: Relevance.RawValue
+    public var maxRelevance: Relevance.RawValue = Relevance.irrelevant.rawValue
     public static let maxRelevancePropertyName = "maxRelevance"
     
     init(id: String) {
