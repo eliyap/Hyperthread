@@ -327,6 +327,7 @@
 				223BBF6B27377EC100375530 /* Tweet.swift */,
 				223BBF6827377EC000375530 /* Conversation.swift */,
 				223BBF6A27377EC000375530 /* Discussion.swift */,
+				223BBF6927377EC000375530 /* User.swift */,
 				22760A48274ADFA900F28F0A /* ReadStatus.swift */,
 				223BBF6C27377EC300375530 /* Query.swift */,
 				22A9E9062773059E00C4EE99 /* Transaction.swift */,
@@ -335,7 +336,6 @@
 				22F24640274DC20200AE17AD /* CanonicalString.swift */,
 				22760A4E274B136200F28F0A /* Media.swift */,
 				2248FF4F2745BEA100C6DEF9 /* Entities.swift */,
-				223BBF6927377EC000375530 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
