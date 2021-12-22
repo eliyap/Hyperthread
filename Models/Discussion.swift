@@ -110,7 +110,7 @@ extension Discussion {
     }
     
     /// - Note: must take place within a `Realm` write transaction.
-    func patchUpdatedAt() -> Void {
+    func patchUpdatedAt(_ token: Realm.TransactionToken) -> Void {
         updatedAt = tweets.map(\.createdAt).max()!
     }
 }

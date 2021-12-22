@@ -272,7 +272,7 @@ extension MainTable {
                 discussion.read = .read
                 
                 /// Patch updated date, as it can be flaky.
-                discussion.patchUpdatedAt()
+                discussion.patchUpdatedAt(token)
             }
         } catch {
             // TODO: log non-critical failure.
