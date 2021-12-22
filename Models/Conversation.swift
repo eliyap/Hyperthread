@@ -42,12 +42,14 @@ final class Conversation: Object, Identifiable {
     }
     public static let tweetsPropertyName = "tweets"
     
-    /**
-     A SQL-Query friendly variable which exposes the maximum relevance in `tweets`.
-     Invalidated whenever `tweets` is modified by setting the stored value to `nil`.
+    /** SQL-Query friendly variable which exposes the maximum relevance in `tweets`.
+        Needs to be updated whenever `tweets` is changed, or one of the `tweets` changes relevance.
+        Updates its `Discussion` whenever it is set.
      */
     @Persisted
-    public var maxRelevance: Relevance.RawValue = Relevance.irrelevant.rawValue
+    public var maxRelevance: Relevance.RawValue = Relevance.irrelevant.rawValue {
+        didSet { discussion.forEach { $0.updateMaxRelevance() } }
+    }
     public static let maxRelevancePropertyName = "maxRelevance"
     
     init(id: String) {
