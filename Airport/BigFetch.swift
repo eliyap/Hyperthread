@@ -25,14 +25,12 @@ func ingestRaw(
     var idsToFetch = Set<Tweet.ID>()
     
     var tweets = Set<Tweet>()
-    var users = Set<User>()
     
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
             let user = User(raw: rawUser)
             realm.add(user, update: .modified)
-            users.insert(user)
         }
     }
     
