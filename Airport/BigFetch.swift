@@ -14,10 +14,12 @@ import Twig
  Links Tweets to Conversations, and Conversations to Discussions.
  - Returns: IDs of Tweets which need to be fetched.
  */
-func _ingestRaw(
+@discardableResult
+func _ingestRawWithFollowUp(
     rawTweets: [RawHydratedTweet],
     rawUsers: [RawIncludeUser],
-    rawMedia: [RawIncludeMedia]
+    rawMedia: [RawIncludeMedia],
+    following: [UserIdentifiable]
 ) throws -> Set<Tweet.ID> {
     let realm = try! Realm()
     
@@ -33,6 +35,7 @@ func _ingestRaw(
     }
     
     /// First, pick out tweets with missing media keys.
+    /// Note that all such tweets are guaranteed to not be in the set of requested Tweet IDs.
     let mediaKeys = rawMedia.map(\.media_key)
     let rawTweets = rawTweets.filter { rawTweet in
         /// Pass on anything without media keys.
