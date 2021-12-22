@@ -14,6 +14,42 @@ enum Elapsed {
     case days(Int)
     case weeks(Int)
     case years(Int)
+    
+    init(since date: Date) {
+        let seconds = date.distance(to: Date())
+        if seconds < 60 {
+            self = .seconds(Int(seconds))
+            return
+        }
+        
+        let minutes = seconds / 60
+        if minutes < 60 {
+            self = .minutes(Int(minutes))
+            return
+        }
+
+        let hours = minutes / 60
+        if hours < 24 {
+            self = .hours(Int(hours))
+            return
+        }
+
+        let days = hours / 24
+        if days < 7 {
+            self = .days(Int(days))
+            return
+        }
+
+        let weeks = days / 7
+        if days < 365 {
+            self = .weeks(Int(weeks))
+            return
+        }
+
+        /// - Note: Wrong! But probably close enough.
+        let years = days / 365
+        self = .years(Int(years))
+    }
 }
 
 extension Elapsed: CustomStringConvertible {
