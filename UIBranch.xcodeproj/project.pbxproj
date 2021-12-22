@@ -67,6 +67,7 @@
 		22760A4F274B136200F28F0A /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4E274B136200F28F0A /* Media.swift */; };
 		22A9E900276EA90B00C4EE99 /* AssemblyLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E8FF276EA90B00C4EE99 /* AssemblyLine.swift */; };
 		22A9E902277143E800C4EE99 /* TweetLinker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E901277143E800C4EE99 /* TweetLinker.swift */; };
+		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
 		22BE9C0D27606A280080E475 /* Supertall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BE9C0C27606A280080E475 /* Supertall.swift */; };
 		22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DB27404F4200932614 /* DiscussionTable.swift */; };
 		22D127DE2740651C00932614 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DD2740651C00932614 /* TweetCell.swift */; };
@@ -165,6 +166,7 @@
 		22760A4E274B136200F28F0A /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
 		22A9E8FF276EA90B00C4EE99 /* AssemblyLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssemblyLine.swift; sourceTree = "<group>"; };
 		22A9E901277143E800C4EE99 /* TweetLinker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetLinker.swift; sourceTree = "<group>"; };
+		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
 		22BE9C0C27606A280080E475 /* Supertall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supertall.swift; sourceTree = "<group>"; };
 		22D127DB27404F4200932614 /* DiscussionTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTable.swift; sourceTree = "<group>"; };
 		22D127DD2740651C00932614 /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
@@ -400,6 +402,7 @@
 			children = (
 				22D127DD2740651C00932614 /* TweetCell.swift */,
 				22D127EB274070CD00932614 /* MetricButtons.swift */,
+				22A9E9042772A86700C4EE99 /* TimestampButton.swift */,
 				22D127ED2740713500932614 /* TimeDifference.swift */,
 				22D127E02740655900932614 /* IconView.swift */,
 				22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */,
@@ -668,6 +671,7 @@
 				22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */,
 				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
 				22680A8E276AFCD4008827F8 /* TimelineConduit.swift in Sources */,
+				22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */,
 				22680A8C276ADF91008827F8 /* DateWindow.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
