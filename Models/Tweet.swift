@@ -206,6 +206,7 @@ extension Tweet {
 }
 
 extension Realm {
+    /// Attach `tweet` to a conversation, creating one if necessary.
     func linkConversation(_: TransactionToken, tweet: Tweet) -> Void {
         /// Attach to conversation (create one if necessary).
         var conversation: Conversation
