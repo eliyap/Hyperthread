@@ -324,12 +324,12 @@
 		223BBF6727377EAD00375530 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				223BBF6B27377EC100375530 /* Tweet.swift */,
 				223BBF6827377EC000375530 /* Conversation.swift */,
 				223BBF6A27377EC000375530 /* Discussion.swift */,
 				22760A48274ADFA900F28F0A /* ReadStatus.swift */,
 				223BBF6C27377EC300375530 /* Query.swift */,
 				22A9E9062773059E00C4EE99 /* Transaction.swift */,
-				223BBF6B27377EC100375530 /* Tweet.swift */,
 				22680A91276B41B1008827F8 /* Relevance.swift */,
 				22680A8F276B4159008827F8 /* PublicMetrics.swift */,
 				22F24640274DC20200AE17AD /* CanonicalString.swift */,
