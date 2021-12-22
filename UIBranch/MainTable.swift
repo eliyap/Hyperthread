@@ -466,7 +466,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
         }
     }
     
-    /// DEBUG FUNCTION
+    #if DEBUG
     public func fetchFakeTweet() {
         let realm = try! Realm()
         try! realm.write {
@@ -482,4 +482,5 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             UserDefaults.groupSuite.incrementScrollPositionRow()
         }
     }
+    #endif
 }
