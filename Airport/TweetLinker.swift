@@ -16,7 +16,7 @@ extension Realm {
         objects(Conversation.self)
             .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
                 .init(format: "\(Conversation.discussionPropertyName).@count == 0"),
-                .init(format: "\(Conversation._maxRelevancePropertyName) >= \(Relevance.discussion.rawValue)")
+                .init(format: "\(Conversation.maxRelevancePropertyName) >= \(Relevance.threshold)")
             ]))
     }
 }

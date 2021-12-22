@@ -42,6 +42,9 @@ internal enum Relevance: Int {
             return
         }
     }
+    
+    /// Minimum relevance to be considered worth showing the user.
+    public static let threshold = discussion.rawValue
 }
 
 /** Permit us to find the "maximum" enum.
