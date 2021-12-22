@@ -14,6 +14,67 @@ import Twig
  Links Tweets to Conversations, and Conversations to Discussions.
  - Returns: IDs of Tweets which need to be fetched.
  */
+func _ingestRaw(
+    rawTweets: [RawHydratedTweet],
+    rawUsers: [RawIncludeUser],
+    rawMedia: [RawIncludeMedia]
+) throws -> Set<Tweet.ID> {
+    let realm = try! Realm()
+    
+    /// IDs for further fetching.
+    var idsToFetch = Set<Tweet.ID>()
+    
+    /// Insert all users.
+    try realm.write {
+        for rawUser in rawUsers {
+            let user = User(raw: rawUser)
+            realm.add(user, update: .modified)
+        }
+    }
+    
+    /// First, pick out tweets with missing media keys.
+    let mediaKeys = rawMedia.map(\.media_key)
+    let rawTweets = rawTweets.filter { rawTweet in
+        /// Pass on anything without media keys.
+        guard let keys = rawTweet.attachments?.media_keys, keys.isNotEmpty else { return true }
+        if keys.allSatisfy({ mediaKeys.contains($0) }) {
+            return true
+        } else {
+            /// Request these tweets again.
+            idsToFetch.insert(rawTweet.id)
+            return false
+        }
+    }
+    
+    /// Insert Tweets into local database.
+    try realm.writeWithToken { token in
+        for rawTweet in rawTweets {
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
+            realm.add(tweet, update: .modified)
+            
+            /// Safety check: we count on the user never being missing!
+            if realm.user(id: rawTweet.author_id) == nil {
+                fatalError("Could not find user with id \(rawTweet.author_id)")
+            }
+            
+            /// Attach to conversation (create one if necessary).
+            realm.linkConversation(token, tweet: tweet)
+            
+            /// Check if referenced tweets are in local database.
+            for id in tweet.referenced.missingFrom(realm) {
+                idsToFetch.insert(id)
+            }
+        }
+    }
+    
+    return idsToFetch
+}
+
+/**
+ Accepts raw data from the Twitter v2 API.
+ Links Tweets to Conversations, and Conversations to Discussions.
+ - Returns: IDs of Tweets which need to be fetched.
+ */
 func ingestRaw(
     rawTweets: [RawHydratedTweet],
     rawUsers: [RawIncludeUser],
