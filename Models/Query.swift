@@ -38,3 +38,10 @@ extension Realm {
             .filter("\(Tweet.conversationPropertyName).@count == 0")
     }
 }
+
+extension Realm {
+    func followingUsers() -> Results<User> {
+        objects(User.self)
+            .filter("\(User.followingPropertyName) == YES")
+    }
+}
