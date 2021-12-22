@@ -64,7 +64,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable {
     var media: List<Media>
     
     @Persisted
-    private var _relevance: Relevance.RawValue
+    public var _relevance: Relevance.RawValue
     public var relevance: Relevance! {
         get { .init(rawValue: _relevance) }
         set { _relevance = newValue.rawValue }
