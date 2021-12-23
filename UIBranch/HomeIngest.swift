@@ -21,7 +21,8 @@ final class HomeIngestNew {
         .autoconnect()
     
     public init() {
-        pipeline = intake
+        /// When requested, publishes the IDs of new tweets on the home timeline.
+        let timelineIDPublisher: AnyPublisher<[Tweet.ID], Never> = intake
             /// Only proceed if credentials are loaded.
             .compactMap { Auth.shared.credentials }
             .asyncMap { (credentials) -> [RawV1Tweet] in
@@ -30,7 +31,7 @@ final class HomeIngestNew {
                     return try await timeline(credentials: credentials, sinceID: sinceID, maxID: nil)
                 } catch {
                     NetLog.error("\(error)")
-                    assert(false, error)
+                    assert(false, "\(error)")
                     return []
                 }
             }
@@ -40,15 +41,39 @@ final class HomeIngestNew {
             }
             .buffer(size: UInt(TweetEndpoint.maxResults), timer)
             .filter(\.isNotEmpty)
-            .compactMap{ (ids: [Tweet.ID]) in
+            .eraseToAnyPublisher()
+        
+        pipeline = timelineIDPublisher
+            .compactMap{ (ids: [Tweet.ID]) -> ([Tweet.ID], OAuthCredentials)? in
                 if let credentials = Auth.shared.credentials {
                     return (ids, credentials)
                 } else {
                     return nil
                 }
             }
-            .asyncMap { (ids, credentials) in
-                _hydratedTweets(credentials: Auth.shared.credentials!, ids: <#T##[String]#>)
+            .asyncMap { (ids, credentials) -> ([RawHydratedTweet], [RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]) in
+                do {
+                    return try await _hydratedTweets(credentials: credentials, ids: ids)
+                } catch {
+                    NetLog.error("\(error)")
+                    assert(false, "\(error)")
+                    return ([], [], [], [])
+                }
+
             }
+            .sink(receiveValue: { (tweets, _, users, media) in
+                do {
+                    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
+                    
+                    /// Update home timeline boundaries.
+                    let maxID = UserDefaults.groupSuite.maxID
+                    let newMaxID = min(Int64?(tweets.map(\.id).min()), Int64?(maxID))
+                    UserDefaults.groupSuite.maxID = newMaxID.string
+                    NetLog.debug("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
+                } catch {
+                    ModelLog.error("\(error)")
+                    assert(false, "\(error)")
+                }
+            })
     }
 }

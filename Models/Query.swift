@@ -47,9 +47,18 @@ extension Realm {
 }
 
 extension Realm {
+    
+    func conversationsWithFollowUp() -> Results<Conversation> {
+        objects(Conversation.self)
+            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(Conversation.maxRelevancePropertyName) >= \(Relevance.threshold)"),
+                NSPredicate(format: "\(Conversation.discussionPropertyName).@count == 0")
+            ]))
+    }
+    
     func discussionsWithFollowUp() -> Results<Discussion> {
         objects(Discussion.self)
-            .filter(NSCompoundPredicate.init(andPredicateWithSubpredicates: [
+            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
                 NSPredicate(format: "\(Discussion.maxRelevancePropertyName) >= \(Relevance.threshold)"),
                 NSPredicate(format: "\(Discussion.needsFollowUpPropertyName) == YES"),
             ]))

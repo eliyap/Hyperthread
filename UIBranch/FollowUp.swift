@@ -17,6 +17,7 @@ final class FollowUp {
         let realm = try! Realm()
         pipeline = intake
             .map { _ in
+                print(realm.conversationsWithFollowUp().count)
                 print(realm.discussionsWithFollowUp().count)
             }
             .sink { _ in }
