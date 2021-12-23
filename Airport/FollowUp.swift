@@ -36,21 +36,24 @@ final class FollowUp {
                 Swift.debugPrint("\(realm.discussionsWithFollowUp().count) discussions requiring follow up." as NSString)
                 return toFetch
             }
+            .map { Array($0) }
+        
+        self.pipeline = intakePublisher.merge(with: recycle)
             .map {
                 $0.filter { inFlight.contains($0) == false }
             }
-            .map { (ids: Set<Tweet.ID>) -> [Tweet.ID] in
+            .map { (ids: [Tweet.ID]) -> [Tweet.ID] in
                 inFlight.formUnion(ids)
-                print(ids)
-                return Array(ids)
+                print(ids.sorted())
+                return ids
             }
-        
-        self.pipeline = intakePublisher.merge(with: recycle)
             .v2Fetch()
             .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
             .sink { [weak self] data, following in
                 let (tweets, _, users, media) = data
                 do {
+                    Swift.debugPrint("Received \(tweets.map(\.id).sorted())")
+                    
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: following)
                     
                     /// Remove tweets from list.
@@ -59,9 +62,15 @@ final class FollowUp {
                     }
                     NetLog.debug("Follow up has \(inFlight.count) in flight.", print: true, true)
                     
+                    let realm = try! Realm()
+                    
+                    Swift.debugPrint("B – \(realm.conversationsWithFollowUp().count) conversations requiring follow up." as NSString)
+                    
                     /// Perform linking and request follow up.
                     let toRecycle = try linkUnlinked()
                     self?.recycle.send(Array(toRecycle))
+                    
+                    Swift.debugPrint("A – \(realm.conversationsWithFollowUp().count) conversations requiring follow up." as NSString)
                     
                     /// Check for further follow up.
                     self?.intake.send()

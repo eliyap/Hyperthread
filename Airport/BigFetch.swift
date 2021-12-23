@@ -179,11 +179,12 @@ internal func linkUnlinked() throws -> Set<Tweet.ID> {
     
     let realm = try! Realm()
     
-    /// Check orphaned conversations.
-    let orphans = realm.conversationsWithFollowUp()
+    /// Check unlinked conversations.
+    let unlinked = realm.objects(Conversation.self)
+        .filter(NSPredicate(format: "\(Conversation.discussionPropertyName).@count == 0"))
     try realm.writeWithToken { token in
-        for orphan: Conversation in orphans {
-            _link(token, orphan: orphan, idsToFetch: &idsToFetch, realm: realm)
+        for conversation in unlinked {
+            _link(token, conversation: conversation, idsToFetch: &idsToFetch, realm: realm)
         }
     }
     
@@ -273,47 +274,37 @@ internal func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, realm:
 #warning("De-Dupe")
 /// Tries to link Tweets to Conversations, and Conversations to Discussions.
 /// - Important: MUST take place within a Realm `write` transaction!
-internal func _link(_: Realm.TransactionToken, orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, realm: Realm) -> Void {
+internal func _link(_ token: Realm.TransactionToken, conversation: Conversation, idsToFetch: inout Set<Tweet.ID>, realm: Realm) -> Void {
     /// Link to upstream's discussion, if possible.
     if
-        let upstreamID = orphan.upstream,
+        let upstreamID = conversation.upstream,
         let upstreamConvo = realm.conversation(id: upstreamID),
         let upstream: Discussion = upstreamConvo.discussion.first
     {
-        upstream.conversations.append(orphan)
-        
-        /// Bump update time.
-        upstream.update(with: orphan.tweets.map(\.createdAt).max())
-        
-        /// Mark as updated (new discussions should stay new).
-        if upstream.read == .read {
-            upstream.read = .updated
-        }
-        
-        upstream.notifyTweetsDidChange()
+        upstream.insert(conversation, token, realm: realm)
         return
     }
     /** Conclusion: upstream is either missing, or itself has no `Discussion`. **/
     
     /// Link the conversation to a local tweet, if needed and possible.
     if
-        orphan.root == nil,
-        let local = realm.tweet(id: orphan.id)
+        conversation.root == nil,
+        let local = realm.tweet(id: conversation.id)
     {
-        orphan.root = local
+        conversation.root = local
     }
     
     /// Check if root tweet was still not found.
-    guard let root: Tweet = orphan.root else {
-        idsToFetch.insert(orphan.id)
+    guard let root: Tweet = conversation.root else {
+        idsToFetch.insert(conversation.id)
         return
     }
     
     /// Remove conversations that are standalone discussions.
-    guard let primaryReference: Tweet.ID = root.primaryReference else {
+    guard let rootPRID: Tweet.ID = root.primaryReference else {
         /// Recognize conversation as its own discussion.
-        orphan.upstream = root.id
-        realm.add(Discussion(root: orphan))
+        conversation.upstream = root.id
+        realm.add(Discussion(root: conversation))
         
         /// Note a new discussion above the fold.
         UserDefaults.groupSuite.incrementScrollPositionRow()
@@ -322,31 +313,27 @@ internal func _link(_: Realm.TransactionToken, orphan: Conversation, idsToFetch:
     }
     
     /// Remove conversations with un-fetched upstream tweets.
-    guard let orphanRootReferenced: Tweet = realm.tweet(id: primaryReference) else {
+    guard let rootPrimaryReference: Tweet = realm.tweet(id: rootPRID) else {
         /// Go fetch the upstream reference.
-        idsToFetch.insert(primaryReference)
+        idsToFetch.insert(rootPRID)
         return
     }
     
     /// Set upstream conversation.
-    let upstreamID: Conversation.ID = orphanRootReferenced.conversation_id
-    orphan.upstream = upstreamID
+    let upstreamID: Conversation.ID = rootPrimaryReference.conversation_id
+    conversation.upstream = upstreamID
         
     /// Check if the upstream Conversation is part of a Discussion.
     if
         let upstreamConvo = realm.conversation(id: upstreamID),
-        let upstreamDiscussion = upstreamConvo.discussion.first
+        let upstream: Discussion = upstreamConvo.discussion.first
     {
-        /// Add this Conversation to that discussion.
-        upstreamDiscussion.conversations.append(orphan)
-        
-        /// Bump the Discussion's "last updated" timestamp.
-        upstreamDiscussion.update(with: orphan.tweets.map(\.createdAt).max())
-        
-        /// Manually inform the Discussion that its contents changed.
-        upstreamDiscussion.notifyTweetsDidChange()
+        upstream.insert(conversation, token, realm: realm)
     } else {
         /// Otherwise, fetch the upstream Conversation's root Tweet.
         idsToFetch.insert(upstreamID)
+        print("HERE!")
     }
 }
+
+

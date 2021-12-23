@@ -147,3 +147,13 @@ extension Discussion {
         updatedAt = tweets.map(\.createdAt).max()!
     }
 }
+
+extension Discussion {
+    func insert(_ conversation: Conversation, _: Realm.TransactionToken, realm: Realm) -> Void {
+        conversations.append(conversation)
+        update(with: conversation.tweets.map(\.createdAt).max())
+        notifyTweetsDidChange()
+        updateMaxRelevance()
+        updateNeedsFollowUp(realm: realm)
+    }
+}
