@@ -10,7 +10,7 @@ import RealmSwift
 import Realm
 import Twig
 
-final class Tweet: Object, Identifiable, AuthorIdentifiable {
+final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     
     /// Twitter API `id`.
     @Persisted(primaryKey: true) 

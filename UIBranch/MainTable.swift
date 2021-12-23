@@ -121,10 +121,10 @@ final class MainTable: UITableViewController {
         TEST.intake.send(Void())
     }
     
-    private let _TEST_: HomeIngest<TimelineNewFetcher> = .init()
+    private let _TEST_: Airport🆕 = .init()
     @objc
     func debugMethod5() {
-        _TEST_.intake.send(Void())
+        _TEST_.requestNew()
     }
     
     required init?(coder: NSCoder) {

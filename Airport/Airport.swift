@@ -114,5 +114,20 @@ extension Collection {
 
 #warning("De Dupe Classes!") /// a re-imagined airport.
 final class Airport🆕 {
+    private let followUp: FollowUp = .init()
+    private let newIngest: HomeIngest<TimelineNewFetcher>
+    private let oldIngest: HomeIngest<TimelineOldFetcher>
     
+    init() {
+        self.newIngest = .init(followUp: followUp)
+        self.oldIngest = .init(followUp: followUp)
+    }
+    
+    public func requestNew() {
+        newIngest.intake.send()
+    }
+    
+    public func requestOld() {
+        oldIngest.intake.send()
+    }
 }

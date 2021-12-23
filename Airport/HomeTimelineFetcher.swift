@@ -18,7 +18,7 @@ internal protocol HomeTimelineFetcher {
     func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1Tweet]
     
     /// Update internal representation based on the fetched tweets.
-    func updateBoundaries(tweets: [Tweet]) -> Void
+    func updateBoundaries(tweets: [TweetIdentifiable]) -> Void
 }
 
 /// Helps us fetch Tweets newer than the ones we have.
@@ -31,7 +31,7 @@ final class TimelineNewFetcher: HomeTimelineFetcher {
         return try await timeline(credentials: credentials, sinceID: sinceID, maxID: nil)
     }
     
-    func updateBoundaries(tweets: [Tweet]) {
+    func updateBoundaries(tweets: [TweetIdentifiable]) {
         /// Update home timeline boundaries.
         let sinceID = UserDefaults.groupSuite.sinceID
         let newSinceID = max(Int64?(tweets.map(\.id).min()), Int64?(sinceID))
@@ -50,7 +50,7 @@ final class TimelineOldFetcher: HomeTimelineFetcher {
         return try await timeline(credentials: credentials, sinceID: nil, maxID: maxID)
     }
     
-    func updateBoundaries(tweets: [Tweet]) {
+    func updateBoundaries(tweets: [TweetIdentifiable]) {
         /// Update home timeline boundaries.
         let maxID = UserDefaults.groupSuite.maxID
         let newMaxID = min(Int64?(tweets.map(\.id).min()), Int64?(maxID))

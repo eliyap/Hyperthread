@@ -20,7 +20,11 @@ final class HomeIngest<T: HomeTimelineFetcher> {
     private let timer = Timer.publish(every: 0.05, tolerance: 0.05, on: .main, in: .default)
         .autoconnect()
     
-    public init() {
+    weak var followUp: FollowUp?
+    
+    public init(followUp: FollowUp) {
+        self.followUp = followUp
+        
         let fetcher = T()
         
         /// When requested, publishes the IDs of new tweets on the home timeline.
@@ -67,10 +71,7 @@ final class HomeIngest<T: HomeTimelineFetcher> {
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
                     
                     /// Update home timeline boundaries.
-                    let maxID = UserDefaults.groupSuite.maxID
-                    let newMaxID = min(Int64?(tweets.map(\.id).min()), Int64?(maxID))
-                    UserDefaults.groupSuite.maxID = newMaxID.string
-                    NetLog.debug("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
+                    fetcher.updateBoundaries(tweets: tweets)
                 } catch {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
