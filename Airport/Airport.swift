@@ -111,3 +111,8 @@ extension Collection {
         !isEmpty
     }
 }
+
+#warning("De Dupe Classes!") /// a re-imagined airport.
+final class Airport🆕 {
+    
+}
