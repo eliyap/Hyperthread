@@ -45,3 +45,14 @@ extension Realm {
             .filter("\(User.followingPropertyName) == YES")
     }
 }
+
+extension Realm {
+    func discussionsWithFollowUp() -> Results<Discussion> {
+        objects(Discussion.self)
+            .filter(NSCompoundPredicate.init(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(Discussion.maxRelevancePropertyName) >= \(Relevance.threshold)"),
+                NSPredicate(format: "\(Discussion.needsFollowUpPropertyName) == YES"),
+            ]))
+    }
+}
+    
