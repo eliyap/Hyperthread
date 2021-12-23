@@ -47,7 +47,7 @@ final class Airport {
         let chunkPublisher: AnyPublisher<([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]), Error> = queue
             .buffer(size: UInt(TweetEndpoint.maxResults), timer)
             .filter(\.isNotEmpty)
-            .asyncMap { (ids: [Tweet.ID]) in
+            .asyncTryMap { (ids: [Tweet.ID]) in
                 NetLog.debug("Fetching \(ids.count) IDs")
                 return try await hydratedTweets(
                     credentials: credentials,
