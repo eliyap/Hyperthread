@@ -78,7 +78,7 @@ final class Discussion: Object, Identifiable {
     public static let needsFollowUpPropertyName = "needsFollowUp"
     public func updateNeedsFollowUp(realm: Realm) -> Void {
         needsFollowUp = getFollowUp(realm: realm)
-            .isEmpty
+            .isNotEmpty
     }
     public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
         tweets

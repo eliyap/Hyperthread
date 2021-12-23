@@ -226,8 +226,12 @@ extension Realm {
         
         /// Add tweet to conversation.
         conversation.insert(tweet)
+        conversation.updateMaxRelevance()
+        
         if let discussion = conversation.discussion.first {
             discussion.notifyTweetsDidChange()
+            discussion.updateMaxRelevance()
+            discussion.updateNeedsFollowUp(realm: self)
         }
     }
 }

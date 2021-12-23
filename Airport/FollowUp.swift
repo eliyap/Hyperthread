@@ -13,10 +13,11 @@ import Twig
 final class FollowUp {
     private var pipeline: AnyCancellable? = nil
     public let intake = PassthroughSubject<Void, Never>()
-    
+    public let recycle = PassthroughSubject<[Tweet.ID], Never>()
     init() {
         var inFlight: Set<Tweet.ID> = []
-        self.pipeline = intake
+        
+        let intakePublisher = intake
             .map { (_) -> Set<Tweet.ID> in
                 let realm = try! Realm()
                 var toFetch: Set<Tweet.ID> = []
@@ -31,8 +32,8 @@ final class FollowUp {
                     .reduce(Set<Tweet.ID>()) { $0.union($1) }
                 toFetch.formUnion(d)
                 
-                print(realm.conversationsWithFollowUp().count)
-                print(realm.discussionsWithFollowUp().count)
+                Swift.debugPrint("\(realm.conversationsWithFollowUp().count) conversations requiring follow up." as NSString)
+                Swift.debugPrint("\(realm.discussionsWithFollowUp().count) discussions requiring follow up." as NSString)
                 return toFetch
             }
             .map {
@@ -43,6 +44,8 @@ final class FollowUp {
                 print(ids)
                 return Array(ids)
             }
+        
+        self.pipeline = intakePublisher.merge(with: recycle)
             .v2Fetch()
             .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
             .sink { [weak self] data, following in
@@ -55,6 +58,10 @@ final class FollowUp {
                         inFlight.remove(tweet.id)
                     }
                     NetLog.debug("Follow up has \(inFlight.count) in flight.", print: true, true)
+                    
+                    /// Perform linking and request follow up.
+                    let toRecycle = try linkUnlinked()
+                    self?.recycle.send(Array(toRecycle))
                     
                     /// Check for further follow up.
                     self?.intake.send()
