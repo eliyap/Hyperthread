@@ -36,10 +36,7 @@ final class Conversation: Object, Identifiable {
     var root: Tweet?
     
     @Persisted
-    var tweets: List<Tweet> {
-        /// Update value.
-        didSet { updateMaxRelevance() }
-    }
+    var tweets: List<Tweet>
     public static let tweetsPropertyName = "tweets"
     
     /** SQL-Query friendly variable which exposes the maximum relevance in `tweets`.
@@ -71,6 +68,7 @@ extension Conversation {
         /// Insert tweet if missing.
         if tweets.contains(where: {$0.id == tweet.id}) == false {
             tweets.append(tweet)
+            updateMaxRelevance()
         }
         
         /// Check is root tweet.
