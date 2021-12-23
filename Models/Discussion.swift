@@ -75,6 +75,7 @@ final class Discussion: Object, Identifiable {
      */
     @Persisted
     private var needsFollowUp: Bool = true
+    public static let needsFollowUpPropertyName = "needsFollowUp"
     public func updateNeedsFollowUp(realm: Realm) -> Void {
         needsFollowUp = getFollowUp(realm: realm)
             .isEmpty
