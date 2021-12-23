@@ -8,12 +8,20 @@
 import Foundation
 import Twig
 
+/**
+ Describes an object which helps fetch the home timeline (Twitter v1 API).
+ */
 internal protocol HomeTimelineFetcher {
     init()
+    
+    /// Fetch tweets using the provided credentials.
     func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1Tweet]
+    
+    /// Update internal representation based on the fetched tweets.
     func updateBoundaries(tweets: [Tweet]) -> Void
 }
 
+/// Helps us fetch Tweets newer than the ones we have.
 final class TimelineNewFetcher: HomeTimelineFetcher {
     
     init() {}
@@ -32,6 +40,7 @@ final class TimelineNewFetcher: HomeTimelineFetcher {
     }
 }
 
+/// Helps us fetch Tweets older than the ones we have.
 final class TimelineOldFetcher: HomeTimelineFetcher {
     
     init() {}
