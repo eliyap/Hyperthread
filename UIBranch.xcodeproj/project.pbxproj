@@ -68,6 +68,7 @@
 		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
 		22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9062773059E00C4EE99 /* Transaction.swift */; };
 		22BE9C0D27606A280080E475 /* Supertall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BE9C0C27606A280080E475 /* Supertall.swift */; };
+		22BFD7A1277402B700E46DF1 /* FollowUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A0277402B700E46DF1 /* FollowUp.swift */; };
 		22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DB27404F4200932614 /* DiscussionTable.swift */; };
 		22D127DE2740651C00932614 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DD2740651C00932614 /* TweetCell.swift */; };
 		22D127E12740655900932614 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E02740655900932614 /* IconView.swift */; };
@@ -166,6 +167,7 @@
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
 		22A9E9062773059E00C4EE99 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		22BE9C0C27606A280080E475 /* Supertall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supertall.swift; sourceTree = "<group>"; };
+		22BFD7A0277402B700E46DF1 /* FollowUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUp.swift; sourceTree = "<group>"; };
 		22D127DB27404F4200932614 /* DiscussionTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTable.swift; sourceTree = "<group>"; };
 		22D127DD2740651C00932614 /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		22D127E02740655900932614 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				222161F02741A8D300220F0C /* CardCell */,
 				22D127DF2740653900932614 /* TweetCell */,
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
+				22BFD7A0277402B700E46DF1 /* FollowUp.swift */,
 				223BBF7D273846BE00375530 /* LoginState.swift */,
 				223BBF792737867800375530 /* AuthView.swift */,
 				22D127EF2740A17B00932614 /* Following.swift */,
@@ -621,6 +624,7 @@
 				22D127E7274065E900932614 /* UserView.swift in Sources */,
 				2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */,
 				22BE9C0D27606A280080E475 /* Supertall.swift in Sources */,
+				22BFD7A1277402B700E46DF1 /* FollowUp.swift in Sources */,
 				22D127E12740655900932614 /* IconView.swift in Sources */,
 				224F88D5275E5C8700085678 /* ImageViewController.swift in Sources */,
 				22680A8A276AA710008827F8 /* DeferredBuffer.swift in Sources */,
