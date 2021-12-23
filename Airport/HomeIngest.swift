@@ -72,6 +72,8 @@ final class HomeIngest<T: HomeTimelineFetcher> {
                     
                     /// Update home timeline boundaries.
                     fetcher.updateBoundaries(tweets: tweets)
+                    
+                    followUp.intake.send()
                 } catch {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
