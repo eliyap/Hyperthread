@@ -28,7 +28,7 @@ final class HomeIngest<T: HomeTimelineFetcher> {
         let fetcher = T()
         
         /// When requested, publishes the IDs of new tweets on the home timeline.
-        let timelineIDPublisher: AnyPublisher<[Tweet.ID], Never> = intake
+        self.pipeline = intake
             /// Only proceed if credentials are loaded.
             .compactMap { Auth.shared.credentials }
             .asyncMap { (credentials) -> [RawV1Tweet] in
@@ -40,32 +40,8 @@ final class HomeIngest<T: HomeTimelineFetcher> {
                     return []
                 }
             }
-            .flatMap { $0.publisher }
-            .map { (raw: RawV1Tweet) in
-                "\(raw.id)"
-            }
-            .buffer(size: UInt(TweetEndpoint.maxResults), timer)
-            .filter(\.isNotEmpty)
-            .eraseToAnyPublisher()
-        
-        pipeline = timelineIDPublisher
-            /// Only proceed if credentials are loaded.
-            .compactMap{ (ids: [Tweet.ID]) -> ([Tweet.ID], OAuthCredentials)? in
-                if let credentials = Auth.shared.credentials {
-                    return (ids, credentials)
-                } else {
-                    return nil
-                }
-            }
-            .asyncMap { (ids, credentials) -> ([RawHydratedTweet], [RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]) in
-                do {
-                    return try await _hydratedTweets(credentials: credentials, ids: ids)
-                } catch {
-                    NetLog.error("\(error)")
-                    assert(false, "\(error)")
-                    return ([], [], [], [])
-                }
-            }
+            .map { $0.map{ "\($0.id)" } }
+            .v2Fetch()
             .sink(receiveValue: { (tweets, _, users, media) in
                 do {
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
