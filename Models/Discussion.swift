@@ -28,6 +28,8 @@ final class Discussion: Object, Identifiable {
     @Persisted
     var conversations: List<Conversation> {
         didSet {
+            updateMaxRelevance()
+            
             /// Wipe memoized storage.
             _tweets = nil
         }
@@ -58,6 +60,29 @@ final class Discussion: Object, Identifiable {
     public static let maxRelevancePropertyName = "maxRelevance"
     public func updateMaxRelevance() -> Void {
         maxRelevance = tweets.map(\._relevance).max() ?? Relevance.irrelevant.rawValue
+        
+        /// Also request a follow up check.
+        needsFollowUp = true
+    }
+    
+    /** Flag variable that denotes the `Discussion` has been updated and may need a follow up fetch.
+     Should be set when:
+     - `tweets` changes
+     - `conversations` changes
+     - Any tweet relevance changes
+     
+     These coincide with when `updateMaxRelevance` is called, so we simply set it to true there.
+     */
+    @Persisted
+    private var needsFollowUp: Bool = true
+    public func updateNeedsFollowUp(realm: Realm) -> Void {
+        needsFollowUp = getFollowUp(realm: realm)
+            .isEmpty
+    }
+    public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
+        tweets
+            .map { $0.getFollowUp(realm: realm) }
+            .reduce([]) { $0.union($1) }
     }
     
     override required init() {
