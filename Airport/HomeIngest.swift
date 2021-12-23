@@ -78,4 +78,8 @@ final class HomeIngest<T: HomeTimelineFetcher> {
                 }
             })
     }
+    
+    deinit {
+        pipeline.cancel()
+    }
 }
