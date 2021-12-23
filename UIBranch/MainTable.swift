@@ -89,6 +89,7 @@ final class MainTable: UITableViewController {
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod4)),
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod5)),
         ]
         #endif
         
@@ -114,10 +115,16 @@ final class MainTable: UITableViewController {
         ))
     }
     
-    private let TEST = FollowUp()
+    private let TEST: FollowUp = .init()
     @objc
     func debugMethod4() {
         TEST.intake.send(Void())
+    }
+    
+    private let _TEST_: HomeIngestNew = .init()
+    @objc
+    func debugMethod5() {
+        _TEST_.intake.send(Void())
     }
     
     required init?(coder: NSCoder) {
