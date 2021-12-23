@@ -52,6 +52,12 @@ final class Conversation: Object, Identifiable {
         maxRelevance = tweets.map(\._relevance).max() ?? Relevance.irrelevant.rawValue
     }
     
+    public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
+        tweets
+            .map { $0.getFollowUp(realm: realm) }
+            .reduce([]) { $0.union($1) }
+    }
+    
     init(id: String) {
         super.init()
         self.id = id
