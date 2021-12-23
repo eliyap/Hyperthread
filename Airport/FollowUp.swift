@@ -11,17 +11,12 @@ import RealmSwift
 import Twig
 
 final class FollowUp {
-    private let pipeline: AnyCancellable
+    private var pipeline: AnyCancellable? = nil
     public let intake = PassthroughSubject<Void, Never>()
-    
-    /// - Note: tolerance set to 100% to prevent performance hits.
-    /// Docs: https://developer.apple.com/documentation/foundation/timer/1415085-tolerance
-    private let timer = Timer.publish(every: 0.05, tolerance: 0.05, on: .main, in: .default)
-        .autoconnect()
     
     init() {
         var inFlight: Set<Tweet.ID> = []
-        let timelineIDPublisher: AnyPublisher<[Tweet.ID], Never> = intake
+        self.pipeline = intake
             .map { (_) -> Set<Tweet.ID> in
                 let realm = try! Realm()
                 var toFetch: Set<Tweet.ID> = []
@@ -40,49 +35,43 @@ final class FollowUp {
                 print(realm.discussionsWithFollowUp().count)
                 return toFetch
             }
-            .flatMap({
-                Array($0).publisher
-            })
-            .filter { inFlight.contains($0) == false }
-            .map { (id: Tweet.ID) -> Tweet.ID in
-                inFlight.insert(id)
-                print(id)
-                return id
+            .map {
+                $0.filter { inFlight.contains($0) == false }
             }
-            .buffer(size: UInt(TweetEndpoint.maxResults), timer)
-            .filter(\.isNotEmpty)
-            .eraseToAnyPublisher()
-        
-        self.pipeline = timelineIDPublisher
-            /// Only proceed if credentials are loaded.
-            .compactMap{ (ids: [Tweet.ID]) -> ([Tweet.ID], OAuthCredentials)? in
-                if let credentials = Auth.shared.credentials {
-                    return (ids, credentials)
-                } else {
-                    return nil
-                }
+            .map { (ids: Set<Tweet.ID>) -> [Tweet.ID] in
+                inFlight.formUnion(ids)
+                print(ids)
+                return Array(ids)
             }
-            .asyncMap { (ids, credentials) -> ([RawHydratedTweet], [RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]) in
+            .v2Fetch()
+            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
+            .sink { [weak self] data, following in
+                let (tweets, _, users, media) = data
                 do {
-                    return try await _hydratedTweets(credentials: credentials, ids: ids)
+                    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: following)
+                    
+                    /// Remove tweets from list.
+                    for tweet in tweets {
+                        inFlight.remove(tweet.id)
+                    }
+                    NetLog.debug("Follow up has \(inFlight.count) in flight.", print: true, true)
+                    
+                    /// Check for further follow up.
+                    self?.intake.send()
                 } catch {
-                    NetLog.error("\(error)")
+                    ModelLog.error("\(error)")
                     assert(false, "\(error)")
-                    return ([], [], [], [])
                 }
-            }
-            .sink { _ in
-                
             }
     }
     
     deinit {
-        pipeline.cancel()
+        pipeline?.cancel()
     }
 }
 
+public typealias RawData = ([RawHydratedTweet], [RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia])
 extension Publisher where Output == [Tweet.ID], Failure == Never {
-    typealias RawData = ([RawHydratedTweet], [RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia])
     func v2Fetch() -> AnyPublisher<RawData, Never> {
         /// - Note: tolerance set to 100% to prevent performance hits.
         /// Docs: https://developer.apple.com/documentation/foundation/timer/1415085-tolerance
@@ -111,5 +100,57 @@ extension Publisher where Output == [Tweet.ID], Failure == Never {
                 }
             }
             .eraseToAnyPublisher()
+    }
+}
+
+/**
+ An element in our Combine machinery.
+ Dispenses a list of IDs you follow that is guaranteed to be recent.
+ */
+final class FollowingFetcher<Input, Failure: Error>
+    : DeferredBuffer<Input, [User.ID], Failure>
+{
+    override func _fetch(_ onCompletion: @escaping ([User.ID]) -> Void) {
+        Task {
+            /// Assume credentials are available.
+            let credentials = Auth.shared.credentials!
+            
+            /// If the fetch fails, fall back on local storage.
+            guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
+                NetLog.error("Failed to fetch following list!")
+                assert(false, "Failed to fetch following list!")
+                
+                let realm = try! await Realm()
+                let ids: [User.ID] = realm.objects(User.self)
+                    .filter("\(User.followingPropertyName) == YES")
+                    .map(\.id)
+                onCompletion(ids)
+            }
+            
+            /// Store fetched results.
+            do {
+                let realm = try! await Realm()
+                try realm.write {
+                    /// Remove users who are no longer being followed.
+                    realm.followingUsers()
+                        .filter { user in
+                            /// Find users who were marked as followed but are now missing.
+                            rawUsers.contains(where: {user.id == $0.id}) == false
+                        }
+                        .forEach { user in
+                            user.following = false
+                        }
+                    
+                    /// Write all data, including following status, out to disk.
+                    rawUsers.forEach { realm.add(User(raw: $0), update: .modified) }
+                }
+            } catch {
+                NetLog.error("Failed to store following list!")
+                assert(false, "Failed to store following list!")
+            }
+            
+            /// Call completion handler.
+            onCompletion(rawUsers.map(\.id))
+        }
     }
 }

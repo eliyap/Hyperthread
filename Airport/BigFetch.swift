@@ -18,6 +18,45 @@ func ingestRaw(
     rawTweets: [RawHydratedTweet],
     rawUsers: [RawIncludeUser],
     rawMedia: [RawIncludeMedia],
+    following: [User.ID]
+) throws -> Void {
+    let realm = try! Realm()
+    
+    /// Insert all users.
+    try realm.write {
+        for rawUser in rawUsers {
+            let user = User(raw: rawUser)
+            realm.add(user, update: .modified)
+        }
+    }
+    
+    /// Insert Tweets into local database.
+    try realm.writeWithToken { token in
+        for rawTweet in rawTweets {
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
+            realm.add(tweet, update: .modified)
+            tweet.relevance = Relevance(tweet: tweet, following: following)
+            
+            /// Safety check: we count on the user never being missing!
+            if realm.user(id: rawTweet.author_id) == nil {
+                fatalError("Could not find user with id \(rawTweet.author_id)")
+            }
+            
+            /// Attach to conversation (create one if necessary).
+            realm.linkConversation(token, tweet: tweet)
+        }
+    }
+}
+
+/**
+ Accepts raw data from the Twitter v2 API.
+ - Warning: Do not feed `include`d `Tweet`s!
+            These may be missing media keys, or be of a different `Relevance` than the main payload!
+ */
+func ingestRaw(
+    rawTweets: [RawHydratedTweet],
+    rawUsers: [RawIncludeUser],
+    rawMedia: [RawIncludeMedia],
     relevance: Relevance
 ) throws -> Void {
     let realm = try! Realm()
