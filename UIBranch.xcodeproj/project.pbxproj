@@ -273,7 +273,6 @@
 				22D127DF2740653900932614 /* TweetCell */,
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
 				22BFD7A0277402B700E46DF1 /* FollowUp.swift */,
-				22BFD7A2277405F100E46DF1 /* HomeIngest.swift */,
 				223BBF7D273846BE00375530 /* LoginState.swift */,
 				223BBF792737867800375530 /* AuthView.swift */,
 				22D127EF2740A17B00932614 /* Following.swift */,
@@ -323,6 +322,7 @@
 				223BBF6127377E8800375530 /* BigFetch.swift */,
 				22A9E901277143E800C4EE99 /* TweetLinker.swift */,
 				22680A8D276AFCD4008827F8 /* TimelineConduit.swift */,
+				22BFD7A2277405F100E46DF1 /* HomeIngest.swift */,
 			);
 			path = Airport;
 			sourceTree = "<group>";

@@ -121,7 +121,7 @@ final class MainTable: UITableViewController {
         TEST.intake.send(Void())
     }
     
-    private let _TEST_: HomeIngestNew = .init()
+    private let _TEST_: HomeIngest<TimelineNewFetcher> = .init()
     @objc
     func debugMethod5() {
         _TEST_.intake.send(Void())
