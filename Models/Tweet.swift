@@ -87,6 +87,17 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         set { _relevance = newValue.rawValue }
     }
     
+    /** The set of referenced tweets which have yet to be fetched.
+        If empty, we should be able to find the Tweet in our Realm by the stored reference ID.
+     */
+    @Persisted
+    private var _dangling: ReferenceSet.RawValue
+    public static let danglingPropertyName = "_dangling"
+    public var dangling: ReferenceSet! {
+        get { .init(rawValue: _dangling) }
+        set { _dangling = newValue.rawValue}
+    }
+    
     init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia]) {
         super.init()
         self.id = raw.id
