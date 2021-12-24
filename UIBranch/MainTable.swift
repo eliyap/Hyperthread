@@ -197,6 +197,13 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
+            .filter(NSPredicate(format: """
+                SUBQUERY(conversations, $c,
+                    SUBQUERY(tweets, $t,
+                        $t.createdAt > %@
+                    ).@count > 0
+                ).@count == 0
+                """, Calendar.current.startOfDay(for: Date()) as NSDate))
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.fetcher = fetcher
         self.scrollAction = action
