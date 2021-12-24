@@ -269,7 +269,7 @@ extension Tweet: ReplyIdentifiable {
 
 extension Realm {
     /// Find tweets with possibly dangling
-    internal func updateDangling(_ token: TransactionToken) throws -> Void {
+    internal func updateDangling() throws -> Void {
         let tweets = objects(Tweet.self)
             .filter(.init(format: "\(Tweet.danglingPropertyName) > 0"))
         

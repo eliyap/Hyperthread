@@ -67,6 +67,8 @@ final class FollowUp {
                     NetLog.debug("Follow up has \(inFlight.count) in flight.", print: true, true)
                     
                     let realm = try! Realm()
+                    try realm.updateDangling()
+                    
                     
                     Swift.debugPrint("B – \(realm.conversationsWithFollowUp().count) conversations requiring follow up." as NSString)
                     
