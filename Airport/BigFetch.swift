@@ -235,7 +235,6 @@ internal func link(_ token: Realm.TransactionToken, conversation: Conversation, 
     } else {
         /// Otherwise, fetch the upstream Conversation's root Tweet.
         idsToFetch.insert(upstreamID)
-        print("HERE!")
     }
 }
 
