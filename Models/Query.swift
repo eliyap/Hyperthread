@@ -58,6 +58,7 @@ extension Realm {
     func discussionsWithFollowUp() -> Results<Discussion> {
         objects(Discussion.self)
             .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
+                /// Check if any `Tweet` is above the relevance threshold.
                 NSPredicate(format: """
                     SUBQUERY(\(Discussion.conversationsPropertyName), $c,
                         SUBQUERY(\(Conversation.tweetsPropertyName), $t,
@@ -65,7 +66,15 @@ extension Realm {
                         ).@count > 0
                     ).@count > 0
                     """),
-                NSPredicate(format: "\(Discussion.needsFollowUpPropertyName) == YES"),
+                
+                /// Check if any `Tweet` has dangling references.
+                NSPredicate(format: """
+                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+                            $t.\(Tweet.danglingPropertyName) >= \(ReferenceSet.empty.rawValue)
+                        ).@count > 0
+                    ).@count > 0
+                    """),
             ]))
     }
 }
