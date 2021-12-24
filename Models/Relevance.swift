@@ -46,13 +46,3 @@ internal enum Relevance: Int {
     /// Minimum relevance to be considered worth showing the user.
     public static let threshold = discussion.rawValue
 }
-
-/** Permit us to find the "maximum" enum.
-    Allows us to easily determine the highest `Relevance`.
- */
-extension Collection where Element: RawRepresentable, Element.RawValue: Comparable {
-    func max() -> Element? {
-        guard let maxRaw = map(\.rawValue).max() else { return nil }
-        return .init(rawValue: maxRaw)
-    }
-}

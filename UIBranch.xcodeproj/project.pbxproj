@@ -71,6 +71,7 @@
 		22BFD7A1277402B700E46DF1 /* FollowUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A0277402B700E46DF1 /* FollowUp.swift */; };
 		22BFD7A3277405F100E46DF1 /* HomeIngest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A2277405F100E46DF1 /* HomeIngest.swift */; };
 		22BFD7A52774620600E46DF1 /* HomeTimelineFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */; };
+		22BFD7A72775882000E46DF1 /* Collection<Enum>.max.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */; };
 		22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DB27404F4200932614 /* DiscussionTable.swift */; };
 		22D127DE2740651C00932614 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127DD2740651C00932614 /* TweetCell.swift */; };
 		22D127E12740655900932614 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E02740655900932614 /* IconView.swift */; };
@@ -172,6 +173,7 @@
 		22BFD7A0277402B700E46DF1 /* FollowUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUp.swift; sourceTree = "<group>"; };
 		22BFD7A2277405F100E46DF1 /* HomeIngest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeIngest.swift; sourceTree = "<group>"; };
 		22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTimelineFetcher.swift; sourceTree = "<group>"; };
+		22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection<Enum>.max.swift"; sourceTree = "<group>"; };
 		22D127DB27404F4200932614 /* DiscussionTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTable.swift; sourceTree = "<group>"; };
 		22D127DD2740651C00932614 /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		22D127E02740655900932614 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
@@ -378,6 +380,7 @@
 				223BBF8927385AFA00375530 /* OptionalCompare.swift */,
 				223BBF8B27385B0F00375530 /* OptionalCast.swift */,
 				2266D0C927616FDA0099477D /* GetHeight.swift */,
+				22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				223BBF6627377E8900375530 /* LatchBuffer.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
+				22BFD7A72775882000E46DF1 /* Collection<Enum>.max.swift in Sources */,
 				220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */,
 				22680A92276B41B1008827F8 /* Relevance.swift in Sources */,
 				222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */,
