@@ -259,7 +259,6 @@ extension Realm {
         
         if let discussion = conversation.discussion.first {
             discussion.notifyTweetsDidChange()
-            discussion.updateNeedsFollowUp(realm: self)
         }
     }
 }
