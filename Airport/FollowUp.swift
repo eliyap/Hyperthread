@@ -51,7 +51,7 @@ final class FollowUp {
             }
             .v2Fetch()
             /// Synchronize
-            .receive(on: Airport.scheduler)
+            .receive(on: Airport🆕.scheduler)
             .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
             .sink { [weak self] data, following in
                 let (tweets, _, users, media) = data
