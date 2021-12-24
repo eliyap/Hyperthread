@@ -267,3 +267,62 @@ extension Realm {
 extension Tweet: ReplyIdentifiable {
     var replyID: String? { replying_to }
 }
+
+extension Realm {
+    /// Find tweets with possibly dangling
+    internal func getDangling(_ token: TransactionToken) throws -> [Tweet] {
+        let tweets = objects(Tweet.self)
+            .filter(.init(format: "\(Tweet.danglingPropertyName) > 0"))
+        var result: [Tweet] = []
+        
+        /// Do a just-in-time check for tweets which are no longer dangling.
+        try writeWithToken { token in
+            for tweet in tweets {
+                updateReferenceSet(token, tweet: tweet)
+                if tweet.dangling != .empty {
+                    result.append(tweet)
+                }
+            }
+        }
+        
+        return result
+    }
+}
+
+extension Realm {
+    /** Update the reference set based on what is present in the database*/
+    fileprivate func updateReferenceSet(_ token: TransactionToken, tweet: Tweet) -> Void {
+        if tweet.dangling.contains(.reply) {
+            guard let replyID = tweet.replying_to else {
+                ModelLog.error("Illegal State! Reply ID missing!")
+                assert(false)
+                return
+            }
+            if self.tweet(id: replyID) != nil {
+                tweet.dangling.remove(.reply)
+            }
+        }
+
+        if tweet.dangling.contains(.quote) {
+            guard let quoteID = tweet.quoting else {
+                ModelLog.error("Illegal State! Quote ID missing!")
+                assert(false)
+                return
+            }
+            if self.tweet(id: quoteID) != nil {
+                tweet.dangling.remove(.quote)
+            }
+        }
+
+        if tweet.dangling.contains(.retweet) {
+            guard let retweetID = tweet.retweeting else {
+                ModelLog.error("Illegal State! Retweet ID missing!")
+                assert(false)
+                return
+            }
+            if self.tweet(id: retweetID) != nil {
+                tweet.dangling.remove(.retweet)
+            }
+        }
+    }
+}
