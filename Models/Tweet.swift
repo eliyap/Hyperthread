@@ -270,22 +270,16 @@ extension Tweet: ReplyIdentifiable {
 
 extension Realm {
     /// Find tweets with possibly dangling
-    internal func getDangling(_ token: TransactionToken) throws -> [Tweet] {
+    internal func updateDangling(_ token: TransactionToken) throws -> Void {
         let tweets = objects(Tweet.self)
             .filter(.init(format: "\(Tweet.danglingPropertyName) > 0"))
-        var result: [Tweet] = []
         
         /// Do a just-in-time check for tweets which are no longer dangling.
         try writeWithToken { token in
             for tweet in tweets {
                 updateReferenceSet(token, tweet: tweet)
-                if tweet.dangling != .empty {
-                    result.append(tweet)
-                }
             }
         }
-        
-        return result
     }
 }
 
