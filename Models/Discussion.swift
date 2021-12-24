@@ -10,26 +10,6 @@ import RealmSwift
 import Realm
 import Twig
 
-#warning("incomplete")
-//final class ConversationList: EmbeddedObject {
-//    @Persisted
-//    private var conversations: List<Conversation>
-//    public static let conversationsPropertyName = "conversations"
-//
-//    @Persisted
-//    public private(set) var maxRelevance: Relevance.RawValue
-//    public func updateMaxRelevance() -> Void {
-//        maxRelevance = conversations
-//            .flatMap(\.tweets)
-//            .map(\._relevance)
-//            .max() ??
-//    }
-//
-//    func append(_ conversation: Conversation) -> Void {
-//        conversations.append(conversation)
-//    }
-//}
-
 final class Discussion: Object, Identifiable {
     
     /// The root conversation ID, and thereby the root Tweet ID.
