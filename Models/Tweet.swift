@@ -64,13 +64,8 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     var media: List<Media>
     
     @Persisted
-    public var _relevance: Relevance.RawValue {
-        /// Update `Conversation`, which will update `Discussion`.
-        didSet {
-            conversation.forEach { $0.updateMaxRelevance() }
-            conversation.flatMap(\.discussion).forEach { $0.updateMaxRelevance() }
-        }
-    }
+    public var _relevance: Relevance.RawValue
+    public static let relevancePropertyName = "_relevance"
     public var relevance: Relevance! {
         get { .init(rawValue: _relevance) }
         set { _relevance = newValue.rawValue }
@@ -229,11 +224,9 @@ extension Realm {
         
         /// Add tweet to conversation.
         conversation.insert(tweet)
-        conversation.updateMaxRelevance()
         
         if let discussion = conversation.discussion.first {
             discussion.notifyTweetsDidChange()
-            discussion.updateMaxRelevance()
             discussion.updateNeedsFollowUp(realm: self)
         }
     }

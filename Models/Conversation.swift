@@ -39,19 +39,6 @@ final class Conversation: Object, Identifiable {
     var tweets: List<Tweet>
     public static let tweetsPropertyName = "tweets"
     
-    /** SQL-Query friendly variable which exposes the maximum relevance in `tweets`.
-        Needs to be updated whenever `tweets` is changed, or one of the `tweets` changes relevance.
-        Updates its `Discussion` whenever it is set.
-     */
-    @Persisted
-    public var maxRelevance: Relevance.RawValue = Relevance.irrelevant.rawValue {
-        didSet { discussion.forEach { $0.updateMaxRelevance() } }
-    }
-    public static let maxRelevancePropertyName = "maxRelevance"
-    public func updateMaxRelevance() -> Void {
-        maxRelevance = tweets.map(\._relevance).max() ?? Relevance.irrelevant.rawValue
-    }
-    
     public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
         tweets
             .map { $0.getFollowUp(realm: realm) }
@@ -74,7 +61,6 @@ extension Conversation {
         /// Insert tweet if missing.
         if tweets.contains(where: {$0.id == tweet.id}) == false {
             tweets.append(tweet)
-            updateMaxRelevance()
         }
         
         /// Check is root tweet.
