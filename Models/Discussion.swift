@@ -10,6 +10,26 @@ import RealmSwift
 import Realm
 import Twig
 
+#warning("incomplete")
+//final class ConversationList: EmbeddedObject {
+//    @Persisted
+//    private var conversations: List<Conversation>
+//    public static let conversationsPropertyName = "conversations"
+//
+//    @Persisted
+//    public private(set) var maxRelevance: Relevance.RawValue
+//    public func updateMaxRelevance() -> Void {
+//        maxRelevance = conversations
+//            .flatMap(\.tweets)
+//            .map(\._relevance)
+//            .max() ??
+//    }
+//
+//    func append(_ conversation: Conversation) -> Void {
+//        conversations.append(conversation)
+//    }
+//}
+
 final class Discussion: Object, Identifiable {
     
     /// The root conversation ID, and thereby the root Tweet ID.
@@ -59,7 +79,17 @@ final class Discussion: Object, Identifiable {
     public var maxRelevance: Relevance.RawValue = Relevance.irrelevant.rawValue
     public static let maxRelevancePropertyName = "maxRelevance"
     public func updateMaxRelevance() -> Void {
-        maxRelevance = tweets.map(\._relevance).max() ?? Relevance.irrelevant.rawValue
+        maxRelevance = conversations
+            .flatMap(\.tweets)
+            .map(\._relevance)
+            .max() ?? Relevance.irrelevant.rawValue
+        
+        if id == "1471893582999166978" {
+            Swift.debugPrint("Count: \(conversations.count)" as NSString)
+            Swift.debugPrint("Texts: \(Array(conversations.flatMap(\.tweets).map(\.text)))" as NSString)
+            Swift.debugPrint("Relevances: \(Array(conversations.flatMap(\.tweets).map(\._relevance)))" as NSString)
+            Swift.debugPrint("================================================================================")
+        }
         
         /// Also request a follow up check.
         needsFollowUp = true
@@ -151,6 +181,9 @@ extension Discussion {
 extension Discussion {
     func insert(_ conversation: Conversation, _: Realm.TransactionToken, realm: Realm) -> Void {
         conversations.append(conversation)
+        
+        /// Update internal representation.
+        _tweets = nil
         update(with: conversation.tweets.map(\.createdAt).max())
         notifyTweetsDidChange()
         updateMaxRelevance()

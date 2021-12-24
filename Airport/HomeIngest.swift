@@ -42,6 +42,8 @@ final class HomeIngest<T: HomeTimelineFetcher> {
             }
             .map { $0.map{ "\($0.id)" } }
             .v2Fetch()
+            /// Synchronize
+            .receive(on: Airport.scheduler)
             .sink(receiveValue: { (tweets, _, users, media) in
                 do {
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
