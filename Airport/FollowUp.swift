@@ -112,7 +112,7 @@ extension Publisher where Output == [Tweet.ID], Failure == Never {
             }
             .asyncMap { (ids, credentials) -> ([RawHydratedTweet], [RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]) in
                 do {
-                    return try await _hydratedTweets(credentials: credentials, ids: ids)
+                    return try await hydratedTweets(credentials: credentials, ids: ids)
                 } catch {
                     NetLog.error("\(error)")
                     assert(false, "\(error)")
