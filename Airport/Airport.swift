@@ -131,3 +131,16 @@ final class Airport🆕 {
         oldIngest.intake.send()
     }
 }
+
+extension Airport🆕 {
+    /** The scheduler on which work is done.
+        
+        `Realm` write transactions are performed in our pipeline, which blocks other `Realm` work.
+        Therefore, we must allow other threads to avoid conflict with `Airport`, by running on the same
+        scheduler.
+     
+        Scheduler chosen based on:
+        https://www.avanderlee.com/combine/runloop-main-vs-dispatchqueue-main/
+     */
+    public static let scheduler = DispatchQueue.main
+}
