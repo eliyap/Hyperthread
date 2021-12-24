@@ -9,12 +9,6 @@ import Foundation
 import Combine
 import Twig
 
-extension Collection {
-    var isNotEmpty: Bool {
-        !isEmpty
-    }
-}
-
 final class Airport🆕 {
     
     /** The scheduler on which work is done.
