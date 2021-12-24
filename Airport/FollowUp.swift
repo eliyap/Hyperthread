@@ -19,7 +19,7 @@ final class FollowUp {
         
         let intakePublisher = intake
             /// Synchronize
-            .receive(on: Airport.scheduler)
+            .receive(on: Airport🆕.scheduler)
             .map { (_) -> Set<Tweet.ID> in
                 let realm = try! Realm()
                 var toFetch: Set<Tweet.ID> = []
@@ -51,7 +51,7 @@ final class FollowUp {
             }
             .v2Fetch()
             /// Synchronize
-            .receive(on: Airport.scheduler)
+            .receive(on: Airport🆕.scheduler)
             .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
             .sink { [weak self] data, following in
                 let (tweets, _, users, media) = data
@@ -112,7 +112,7 @@ extension Publisher where Output == [Tweet.ID], Failure == Never {
             }
             .asyncMap { (ids, credentials) -> ([RawHydratedTweet], [RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]) in
                 do {
-                    return try await _hydratedTweets(credentials: credentials, ids: ids)
+                    return try await hydratedTweets(credentials: credentials, ids: ids)
                 } catch {
                     NetLog.error("\(error)")
                     assert(false, "\(error)")

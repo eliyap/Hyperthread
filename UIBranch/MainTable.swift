@@ -388,7 +388,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     private let threshhold = 25
     
     /// Laziness prevents attempting to load nil IDs.
-    public lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
+    public lazy var airport = { Airport🆕() }()
     public lazy var timelineConduit = { TimelineConduit(credentials: Auth.shared.credentials!) }()
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
@@ -418,30 +418,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 return
             }
             
-            /// Prevent repeated requests.
-            isFetching = true
-            
-            /// Perform a simple `home_timelime` fetch.
-            let maxID = UserDefaults.groupSuite.maxID
-            guard let rawTweets = try? await timeline(credentials: credentials, sinceID: nil, maxID: maxID) else {
-                NetLog.warning("Failed to fetch timeline!")
-                return
-            }
-            if rawTweets.isEmpty {
-                NetLog.debug("No new tweets found!", print: true)
-            } else {
-                /// Allow further requests.
-                isFetching = false
-            }
-            
-            /// Send to airport for further fetching.
-            let ids = rawTweets.map{"\($0.id)"}
-            airport.enqueue(ids)
-            
-            /// Update boundaries.
-            let newMaxID = min(rawTweets.map(\.id).min(), Int64?(maxID))
-            UserDefaults.groupSuite.maxID = newMaxID.string
-            NetLog.debug("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
+            airport.requestOld()
         }
     }
     
@@ -453,29 +430,9 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 return
             }
             
-            NetLog.debug("UserID is \(credentials.user_id)", print: false, true)
+            airport.requestNew()
             
-            /// Prevent repeated requests.
-            isFetching = true
-            
-            /// Perform a simple `home_timelime` fetch.
-            let sinceID = UserDefaults.groupSuite.sinceID
-            guard let rawTweets = try? await timeline(credentials: credentials, sinceID: sinceID, maxID: nil) else {
-                NetLog.warning("Failed to fetch timeline!")
-                return
-            }
-            /// Allow further requests.
-            isFetching = false
-            
-            /// Send to airport for further fetching.
-            let ids = rawTweets.map{"\($0.id)"}
-            airport.enqueue(ids)
-            
-            /// Update boundaries.
-            let newSinceID = max(rawTweets.map(\.id).max(), Int64?(sinceID))
-            UserDefaults.groupSuite.sinceID = newSinceID.string
-            NetLog.debug("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
-            
+            #warning("TODO: support completion handler")
             onFetched()
         }
     }
