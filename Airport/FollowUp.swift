@@ -19,7 +19,7 @@ final class FollowUp {
         
         let intakePublisher = intake
             /// Synchronize
-            .receive(on: Airport.scheduler)
+            .receive(on: Airport🆕.scheduler)
             .map { (_) -> Set<Tweet.ID> in
                 let realm = try! Realm()
                 var toFetch: Set<Tweet.ID> = []
