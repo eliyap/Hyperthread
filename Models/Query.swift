@@ -58,7 +58,13 @@ extension Realm {
     func discussionsWithFollowUp() -> Results<Discussion> {
         objects(Discussion.self)
             .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "\(Discussion.maxRelevancePropertyName) >= \(Relevance.threshold)"),
+                NSPredicate(format: """
+                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+                            $t.\(Tweet.relevancePropertyName) >= \(Relevance.threshold)
+                        ).@count > 0
+                    ).@count > 0
+                    """),
                 NSPredicate(format: "\(Discussion.needsFollowUpPropertyName) == YES"),
             ]))
     }

@@ -28,8 +28,6 @@ final class Discussion: Object, Identifiable {
     @Persisted
     var conversations: List<Conversation> {
         didSet {
-            updateMaxRelevance()
-            
             /// Wipe memoized storage.
             _tweets = nil
         }
@@ -54,26 +52,6 @@ final class Discussion: Object, Identifiable {
     private var tweetsBellValue: Bool = false
     public static let tweetsDidChangeKey = "tweetsBellValue"
     public func notifyTweetsDidChange() -> Void { tweetsBellValue.toggle() }
-    
-    @Persisted
-    public var maxRelevance: Relevance.RawValue = Relevance.irrelevant.rawValue
-    public static let maxRelevancePropertyName = "maxRelevance"
-    public func updateMaxRelevance() -> Void {
-        maxRelevance = conversations
-            .flatMap(\.tweets)
-            .map(\._relevance)
-            .max() ?? Relevance.irrelevant.rawValue
-        
-        if id == "1471893582999166978" {
-            Swift.debugPrint("Count: \(conversations.count)" as NSString)
-            Swift.debugPrint("Texts: \(Array(conversations.flatMap(\.tweets).map(\.text)))" as NSString)
-            Swift.debugPrint("Relevances: \(Array(conversations.flatMap(\.tweets).map(\._relevance)))" as NSString)
-            Swift.debugPrint("================================================================================")
-        }
-        
-        /// Also request a follow up check.
-        needsFollowUp = true
-    }
     
     /** Flag variable that denotes the `Discussion` has been updated and may need a follow up fetch.
      Should be set when:
@@ -166,7 +144,6 @@ extension Discussion {
         _tweets = nil
         update(with: conversation.tweets.map(\.createdAt).max())
         notifyTweetsDidChange()
-        updateMaxRelevance()
         updateNeedsFollowUp(realm: realm)
     }
 }
