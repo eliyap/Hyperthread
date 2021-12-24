@@ -53,27 +53,6 @@ final class Discussion: Object, Identifiable {
     public static let tweetsDidChangeKey = "tweetsBellValue"
     public func notifyTweetsDidChange() -> Void { tweetsBellValue.toggle() }
     
-    /** Flag variable that denotes the `Discussion` has been updated and may need a follow up fetch.
-     Should be set when:
-     - `tweets` changes
-     - `conversations` changes
-     - Any tweet relevance changes
-     
-     These coincide with when `updateMaxRelevance` is called, so we simply set it to true there.
-     */
-    @Persisted
-    private var needsFollowUp: Bool = true
-    public static let needsFollowUpPropertyName = "needsFollowUp"
-    public func updateNeedsFollowUp(realm: Realm) -> Void {
-        needsFollowUp = getFollowUp(realm: realm)
-            .isNotEmpty
-    }
-    public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
-        tweets
-            .map { $0.getFollowUp(realm: realm) }
-            .reduce([]) { $0.union($1) }
-    }
-    
     override required init() {
         super.init()
     }
@@ -144,6 +123,5 @@ extension Discussion {
         _tweets = nil
         update(with: conversation.tweets.map(\.createdAt).max())
         notifyTweetsDidChange()
-        updateNeedsFollowUp(realm: realm)
     }
 }
