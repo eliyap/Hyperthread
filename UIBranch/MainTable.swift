@@ -222,7 +222,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 return 
             }
             
-            /** - Note: animated is `false` so that when new tweet's are added via
+            /** - Note: `animated` is `false` so that when new tweet's are added via
                         "pull to refresh", the "inserted above" Twitterific-style effect is as
                         seamless as possible.
              */
