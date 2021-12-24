@@ -20,19 +20,3 @@ extension Realm {
             ]))
     }
 }
-
-internal func _linkOrphans() throws -> Set<Tweet.ID> {
-    var idsToFetch = Set<Tweet.ID>()
-    
-    let realm = try! Realm()
-    
-    /// Check orphaned conversations.
-    let orphans = realm.findOrphans()
-    try realm.write {
-        for orphan: Conversation in orphans {
-            link(orphan: orphan, idsToFetch: &idsToFetch, realm: realm)
-        }
-    }
-    
-    return idsToFetch
-}
