@@ -108,18 +108,23 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         self.authorID = raw.author_id
         self.read = false
         
+        var referenceSet: ReferenceSet = .empty
         if let references = raw.referenced_tweets {
             for reference in references {
                 switch reference.type {
                 case .replied_to:
                     replying_to = reference.id
+                    referenceSet.formUnion(.reply)
                 case .quoted:
                     quoting = reference.id
+                    referenceSet.formUnion(.quote)
                 case .retweeted:
                     retweeting = reference.id
+                    referenceSet.formUnion(.retweet)
                 }
             }
         }
+        dangling = referenceSet
         
         if let rawEntities = raw.entities {
             entities = Entities(raw: rawEntities)
