@@ -241,7 +241,6 @@
 		223BBF1E27377BE500375530 = {
 			isa = PBXGroup;
 			children = (
-				22BFD7A82775883F00E46DF1 /* Collection.isNotEmpty.swift */,
 				223BBF7F2738476B00375530 /* Misc */,
 				223BBF7227377EE500375530 /* Logging */,
 				223BBF6727377EAD00375530 /* Models */,
@@ -384,6 +383,7 @@
 				223BBF8B27385B0F00375530 /* OptionalCast.swift */,
 				2266D0C927616FDA0099477D /* GetHeight.swift */,
 				22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */,
+				22BFD7A82775883F00E46DF1 /* Collection.isNotEmpty.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
