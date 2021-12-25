@@ -42,7 +42,13 @@ final class HomeIngest<T: HomeTimelineFetcher> {
                     return []
                 }
             }
-            .map { $0.map{ "\($0.id)" } }
+            /// Convert to strings
+            .map { [weak self] ids in
+                if ids.isEmpty {
+                    self?.removeAll()
+                }
+                return ids.map{ "\($0.id)" }
+            }
             .v2Fetch()
             /// Synchronize
             .receive(on: Airport.scheduler)
@@ -57,9 +63,7 @@ final class HomeIngest<T: HomeTimelineFetcher> {
                     /// Immediately check for follow up.
                     followUp.intake.send()
                     
-                    /// Execute and remove completion handlers.
-                    self?.onFetched.forEach { $0() }
-                    self?.onFetched = []
+                    self?.removeAll()
                 } catch {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
@@ -73,5 +77,11 @@ final class HomeIngest<T: HomeTimelineFetcher> {
     
     public func add(_ completion: @escaping () -> Void) -> Void {
         onFetched.append(completion)
+    }
+    
+    private func removeAll() -> Void {
+        /// Execute and remove completion handlers.
+        onFetched.forEach { $0() }
+        onFetched = []
     }
 }
