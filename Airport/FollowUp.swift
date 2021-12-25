@@ -46,7 +46,6 @@ final class FollowUp {
             }
             .map { (ids: [Tweet.ID]) -> [Tweet.ID] in
                 inFlight.formUnion(ids)
-                print(ids.sorted())
                 return ids
             }
             .v2Fetch()
@@ -56,8 +55,6 @@ final class FollowUp {
             .sink { [weak self] data, following in
                 let (tweets, _, users, media) = data
                 do {
-                    Swift.debugPrint("Received \(tweets.map(\.id).sorted())")
-                    
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: following)
                     
                     /// Remove tweets from list.
