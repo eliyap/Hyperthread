@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import Twig
 
-final class Airport🆕 {
+final class Airport {
     
     /** The scheduler on which work is done.
         

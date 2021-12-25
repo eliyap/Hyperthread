@@ -30,6 +30,8 @@ final class MainTable: UITableViewController {
     
     private var arrowView: ArrowRefreshView? = nil
     
+    private let airport: Airport = .init()
+    
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
@@ -58,8 +60,9 @@ final class MainTable: UITableViewController {
         tableView.prefetchDataSource = fetcher
         
         /// Refresh timeline at app startup.
-        #warning("Disabled startup refresh")
-//        fetcher.fetchNewTweets { /* do nothing */ }
+        #if !DEBUG /// Disabled for debugging.
+        fetcher.fetchNewTweets { /* do nothing */ }
+        #endif
         
         /// Refresh timeline at login.
         Auth.shared.$state
@@ -67,8 +70,9 @@ final class MainTable: UITableViewController {
             .sink { [weak self] state in
                 switch state {
                 case .loggedIn:
-                    #warning("Disabled startup refresh")
-//                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                    #if !DEBUG /// Disabled for debugging.
+                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                    #endif
                     break
                 default:
                     break
@@ -88,8 +92,6 @@ final class MainTable: UITableViewController {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod4)),
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod5)),
         ]
         #endif
         
@@ -113,18 +115,6 @@ final class MainTable: UITableViewController {
             startTime: Date().advanced(by: -.pi * pow(10, 7)),
             endTime: Date()
         ))
-    }
-    
-    private let TEST: FollowUp = .init()
-    @objc
-    func debugMethod4() {
-        TEST.intake.send(Void())
-    }
-    
-    private let _TEST_: Airport🆕 = .init()
-    @objc
-    func debugMethod5() {
-        _TEST_.requestNew()
     }
     
     required init?(coder: NSCoder) {
@@ -388,7 +378,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     private let threshhold = 25
     
     /// Laziness prevents attempting to load nil IDs.
-    public lazy var airport = { Airport🆕() }()
+    public lazy var airport = { Airport() }()
     public lazy var timelineConduit = { TimelineConduit(credentials: Auth.shared.credentials!) }()
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
@@ -413,7 +403,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     @objc
     public func fetchOldTweets() {
         Task {
-            guard let credentials = Auth.shared.credentials else {
+            guard Auth.shared.credentials != nil else {
                 NetLog.warning("Tried to load tweets with nil credentials!")
                 return
             }
@@ -425,7 +415,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     @objc
     public func fetchNewTweets(onFetched: @escaping () -> Void) {
         Task {
-            guard let credentials = Auth.shared.credentials else {
+            guard Auth.shared.credentials != nil else {
                 NetLog.warning("Tried to load tweets with nil credentials!")
                 return
             }

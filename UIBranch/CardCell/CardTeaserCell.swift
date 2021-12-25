@@ -105,7 +105,7 @@ final class CardTeaserCell: ControlledCell {
          so that by the time our work comes up, the write is guaranteed to be complete.
          Source: https://github.com/realm/realm-cocoa/issues/4818#issuecomment-489889711
          */
-        Airport🆕.scheduler.async { [weak self] in
+        Airport.scheduler.async { [weak self] in
             guard let self = self else {
                 assert(false, "Self is nil!")
                 return
