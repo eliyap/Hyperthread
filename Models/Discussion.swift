@@ -125,3 +125,12 @@ extension Discussion {
         notifyTweetsDidChange()
     }
 }
+
+extension Discussion {
+    internal func getFollowUp() -> Set<Tweet.ID> {
+        conversations
+            .flatMap(\.tweets)
+            .map(\.danglingReferences)
+            .reduce(Set()) { $0.union($1) }
+    }
+}

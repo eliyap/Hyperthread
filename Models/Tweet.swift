@@ -210,6 +210,35 @@ extension Tweet {
             quoting
         ].compactMap { $0 }
     }
+    
+    var danglingReferences: Set<Tweet.ID> {
+        var result: Set<Tweet.ID> = .init()
+        if dangling.contains(.reply) {
+            guard let replyID = replying_to else {
+                ModelLog.error("Tweet \(id) has dangling reply but no replying_to ID")
+                assert(false)
+                return result
+            }
+            result.insert(replyID)
+        }
+        if dangling.contains(.quote) {
+            guard let quoteID = quoting else {
+                ModelLog.error("Tweet \(id) has dangling quote but no quoting ID")
+                assert(false)
+                return result
+            }
+            result.insert(quoteID)
+        }
+        if dangling.contains(.retweet) {
+            guard let retweetID = retweeting else {
+                ModelLog.error("Tweet \(id) has dangling retweet but no retweeting ID")
+                assert(false)
+                return result
+            }
+            result.insert(retweetID)
+        }
+        return result
+    }
 }
 
 extension Tweet.ID {
