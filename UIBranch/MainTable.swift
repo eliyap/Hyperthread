@@ -132,9 +132,11 @@ final class MainTable: UITableViewController {
         }
         
         fetcher.fetchNewTweets {
-            UIView.animate(withDuration: 0.25) { [weak self] in
-                self?.arrowView?.endRefreshing()
-                self?.tableView.setContentOffset(CGPoint(x: .zero, y: -offset), animated: true)
+            DispatchQueue.main.async { /// Ensure call on main thread.
+                UIView.animate(withDuration: 0.25) { [weak self] in
+                    self?.arrowView?.endRefreshing()
+                    self?.tableView.setContentOffset(CGPoint(x: .zero, y: -offset), animated: true)
+                }
             }
         }
     }
@@ -201,6 +203,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
+            .filter(Discussion.minRelevancePredicate)
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.fetcher = fetcher
         self.scrollAction = action
@@ -413,17 +416,14 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     }
     
     @objc
-    public func fetchNewTweets(onFetched: @escaping () -> Void) {
+    public func fetchNewTweets(onFetched completion: @escaping () -> Void) {
         Task {
             guard Auth.shared.credentials != nil else {
                 NetLog.warning("Tried to load tweets with nil credentials!")
                 return
             }
             
-            airport.requestNew()
-            
-            #warning("TODO: support completion handler")
-            onFetched()
+            airport.requestNew(onFetched: completion)
         }
     }
     

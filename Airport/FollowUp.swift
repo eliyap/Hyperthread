@@ -25,17 +25,18 @@ final class FollowUp {
                 var toFetch: Set<Tweet.ID> = []
                 
                 let c = realm.conversationsWithFollowUp()
+                toFetch.formUnion(c
                     .map { $0.getFollowUp(realm: realm) }
                     .reduce(Set<Tweet.ID>()) { $0.union($1) }
-                toFetch.formUnion(c)
+                )
                 
                 let d = realm.discussionsWithFollowUp()
+                toFetch.formUnion(d
                     .map { $0.getFollowUp() }
                     .reduce(Set<Tweet.ID>()) { $0.union($1) }
-                toFetch.formUnion(d)
+                )
                 
-                Swift.debugPrint("\(realm.conversationsWithFollowUp().count) conversations requiring follow up." as NSString)
-                Swift.debugPrint("\(realm.discussionsWithFollowUp().count) discussions requiring follow up." as NSString)
+                NetLog.debug("\(c.count) conversations, \(d.count) discussions requiring follow up.", print: true, true)
                 return toFetch
             }
             .map { Array($0) }
@@ -46,7 +47,7 @@ final class FollowUp {
             }
             .map { (ids: [Tweet.ID]) -> [Tweet.ID] in
                 inFlight.formUnion(ids)
-                print(ids.sorted())
+                NetLog.debug("Requesting \(ids.count) tweets", print: true, true)
                 return ids
             }
             .v2Fetch()
@@ -56,8 +57,6 @@ final class FollowUp {
             .sink { [weak self] data, following in
                 let (tweets, _, users, media) = data
                 do {
-                    Swift.debugPrint("Received \(tweets.map(\.id).sorted())")
-                    
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: following)
                     
                     /// Remove tweets from list.
@@ -135,13 +134,13 @@ final class FollowingFetcher<Input, Failure: Error>
             /// If the fetch fails, fall back on local storage.
             guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
                 NetLog.error("Failed to fetch following list!")
-                assert(false, "Failed to fetch following list!")
                 
                 let realm = try! await Realm()
                 let ids: [User.ID] = realm.objects(User.self)
                     .filter("\(User.followingPropertyName) == YES")
                     .map(\.id)
                 onCompletion(ids)
+                return
             }
             
             /// Store fetched results.

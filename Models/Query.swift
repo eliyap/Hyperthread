@@ -26,20 +26,6 @@ extension Realm {
 }
 
 extension Realm {
-    func orphanConversations() -> Results<Conversation> {
-        objects(Conversation.self)
-            .filter("\(Conversation.discussionPropertyName).@count == 0")
-    }
-}
-
-extension Realm {
-    func orphanTweets() -> Results<Tweet> {
-        objects(Tweet.self)
-            .filter("\(Tweet.conversationPropertyName).@count == 0")
-    }
-}
-
-extension Realm {
     func followingUsers() -> Results<User> {
         objects(User.self)
             .filter("\(User.followingPropertyName) == YES")
@@ -59,23 +45,30 @@ extension Realm {
         objects(Discussion.self)
             .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
                 /// Check if any `Tweet` is above the relevance threshold.
-                NSPredicate(format: """
-                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
-                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
-                            $t.\(Tweet.relevancePropertyName) >= \(Relevance.threshold)
-                        ).@count > 0
-                    ).@count > 0
-                    """),
+                Discussion.minRelevancePredicate,
                 
                 /// Check if any `Tweet` has dangling references.
-                NSPredicate(format: """
-                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
-                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
-                            $t.\(Tweet.danglingPropertyName) >= \(ReferenceSet.empty.rawValue)
-                        ).@count > 0
-                    ).@count > 0
-                    """),
+                Discussion.danglingReferencePredicate,
             ]))
     }
 }
     
+extension Discussion {
+    /// Check if any `Tweet` is above the relevance threshold.
+    static let minRelevancePredicate = NSPredicate(format: """
+        SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+            SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+                $t.\(Tweet.relevancePropertyName) >= \(Relevance.threshold)
+            ).@count > 0
+        ).@count > 0
+        """)
+    
+    /// Check if any `Tweet` has dangling references.
+    static let danglingReferencePredicate = NSPredicate(format: """
+        SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+            SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+                $t.\(Tweet.danglingPropertyName) > \(ReferenceSet.empty.rawValue)
+            ).@count > 0
+        ).@count > 0
+        """)
+}

@@ -12,7 +12,7 @@ import Twig
 
 final class HomeIngest<T: HomeTimelineFetcher> {
     
-    private let pipeline: AnyCancellable
+    private var pipeline: AnyCancellable? = nil
     public let intake = PassthroughSubject<Void, Never>()
     
     /// - Note: tolerance set to 100% to prevent performance hits.
@@ -21,6 +21,8 @@ final class HomeIngest<T: HomeTimelineFetcher> {
         .autoconnect()
     
     weak var followUp: FollowUp?
+    
+    private var onFetched: [() -> Void] = []
     
     public init(followUp: FollowUp) {
         self.followUp = followUp
@@ -40,18 +42,30 @@ final class HomeIngest<T: HomeTimelineFetcher> {
                     return []
                 }
             }
-            .map { $0.map{ "\($0.id)" } }
+            /// Convert to strings
+            .map { [weak self] ids in
+                /// Fire completion early if home timeline returns nothing.
+                /// This prevents the "empty" filter in `v2Fetch` from swallowing stuff.
+                if ids.isEmpty {
+                    self?.removeAll()
+                }
+                return ids.map{ "\($0.id)" }
+            }
             .v2Fetch()
             /// Synchronize
             .receive(on: Airport.scheduler)
-            .sink(receiveValue: { (tweets, _, users, media) in
+            .sink(receiveValue: { [weak self] (tweets, _, users, media) in
                 do {
+                    NetLog.debug("Received \(tweets.count) home timeline tweets.", print: true, true)
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
                     
                     /// Update home timeline boundaries.
                     fetcher.updateBoundaries(tweets: tweets)
                     
+                    /// Immediately check for follow up.
                     followUp.intake.send()
+                    
+                    self?.removeAll()
                 } catch {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
@@ -60,6 +74,16 @@ final class HomeIngest<T: HomeTimelineFetcher> {
     }
     
     deinit {
-        pipeline.cancel()
+        pipeline?.cancel()
+    }
+    
+    public func add(_ completion: @escaping () -> Void) -> Void {
+        onFetched.append(completion)
+    }
+    
+    private func removeAll() -> Void {
+        /// Execute and remove completion handlers.
+        onFetched.forEach { $0() }
+        onFetched = []
     }
 }

@@ -34,7 +34,8 @@ final class TimelineNewFetcher: HomeTimelineFetcher {
     func updateBoundaries(tweets: [TweetIdentifiable]) {
         /// Update home timeline boundaries.
         let sinceID = UserDefaults.groupSuite.sinceID
-        let newSinceID = max(Int64?(tweets.map(\.id).min()), Int64?(sinceID))
+        let tweetsMaxID = tweets.compactMap { Int64($0.id) }.max()
+        let newSinceID = max(tweetsMaxID, Int64?(sinceID))
         UserDefaults.groupSuite.sinceID = newSinceID.string
         NetLog.debug("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
     }
@@ -53,7 +54,8 @@ final class TimelineOldFetcher: HomeTimelineFetcher {
     func updateBoundaries(tweets: [TweetIdentifiable]) {
         /// Update home timeline boundaries.
         let maxID = UserDefaults.groupSuite.maxID
-        let newMaxID = min(Int64?(tweets.map(\.id).min()), Int64?(maxID))
+        let tweetsMinID = tweets.compactMap { Int64($0.id) }.min()
+        let newMaxID = min(tweetsMinID, Int64?(maxID))
         UserDefaults.groupSuite.maxID = newMaxID.string
         NetLog.debug("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
     }

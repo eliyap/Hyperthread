@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_UIBranchVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_UIBranchVersionString[];
+FOUNDATION_EXPORT double Pods_HyperthreadVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_HyperthreadVersionString[];
 

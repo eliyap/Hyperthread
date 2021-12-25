@@ -1,0 +1,11 @@
+schemes:
+- BlackBox
+- Collections
+- DequeModule
+- Hyperthread
+- OrderedCollections
+- Twig
+- swift-collections-Package
+targets:
+- Hyperthread
+workspace: UIBranch.xcworkspace
