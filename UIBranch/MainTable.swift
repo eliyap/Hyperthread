@@ -92,7 +92,6 @@ final class MainTable: UITableViewController {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod4)),
         ]
         #endif
         
@@ -116,35 +115,6 @@ final class MainTable: UITableViewController {
             startTime: Date().advanced(by: -.pi * pow(10, 7)),
             endTime: Date()
         ))
-    }
-    
-    @objc
-    func debugMethod4() {
-        let realm = try! Realm()
-        try! realm.updateDangling()
-        let count: Int = realm.objects(Discussion.self)
-            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
-                /// Check if any `Tweet` is above the relevance threshold.
-                NSPredicate(format: """
-                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
-                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
-                            $t.\(Tweet.relevancePropertyName) >= 10000
-                        ).@count > 0
-                    ).@count > 0
-                    """),
-                
-                /// Check if any `Tweet` has dangling references.
-//                NSPredicate(format: """
-//                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
-//                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
-//                            $t.\(Tweet.danglingPropertyName) >= \(ReferenceSet.empty.rawValue)
-//                        ).@count > 0
-//                    ).@count > 0
-//                    """),
-            ]))
-            .count
-        
-        print("Count was \(count)")
     }
     
     required init?(coder: NSCoder) {
@@ -231,6 +201,13 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
+            .filter(.init(format: """
+                SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+                    SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+                        $t.\(Tweet.relevancePropertyName) >= \(Relevance.threshold)
+                    ).@count > 0
+                ).@count > 0
+                """))
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.fetcher = fetcher
         self.scrollAction = action
