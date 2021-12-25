@@ -201,13 +201,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
-            .filter(.init(format: """
-                SUBQUERY(\(Discussion.conversationsPropertyName), $c,
-                    SUBQUERY(\(Conversation.tweetsPropertyName), $t,
-                        $t.\(Tweet.relevancePropertyName) >= \(Relevance.threshold)
-                    ).@count > 0
-                ).@count > 0
-                """))
+            .filter(Discussion.minRelevancePredicate)
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.fetcher = fetcher
         self.scrollAction = action
