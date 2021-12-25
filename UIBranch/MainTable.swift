@@ -132,9 +132,11 @@ final class MainTable: UITableViewController {
         }
         
         fetcher.fetchNewTweets {
-            UIView.animate(withDuration: 0.25) { [weak self] in
-                self?.arrowView?.endRefreshing()
-                self?.tableView.setContentOffset(CGPoint(x: .zero, y: -offset), animated: true)
+            DispatchQueue.main.async { /// Ensure call on main thread.
+                UIView.animate(withDuration: 0.25) { [weak self] in
+                    self?.arrowView?.endRefreshing()
+                    self?.tableView.setContentOffset(CGPoint(x: .zero, y: -offset), animated: true)
+                }
             }
         }
     }
