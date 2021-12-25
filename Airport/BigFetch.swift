@@ -11,10 +11,88 @@ import Twig
 
 /**
  Accepts raw data from the Twitter v2 API.
+ - Warning: Do not feed `include`d `Tweet`s!
+            These may be missing media keys, or be of a different `Relevance` than the main payload!
+ */
+func ingestRaw(
+    rawTweets: [RawHydratedTweet],
+    rawUsers: [RawIncludeUser],
+    rawMedia: [RawIncludeMedia],
+    following: [User.ID]
+) throws -> Void {
+    let realm = try! Realm()
+    
+    /// Insert all users.
+    try realm.write {
+        for rawUser in rawUsers {
+            let user = User(raw: rawUser)
+            realm.add(user, update: .modified)
+        }
+    }
+    
+    /// Insert Tweets into local database.
+    try realm.writeWithToken { token in
+        for rawTweet in rawTweets {
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
+            realm.add(tweet, update: .modified)
+            tweet.relevance = Relevance(tweet: tweet, following: following)
+            
+            /// Safety check: we count on the user never being missing!
+            if realm.user(id: rawTweet.author_id) == nil {
+                fatalError("Could not find user with id \(rawTweet.author_id)")
+            }
+            
+            /// Attach to conversation (create one if necessary).
+            realm.linkConversation(token, tweet: tweet)
+        }
+    }
+}
+
+/**
+ Accepts raw data from the Twitter v2 API.
+ - Warning: Do not feed `include`d `Tweet`s!
+            These may be missing media keys, or be of a different `Relevance` than the main payload!
+ */
+func ingestRaw(
+    rawTweets: [RawHydratedTweet],
+    rawUsers: [RawIncludeUser],
+    rawMedia: [RawIncludeMedia],
+    relevance: Relevance
+) throws -> Void {
+    let realm = try! Realm()
+    
+    /// Insert all users.
+    try realm.write {
+        for rawUser in rawUsers {
+            let user = User(raw: rawUser)
+            realm.add(user, update: .modified)
+        }
+    }
+    
+    /// Insert Tweets into local database.
+    try realm.writeWithToken { token in
+        for rawTweet in rawTweets {
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
+            realm.add(tweet, update: .modified)
+            tweet.relevance = relevance
+            
+            /// Safety check: we count on the user never being missing!
+            if realm.user(id: rawTweet.author_id) == nil {
+                fatalError("Could not find user with id \(rawTweet.author_id)")
+            }
+            
+            /// Attach to conversation (create one if necessary).
+            realm.linkConversation(token, tweet: tweet)
+        }
+    }
+}
+
+/**
+ Accepts raw data from the Twitter v2 API.
  Links Tweets to Conversations, and Conversations to Discussions.
  - Returns: IDs of Tweets which need to be fetched.
  */
-func furtherFetch(
+func ingestRaw(
     rawTweets: [RawHydratedTweet],
     rawUsers: [RawIncludeUser],
     rawMedia: [RawIncludeMedia]
@@ -24,15 +102,11 @@ func furtherFetch(
     /// IDs for further fetching.
     var idsToFetch = Set<Tweet.ID>()
     
-    var tweets = Set<Tweet>()
-    var users = Set<User>()
-    
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
             let user = User(raw: rawUser)
             realm.add(user, update: .modified)
-            users.insert(user)
         }
     }
     
@@ -55,7 +129,6 @@ func furtherFetch(
         for rawTweet in rawTweets {
             let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
             realm.add(tweet, update: .modified)
-            tweets.insert(tweet)
             
             /// Safety check: we count on the user never being missing!
             if realm.user(id: rawTweet.author_id) == nil {
@@ -82,11 +155,20 @@ func furtherFetch(
         }
     }
     
-    /// Check orphaned conversations.
-    let orphans = realm.orphanConversations()
-    try realm.write {
-        for orphan: Conversation in orphans {
-            link(orphan: orphan, idsToFetch: &idsToFetch, realm: realm)
+    return idsToFetch
+}
+
+internal func linkUnlinked() throws -> Set<Tweet.ID> {
+    var idsToFetch = Set<Tweet.ID>()
+    
+    let realm = try! Realm()
+    
+    /// Check unlinked conversations.
+    let unlinked = realm.objects(Conversation.self)
+        .filter(NSPredicate(format: "\(Conversation.discussionPropertyName).@count == 0"))
+    try realm.writeWithToken { token in
+        for conversation in unlinked {
+            link(token, conversation: conversation, idsToFetch: &idsToFetch, realm: realm)
         }
     }
     
@@ -95,47 +177,37 @@ func furtherFetch(
 
 /// Tries to link Tweets to Conversations, and Conversations to Discussions.
 /// - Important: MUST take place within a Realm `write` transaction!
-fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, realm: Realm) -> Void {
+internal func link(_ token: Realm.TransactionToken, conversation: Conversation, idsToFetch: inout Set<Tweet.ID>, realm: Realm) -> Void {
     /// Link to upstream's discussion, if possible.
     if
-        let upstreamID = orphan.upstream,
+        let upstreamID = conversation.upstream,
         let upstreamConvo = realm.conversation(id: upstreamID),
         let upstream: Discussion = upstreamConvo.discussion.first
     {
-        upstream.conversations.append(orphan)
-        
-        /// Bump update time.
-        upstream.update(with: orphan.tweets.map(\.createdAt).max())
-        
-        /// Mark as updated (new discussions should stay new).
-        if upstream.read == .read {
-            upstream.read = .updated
-        }
-        
-        upstream.notifyTweetsDidChange()
+        upstream.insert(conversation, token, realm: realm)
         return
     }
     /** Conclusion: upstream is either missing, or itself has no `Discussion`. **/
     
     /// Link the conversation to a local tweet, if needed and possible.
     if
-        orphan.root == nil,
-        let local = realm.tweet(id: orphan.id)
+        conversation.root == nil,
+        let local = realm.tweet(id: conversation.id)
     {
-        orphan.root = local
+        conversation.root = local
     }
     
     /// Check if root tweet was still not found.
-    guard let root: Tweet = orphan.root else {
-        idsToFetch.insert(orphan.id)
+    guard let root: Tweet = conversation.root else {
+        idsToFetch.insert(conversation.id)
         return
     }
     
     /// Remove conversations that are standalone discussions.
-    guard let primaryReference: Tweet.ID = root.primaryReference else {
+    guard let rootPRID: Tweet.ID = root.primaryReference else {
         /// Recognize conversation as its own discussion.
-        orphan.upstream = root.id
-        realm.add(Discussion(root: orphan))
+        conversation.upstream = root.id
+        realm.add(Discussion(root: conversation))
         
         /// Note a new discussion above the fold.
         UserDefaults.groupSuite.incrementScrollPositionRow()
@@ -144,26 +216,27 @@ fileprivate func link(orphan: Conversation, idsToFetch: inout Set<Tweet.ID>, rea
     }
     
     /// Remove conversations with un-fetched upstream tweets.
-    guard let orphanRootReferenced: Tweet = realm.tweet(id: primaryReference) else {
+    guard let rootPrimaryReference: Tweet = realm.tweet(id: rootPRID) else {
         /// Go fetch the upstream reference.
-        idsToFetch.insert(primaryReference)
+        idsToFetch.insert(rootPRID)
         return
     }
     
     /// Set upstream conversation.
-    let upstreamID: Conversation.ID = orphanRootReferenced.conversation_id
-    orphan.upstream = upstreamID
+    let upstreamID: Conversation.ID = rootPrimaryReference.conversation_id
+    conversation.upstream = upstreamID
         
-    /// Inherit discussion, if possible.
+    /// Check if the upstream Conversation is part of a Discussion.
     if
         let upstreamConvo = realm.conversation(id: upstreamID),
-        let upstreamDiscussion = upstreamConvo.discussion.first
+        let upstream: Discussion = upstreamConvo.discussion.first
     {
-        upstreamDiscussion.conversations.append(orphan)
-        upstreamDiscussion.update(with: orphan.tweets.map(\.createdAt).max())
-        upstreamDiscussion.notifyTweetsDidChange()
+        upstream.insert(conversation, token, realm: realm)
     } else {
-        /// Go fetch the upstream conversation root.
+        /// Otherwise, fetch the upstream Conversation's root Tweet.
         idsToFetch.insert(upstreamID)
+        print("HERE!")
     }
 }
+
+

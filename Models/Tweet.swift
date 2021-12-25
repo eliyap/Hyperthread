@@ -10,7 +10,23 @@ import RealmSwift
 import Realm
 import Twig
 
-final class Tweet: Object, Identifiable {
+/**
+ Represents the set of references held by a Tweet.
+ */
+internal struct ReferenceSet: OptionSet {
+    var rawValue: Int
+    
+    typealias RawValue = Int
+    
+    static let reply = Self(rawValue: 1 << 0)
+    static let quote = Self(rawValue: 1 << 1)
+    static let retweet = Self(rawValue: 1 << 2)
+    
+    static let empty: Self = []
+    static let all: Self = [.reply, .quote, .retweet]
+}
+
+final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     
     /// Twitter API `id`.
     @Persisted(primaryKey: true) 
@@ -63,6 +79,25 @@ final class Tweet: Object, Identifiable {
     @Persisted
     var media: List<Media>
     
+    @Persisted
+    private var _relevance: Relevance.RawValue
+    public static let relevancePropertyName = "_relevance"
+    public var relevance: Relevance! {
+        get { .init(rawValue: _relevance) }
+        set { _relevance = newValue.rawValue }
+    }
+    
+    /** The set of referenced tweets which have yet to be fetched.
+        If empty, we should be able to find the Tweet in our Realm by the stored reference ID.
+     */
+    @Persisted
+    private var _dangling: ReferenceSet.RawValue
+    public static let danglingPropertyName = "_dangling"
+    public var dangling: ReferenceSet! {
+        get { .init(rawValue: _dangling) }
+        set { _dangling = newValue.rawValue}
+    }
+    
     init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia]) {
         super.init()
         self.id = raw.id
@@ -73,18 +108,23 @@ final class Tweet: Object, Identifiable {
         self.authorID = raw.author_id
         self.read = false
         
+        var referenceSet: ReferenceSet = .empty
         if let references = raw.referenced_tweets {
             for reference in references {
                 switch reference.type {
                 case .replied_to:
                     replying_to = reference.id
+                    referenceSet.formUnion(.reply)
                 case .quoted:
                     quoting = reference.id
+                    referenceSet.formUnion(.quote)
                 case .retweeted:
                     retweeting = reference.id
+                    referenceSet.formUnion(.retweet)
                 }
             }
         }
+        dangling = referenceSet
         
         if let rawEntities = raw.entities {
             entities = Entities(raw: rawEntities)
@@ -140,6 +180,10 @@ final class Tweet: Object, Identifiable {
     public static func generateFake() -> Tweet {
         .init(Void())
     }
+    
+    public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
+        Set(referenced.filter { realm.tweet(id: $0) == nil })
+    }
 }
 
 extension Tweet {
@@ -166,6 +210,35 @@ extension Tweet {
             quoting
         ].compactMap { $0 }
     }
+    
+    var danglingReferences: Set<Tweet.ID> {
+        var result: Set<Tweet.ID> = .init()
+        if dangling.contains(.reply) {
+            guard let replyID = replying_to else {
+                ModelLog.error("Tweet \(id) has dangling reply but no replying_to ID")
+                assert(false)
+                return result
+            }
+            result.insert(replyID)
+        }
+        if dangling.contains(.quote) {
+            guard let quoteID = quoting else {
+                ModelLog.error("Tweet \(id) has dangling quote but no quoting ID")
+                assert(false)
+                return result
+            }
+            result.insert(quoteID)
+        }
+        if dangling.contains(.retweet) {
+            guard let retweetID = retweeting else {
+                ModelLog.error("Tweet \(id) has dangling retweet but no retweeting ID")
+                assert(false)
+                return result
+            }
+            result.insert(retweetID)
+        }
+        return result
+    }
 }
 
 extension Tweet.ID {
@@ -187,13 +260,91 @@ extension Tweet {
 }
 
 extension Tweet {
-    static let chronologicalSort: (Tweet, Tweet) -> Bool = { (lhs: Tweet, rhs: Tweet) in
+    static let chronologicalSort = { (lhs: Tweet, rhs: Tweet) -> Bool in
         /// Tie break by ID.
         /// I have observed tied timestamps. (see https://twitter.com/ChristianSelig/status/1469028219441623049)
         if lhs.createdAt != rhs.createdAt {
             return lhs.createdAt < rhs.createdAt
         } else {
             return lhs.id < rhs.id
+        }
+    }
+}
+
+extension Realm {
+    /// Attach `tweet` to a conversation, creating one if necessary.
+    func linkConversation(_: TransactionToken, tweet: Tweet) -> Void {
+        /// Attach to conversation (create one if necessary).
+        var conversation: Conversation
+        if let local = self.conversation(id: tweet.conversation_id) {
+            conversation = local
+        } else {
+            conversation = Conversation(id: tweet.conversation_id)
+            self.add(conversation)
+        }
+        
+        /// Add tweet to conversation.
+        conversation.insert(tweet)
+        
+        if let discussion = conversation.discussion.first {
+            discussion.notifyTweetsDidChange()
+        }
+    }
+}
+
+extension Tweet: ReplyIdentifiable {
+    var replyID: String? { replying_to }
+}
+
+extension Realm {
+    /// Find tweets with possibly dangling
+    internal func updateDangling() throws -> Void {
+        let tweets = objects(Tweet.self)
+            .filter(.init(format: "\(Tweet.danglingPropertyName) > 0"))
+        
+        /// Do a just-in-time check for tweets which are no longer dangling.
+        try writeWithToken { token in
+            for tweet in tweets {
+                updateReferenceSet(token, tweet: tweet)
+            }
+        }
+    }
+}
+
+extension Realm {
+    /** Update the reference set based on what is present in the database*/
+    fileprivate func updateReferenceSet(_ token: TransactionToken, tweet: Tweet) -> Void {
+        if tweet.dangling.contains(.reply) {
+            guard let replyID = tweet.replying_to else {
+                ModelLog.error("Illegal State! Reply ID missing!")
+                assert(false)
+                return
+            }
+            if self.tweet(id: replyID) != nil {
+                tweet.dangling.remove(.reply)
+            }
+        }
+
+        if tweet.dangling.contains(.quote) {
+            guard let quoteID = tweet.quoting else {
+                ModelLog.error("Illegal State! Quote ID missing!")
+                assert(false)
+                return
+            }
+            if self.tweet(id: quoteID) != nil {
+                tweet.dangling.remove(.quote)
+            }
+        }
+
+        if tweet.dangling.contains(.retweet) {
+            guard let retweetID = tweet.retweeting else {
+                ModelLog.error("Illegal State! Retweet ID missing!")
+                assert(false)
+                return
+            }
+            if self.tweet(id: retweetID) != nil {
+                tweet.dangling.remove(.retweet)
+            }
         }
     }
 }

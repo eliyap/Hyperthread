@@ -9,7 +9,7 @@ import Combine
 
 /// Source: https://www.swiftbysundell.com/articles/calling-async-functions-within-a-combine-pipeline/
 extension Publisher {
-    func asyncMap<T>(
+    func asyncTryMap<T>(
         _ transform: @escaping (Output) async throws -> T
     ) -> Publishers.FlatMap<Future<T, Error>,
                             Publishers.SetFailureType<Self, Error>> {
@@ -22,6 +22,20 @@ extension Publisher {
                     } catch {
                         promise(.failure(error))
                     }
+                }
+            }
+        }
+    }
+    
+    func asyncMap<T>(
+        _ transform: @escaping (Output) async -> T
+    ) -> Publishers.FlatMap<Future<T, Failure>,
+                            Publishers.SetFailureType<Self, Failure>> {
+        flatMap { value in
+            Future { promise in
+                Task {
+                    let output = await transform(value)
+                    promise(.success(output))
                 }
             }
         }

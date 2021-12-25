@@ -110,7 +110,27 @@ extension Discussion {
     }
     
     /// - Note: must take place within a `Realm` write transaction.
-    func patchUpdatedAt() -> Void {
+    func patchUpdatedAt(_ token: Realm.TransactionToken) -> Void {
         updatedAt = tweets.map(\.createdAt).max()!
+    }
+}
+
+extension Discussion {
+    func insert(_ conversation: Conversation, _: Realm.TransactionToken, realm: Realm) -> Void {
+        conversations.append(conversation)
+        
+        /// Update internal representation.
+        _tweets = nil
+        update(with: conversation.tweets.map(\.createdAt).max())
+        notifyTweetsDidChange()
+    }
+}
+
+extension Discussion {
+    internal func getFollowUp() -> Set<Tweet.ID> {
+        conversations
+            .flatMap(\.tweets)
+            .map(\.danglingReferences)
+            .reduce(Set()) { $0.union($1) }
     }
 }

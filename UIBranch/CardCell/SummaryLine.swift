@@ -50,22 +50,34 @@ final class SummaryView: UIStackView {
             likeButton.isHidden = true
             iconView.isHidden = false
             
-            /// Configure with an appropriate symbol.
-            let nonRetweets = discussion.tweets.filter { $0.retweeting == nil }
+            /** It's common for there to be only 1 response in a discussion.
+                In this case, show who responded.
+                
+                Usually this occurs someone you follow quotes someone you don't.
+                In this case, this shows the person who "pushed" this to your feed.
+             */
+            let nonRetweets = discussion.tweets
+                /// - Note: Unsorted `tweets` can be out of order, resulting in mis-attributing the reply.
+                .sorted(by: Tweet.chronologicalSort)
+                .filter { $0.retweeting == nil }
+                
             guard nonRetweets.count == 2 else {
-                Swift.debugPrint("Wrong number of tweets!")
+                assert(false, "Wrong number of tweets!")
                 return
             }
-            let onlyReply = discussion.tweets[1]
-            if onlyReply.primaryReference == onlyReply.replying_to {
+            
+            /// Configure with an appropriate symbol.
+            let onlyResponse = nonRetweets[1]
+            if onlyResponse.primaryReference == onlyResponse.replying_to {
                 iconView.imageView.setImage(to: "arrowshape.turn.up.left.fill")
-            } else if onlyReply.primaryReference == onlyReply.quoting {
+            } else if onlyResponse.primaryReference == onlyResponse.quoting {
                 iconView.imageView.setImage(to: "quote.bubble.fill")
             } else {
                 TableLog.error("Invalid state, should be retweet or reply!")
             }
             
-            iconView.setText(to: realm.user(id: onlyReply.authorID)!.name)
+            /// Name the responder in the summary line.
+            iconView.setText(to: realm.user(id: onlyResponse.authorID)!.name)
         } else {
             replyButton.isHidden = true
             retweetButton.isHidden = true

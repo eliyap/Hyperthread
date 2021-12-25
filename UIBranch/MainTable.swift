@@ -88,6 +88,8 @@ final class MainTable: UITableViewController {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod4)),
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod5)),
         ]
         #endif
         
@@ -111,6 +113,18 @@ final class MainTable: UITableViewController {
             startTime: Date().advanced(by: -.pi * pow(10, 7)),
             endTime: Date()
         ))
+    }
+    
+    private let TEST: FollowUp = .init()
+    @objc
+    func debugMethod4() {
+        TEST.intake.send(Void())
+    }
+    
+    private let _TEST_: Airport🆕 = .init()
+    @objc
+    func debugMethod5() {
+        _TEST_.requestNew()
     }
     
     required init?(coder: NSCoder) {
@@ -208,7 +222,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 return 
             }
             
-            /** - Note: animated is `false` so that when new tweet's are added via
+            /** - Note: `animated` is `false` so that when new tweet's are added via
                         "pull to refresh", the "inserted above" Twitterific-style effect is as
                         seamless as possible.
              */
@@ -267,15 +281,15 @@ extension MainTable {
         splitDelegate.present(discussion)
         
         do {
-            try realm.write(withoutNotifying: [dds.getToken()]) {
+            try realm.writeWithToken(withoutNotifying: [dds.getToken()]) { token in
                 /// Mark discussion as read.
                 discussion.read = .read
                 
                 /// Patch updated date, as it can be flaky.
-                discussion.patchUpdatedAt()
+                discussion.patchUpdatedAt(token)
             }
         } catch {
-            // TODO: log non-critical failure.
+            TableLog.error("\(error)")
             assert(false, "\(error)")
         }
 
@@ -374,7 +388,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     private let threshhold = 25
     
     /// Laziness prevents attempting to load nil IDs.
-    public lazy var airport = { Airport(credentials: Auth.shared.credentials!) }()
+    public lazy var airport = { Airport🆕() }()
     public lazy var timelineConduit = { TimelineConduit(credentials: Auth.shared.credentials!) }()
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
@@ -404,30 +418,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 return
             }
             
-            /// Prevent repeated requests.
-            isFetching = true
-            
-            /// Perform a simple `home_timelime` fetch.
-            let maxID = UserDefaults.groupSuite.maxID
-            guard let rawTweets = try? await timeline(credentials: credentials, sinceID: nil, maxID: maxID) else {
-                NetLog.warning("Failed to fetch timeline!")
-                return
-            }
-            if rawTweets.isEmpty {
-                NetLog.debug("No new tweets found!", print: true)
-            } else {
-                /// Allow further requests.
-                isFetching = false
-            }
-            
-            /// Send to airport for further fetching.
-            let ids = rawTweets.map{"\($0.id)"}
-            airport.enqueue(ids)
-            
-            /// Update boundaries.
-            let newMaxID = min(rawTweets.map(\.id).min(), Int64?(maxID))
-            UserDefaults.groupSuite.maxID = newMaxID.string
-            NetLog.debug("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
+            airport.requestOld()
         }
     }
     
@@ -439,34 +430,14 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 return
             }
             
-            NetLog.debug("UserID is \(credentials.user_id)", print: false, true)
+            airport.requestNew()
             
-            /// Prevent repeated requests.
-            isFetching = true
-            
-            /// Perform a simple `home_timelime` fetch.
-            let sinceID = UserDefaults.groupSuite.sinceID
-            guard let rawTweets = try? await timeline(credentials: credentials, sinceID: sinceID, maxID: nil) else {
-                NetLog.warning("Failed to fetch timeline!")
-                return
-            }
-            /// Allow further requests.
-            isFetching = false
-            
-            /// Send to airport for further fetching.
-            let ids = rawTweets.map{"\($0.id)"}
-            airport.enqueue(ids)
-            
-            /// Update boundaries.
-            let newSinceID = max(rawTweets.map(\.id).max(), Int64?(sinceID))
-            UserDefaults.groupSuite.sinceID = newSinceID.string
-            NetLog.debug("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
-            
+            #warning("TODO: support completion handler")
             onFetched()
         }
     }
     
-    /// DEBUG FUNCTION
+    #if DEBUG
     public func fetchFakeTweet() {
         let realm = try! Realm()
         try! realm.write {
@@ -482,4 +453,5 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             UserDefaults.groupSuite.incrementScrollPositionRow()
         }
     }
+    #endif
 }

@@ -38,7 +38,13 @@ final class Conversation: Object, Identifiable {
     @Persisted
     var tweets: List<Tweet>
     public static let tweetsPropertyName = "tweets"
-
+    
+    public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
+        tweets
+            .map { $0.getFollowUp(realm: realm) }
+            .reduce([]) { $0.union($1) }
+    }
+    
     init(id: String) {
         super.init()
         self.id = id

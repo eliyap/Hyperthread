@@ -38,3 +38,44 @@ extension Realm {
             .filter("\(Tweet.conversationPropertyName).@count == 0")
     }
 }
+
+extension Realm {
+    func followingUsers() -> Results<User> {
+        objects(User.self)
+            .filter("\(User.followingPropertyName) == YES")
+    }
+}
+
+extension Realm {
+    
+    func conversationsWithFollowUp() -> Results<Conversation> {
+        objects(Conversation.self)
+            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(Conversation.discussionPropertyName).@count == 0")
+            ]))
+    }
+    
+    func discussionsWithFollowUp() -> Results<Discussion> {
+        objects(Discussion.self)
+            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
+                /// Check if any `Tweet` is above the relevance threshold.
+                NSPredicate(format: """
+                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+                            $t.\(Tweet.relevancePropertyName) >= \(Relevance.threshold)
+                        ).@count > 0
+                    ).@count > 0
+                    """),
+                
+                /// Check if any `Tweet` has dangling references.
+                NSPredicate(format: """
+                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+                            $t.\(Tweet.danglingPropertyName) >= \(ReferenceSet.empty.rawValue)
+                        ).@count > 0
+                    ).@count > 0
+                    """),
+            ]))
+    }
+}
+    

@@ -10,7 +10,7 @@ import RealmSwift
 import Realm
 import Twig
 
-final class User: Object, Identifiable {
+final class User: Object, Identifiable, UserIdentifiable {
     
     @Persisted(primaryKey: true) 
     var id: ID
@@ -28,6 +28,7 @@ final class User: Object, Identifiable {
     /// - Note: not included in `RawUser` object, hence we default initialize it.
     @Persisted
     var following: Bool = false
+    static let followingPropertyName = "following"
     
     init(raw: RawUser) {
         super.init()
