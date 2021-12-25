@@ -48,6 +48,7 @@ final class HomeIngest<T: HomeTimelineFetcher> {
             .receive(on: Airport.scheduler)
             .sink(receiveValue: { [weak self] (tweets, _, users, media) in
                 do {
+                    NetLog.debug("Received \(tweets.count) home timeline tweets.", print: true, true)
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
                     
                     /// Update home timeline boundaries.
