@@ -1,5 +1,4 @@
 PODS:
-  - Periphery (2.8.3)
   - Realm (10.18.0):
     - Realm/Headers (= 10.18.0)
   - Realm/Headers (10.18.0)
@@ -7,20 +6,17 @@ PODS:
     - Realm (= 10.18.0)
 
 DEPENDENCIES:
-  - Periphery
   - RealmSwift (~> 10)
 
 SPEC REPOS:
   trunk:
-    - Periphery
     - Realm
     - RealmSwift
 
 SPEC CHECKSUMS:
-  Periphery: 79a94069e649265682b47e69eb546f5ccb14b5bb
   Realm: b8b0a36bf48c39c50fd8cee7ac34005e6d887ddd
   RealmSwift: fe2f33d731f47aaf4c3618930f9f7cf7b935c33f
 
-PODFILE CHECKSUM: 3b6d0efc03692e1ddc93e5ae250c0d0f241cecd5
+PODFILE CHECKSUM: d97136450d277ecc5c48ac9e261511fa0eebb31d
 
 COCOAPODS: 1.11.2
