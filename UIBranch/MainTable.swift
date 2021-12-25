@@ -30,6 +30,8 @@ final class MainTable: UITableViewController {
     
     private var arrowView: ArrowRefreshView? = nil
     
+    private let airport: Airport = .init()
+    
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
@@ -88,7 +90,6 @@ final class MainTable: UITableViewController {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod5)),
         ]
         #endif
         
@@ -112,12 +113,6 @@ final class MainTable: UITableViewController {
             startTime: Date().advanced(by: -.pi * pow(10, 7)),
             endTime: Date()
         ))
-    }
-    
-    private let _TEST_: Airport = .init()
-    @objc
-    func debugMethod5() {
-        _TEST_.requestNew()
     }
     
     required init?(coder: NSCoder) {
