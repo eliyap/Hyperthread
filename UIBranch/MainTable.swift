@@ -60,8 +60,9 @@ final class MainTable: UITableViewController {
         tableView.prefetchDataSource = fetcher
         
         /// Refresh timeline at app startup.
-        #warning("Disabled startup refresh")
-//        fetcher.fetchNewTweets { /* do nothing */ }
+        #if !DEBUG /// Disabled for debugging.
+        fetcher.fetchNewTweets { /* do nothing */ }
+        #endif
         
         /// Refresh timeline at login.
         Auth.shared.$state
@@ -69,8 +70,9 @@ final class MainTable: UITableViewController {
             .sink { [weak self] state in
                 switch state {
                 case .loggedIn:
-                    #warning("Disabled startup refresh")
-//                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                    #if !DEBUG /// Disabled for debugging.
+                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                    #endif
                     break
                 default:
                     break
