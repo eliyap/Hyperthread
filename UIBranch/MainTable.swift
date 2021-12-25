@@ -92,6 +92,7 @@ final class MainTable: UITableViewController {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod4)),
         ]
         #endif
         
@@ -127,7 +128,7 @@ final class MainTable: UITableViewController {
                 NSPredicate(format: """
                     SUBQUERY(\(Discussion.conversationsPropertyName), $c,
                         SUBQUERY(\(Conversation.tweetsPropertyName), $t,
-                            $t.\(Tweet.relevancePropertyName) >= \(Relevance.threshold)
+                            $t.\(Tweet.relevancePropertyName) >= 10000
                         ).@count > 0
                     ).@count > 0
                     """),
@@ -143,6 +144,7 @@ final class MainTable: UITableViewController {
             ]))
             .count
         
+        print("Count was \(count)")
     }
     
     required init?(coder: NSCoder) {
