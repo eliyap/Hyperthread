@@ -25,17 +25,18 @@ final class FollowUp {
                 var toFetch: Set<Tweet.ID> = []
                 
                 let c = realm.conversationsWithFollowUp()
+                toFetch.formUnion(c
                     .map { $0.getFollowUp(realm: realm) }
                     .reduce(Set<Tweet.ID>()) { $0.union($1) }
-                toFetch.formUnion(c)
+                )
                 
                 let d = realm.discussionsWithFollowUp()
+                toFetch.formUnion(d
                     .map { $0.getFollowUp() }
                     .reduce(Set<Tweet.ID>()) { $0.union($1) }
-                toFetch.formUnion(d)
+                )
                 
-                Swift.debugPrint("\(realm.conversationsWithFollowUp().count) conversations requiring follow up." as NSString)
-                Swift.debugPrint("\(realm.discussionsWithFollowUp().count) discussions requiring follow up." as NSString)
+                NetLog.debug("\(c.count) conversations, \(d.count) discussions requiring follow up.", print: true, true)
                 return toFetch
             }
             .map { Array($0) }
