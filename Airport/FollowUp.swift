@@ -133,13 +133,13 @@ final class FollowingFetcher<Input, Failure: Error>
             /// If the fetch fails, fall back on local storage.
             guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
                 NetLog.error("Failed to fetch following list!")
-                assert(false, "Failed to fetch following list!")
                 
                 let realm = try! await Realm()
                 let ids: [User.ID] = realm.objects(User.self)
                     .filter("\(User.followingPropertyName) == YES")
                     .map(\.id)
                 onCompletion(ids)
+                return
             }
             
             /// Store fetched results.
