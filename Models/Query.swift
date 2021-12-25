@@ -67,7 +67,7 @@ extension Discussion {
     static let danglingReferencePredicate = NSPredicate(format: """
         SUBQUERY(\(Discussion.conversationsPropertyName), $c,
             SUBQUERY(\(Conversation.tweetsPropertyName), $t,
-                $t.\(Tweet.danglingPropertyName) >= \(ReferenceSet.empty.rawValue)
+                $t.\(Tweet.danglingPropertyName) > \(ReferenceSet.empty.rawValue)
             ).@count > 0
         ).@count > 0
         """)
