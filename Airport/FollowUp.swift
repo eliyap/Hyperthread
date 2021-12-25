@@ -69,14 +69,9 @@ final class FollowUp {
                     let realm = try! Realm()
                     try realm.updateDangling()
                     
-                    
-                    Swift.debugPrint("B – \(realm.conversationsWithFollowUp().count) conversations requiring follow up." as NSString)
-                    
                     /// Perform linking and request follow up.
                     let toRecycle = try linkUnlinked()
                     self?.recycle.send(Array(toRecycle))
-                    
-                    Swift.debugPrint("A – \(realm.conversationsWithFollowUp().count) conversations requiring follow up." as NSString)
                     
                     /// Check for further follow up.
                     self?.intake.send()
