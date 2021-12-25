@@ -88,7 +88,6 @@ final class MainTable: UITableViewController {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod4)),
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod5)),
         ]
         #endif
@@ -113,12 +112,6 @@ final class MainTable: UITableViewController {
             startTime: Date().advanced(by: -.pi * pow(10, 7)),
             endTime: Date()
         ))
-    }
-    
-    private let TEST: FollowUp = .init()
-    @objc
-    func debugMethod4() {
-        TEST.intake.send(Void())
     }
     
     private let _TEST_: Airport = .init()
