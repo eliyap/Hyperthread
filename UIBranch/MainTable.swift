@@ -121,7 +121,7 @@ final class MainTable: UITableViewController {
         TEST.intake.send(Void())
     }
     
-    private let _TEST_: Airport🆕 = .init()
+    private let _TEST_: Airport = .init()
     @objc
     func debugMethod5() {
         _TEST_.requestNew()
@@ -388,7 +388,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     private let threshhold = 25
     
     /// Laziness prevents attempting to load nil IDs.
-    public lazy var airport = { Airport🆕() }()
+    public lazy var airport = { Airport() }()
     public lazy var timelineConduit = { TimelineConduit(credentials: Auth.shared.credentials!) }()
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
