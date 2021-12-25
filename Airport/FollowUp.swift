@@ -46,6 +46,7 @@ final class FollowUp {
             }
             .map { (ids: [Tweet.ID]) -> [Tweet.ID] in
                 inFlight.formUnion(ids)
+                NetLog.debug("Requesting \(ids.count) tweets", print: true, true)
                 return ids
             }
             .v2Fetch()
