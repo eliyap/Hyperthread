@@ -401,7 +401,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     @objc
     public func fetchOldTweets() {
         Task {
-            guard let credentials = Auth.shared.credentials else {
+            guard Auth.shared.credentials != nil else {
                 NetLog.warning("Tried to load tweets with nil credentials!")
                 return
             }
@@ -413,7 +413,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     @objc
     public func fetchNewTweets(onFetched: @escaping () -> Void) {
         Task {
-            guard let credentials = Auth.shared.credentials else {
+            guard Auth.shared.credentials != nil else {
                 NetLog.warning("Tried to load tweets with nil credentials!")
                 return
             }
