@@ -117,6 +117,34 @@ final class MainTable: UITableViewController {
         ))
     }
     
+    @objc
+    func debugMethod4() {
+        let realm = try! Realm()
+        try! realm.updateDangling()
+        let count: Int = realm.objects(Discussion.self)
+            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
+                /// Check if any `Tweet` is above the relevance threshold.
+                NSPredicate(format: """
+                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+                            $t.\(Tweet.relevancePropertyName) >= \(Relevance.threshold)
+                        ).@count > 0
+                    ).@count > 0
+                    """),
+                
+                /// Check if any `Tweet` has dangling references.
+//                NSPredicate(format: """
+//                    SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+//                        SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+//                            $t.\(Tweet.danglingPropertyName) >= \(ReferenceSet.empty.rawValue)
+//                        ).@count > 0
+//                    ).@count > 0
+//                    """),
+            ]))
+            .count
+        
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("No.")
     }
