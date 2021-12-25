@@ -44,6 +44,8 @@ final class HomeIngest<T: HomeTimelineFetcher> {
             }
             /// Convert to strings
             .map { [weak self] ids in
+                /// Fire completion early if home timeline returns nothing.
+                /// This prevents the "empty" filter in `v2Fetch` from swallowing stuff.
                 if ids.isEmpty {
                     self?.removeAll()
                 }
