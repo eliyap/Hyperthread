@@ -26,20 +26,6 @@ extension Realm {
 }
 
 extension Realm {
-    func orphanConversations() -> Results<Conversation> {
-        objects(Conversation.self)
-            .filter("\(Conversation.discussionPropertyName).@count == 0")
-    }
-}
-
-extension Realm {
-    func orphanTweets() -> Results<Tweet> {
-        objects(Tweet.self)
-            .filter("\(Tweet.conversationPropertyName).@count == 0")
-    }
-}
-
-extension Realm {
     func followingUsers() -> Results<User> {
         objects(User.self)
             .filter("\(User.followingPropertyName) == YES")
