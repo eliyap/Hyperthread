@@ -12,7 +12,7 @@ import Twig
 
 final class HomeIngest<T: HomeTimelineFetcher> {
     
-    private let pipeline: AnyCancellable
+    private var pipeline: AnyCancellable? = nil
     public let intake = PassthroughSubject<Void, Never>()
     
     /// - Note: tolerance set to 100% to prevent performance hits.
@@ -21,6 +21,8 @@ final class HomeIngest<T: HomeTimelineFetcher> {
         .autoconnect()
     
     weak var followUp: FollowUp?
+    
+    private var onFetched: [() -> Void] = []
     
     public init(followUp: FollowUp) {
         self.followUp = followUp
@@ -44,14 +46,19 @@ final class HomeIngest<T: HomeTimelineFetcher> {
             .v2Fetch()
             /// Synchronize
             .receive(on: Airport.scheduler)
-            .sink(receiveValue: { (tweets, _, users, media) in
+            .sink(receiveValue: { [weak self] (tweets, _, users, media) in
                 do {
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
                     
                     /// Update home timeline boundaries.
                     fetcher.updateBoundaries(tweets: tweets)
                     
+                    /// Immediately check for follow up.
                     followUp.intake.send()
+                    
+                    /// Execute and remove completion handlers.
+                    self?.onFetched.forEach { $0() }
+                    self?.onFetched = []
                 } catch {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
@@ -60,6 +67,10 @@ final class HomeIngest<T: HomeTimelineFetcher> {
     }
     
     deinit {
-        pipeline.cancel()
+        pipeline?.cancel()
+    }
+    
+    public func add(_ completion: @escaping () -> Void) -> Void {
+        onFetched.append(completion)
     }
 }

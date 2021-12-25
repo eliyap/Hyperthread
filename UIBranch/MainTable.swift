@@ -414,17 +414,14 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     }
     
     @objc
-    public func fetchNewTweets(onFetched: @escaping () -> Void) {
+    public func fetchNewTweets(onFetched completion: @escaping () -> Void) {
         Task {
             guard Auth.shared.credentials != nil else {
                 NetLog.warning("Tried to load tweets with nil credentials!")
                 return
             }
             
-            airport.requestNew()
-            
-            #warning("TODO: support completion handler")
-            onFetched()
+            airport.requestNew(onFetched: completion)
         }
     }
     

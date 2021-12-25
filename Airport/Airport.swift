@@ -31,7 +31,8 @@ final class Airport {
         self.oldIngest = .init(followUp: followUp)
     }
     
-    public func requestNew() {
+    public func requestNew(onFetched completion: @escaping () -> Void) {
+        newIngest.add(completion)
         newIngest.intake.send()
     }
     
