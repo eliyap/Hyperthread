@@ -10,11 +10,12 @@ import Combine
 import RealmSwift
 import Twig
 
-final class FollowUp {
-    private var pipeline: AnyCancellable? = nil
-    public let intake = PassthroughSubject<Void, Never>()
-    public let recycle = PassthroughSubject<[Tweet.ID], Never>()
-    init() {
+final class FollowUp: Conduit<Void, Never> {
+    /// An additional "intake" for follow up on follow up.
+    private let recycle = PassthroughSubject<[Tweet.ID], Never>()
+    
+    override init() {
+        super.init()
         var inFlight: Set<Tweet.ID> = []
         
         let intakePublisher = intake
@@ -79,10 +80,6 @@ final class FollowUp {
                     assert(false, "\(error)")
                 }
             }
-    }
-    
-    deinit {
-        pipeline?.cancel()
     }
 }
 
