@@ -164,5 +164,3 @@ internal func link(_ token: Realm.TransactionToken, conversation: Conversation, 
         idsToFetch.insert(upstreamID)
     }
 }
-
-
