@@ -33,9 +33,8 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, following: following)
             realm.add(tweet, update: .modified)
-            tweet.relevance = Relevance(tweet: tweet, following: following)
             
             /// Safety check: we count on the user never being missing!
             if realm.user(id: rawTweet.author_id) == nil {
@@ -72,9 +71,8 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: relevance)
             realm.add(tweet, update: .modified)
-            tweet.relevance = relevance
             
             /// Safety check: we count on the user never being missing!
             if realm.user(id: rawTweet.author_id) == nil {
