@@ -98,7 +98,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         set { _dangling = newValue.rawValue}
     }
     
-    init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia]) {
+    init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia], relevance: Relevance) {
         super.init()
         self.id = raw.id
         self.createdAt = raw.created_at
@@ -143,6 +143,10 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
                 media.append(Media(raw: match))
             }
         }
+    }
+    
+    convenience init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia], following: [User.ID]) {
+        self.init(raw: raw, rawMedia: rawMedia, relevance: Relevance(tweet: raw, following: following))
     }
     
     override required init() {

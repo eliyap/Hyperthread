@@ -64,7 +64,8 @@ extension String {
             let atHandle = "@" + mention.handle
             
             /// Ensure @mention is right after the `cursor`.
-            guard self[cursor..<endIndex].starts(with: atHandle) else {
+            /// Use `lowercased` for case-insensitive matching, due to Twitter matches @-handles case-insensitively.
+            guard self[cursor..<endIndex].lowercased().starts(with: atHandle.lowercased()) else {
                 if contains(atHandle) == false {
                     ModelLog.warning("Mention \(atHandle) not found in \(self)")
                 }

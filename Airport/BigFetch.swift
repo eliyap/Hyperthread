@@ -33,9 +33,8 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, following: following)
             realm.add(tweet, update: .modified)
-            tweet.relevance = Relevance(tweet: tweet, following: following)
             
             /// Safety check: we count on the user never being missing!
             if realm.user(id: rawTweet.author_id) == nil {
@@ -72,9 +71,8 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: relevance)
             realm.add(tweet, update: .modified)
-            tweet.relevance = relevance
             
             /// Safety check: we count on the user never being missing!
             if realm.user(id: rawTweet.author_id) == nil {
@@ -85,77 +83,6 @@ func ingestRaw(
             realm.linkConversation(token, tweet: tweet)
         }
     }
-}
-
-/**
- Accepts raw data from the Twitter v2 API.
- Links Tweets to Conversations, and Conversations to Discussions.
- - Returns: IDs of Tweets which need to be fetched.
- */
-func ingestRaw(
-    rawTweets: [RawHydratedTweet],
-    rawUsers: [RawIncludeUser],
-    rawMedia: [RawIncludeMedia]
-) throws -> Set<Tweet.ID> {
-    let realm = try! Realm()
-    
-    /// IDs for further fetching.
-    var idsToFetch = Set<Tweet.ID>()
-    
-    /// Insert all users.
-    try realm.write {
-        for rawUser in rawUsers {
-            let user = User(raw: rawUser)
-            realm.add(user, update: .modified)
-        }
-    }
-    
-    /// First, pick out tweets with missing media keys.
-    let mediaKeys = rawMedia.map(\.media_key)
-    let rawTweets = rawTweets.filter { rawTweet in
-        /// Pass on anything without media keys.
-        guard let keys = rawTweet.attachments?.media_keys, keys.isNotEmpty else { return true }
-        if keys.allSatisfy({ mediaKeys.contains($0) }) {
-            return true
-        } else {
-            /// Request these tweets again.
-            idsToFetch.insert(rawTweet.id)
-            return false
-        }
-    }
-    
-    /// Insert Tweets into local database.
-    try realm.write {
-        for rawTweet in rawTweets {
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia)
-            realm.add(tweet, update: .modified)
-            
-            /// Safety check: we count on the user never being missing!
-            if realm.user(id: rawTweet.author_id) == nil {
-                fatalError("Could not find user with id \(rawTweet.author_id)")
-            }
-            
-            /// Attach to conversation (create one if necessary).
-            var conversation: Conversation
-            if let local = realm.conversation(id: rawTweet.conversation_id) {
-                conversation = local
-            } else {
-                conversation = Conversation(id: rawTweet.conversation_id)
-                realm.add(conversation)
-            }
-            conversation.insert(tweet)
-            if let discussion = conversation.discussion.first {
-                discussion.notifyTweetsDidChange()
-            }
-            
-            /// Check if referenced tweets are in local database.
-            for id in tweet.referenced.missingFrom(realm) {
-                idsToFetch.insert(id)
-            }
-        }
-    }
-    
-    return idsToFetch
 }
 
 internal func linkUnlinked() throws -> Set<Tweet.ID> {
@@ -235,8 +162,5 @@ internal func link(_ token: Realm.TransactionToken, conversation: Conversation, 
     } else {
         /// Otherwise, fetch the upstream Conversation's root Tweet.
         idsToFetch.insert(upstreamID)
-        print("HERE!")
     }
 }
-
-
