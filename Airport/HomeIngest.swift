@@ -10,21 +10,30 @@ import Combine
 import RealmSwift
 import Twig
 
-final class HomeIngest<T: HomeTimelineFetcher> {
-    
-    private var pipeline: AnyCancellable? = nil
-    public let intake = PassthroughSubject<Void, Never>()
+/// An object wrapping a Combine data processing "pipeline".
+/// Takes care of the oft-forgotten step of cancelling the `AnyCancellable`.
+public class Conduit<Input, Failure: Error> {
+    public var pipeline: AnyCancellable? = nil
+    public let intake: PassthroughSubject<Input, Failure> = .init()
+    public init() {}
+    deinit { pipeline?.cancel() }
+}
+
+final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
     
     /// - Note: tolerance set to 100% to prevent performance hits.
     /// Docs: https://developer.apple.com/documentation/foundation/timer/1415085-tolerance
     private let timer = Timer.publish(every: 0.05, tolerance: 0.05, on: .main, in: .default)
         .autoconnect()
     
+    /// Conduit Object with which to request follow up fetches.
     weak var followUp: FollowUp?
     
+    /// Completion handlers to be executed and discarded when a fetch completes successfully.
     private var onFetched: [() -> Void] = []
     
     public init(followUp: FollowUp) {
+        super.init()
         self.followUp = followUp
         
         let fetcher = T()
@@ -71,10 +80,6 @@ final class HomeIngest<T: HomeTimelineFetcher> {
                     assert(false, "\(error)")
                 }
             })
-    }
-    
-    deinit {
-        pipeline?.cancel()
     }
     
     public func add(_ completion: @escaping () -> Void) -> Void {
