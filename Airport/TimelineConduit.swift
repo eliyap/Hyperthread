@@ -9,14 +9,10 @@ import Combine
 import Foundation
 import Twig
 
-final class TimelineConduit {
-    
-    
-    private var pipeline: AnyCancellable? = nil
-    
-    private let intake = PassthroughSubject<Request, Never>()
+final class TimelineConduit: Conduit<TimelineConduit.Request, Never> {
     
     public init(credentials: OAuthCredentials) {
+        super.init()
         pipeline = intake
             .flatMap { (request: Request) -> AnyPublisher in
                 /// We place data here as it pages in asynchronously.
