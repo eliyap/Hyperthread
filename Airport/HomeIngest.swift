@@ -10,18 +10,6 @@ import Combine
 import RealmSwift
 import Twig
 
-/// An object wrapping a Combine data processing "pipeline".
-/// Takes care of the oft-forgotten step of cancelling the `AnyCancellable`.
-public class Conduit<Input, Failure: Error> {
-    public var pipeline: AnyCancellable? = nil
-    public let intake: PassthroughSubject<Input, Failure> = .init()
-    public init() {}
-    deinit {
-        pipeline?.cancel()
-        pipeline = nil
-    }
-}
-
 final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
     
     /// - Note: tolerance set to 100% to prevent performance hits.
