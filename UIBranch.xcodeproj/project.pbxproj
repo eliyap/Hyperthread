@@ -325,7 +325,6 @@
 				22A9E9032771D76500C4EE99 /* Operators */,
 				223BBF5F27377E8700375530 /* Airport.swift */,
 				22BFD7A0277402B700E46DF1 /* FollowUp.swift */,
-				223BBF6127377E8800375530 /* IngestTweet.swift */,
 				22680A8D276AFCD4008827F8 /* TimelineConduit.swift */,
 				22BFD7A2277405F100E46DF1 /* HomeIngest.swift */,
 				22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */,
@@ -348,6 +347,7 @@
 				22F24640274DC20200AE17AD /* CanonicalString.swift */,
 				22760A4E274B136200F28F0A /* Media.swift */,
 				2248FF4F2745BEA100C6DEF9 /* Entities.swift */,
+				223BBF6127377E8800375530 /* IngestTweet.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
