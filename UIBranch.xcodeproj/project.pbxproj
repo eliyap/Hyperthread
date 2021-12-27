@@ -326,11 +326,8 @@
 			children = (
 				22A9E9032771D76500C4EE99 /* Operators */,
 				223BBF5F27377E8700375530 /* Airport.swift */,
-				22BFD7A0277402B700E46DF1 /* FollowUp.swift */,
-				22680A8D276AFCD4008827F8 /* TimelineConduit.swift */,
-				22BFD7A2277405F100E46DF1 /* HomeIngest.swift */,
+				228D71E5277A805900E306BD /* Conduits */,
 				22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */,
-				228D71E3277A800B00E306BD /* Conduit.swift */,
 			);
 			path = Airport;
 			sourceTree = "<group>";
@@ -398,6 +395,17 @@
 				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
 			);
 			path = Album;
+			sourceTree = "<group>";
+		};
+		228D71E5277A805900E306BD /* Conduits */ = {
+			isa = PBXGroup;
+			children = (
+				228D71E3277A800B00E306BD /* Conduit.swift */,
+				22BFD7A0277402B700E46DF1 /* FollowUp.swift */,
+				22680A8D276AFCD4008827F8 /* TimelineConduit.swift */,
+				22BFD7A2277405F100E46DF1 /* HomeIngest.swift */,
+			);
+			path = Conduits;
 			sourceTree = "<group>";
 		};
 		22A9E9032771D76500C4EE99 /* Operators */ = {
