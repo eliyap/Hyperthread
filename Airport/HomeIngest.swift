@@ -16,7 +16,10 @@ public class Conduit<Input, Failure: Error> {
     public var pipeline: AnyCancellable? = nil
     public let intake: PassthroughSubject<Input, Failure> = .init()
     public init() {}
-    deinit { pipeline?.cancel() }
+    deinit {
+        pipeline?.cancel()
+        pipeline = nil
+    }
 }
 
 final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
