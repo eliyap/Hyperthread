@@ -146,9 +146,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     }
     
     convenience init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia], following: [User.ID]) {
-        let temporary = Relevance.irrelevant
-        self.init(raw: raw, rawMedia: rawMedia, relevance: temporary)
-        self.relevance = Relevance(tweet: self, following: following)
+        self.init(raw: raw, rawMedia: rawMedia, relevance: Relevance(tweet: raw, following: following))
     }
     
     override required init() {
