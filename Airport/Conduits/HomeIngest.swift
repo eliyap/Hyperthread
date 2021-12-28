@@ -10,7 +10,7 @@ import Combine
 import RealmSwift
 import Twig
 
-final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
+final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
     
     /// - Note: tolerance set to 100% to prevent performance hits.
     /// Docs: https://developer.apple.com/documentation/foundation/timer/1415085-tolerance
@@ -20,14 +20,18 @@ final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
     /// Conduit Object with which to request follow up fetches.
     weak var followUp: FollowUp?
     
+    /// Conduit Object with which to request user timeline fetches.
+    weak var timelineConduit: TimelineConduit?
+    
     /// Completion handlers to be executed and discarded when a fetch completes successfully.
     private var onFetched: [() -> Void] = []
     
-    public init(followUp: FollowUp) {
+    public init(followUp: FollowUp, timelineConduit: TimelineConduit) {
         super.init()
         self.followUp = followUp
+        self.timelineConduit = timelineConduit
         
-        let fetcher = T()
+        let fetcher = Fetcher()
         
         /// When requested, publishes the IDs of new tweets on the home timeline.
         self.pipeline = intake
@@ -64,6 +68,8 @@ final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
                     
                     /// Immediately check for follow up.
                     followUp.intake.send()
+                    
+                    timelineConduit.intake.send()
                     
                     self?.removeAll()
                 } catch {

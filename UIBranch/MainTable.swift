@@ -110,6 +110,11 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod3() {
+        let realm = try! Realm()
+        let x = realm.objects(Discussion.self)
+            .filter(Discussion.minRelevancePredicate)
+            .count
+        print("\(x) total discussions")
         NOT_IMPLEMENTED()
     }
     
@@ -378,7 +383,6 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     
     /// Laziness prevents attempting to load nil IDs.
     public lazy var airport = { Airport() }()
-    public lazy var timelineConduit = { TimelineConduit(credentials: Auth.shared.credentials!) }()
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
         if

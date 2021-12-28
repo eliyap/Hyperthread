@@ -10,12 +10,12 @@ import Foundation
 import Twig
 import RealmSwift
 
-final class TimelineConduit: Conduit<DateWindow, Never> {
+final class TimelineConduit: Conduit<Void, Never> {
     
-    public init(credentials: OAuthCredentials) {
+    public override init() {
         super.init()
         pipeline = intake
-            .map { window -> [Request] in
+            .map { _ -> [Request] in
                 let realm = try! Realm()
                 
                 /// Check up to 1 day before
@@ -40,32 +40,33 @@ final class TimelineConduit: Conduit<DateWindow, Never> {
                 return requests
             }
             .flatMap { $0.publisher }
-            .flatMap { (request: Request) -> AnyPublisher in
-                /// We place data here as it pages in asynchronously.
-                let publisher = PassthroughSubject<([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]), Error>()
-                
-                Task {
-                    /// Fetch asynchronously until there are no more pages.
-                    var nextToken: String? = nil
-                    repeat {
-                        let (tweets, users, media, token) = try await userTimeline(
-                            userID: request.id,
-                            credentials: credentials,
-                            startTime: request.startTime,
-                            endTime: request.endTime,
-                            nextToken: nextToken
-                        )
-                        publisher.send((tweets, users, media))
-                        nextToken = token
-                    } while (nextToken != nil)
-                }
-                
-                return publisher.eraseToAnyPublisher()
-            }
-            .sink(receiveCompletion: { (completion: Subscribers.Completion<Error>) in
+//            .flatMap { (request: Request) -> AnyPublisher in
+//                /// We place data here as it pages in asynchronously.
+//                let publisher = PassthroughSubject<([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]), Error>()
+//
+//                Task {
+//                    /// Fetch asynchronously until there are no more pages.
+//                    var nextToken: String? = nil
+//                    repeat {
+//                        let (tweets, users, media, token) = try await userTimeline(
+//                            userID: request.id,
+//                            credentials: credentials,
+//                            startTime: request.startTime,
+//                            endTime: request.endTime,
+//                            nextToken: nextToken
+//                        )
+//                        publisher.send((tweets, users, media))
+//                        nextToken = token
+//                    } while (nextToken != nil)
+//                }
+//
+//                return publisher.eraseToAnyPublisher()
+//            }
+            .sink(receiveCompletion: { (completion: Subscribers.Completion) in
                 #warning("TODO")
                 ///
-            }, receiveValue: { ([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]) in
+            }, receiveValue: { request in
+                print("Request \(request)")
                 ///
             })
     }
