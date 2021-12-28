@@ -125,19 +125,42 @@ final class FollowingFetcher<Input, Failure: Error>
 {
     override func _fetch(_ onCompletion: @escaping ([User.ID]) -> Void) {
         Task {
+            let ids = await FollowingClearingHouse.shared.getFollowing()
+            onCompletion(ids)
+        }
+    }
+}
+
+/// Centralized reference for following, to avoid multiple fetchers pummeling the API.
+fileprivate actor FollowingClearingHouse {
+    public typealias Output = [User.ID]
+    
+    /// Memoized Output.
+    private let local: Sealed<Output> = .init(initial: nil, timer: FollowingEndpoint.staleTimer)
+    
+    public static let shared: FollowingClearingHouse = .init()
+    private init(){}
+    
+    public func getFollowing() async -> Output {
+        if let stored = local.value {
+            return stored
+        } else {
             /// Assume credentials are available.
-            let credentials = Auth.shared.credentials!
+            guard let credentials = Auth.shared.credentials else {
+                NetLog.error("Tried to fetch, but credentials missing!")
+                assert(false)
+                return []
+            }
             
-            /// If the fetch fails, fall back on local storage.
             guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
                 NetLog.error("Failed to fetch following list!")
                 
+                /// If the fetch fails, fall back on local Realm storage.
                 let realm = try! await Realm()
                 let ids: [User.ID] = realm.objects(User.self)
                     .filter("\(User.followingPropertyName) == YES")
                     .map(\.id)
-                onCompletion(ids)
-                return
+                return ids
             }
             
             NetLog.debug("Successfully fetched \(rawUsers.count) following users", print: true, true)
@@ -146,13 +169,12 @@ final class FollowingFetcher<Input, Failure: Error>
             do {
                 let realm = try! await Realm()
                 try realm.storeFollowing(raw: Array(rawUsers))
+                return rawUsers.map(\.id)
             } catch {
                 NetLog.error("Failed to store following list!")
                 assert(false, "Failed to store following list!")
+                return []
             }
-            
-            /// Call completion handler.
-            onCompletion(rawUsers.map(\.id))
         }
     }
 }
