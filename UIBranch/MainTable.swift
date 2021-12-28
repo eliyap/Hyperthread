@@ -110,11 +110,6 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod3() {
-        let realm = try! Realm()
-        let x = realm.objects(Discussion.self)
-            .filter(Discussion.minRelevancePredicate)
-            .count
-        print("\(x) total discussions")
         NOT_IMPLEMENTED()
     }
     
