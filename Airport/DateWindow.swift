@@ -67,6 +67,12 @@ internal final class RealmDateWindow: EmbeddedObject {
     @Persisted
     var end: Date
     
+    override init() {
+        super.init()
+        self.start = Date()
+        self.end = Date()
+    }
+    
     init(_ window: DateWindow) {
         super.init()
         self.start = window.start
