@@ -16,3 +16,6 @@ let NetLog = BlackBox.Logger(name: "NetLog")
 
 /// Realm Data Model Logging.
 let ModelLog = BlackBox.Logger(name: "ModelLog")
+
+/// UserDefaults
+let DefaultsLog = BlackBox.Logger(name: "UserDefaults")
