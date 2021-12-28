@@ -45,6 +45,19 @@ public struct DateWindow {
         }
         return result
     }
+    
+    /// Capped at either end by the passed dates
+    mutating func capped(start: Date? = nil, end: Date? = nil) -> Void {
+        var s = self.start
+        var e = self.end
+        if let start = start {
+            s = max(s, start)
+        }
+        if let end = end {
+            e = min(e, end)
+        }
+        self = .init(start: s, end: e)
+    }
 }
 
 internal final class RealmDateWindow: EmbeddedObject {
@@ -62,7 +75,7 @@ internal final class RealmDateWindow: EmbeddedObject {
 }
 
 extension DateWindow {
-    func fromHomeTimeline(in store: UserDefaults) -> Self? {
+    static func fromHomeTimeline(in store: UserDefaults) -> Self? {
         guard
             let maxID = store.maxID,
             let sinceID = store.sinceID
