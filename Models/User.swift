@@ -32,7 +32,7 @@ final class User: Object, Identifiable, UserIdentifiable {
     
     /// The date window fetched for this user.
     @Persisted
-    private var _timelineWindow: RealmDateWindow = .init(.new())
+    private var _timelineWindow: RealmDateWindow! = .init(.new())
     public var timelineWindow: DateWindow {
         get { .init(_timelineWindow) }
         set { _timelineWindow = .init(newValue) }
