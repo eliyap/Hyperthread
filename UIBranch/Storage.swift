@@ -19,7 +19,7 @@ extension UserDefaults {
     var oAuthCredentials: OAuthCredentials? {
         get {
             guard let data = object(forKey: Keys.oAuthCredentials.rawValue) as? Data else {
-                Swift.debugPrint("No OAuth credentials found.")
+                DefaultsLog.debug("No OAuth credentials found.", print: true, true)
                 return nil
             }
             guard let loaded = try? JSONDecoder().decode(OAuthCredentials.self, from: data) else {
