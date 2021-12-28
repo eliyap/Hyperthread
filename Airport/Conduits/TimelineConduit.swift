@@ -15,12 +15,16 @@ final class TimelineConduit: Conduit<Void, Never> {
     public override init() {
         super.init()
         pipeline = intake
+        
             .map { _ -> [Request] in
                 let realm = try! Realm()
                 
-                /// Check up to 1 day before
+                /// Check up to 1 day before.
                 var homeWindow = DateWindow.fromHomeTimeline(in: .groupSuite) ?? .new()
                 homeWindow.start.addTimeInterval(-.day)
+                homeWindow.duration += .day
+                
+                Swift.debugPrint("Home Window \(homeWindow)")
                 
                 let following = realm.objects(User.self)
                     .filter(NSPredicate(format: "\(User.followingPropertyName) == YES"))
