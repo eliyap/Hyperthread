@@ -30,6 +30,7 @@ final class User: Object, Identifiable, UserIdentifiable {
     var following: Bool = false
     static let followingPropertyName = "following"
     
+    /// The date window fetched for this user.
     @Persisted
     private var _timelineWindow: RealmDateWindow = .init(.new())
     public var timelineWindow: DateWindow {
