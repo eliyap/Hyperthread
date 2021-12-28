@@ -27,7 +27,7 @@ final class User: Object, Identifiable, UserIdentifiable {
     /// Whether our user follows this Twitter user.
     /// - Note: not included in `RawUser` object, hence we default initialize it.
     @Persisted
-    var following: Bool = false
+    var following: Bool
     static let followingPropertyName = "following"
     
     /// The date window fetched for this user.
@@ -38,18 +38,20 @@ final class User: Object, Identifiable, UserIdentifiable {
         set { _timelineWindow = .init(newValue) }
     }
     
-    init(raw: RawUser) {
+    init(raw: RawUser, following: Bool) {
         super.init()
         self.id = "\(raw.id)"
         self.name = raw.name
         self.handle = raw.screen_name
+        self.following = following
     }
     
-    init(raw: RawIncludeUser) {
+    init(raw: RawIncludeUser, following: Bool) {
         super.init()
         self.id = raw.id
         self.name = raw.name
         self.handle = raw.username
+        self.following = following
     }
     
     override required init() {
@@ -76,8 +78,7 @@ internal extension Realm {
             
             /// Write out users to account for possible new users.
             raw.forEach {
-                let user = User(raw: $0)
-                user.following = true
+                let user = User(raw: $0, following: true)
                 add(user, update: .all)
             }
         }
