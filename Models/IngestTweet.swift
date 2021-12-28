@@ -25,7 +25,7 @@ func ingestRaw(
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
-            let following = realm.user(id: rawUser.id)?.following ?? false
+            let following = following.contains(where: {$0 == rawUser.id})
             let user = User(raw: rawUser, following: following)
             realm.add(user, update: .modified)
         }
