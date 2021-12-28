@@ -60,3 +60,26 @@ final class User: Object, Identifiable, UserIdentifiable {
 public extension Int64 {
     static let NSNotFound = Int64(Foundation.NSNotFound)
 }
+
+internal extension Realm {
+    func storeFollowing(raw: [RawIncludeUser]) throws -> Void {
+        try write {
+            /// Remove users who are no longer being followed.
+            followingUsers()
+                .filter { user in
+                    /// Find users who were marked as followed but are now missing.
+                    raw.contains(where: {user.id == $0.id}) == false
+                }
+                .forEach { user in
+                    user.following = false
+                }
+            
+            /// Write out users to account for possible new users.
+            raw.forEach {
+                let user = User(raw: $0)
+                user.following = true
+                add(user, update: .all)
+            }
+        }
+    }
+}

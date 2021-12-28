@@ -140,27 +140,12 @@ final class FollowingFetcher<Input, Failure: Error>
                 return
             }
             
+            NetLog.debug("Successfully fetched \(rawUsers.count) following users", print: true, true)
+            
             /// Store fetched results.
             do {
                 let realm = try! await Realm()
-                try realm.write {
-                    /// Remove users who are no longer being followed.
-                    realm.followingUsers()
-                        .filter { user in
-                            /// Find users who were marked as followed but are now missing.
-                            rawUsers.contains(where: {user.id == $0.id}) == false
-                        }
-                        .forEach { user in
-                            user.following = false
-                        }
-                    
-                    /// Write out users to account for possible new users.
-                    rawUsers.forEach {
-                        let user = User(raw: $0)
-                        user.following = true
-                        realm.add(user, update: .modified)
-                    }
-                }
+                try realm.storeFollowing(raw: Array(rawUsers))
             } catch {
                 NetLog.error("Failed to store following list!")
                 assert(false, "Failed to store following list!")
