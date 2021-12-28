@@ -15,10 +15,8 @@ final class TimelineConduit: Conduit<Void, Never> {
     public override init() {
         super.init()
         pipeline = intake
-        
-            .map { _ -> [Request] in
-                let realm = try! Realm()
-                
+            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
+            .map { (_, following) -> [Request] in
                 /// Check up to 1 day before.
                 var homeWindow = DateWindow.fromHomeTimeline(in: .groupSuite) ?? .new()
                 homeWindow.start.addTimeInterval(-.day)
@@ -26,12 +24,14 @@ final class TimelineConduit: Conduit<Void, Never> {
                 
                 Swift.debugPrint("Home Window \(homeWindow)")
                 
-                let following = realm.objects(User.self)
-                    .filter(NSPredicate(format: "\(User.followingPropertyName) == YES"))
                 var requests: [Request] = []
                 
+                let realm = try! Realm()
+                let users = following.compactMap(realm.user(id:))
+                assert(users.count == following.count, "Users missing from realm database!")
+                
                 /// Check what portions of the user timeline are un-fetched.
-                for user in following {
+                for user in users {
                     let (a, b) = homeWindow.subtracting(user.timelineWindow)
                     if let a = a {
                         requests.append(Request(id: user.id, startTime: a.start, endTime: a.end))
@@ -44,34 +44,54 @@ final class TimelineConduit: Conduit<Void, Never> {
                 return requests
             }
             .flatMap { $0.publisher }
-//            .flatMap { (request: Request) -> AnyPublisher in
-//                /// We place data here as it pages in asynchronously.
-//                let publisher = PassthroughSubject<([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]), Error>()
-//
-//                Task {
-//                    /// Fetch asynchronously until there are no more pages.
-//                    var nextToken: String? = nil
-//                    repeat {
-//                        let (tweets, users, media, token) = try await userTimeline(
-//                            userID: request.id,
-//                            credentials: credentials,
-//                            startTime: request.startTime,
-//                            endTime: request.endTime,
-//                            nextToken: nextToken
-//                        )
-//                        publisher.send((tweets, users, media))
-//                        nextToken = token
-//                    } while (nextToken != nil)
-//                }
-//
-//                return publisher.eraseToAnyPublisher()
-//            }
+            .flatMap { (request: Request) -> AnyPublisher<RawData, Error> in
+                /// Check that credentials are present.
+                guard let credentials = Auth.shared.credentials else {
+                    NetLog.error("Credentials missing.")
+                    assert(false)
+                    return Just(([], [], [], []))
+                        .setFailureType(to: Error.self)
+                        .eraseToAnyPublisher()
+                }
+                
+                /// We place data here as it pages in asynchronously.
+                let publisher = PassthroughSubject<RawData, Error>()
+
+                Task {
+                    /// Fetch asynchronously until there are no more pages.
+                    var nextToken: String? = nil
+                    repeat {
+                        let (tweets, users, media, token) = try await userTimeline(
+                            userID: request.id,
+                            credentials: credentials,
+                            startTime: request.startTime,
+                            endTime: request.endTime,
+                            nextToken: nextToken
+                        )
+                        publisher.send((tweets, [], users, media))
+                        nextToken = token
+                    } while (nextToken != nil)
+                }
+
+                return publisher.eraseToAnyPublisher()
+            }
+            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
             .sink(receiveCompletion: { (completion: Subscribers.Completion) in
                 #warning("TODO")
                 ///
-            }, receiveValue: { request in
-                print("Request \(request)")
-                ///
+            }, receiveValue: { (rawData, followingIDs) in
+                let (tweets, _, users, media) = rawData
+                do {
+                    NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
+                    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: followingIDs)
+                    
+                    /// Immediately check for follow up.
+                    #warning("TODO")
+//                    followUp.intake.send()
+                } catch {
+                    ModelLog.error("\(error)")
+                    assert(false, "\(error)")
+                }
             })
     }
 }
