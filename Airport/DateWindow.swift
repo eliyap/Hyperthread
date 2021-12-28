@@ -9,9 +9,9 @@ import Foundation
 import RealmSwift
 
 public struct DateWindow {
-    let start: Date
-    let duration: TimeInterval
-    var end: Date { start.addingTimeInterval(duration) }
+    public var start: Date
+    public var duration: TimeInterval
+    public var end: Date { start.addingTimeInterval(duration) }
     
     init(start: Date, duration: TimeInterval) {
         precondition(duration >= 0, "Duration must be non-negative!")
