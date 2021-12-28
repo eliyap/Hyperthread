@@ -143,6 +143,8 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
                 media.append(Media(raw: match))
             }
         }
+        
+        self.relevance = relevance
     }
     
     convenience init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia], following: [User.ID]) {
