@@ -8,16 +8,55 @@
 import Combine
 import Foundation
 import Twig
+import RealmSwift
 
-final class TimelineConduit: Conduit<TimelineConduit.Request, Never> {
+final class TimelineConduit: Conduit<Void, Never> {
     
-    public init(credentials: OAuthCredentials) {
+    public override init() {
         super.init()
         pipeline = intake
-            .flatMap { (request: Request) -> AnyPublisher in
-                /// We place data here as it pages in asynchronously.
-                let publisher = PassthroughSubject<([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]), Error>()
+            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
+            .map { (_, following) -> [Request] in
+                /// Check up to 1 day before.
+                var homeWindow = DateWindow.fromHomeTimeline(in: .groupSuite) ?? .new()
+                homeWindow.start.addTimeInterval(-.day)
+                homeWindow.duration += .day
                 
+                Swift.debugPrint("Home Window \(homeWindow)")
+                
+                var requests: [Request] = []
+                
+                let realm = try! Realm()
+                let users = following.compactMap(realm.user(id:))
+                assert(users.count == following.count, "Users missing from realm database!")
+                
+                /// Check what portions of the user timeline are un-fetched.
+                for user in users {
+                    let (a, b) = homeWindow.subtracting(user.timelineWindow)
+                    if let a = a {
+                        requests.append(Request(id: user.id, startTime: a.start, endTime: a.end))
+                    }
+                    if let b = b {
+                        requests.append(Request(id: user.id, startTime: b.start, endTime: b.end))
+                    }
+                }
+                
+                return requests
+            }
+            .flatMap { $0.publisher }
+            .flatMap { (request: Request) -> AnyPublisher<RawData, Error> in
+                /// Check that credentials are present.
+                guard let credentials = Auth.shared.credentials else {
+                    NetLog.error("Credentials missing.")
+                    assert(false)
+                    return Just(([], [], [], []))
+                        .setFailureType(to: Error.self)
+                        .eraseToAnyPublisher()
+                }
+                
+                /// We place data here as it pages in asynchronously.
+                let publisher = PassthroughSubject<RawData, Error>()
+
                 Task {
                     /// Fetch asynchronously until there are no more pages.
                     var nextToken: String? = nil
@@ -29,22 +68,31 @@ final class TimelineConduit: Conduit<TimelineConduit.Request, Never> {
                             endTime: request.endTime,
                             nextToken: nextToken
                         )
-                        publisher.send((tweets, users, media))
+                        publisher.send((tweets, [], users, media))
                         nextToken = token
                     } while (nextToken != nil)
                 }
-                
+
                 return publisher.eraseToAnyPublisher()
             }
-            .sink(receiveCompletion: { (completion: Subscribers.Completion<Error>) in
+            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
+            .sink(receiveCompletion: { (completion: Subscribers.Completion) in
+                #warning("TODO")
                 ///
-            }, receiveValue: { ([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]) in
-                ///
+            }, receiveValue: { (rawData, followingIDs) in
+                let (tweets, _, users, media) = rawData
+                do {
+                    NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
+                    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: followingIDs)
+                    
+                    /// Immediately check for follow up.
+                    #warning("TODO")
+//                    followUp.intake.send()
+                } catch {
+                    ModelLog.error("\(error)")
+                    assert(false, "\(error)")
+                }
             })
-    }
-    
-    public func request(_ req: Request) -> Void {
-        intake.send(req)
     }
 }
 

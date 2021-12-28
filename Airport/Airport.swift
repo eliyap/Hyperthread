@@ -25,10 +25,11 @@ final class Airport {
     private let followUp: FollowUp = .init()
     private let newIngest: HomeIngest<TimelineNewFetcher>
     private let oldIngest: HomeIngest<TimelineOldFetcher>
+    private let timelineConduit: TimelineConduit = .init()
     
     init() {
-        self.newIngest = .init(followUp: followUp)
-        self.oldIngest = .init(followUp: followUp)
+        self.newIngest = .init(followUp: followUp, timelineConduit: timelineConduit)
+        self.oldIngest = .init(followUp: followUp, timelineConduit: timelineConduit)
     }
     
     public func requestNew(onFetched completion: @escaping () -> Void) {

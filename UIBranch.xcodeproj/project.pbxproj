@@ -35,7 +35,6 @@
 		223BBF7027377EC300375530 /* Tweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6B27377EC100375530 /* Tweet.swift */; };
 		223BBF7127377EC300375530 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6C27377EC300375530 /* Query.swift */; };
 		223BBF7427377EF100375530 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF7327377EF100375530 /* Logger.swift */; };
-		223BBF7627377F2100375530 /* MiscFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF7527377F2100375530 /* MiscFetch.swift */; };
 		223BBF7827377F5100375530 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF7727377F5100375530 /* Storage.swift */; };
 		223BBF7A2737867800375530 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF792737867800375530 /* AuthView.swift */; };
 		223BBF7C273791A100375530 /* PMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF7B273791A100375530 /* PMViewController.swift */; };
@@ -66,6 +65,7 @@
 		22760A4F274B136200F28F0A /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4E274B136200F28F0A /* Media.swift */; };
 		228D71E4277A800B00E306BD /* Conduit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E3277A800B00E306BD /* Conduit.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
+		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
 		22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9062773059E00C4EE99 /* Transaction.swift */; };
 		22BE9C0D27606A280080E475 /* Supertall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BE9C0C27606A280080E475 /* Supertall.swift */; };
@@ -82,7 +82,6 @@
 		22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E927406F9700932614 /* RetweetSymbol.swift */; };
 		22D127EC274070CD00932614 /* MetricButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127EB274070CD00932614 /* MetricButtons.swift */; };
 		22D127EE2740713500932614 /* TimeDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127ED2740713500932614 /* TimeDifference.swift */; };
-		22D127F02740A17B00932614 /* Following.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127EF2740A17B00932614 /* Following.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
 		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
 		22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F24640274DC20200AE17AD /* CanonicalString.swift */; };
@@ -139,7 +138,6 @@
 		223BBF6B27377EC100375530 /* Tweet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tweet.swift; sourceTree = "<group>"; };
 		223BBF6C27377EC300375530 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		223BBF7327377EF100375530 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		223BBF7527377F2100375530 /* MiscFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscFetch.swift; sourceTree = "<group>"; };
 		223BBF7727377F5100375530 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		223BBF792737867800375530 /* AuthView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		223BBF7B273791A100375530 /* PMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PMViewController.swift; sourceTree = "<group>"; };
@@ -170,6 +168,7 @@
 		22760A4E274B136200F28F0A /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
 		228D71E3277A800B00E306BD /* Conduit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conduit.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
+		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
 		22A9E9062773059E00C4EE99 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		22BE9C0C27606A280080E475 /* Supertall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supertall.swift; sourceTree = "<group>"; };
@@ -186,7 +185,6 @@
 		22D127E927406F9700932614 /* RetweetSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetweetSymbol.swift; sourceTree = "<group>"; };
 		22D127EB274070CD00932614 /* MetricButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricButtons.swift; sourceTree = "<group>"; };
 		22D127ED2740713500932614 /* TimeDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeDifference.swift; sourceTree = "<group>"; };
-		22D127EF2740A17B00932614 /* Following.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Following.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
 		22F24640274DC20200AE17AD /* CanonicalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CanonicalString.swift; path = /Users/SAM/Documents/UIBranch/Models/CanonicalString.swift; sourceTree = "<absolute>"; };
@@ -284,8 +282,6 @@
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
 				223BBF7D273846BE00375530 /* LoginState.swift */,
 				223BBF792737867800375530 /* AuthView.swift */,
-				22D127EF2740A17B00932614 /* Following.swift */,
-				223BBF7527377F2100375530 /* MiscFetch.swift */,
 				223BBF83273847E900375530 /* LoginViewController.swift */,
 				223BBF7727377F5100375530 /* Storage.swift */,
 				222161F32741C2F400220F0C /* AssetColors.swift */,
@@ -386,6 +382,7 @@
 				2266D0C927616FDA0099477D /* GetHeight.swift */,
 				22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */,
 				22BFD7A82775883F00E46DF1 /* Collection.isNotEmpty.swift */,
+				228D71E8277AC06100E306BD /* TimeInterval.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -641,6 +638,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				228D71E4277A800B00E306BD /* Conduit.swift in Sources */,
+				228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */,
 				224F88D7275E5CD300085678 /* ImageAnimate.swift in Sources */,
 				22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */,
 				22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */,
@@ -676,7 +674,6 @@
 				228D71E7277A953500E306BD /* DateWindow.swift in Sources */,
 				22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
-				22D127F02740A17B00932614 /* Following.swift in Sources */,
 				22760A4F274B136200F28F0A /* Media.swift in Sources */,
 				223BBF7C273791A100375530 /* PMViewController.swift in Sources */,
 				22D127DE2740651C00932614 /* TweetCell.swift in Sources */,
@@ -686,7 +683,6 @@
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
-				223BBF7627377F2100375530 /* MiscFetch.swift in Sources */,
 				222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,

@@ -10,7 +10,7 @@ import Combine
 import RealmSwift
 import Twig
 
-final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
+final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
     
     /// - Note: tolerance set to 100% to prevent performance hits.
     /// Docs: https://developer.apple.com/documentation/foundation/timer/1415085-tolerance
@@ -20,14 +20,18 @@ final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
     /// Conduit Object with which to request follow up fetches.
     weak var followUp: FollowUp?
     
+    /// Conduit Object with which to request user timeline fetches.
+    weak var timelineConduit: TimelineConduit?
+    
     /// Completion handlers to be executed and discarded when a fetch completes successfully.
     private var onFetched: [() -> Void] = []
     
-    public init(followUp: FollowUp) {
+    public init(followUp: FollowUp, timelineConduit: TimelineConduit) {
         super.init()
         self.followUp = followUp
+        self.timelineConduit = timelineConduit
         
-        let fetcher = T()
+        let fetcher = Fetcher()
         
         /// When requested, publishes the IDs of new tweets on the home timeline.
         self.pipeline = intake
@@ -60,10 +64,12 @@ final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
                     try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
                     
                     /// Update home timeline boundaries.
-                    fetcher.updateBoundaries(tweets: tweets)
+                    self?.updateBoundaries(tweets: tweets)
                     
                     /// Immediately check for follow up.
                     followUp.intake.send()
+                    
+                    timelineConduit.intake.send()
                     
                     self?.removeAll()
                 } catch {
@@ -81,5 +87,21 @@ final class HomeIngest<T: HomeTimelineFetcher>: Conduit<Void, Never> {
         /// Execute and remove completion handlers.
         onFetched.forEach { $0() }
         onFetched = []
+    }
+    
+    /// Update home timeline ID boundaries.
+    fileprivate func updateBoundaries(tweets: [TweetIdentifiable]) -> Void {
+        let sinceID = UserDefaults.groupSuite.sinceID
+        let tweetsMaxID = tweets.compactMap { Int64($0.id) }.max()
+        let newSinceID = max(tweetsMaxID, Int64?(sinceID))
+        UserDefaults.groupSuite.sinceID = newSinceID.string
+        NetLog.debug("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
+        
+        /// Update home timeline boundaries.
+        let maxID = UserDefaults.groupSuite.maxID
+        let tweetsMinID = tweets.compactMap { Int64($0.id) }.min()
+        let newMaxID = min(tweetsMinID, Int64?(maxID))
+        UserDefaults.groupSuite.maxID = newMaxID.string
+        NetLog.debug("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
     }
 }

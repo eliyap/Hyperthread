@@ -16,9 +16,6 @@ internal protocol HomeTimelineFetcher {
     
     /// Fetch tweets using the provided credentials.
     func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1Tweet]
-    
-    /// Update internal representation based on the fetched tweets.
-    func updateBoundaries(tweets: [TweetIdentifiable]) -> Void
 }
 
 /// Helps us fetch Tweets newer than the ones we have.
@@ -30,15 +27,6 @@ final class TimelineNewFetcher: HomeTimelineFetcher {
         let sinceID = UserDefaults.groupSuite.sinceID
         return try await timeline(credentials: credentials, sinceID: sinceID, maxID: nil)
     }
-    
-    func updateBoundaries(tweets: [TweetIdentifiable]) {
-        /// Update home timeline boundaries.
-        let sinceID = UserDefaults.groupSuite.sinceID
-        let tweetsMaxID = tweets.compactMap { Int64($0.id) }.max()
-        let newSinceID = max(tweetsMaxID, Int64?(sinceID))
-        UserDefaults.groupSuite.sinceID = newSinceID.string
-        NetLog.debug("new SinceID: \(newSinceID ?? 0), previously \(sinceID ?? "nil")")
-    }
 }
 
 /// Helps us fetch Tweets older than the ones we have.
@@ -49,14 +37,5 @@ final class TimelineOldFetcher: HomeTimelineFetcher {
     func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1Tweet] {
         let maxID = UserDefaults.groupSuite.maxID
         return try await timeline(credentials: credentials, sinceID: nil, maxID: maxID)
-    }
-    
-    func updateBoundaries(tweets: [TweetIdentifiable]) {
-        /// Update home timeline boundaries.
-        let maxID = UserDefaults.groupSuite.maxID
-        let tweetsMinID = tweets.compactMap { Int64($0.id) }.min()
-        let newMaxID = min(tweetsMinID, Int64?(maxID))
-        UserDefaults.groupSuite.maxID = newMaxID.string
-        NetLog.debug("new MaxID: \(newMaxID ?? 0), previously \(maxID ?? "nil")")
     }
 }
