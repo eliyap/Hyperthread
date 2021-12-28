@@ -34,7 +34,9 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
+            /// Assumes `following` is up to date.
             let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, following: following)
+            
             realm.add(tweet, update: .modified)
             
             /// Safety check: we count on the user never being missing!
@@ -64,7 +66,9 @@ func ingestRaw(
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
+            /// Check following status in Realm, to avoid ovewriting an existing value (if any).
             let following = realm.user(id: rawUser.id)?.following ?? false
+            
             let user = User(raw: rawUser, following: following)
             realm.add(user, update: .modified)
         }
