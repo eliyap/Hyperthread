@@ -30,6 +30,13 @@ final class User: Object, Identifiable, UserIdentifiable {
     var following: Bool = false
     static let followingPropertyName = "following"
     
+    @Persisted
+    private var _timelineWindow: RealmDateWindow = .init(.new())
+    public var timelineWindow: DateWindow {
+        get { .init(_timelineWindow) }
+        set { _timelineWindow = .init(newValue) }
+    }
+    
     init(raw: RawUser) {
         super.init()
         self.id = "\(raw.id)"
