@@ -24,6 +24,10 @@ public struct DateWindow {
         self.init(start: start, duration: end.timeIntervalSince(start))
     }
     
+    init(_ window: RealmDateWindow) {
+        self.init(start: window.start, end: window.end)
+    }
+    
     public static func new() -> DateWindow {
         .init(start: Date(), duration: .zero)
     }
@@ -40,6 +44,20 @@ public struct DateWindow {
             result.later = DateWindow(start: self.end, end: other.end)
         }
         return result
+    }
+}
+
+internal final class RealmDateWindow: EmbeddedObject {
+    @Persisted
+    var start: Date
+    
+    @Persisted
+    var end: Date
+    
+    init(_ window: DateWindow) {
+        super.init()
+        self.start = window.start
+        self.end = window.end
     }
 }
 
