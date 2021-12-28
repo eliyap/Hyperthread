@@ -38,10 +38,10 @@ public struct DateWindow {
     public func subtracting(_ other: DateWindow) -> (earlier: DateWindow?, later: DateWindow?) {
         var result: (earlier: DateWindow?, later: DateWindow?) = (nil, nil)
         if other.start > self.start {
-            result.earlier = DateWindow(start: other.start, end: self.start)
+            result.earlier = DateWindow(start: self.start, end: other.start)
         }
         if other.end < self.end {
-            result.later = DateWindow(start: self.end, end: other.end)
+            result.later = DateWindow(start: other.end, end: self.end)
         }
         return result
     }
