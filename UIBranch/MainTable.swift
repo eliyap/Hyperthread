@@ -110,11 +110,7 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod3() {
-        fetcher.timelineConduit.request(.init(
-            id: OwnUserID,
-            startTime: Date().advanced(by: -.pi * pow(10, 7)),
-            endTime: Date()
-        ))
+        NOT_IMPLEMENTED()
     }
     
     required init?(coder: NSCoder) {

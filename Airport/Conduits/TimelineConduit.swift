@@ -8,12 +8,38 @@
 import Combine
 import Foundation
 import Twig
+import RealmSwift
 
-final class TimelineConduit: Conduit<TimelineConduit.Request, Never> {
+final class TimelineConduit: Conduit<DateWindow, Never> {
     
     public init(credentials: OAuthCredentials) {
         super.init()
         pipeline = intake
+            .map { window -> [Request] in
+                let realm = try! Realm()
+                
+                /// Check up to 1 day before
+                var homeWindow = DateWindow.fromHomeTimeline(in: .groupSuite) ?? .new()
+                homeWindow.start.addTimeInterval(-.day)
+                
+                let following = realm.objects(User.self)
+                    .filter(NSPredicate(format: "\(User.followingPropertyName) == YES"))
+                var requests: [Request] = []
+                
+                /// Check what portions of the user timeline are un-fetched.
+                for user in following {
+                    let (a, b) = homeWindow.subtracting(user.timelineWindow)
+                    if let a = a {
+                        requests.append(Request(id: user.id, startTime: a.start, endTime: a.end))
+                    }
+                    if let b = b {
+                        requests.append(Request(id: user.id, startTime: b.start, endTime: b.end))
+                    }
+                }
+                
+                return requests
+            }
+            .flatMap { $0.publisher }
             .flatMap { (request: Request) -> AnyPublisher in
                 /// We place data here as it pages in asynchronously.
                 let publisher = PassthroughSubject<([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]), Error>()
@@ -37,14 +63,11 @@ final class TimelineConduit: Conduit<TimelineConduit.Request, Never> {
                 return publisher.eraseToAnyPublisher()
             }
             .sink(receiveCompletion: { (completion: Subscribers.Completion<Error>) in
+                #warning("TODO")
                 ///
             }, receiveValue: { ([RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]) in
                 ///
             })
-    }
-    
-    public func request(_ req: Request) -> Void {
-        intake.send(req)
     }
 }
 
