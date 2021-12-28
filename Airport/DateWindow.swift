@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 public struct DateWindow {
     let start: Date
@@ -25,6 +26,44 @@ public struct DateWindow {
     
     public static func new() -> DateWindow {
         .init(start: Date(), duration: .zero)
+    }
+    
+    /** The 2 possible windows formed by subtracting `other` from `self`.
+        Earlier is the portion falling before `other`, later is the portion after `other`.
+     */
+    public func subtracting(_ other: DateWindow) -> (earlier: DateWindow?, later: DateWindow?) {
+        var result: (earlier: DateWindow?, later: DateWindow?) = (nil, nil)
+        if other.start > self.start {
+            result.earlier = DateWindow(start: other.start, end: self.start)
+        }
+        if other.end < self.end {
+            result.later = DateWindow(start: self.end, end: other.end)
+        }
+        return result
+    }
+}
+
+extension DateWindow {
+    func fromHomeTimeline(in store: UserDefaults) -> Self? {
+        guard
+            let maxID = store.maxID,
+            let sinceID = store.sinceID
+        else {
+            DefaultsLog.debug("Could not obtain ID window", print: true, true)
+            return nil
+        }
+        
+        let realm = try! Realm()
+        guard
+            let start = realm.tweet(id: maxID)?.createdAt,
+            let end = realm.tweet(id: sinceID)?.createdAt
+        else {
+            DefaultsLog.error("Could not find tweets in realm, should already be there!")
+            assert(false)
+            return .new()
+        }
+        
+        return .init(start: start, end: end)
     }
 }
 
