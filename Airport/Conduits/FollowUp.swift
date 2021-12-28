@@ -154,8 +154,12 @@ final class FollowingFetcher<Input, Failure: Error>
                             user.following = false
                         }
                     
-                    /// Write all data, including following status, out to disk.
-                    rawUsers.forEach { realm.add(User(raw: $0), update: .modified) }
+                    /// Write out users to account for possible new users.
+                    rawUsers.forEach {
+                        let user = User(raw: $0)
+                        user.following = true
+                        realm.add(user, update: .modified)
+                    }
                 }
             } catch {
                 NetLog.error("Failed to store following list!")
