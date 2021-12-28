@@ -31,6 +31,10 @@ public struct DateWindow {
 extension DateWindow: Codable { }
 
 internal extension UserDefaults {
+    /**
+     Store the window of time over which we have fetched *all* User Timelines (v2 API).
+     If no window is known, default to `.new()`, a zero width window anchored at the current `Date`.
+     */
     var userTimelineWindow: DateWindow {
         get {
             guard let data = object(forKey: #function) as? Data else {
