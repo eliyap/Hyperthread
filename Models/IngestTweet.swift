@@ -25,7 +25,8 @@ func ingestRaw(
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
-            let user = User(raw: rawUser)
+            let following = realm.user(id: rawUser.id)?.following ?? false
+            let user = User(raw: rawUser, following: following)
             realm.add(user, update: .modified)
         }
     }
@@ -63,7 +64,8 @@ func ingestRaw(
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
-            let user = User(raw: rawUser)
+            let following = realm.user(id: rawUser.id)?.following ?? false
+            let user = User(raw: rawUser, following: following)
             realm.add(user, update: .modified)
         }
     }
