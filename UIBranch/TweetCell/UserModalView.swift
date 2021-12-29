@@ -18,11 +18,17 @@ final class UserModalViewController: UIViewController {
     */
 
     private let stackView: UIStackView
+    
+    private let followingButton: UIButton
 
     #warning("TODO: add profile view")
     
-    init() {
+    private let userID: User.ID
+    
+    init(userID: User.ID) {
+        self.userID = userID
         self.stackView = .init()
+        self.followingButton = .init(configuration: .filled(), primaryAction: nil)
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .automatic
         
@@ -37,6 +43,14 @@ final class UserModalViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
+        
+        stackView.addArrangedSubview(followingButton)
+        followingButton.setTitle("Following?", for: .normal)
+    }
+    
+    @objc
+    private func followingButtonOnTap() -> Void {
+        Swift.debugPrint("Tap!")
     }
     
     required init?(coder: NSCoder) {

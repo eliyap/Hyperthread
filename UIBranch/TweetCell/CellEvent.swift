@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 enum CellEvent {
-    case usernameTouch
+    case usernameTouch(User.ID)
 }
 
 final class CellEventLine {

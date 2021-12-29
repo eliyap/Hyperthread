@@ -19,6 +19,9 @@ final class UserView: UIStackView {
     /// Combine communication line.
     weak var line: CellEventLine? = nil
     
+    /// Track the current User ID.
+    private var userID: User.ID? = nil
+    
     init(line: CellEventLine? = nil) {
         self.line = line
         super.init(frame: .zero)
@@ -50,6 +53,8 @@ final class UserView: UIStackView {
     }
 
     public func configure(tweet: Tweet, user: User?, timestamp: Date) {
+        self.userID = user?.id
+        
         if let user = user {
             nameLabel.text = user.name
             handleLabel.text = "@" + user.handle
@@ -77,8 +82,13 @@ final class UserView: UIStackView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         /// Don't count as a cell touch.
 //        super.touchesEnded(touches, with: event)
-        
-        line?.events.send(.usernameTouch)
+        guard let userID = userID else {
+            NetLog.error("Missing User ID on username tap!")
+            assert(false)
+            return
+        }
+
+        line?.events.send(.usernameTouch(userID))
     }
 
     required init(coder: NSCoder) {

@@ -90,15 +90,15 @@ final class CardTeaserCell: ControlledCell {
         line.events
             .sink { [weak self] event in
                 switch event {
-                case .usernameTouch:
-                    self?.handleUsernameTouch()
+                case .usernameTouch(let id):
+                    self?.handleUsernameTouch(id: id)
                 }
             }
             .store(in: &cancellable)
     }
     
-    private func handleUsernameTouch() -> Void {
-        let modal: UserModalViewController = .init()
+    private func handleUsernameTouch(id: User.ID) -> Void {
+        let modal: UserModalViewController = .init(userID: id)
         controller.present(modal, animated: true) { }
     }
 
