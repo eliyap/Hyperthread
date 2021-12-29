@@ -15,10 +15,13 @@ final class CardTeaserCell: ControlledCell {
     public static let reuseID = "CardTeaserCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
+    /// Combine
+    private let line: CellEventLine = .init()
+    
     /// Component
     let cardBackground = CardBackground(inset: CardTeaserCell.borderInset)
     let stackView = UIStackView()
-    let userView = UserView()
+    let userView: UserView
     let tweetTextView = TweetTextView()
     let albumVC = AlbumController()
     let retweetView = RetweetView()
@@ -32,6 +35,7 @@ final class CardTeaserCell: ControlledCell {
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.userView = .init(line: line)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         /// Do not change color when selected.

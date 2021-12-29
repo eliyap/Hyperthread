@@ -16,7 +16,11 @@ final class UserView: UIStackView {
     private let handleLabel = UILabel()
     fileprivate let _spacing: CGFloat = 5
 
-    init() {
+    /// Combine communication line.
+    weak var line: CellEventLine? = nil
+    
+    init(line: CellEventLine? = nil) {
+        self.line = line
         super.init(frame: .zero)
         axis = .horizontal
         alignment = .firstBaseline
@@ -68,6 +72,12 @@ final class UserView: UIStackView {
             /// Placeholder image prevents height shrinking to zero, which leads to graphical glitches.
             symbolButton.setImage(UIImage(systemName: "circle"), for: .normal)
         }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        
+        let modal = UserModalViewController()
         
     }
 
