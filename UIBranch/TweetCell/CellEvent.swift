@@ -12,8 +12,8 @@ enum CellEvent {
     case usernameTouch
 }
 
-final class CellEventLine: ObservableObject {
-    @Published var event: CellEvent? = nil
+final class CellEventLine {
+    public let events: PassthroughSubject<CellEvent, Never> = .init()
     
     init() {}
 }

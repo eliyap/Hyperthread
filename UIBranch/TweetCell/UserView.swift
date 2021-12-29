@@ -77,8 +77,7 @@ final class UserView: UIStackView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
-        let modal = UserModalViewController()
-        
+        line?.events.send(.usernameTouch)
     }
 
     required init(coder: NSCoder) {

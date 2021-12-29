@@ -9,6 +9,7 @@ import UIKit
 import RealmSwift
 import Realm
 import Twig
+import Combine
 
 final class CardTeaserCell: ControlledCell {
     
@@ -33,6 +34,8 @@ final class CardTeaserCell: ControlledCell {
     
     public static let borderInset: CGFloat = 6
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
+    
+    private let cancellable: Set<AnyCancellable> = []
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
@@ -213,6 +216,7 @@ final class CardTeaserCell: ControlledCell {
     deinit {
         token?.invalidate()
         TableLog.debug("\(Self.description()) de-initialized.", print: true, true)
+        cancellable.forEach { $0.cancel() }
     }
 }
 
