@@ -35,7 +35,7 @@ final class CardTeaserCell: ControlledCell {
     public static let borderInset: CGFloat = 6
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
     
-    private let cancellable: Set<AnyCancellable> = []
+    private var cancellable: Set<AnyCancellable> = []
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
@@ -86,6 +86,20 @@ final class CardTeaserCell: ControlledCell {
 
         /// Apply default styling.
         self.resetStyle()
+        
+        line.events
+            .sink { [weak self] event in
+                switch event {
+                case .usernameTouch:
+                    self?.handleUsernameTouch()
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    private func handleUsernameTouch() -> Void {
+        let modal: UserModalViewController = .init()
+        controller.present(modal, animated: true) { }
     }
 
     public func configure(discussion: Discussion, tweet: Tweet, author: User?, realm: Realm) {

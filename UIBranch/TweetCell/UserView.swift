@@ -75,7 +75,8 @@ final class UserView: UIStackView {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
+        /// Don't count as a cell touch.
+//        super.touchesEnded(touches, with: event)
         
         line?.events.send(.usernameTouch)
     }
