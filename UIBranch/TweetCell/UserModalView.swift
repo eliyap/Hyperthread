@@ -19,11 +19,14 @@ final class UserModalViewController: UIViewController {
 
     private let stackView: UIStackView
 
+    #warning("TODO: add profile view")
+    
     init() {
+        self.stackView = .init()
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .automatic
-        view.backgroundColor = .systemRed
-
+        
+        /// Configure `UIStackView`.
         view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .center

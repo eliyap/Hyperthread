@@ -37,7 +37,7 @@ final class CardHeaderCell: ControlledCell {
         controller.view.addSubview(cardBackground)
         cardBackground.constrain(to: safeAreaLayoutGuide)
         
-        /// Configure Main Stack View
+        /// Configure Main Stack View.
         controller.view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
