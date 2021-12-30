@@ -7,6 +7,32 @@
 
 import Foundation
 import UIKit
+import RealmSwift
+
+final class FollowingLine: UIStackView { 
+
+    private let followingLabel: UILabel
+    private let followingButton: UIButton
+
+    /// In future, localize these strings.
+    private let followingText = "Following"
+    private let followingButtonText = "Unfollow"
+    private let notFollowingText = "Not following"
+    private let notFollowingButtonText = "Follow"
+
+    init() {
+        self.followingLabel = .init()
+        self.followingButton = .init()
+        super.init(frame: .zero)
+        axis = .horizontal
+        
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
 
 #warning("View Incomplete")
 final class UserModalViewController: UIViewController {
@@ -19,18 +45,27 @@ final class UserModalViewController: UIViewController {
 
     private let stackView: UIStackView
     
+    private let nameLabel: UILabel
+    private let handleLabel: UILabel
+    private let followingLabel: UILabel
     private let followingButton: UIButton
 
     #warning("TODO: add profile view")
     
     private let userID: User.ID
     
+    private let token: NotificationToken? = nil
+    
     init(userID: User.ID) {
         self.userID = userID
         self.stackView = .init()
+        self.nameLabel = .init()
+        self.handleLabel = .init()
+        self.followingLabel = .init()
         self.followingButton = .init(configuration: .filled(), primaryAction: nil)
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .automatic
+        view.backgroundColor = .systemBackground
         
         /// Configure `UIStackView`.
         view.addSubview(stackView)
@@ -43,9 +78,30 @@ final class UserModalViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-        
+
+        stackView.addArrangedSubview(nameLabel)
+        stackView.addArrangedSubview(handleLabel)
         stackView.addArrangedSubview(followingButton)
         followingButton.setTitle("Following?", for: .normal)
+
+        configure(userID: userID)
+    }
+    
+    private func configure(userID: User.ID) -> Void {
+        let realm = try! Realm()
+        guard let user = realm.user(id: userID) else {
+            TableLog.error("Could not find user with \(userID)")
+            assert(false)
+            return
+        }
+        
+        nameLabel.text = user.name
+        handleLabel.text = user.handle
+        if user.following {
+            followingButton.setTitle("Following", for: .normal)
+        } else {
+            followingButton.setTitle("Follow", for: .normal)
+        }
     }
     
     @objc
@@ -55,5 +111,9 @@ final class UserModalViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        token?.invalidate()
     }
 }
