@@ -99,6 +99,13 @@ final class CardTeaserCell: ControlledCell {
     
     private func handleUsernameTouch(id: User.ID) -> Void {
         let modal: UserModalViewController = .init(userID: id)
+        if let sheetController = modal.sheetPresentationController {
+            sheetController.detents = [
+                .medium(),
+                .large(),
+            ]
+            sheetController.prefersGrabberVisible = true
+        }
         controller.present(modal, animated: true) { }
     }
 
