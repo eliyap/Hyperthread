@@ -20,13 +20,52 @@ final class FollowingLine: UIStackView {
     private let notFollowingText = "Not following"
     private let notFollowingButtonText = "Follow"
 
+    private var userID: User.ID? = nil
+    
     init() {
         self.followingLabel = .init()
-        self.followingButton = .init()
+        self.followingButton = .init(configuration: .filled(), primaryAction: nil)
         super.init(frame: .zero)
         axis = .horizontal
-        
         translatesAutoresizingMaskIntoConstraints = false
+        
+        let action = UIAction(handler: { [weak self] action in
+            let realm = try! Realm()
+            guard let userID = self?.userID else {
+                assert(false, "Missing userID!")
+                return
+            }
+            guard let user = realm.user(id: userID) else {
+                TableLog.error("Missing user with id \(userID)")
+                assert(false)
+                return
+            }
+            do {
+                try realm.write { user.following.toggle() }
+            } catch {
+                TableLog.error("Error in editing following: \(error)")
+                assert(false)
+                return
+            }
+
+        })
+        followingButton.addAction(action, for: .touchUpInside)
+        
+        addArrangedSubview(followingLabel)
+        addArrangedSubview(followingButton)
+    }
+    
+    func configure(userID: User.ID, following: User.FollowingPropertyType) -> Void {
+        self.userID = userID
+        if following {
+            followingLabel.text = followingText
+            followingButton.setTitle(followingButtonText, for: .normal)
+            followingButton.configuration = .gray()
+        } else {
+            followingLabel.text = notFollowingText
+            followingButton.setTitle(notFollowingButtonText, for: .normal)
+            followingButton.configuration = .filled()
+        }
     }
     
     required init(coder: NSCoder) {
@@ -47,22 +86,20 @@ final class UserModalViewController: UIViewController {
     
     private let nameLabel: UILabel
     private let handleLabel: UILabel
-    private let followingLabel: UILabel
-    private let followingButton: UIButton
+    private let followingLine: FollowingLine
 
     #warning("TODO: add profile view")
     
     private let userID: User.ID
     
-    private let token: NotificationToken? = nil
+    private var token: NotificationToken? = nil
     
     init(userID: User.ID) {
         self.userID = userID
         self.stackView = .init()
         self.nameLabel = .init()
         self.handleLabel = .init()
-        self.followingLabel = .init()
-        self.followingButton = .init(configuration: .filled(), primaryAction: nil)
+        self.followingLine = .init()
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .automatic
         view.backgroundColor = .systemBackground
@@ -79,29 +116,61 @@ final class UserModalViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
+        nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        nameLabel.adjustsFontForContentSizeCategory = true
         stackView.addArrangedSubview(nameLabel)
+        
+        handleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        handleLabel.adjustsFontForContentSizeCategory = true
+        handleLabel.textColor = .secondaryLabel
         stackView.addArrangedSubview(handleLabel)
-        stackView.addArrangedSubview(followingButton)
-        followingButton.setTitle("Following?", for: .normal)
-
+        
+        stackView.addArrangedSubview(followingLine)
+        
         configure(userID: userID)
+        registerToken(userID: userID)
+    }
+    
+    private func registerToken(userID: User.ID) -> Void {
+        token?.invalidate()
+        let realm = try! Realm()
+        token = realm.user(id: userID)?.observe { [weak self] change in
+            switch change {
+            case .change(_, let properties):
+                for property in properties {
+                    if property.name == User.followingPropertyName {
+                        guard let following = property.newValue as? User.FollowingPropertyType else {
+                            TableLog.error("Incorrect type \(type(of: property.newValue))")
+                            assert(false)
+                            return
+                        }
+                        self?.followingLine.configure(userID: userID, following: following)
+                    }
+                }
+            case .error(let error):
+                TableLog.error("Key Path Listenener Error: \(error)")
+                assert(false)
+            case .deleted:
+                TableLog.error("User with id \(userID) deleted!")
+                assert(false)
+            }
+        }
     }
     
     private func configure(userID: User.ID) -> Void {
         let realm = try! Realm()
-        guard let user = realm.user(id: userID) else {
+        
+        if let user = realm.user(id: userID) {
+            nameLabel.text = user.name
+            handleLabel.text = "@" + user.handle
+            followingLine.configure(userID: userID, following: user.following)
+        } else {
             TableLog.error("Could not find user with \(userID)")
-            assert(false)
-            return
+            nameLabel.text = "⚠️ UNKNOWN USER"
+            handleLabel.text = "@⚠️"
+            followingLine.configure(userID: userID, following: false)
         }
         
-        nameLabel.text = user.name
-        handleLabel.text = user.handle
-        if user.following {
-            followingButton.setTitle("Following", for: .normal)
-        } else {
-            followingButton.setTitle("Follow", for: .normal)
-        }
     }
     
     @objc
