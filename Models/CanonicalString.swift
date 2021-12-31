@@ -24,7 +24,7 @@ extension Tweet {
             .replacingOccurrences(of: "&lt;", with: "<")
             .replacingOccurrences(of: "&amp;", with: "&")
          
-        var quotedDisplayURL: String? = nil
+        var removedURLs: [String] = []
         
         if let node = node {
             /// The user @handles in the reply chain.
@@ -35,7 +35,7 @@ extension Tweet {
         }
         
         /// Replace `t.co` links with truncated links.
-        text.expandURLs(from: self, quotedDisplayURL: &quotedDisplayURL)
+        text.expandURLs(from: self, removedURLs: &removedURLs)
         
         /// Apply normal text size and color preferences.
         let string = NSMutableAttributedString(string: text, attributes: [
@@ -44,7 +44,7 @@ extension Tweet {
         ])
         
         /// Hyperlink substituted links.
-        string.addHyperlinks(from: self, quotedDisplayURL: quotedDisplayURL)
+        string.addHyperlinks(from: self, removedURLs: removedURLs)
         
         return string
     }
@@ -85,7 +85,7 @@ extension String {
     }
     
     /// Replace `t.co` links with truncated links.
-    mutating func expandURLs(from tweet: Tweet, quotedDisplayURL: inout String?) -> Void {
+    mutating func expandURLs(from tweet: Tweet, removedURLs: inout [String]) -> Void {
         guard let urls = tweet.entities?.urls else { return }
         
         for url in urls {
@@ -104,7 +104,7 @@ extension String {
                 url.display_url.starts(with: "twitter.com/")
             {
                 /// Set variable so we know not to look for this URL in the future.
-                quotedDisplayURL = url.display_url
+                removedURLs.append(url.display_url)
                 replaceSubrange(target, with: "")
             } else {
                 replaceSubrange(target, with: url.display_url)
@@ -118,7 +118,7 @@ extension NSMutableAttributedString {
     /// Hyperlink substituted links.
     /// - Parameters:
     ///   - quotedDisplayURL: optional, for debugging. The URL of the quoted tweet (if any), which is appended to the tweet text by convention.
-    func addHyperlinks(from tweet: Tweet, quotedDisplayURL: String? = nil) -> Void {
+    func addHyperlinks(from tweet: Tweet, removedURLs: [String]) -> Void {
         guard let urls = tweet.entities?.urls else { return }
         
         /**
@@ -136,8 +136,8 @@ extension NSMutableAttributedString {
             /// Obtain URL substring range.
             /// - Note: Should never fail! We just put this URL in!
             guard let target = string.range(of: url.display_url, range: lastTarget.upperBound..<string.endIndex) else {
-                if quotedDisplayURL != nil && url.display_url == quotedDisplayURL {
-                    /** ignore quote URL, which is intentionally omitted. **/
+                if removedURLs.contains(url.display_url) {
+                    /** Ignore URLs which were registered as removed.. **/
                 } else {
                     ModelLog.warning("Could not find display_url \(url.display_url) in \(string)")
                 }
