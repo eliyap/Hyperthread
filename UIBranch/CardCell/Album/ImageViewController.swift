@@ -61,18 +61,27 @@ final class ImageViewController: UIViewController {
     func configure(media: Media) -> Void {
         mediaModel = .init(media: media)
         
-        if let urlString = media.url {
-            loadingIndicator.startAnimating()
-            imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-                self?.loadingIndicator.stopAnimating()
-                if let error = error {
-                    NetLog.warning("Image Loading Error \(error)")
-                }
-                if image == nil {
-                    NetLog.error("Failed to load image! \(#file)")
+        switch media.mediaType {
+        case .photo:
+            if let urlString = media.url {
+                loadingIndicator.startAnimating()
+                imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+                    self?.loadingIndicator.stopAnimating()
+                    if let error = error {
+                        NetLog.warning("Image Loading Error \(error)")
+                    }
+                    if image == nil {
+                        NetLog.error("Failed to load image! \(#file)")
+                    }
                 }
             }
-        }
+        case .animated_gif:
+            break
+        case .video:
+            break
+        case .none:
+            TableLog.error("Unrecognized type with value \(media.type)")
+        }    
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
