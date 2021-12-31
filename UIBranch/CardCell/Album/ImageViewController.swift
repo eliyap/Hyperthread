@@ -10,12 +10,12 @@ import SDWebImage
 
 /// View model for the `Media` Realm Object.
 fileprivate struct MediaModel {
-    var type: MediaType.RawValue
+    var mediaType: MediaType
     var url: String?
     var previewImageUrl: String?
     
     init(media: Media) {
-        self.type = media.type
+        self.mediaType = media.mediaType
         self.url = media.url
         self.previewImageUrl = media.previewImageUrl
     }
@@ -140,7 +140,30 @@ final class ImageViewController: UIViewController {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         
+        guard let mediaModel = mediaModel else {
+            TableLog.error("Missing media model!")
+            assert(false)
+            return
+        }
+
         
+        switch mediaModel.mediaType {
+        case .photo:
+            break
+        case .video, .animated_gif:
+            guard let urlString = mediaModel.url else {
+                TableLog.error("Missing true URL!")
+                assert(false)
+                #warning("TODO: surface to user a real error!")
+                return
+            }
+            guard let url = URL(string: urlString) else {
+                TableLog.error("Invalid URL!")
+                assert(false)
+                return
+            }
+            UIApplication.shared.open(url)
+        }
         
         /// Code stub for future big-image zoom and pan view.
         /*
