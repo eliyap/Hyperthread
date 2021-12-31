@@ -16,7 +16,7 @@ import Twig
  */
 func ingestRaw(
     rawTweets: [RawHydratedTweet],
-    rawUsers: [RawIncludeUser],
+    rawUsers: [RawUser],
     rawMedia: [RawIncludeMedia],
     following: [User.ID]
 ) throws -> Void {
@@ -60,7 +60,7 @@ func ingestRaw(
  */
 func ingestRaw(
     rawTweets: [RawHydratedTweet],
-    rawUsers: [RawIncludeUser],
+    rawUsers: [RawUser],
     rawMedia: [RawIncludeMedia],
     relevance: Relevance
 ) throws -> Void {

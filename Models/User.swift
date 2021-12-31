@@ -57,7 +57,7 @@ final class User: Object, Identifiable, UserIdentifiable {
         set { _timelineWindow = .init(newValue) }
     }
     
-    init(raw: RawIncludeUser, following: Bool) {
+    init(raw: RawUser, following: Bool) {
         super.init()
         self.id = raw.id
         self.name = raw.name
@@ -82,7 +82,7 @@ public extension Int64 {
 }
 
 internal extension Realm {
-    func storeFollowing(raw: [RawIncludeUser]) throws -> Void {
+    func storeFollowing(raw: [RawUser]) throws -> Void {
         try write {
             /// Remove users who are no longer being followed.
             followingUsers()
