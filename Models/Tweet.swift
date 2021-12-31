@@ -148,10 +148,6 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         self.relevance = relevance
     }
     
-    convenience init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia], following: [User.ID]) {
-        self.init(raw: raw, rawMedia: rawMedia, relevance: Relevance(tweet: raw, following: following))
-    }
-    
     override required init() {
         super.init()
     }
