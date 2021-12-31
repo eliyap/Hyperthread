@@ -26,7 +26,7 @@ internal enum Relevance: Int {
     /// i.e. this Tweet is why you see this `Discussion`.
     case discussion = 999
     
-    init(tweet: AuthorIdentifiable & ReplyIdentifiable, following userIDs: [User.ID]) {
+    init(tweet: RawHydratedTweet, following userIDs: [User.ID]) {
         /// If the user is not followed, it is irrelevant (for now).
         /// - Note: in future, we may wish to include say, the originator of the discussion.
         guard userIDs.contains(where: { $0 == tweet.authorID }) else {
@@ -34,7 +34,7 @@ internal enum Relevance: Int {
             return
         }
         
-        if tweet.replyID != nil {
+        if tweet.replyID != nil || tweet.retweetID != nil {
             self = .reply
             return
         } else {
