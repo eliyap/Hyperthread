@@ -105,7 +105,6 @@ final class ImageViewController: UIViewController {
             }
         
         case .animated_gif:
-            Swift.debugPrint("GIF object \(media)" as NSString)
             if let urlString = media.previewImageUrl {
                 loadingIndicator.startAnimating()
                 imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
@@ -124,7 +123,6 @@ final class ImageViewController: UIViewController {
             }
         
         case .video:
-            Swift.debugPrint("Video object \(media)" as NSString)
             if let urlString = media.previewImageUrl {
                 loadingIndicator.startAnimating()
                 imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
