@@ -24,8 +24,26 @@ final class User: Object, Identifiable, UserIdentifiable {
     @Persisted 
     var handle: String
     
+    /// User's text profile description (aka bio), if any.
+    @Persisted
+    var bio: String
+    
+    @Persisted
+    var pinnedTweetID: Tweet.ID?
+    
+    @Persisted
+    var profileImageUrl: String?
+    
+    /// Whether `User`'s tweets are protected (aka private).
+    @Persisted
+    var protected: Bool
+    
+    /// UTC datetime that `User` account was created on Twitter.
+    @Persisted
+    var createdAt: Date
+
     /// Whether our user follows this Twitter user.
-    /// - Note: not included in `RawUser` object, hence we default initialize it.
+    /// - Note: not included in `RawUser` object.
     @Persisted
     var following: FollowingPropertyType
     static let followingPropertyName = "following"
@@ -41,18 +59,17 @@ final class User: Object, Identifiable, UserIdentifiable {
     
     init(raw: RawUser, following: Bool) {
         super.init()
-        self.id = "\(raw.id)"
-        self.name = raw.name
-        self.handle = raw.screen_name
-        self.following = following
-    }
-    
-    init(raw: RawIncludeUser, following: Bool) {
-        super.init()
         self.id = raw.id
         self.name = raw.name
         self.handle = raw.username
+        self.bio = raw.description
+        #warning("TODO: bio entities")
+        self.pinnedTweetID = raw.pinned_tweet_id
+        self.profileImageUrl = raw.profile_image_url
+        self.protected = raw.protected
+        self.createdAt = raw.created_at
         self.following = following
+        
     }
     
     override required init() {
@@ -65,7 +82,7 @@ public extension Int64 {
 }
 
 internal extension Realm {
-    func storeFollowing(raw: [RawIncludeUser]) throws -> Void {
+    func storeFollowing(raw: [RawUser]) throws -> Void {
         try write {
             /// Remove users who are no longer being followed.
             followingUsers()

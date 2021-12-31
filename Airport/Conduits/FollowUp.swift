@@ -12,7 +12,7 @@ import Twig
 
 final class FollowUp: Conduit<Void, Never> {
     /// An additional "intake" for follow up on follow up.
-    private let recycle = PassthroughSubject<[Tweet.ID], Never>()
+    public let recycle = PassthroughSubject<[Tweet.ID], Never>()
     
     override init() {
         super.init()
@@ -83,7 +83,7 @@ final class FollowUp: Conduit<Void, Never> {
     }
 }
 
-public typealias RawData = ([RawHydratedTweet], [RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia])
+public typealias RawData = ([RawHydratedTweet], [RawHydratedTweet], [RawUser], [RawIncludeMedia])
 extension Publisher where Output == [Tweet.ID], Failure == Never {
     func v2Fetch() -> AnyPublisher<RawData, Never> {
         /// - Note: tolerance set to 100% to prevent performance hits.
@@ -103,7 +103,7 @@ extension Publisher where Output == [Tweet.ID], Failure == Never {
                     return nil
                 }
             }
-            .asyncMap { (ids, credentials) -> ([RawHydratedTweet], [RawHydratedTweet], [RawIncludeUser], [RawIncludeMedia]) in
+            .asyncMap { (ids, credentials) -> ([RawHydratedTweet], [RawHydratedTweet], [RawUser], [RawIncludeMedia]) in
                 do {
                     return try await hydratedTweets(credentials: credentials, ids: ids)
                 } catch {

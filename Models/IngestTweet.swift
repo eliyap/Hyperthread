@@ -16,7 +16,7 @@ import Twig
  */
 func ingestRaw(
     rawTweets: [RawHydratedTweet],
-    rawUsers: [RawIncludeUser],
+    rawUsers: [RawUser],
     rawMedia: [RawIncludeMedia],
     following: [User.ID]
 ) throws -> Void {
@@ -34,8 +34,11 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
-            /// Assumes `following` is up to date.
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, following: following)
+            /// Check `relevance` value in Realm, to avoid ovewriting an existing value (if any).
+            let checkedRelevance = realm.tweet(id: rawTweet.id)?.relevance
+                ?? Relevance(tweet: rawTweet, following: following)
+            
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: checkedRelevance)
             
             realm.add(tweet, update: .modified)
             
@@ -57,7 +60,7 @@ func ingestRaw(
  */
 func ingestRaw(
     rawTweets: [RawHydratedTweet],
-    rawUsers: [RawIncludeUser],
+    rawUsers: [RawUser],
     rawMedia: [RawIncludeMedia],
     relevance: Relevance
 ) throws -> Void {
@@ -66,7 +69,7 @@ func ingestRaw(
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
-            /// Check following status in Realm, to avoid ovewriting an existing value (if any).
+            /// Check `following` status in Realm, to avoid ovewriting an existing value (if any).
             let following = realm.user(id: rawUser.id)?.following ?? false
             
             let user = User(raw: rawUser, following: following)
@@ -77,7 +80,10 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: relevance)
+            /// Check `relevance` value in Realm, to avoid ovewriting an existing value (if any).
+            let checkedRelevance = realm.tweet(id: rawTweet.id)?.relevance ?? relevance
+            
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: checkedRelevance)
             realm.add(tweet, update: .modified)
             
             /// Safety check: we count on the user never being missing!

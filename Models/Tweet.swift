@@ -59,8 +59,13 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     @Persisted
     var conversation_id: ID
     
+    /// If this tweet is a reply, this property represents the ID of the tweet this is a reply to.
     @Persisted
     var replying_to: ID?
+    
+    /// If this tweet is a reply, this property represents the ID of the author this tweet is a reply to.
+    @Persisted
+    var inReplyToUserID: User.ID?
     
     @Persisted
     var retweeting: ID?
@@ -107,6 +112,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         self.conversation_id = raw.conversation_id
         self.metrics = PublicMetrics(raw: raw.public_metrics)
         self.authorID = raw.author_id
+        self.inReplyToUserID = raw.in_reply_to_user_id
         self.read = false
         
         var referenceSet: ReferenceSet = .empty
@@ -146,10 +152,6 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         }
         
         self.relevance = relevance
-    }
-    
-    convenience init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia], following: [User.ID]) {
-        self.init(raw: raw, rawMedia: rawMedia, relevance: Relevance(tweet: raw, following: following))
     }
     
     override required init() {
