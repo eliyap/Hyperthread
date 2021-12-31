@@ -10,9 +10,9 @@ import SDWebImage
 
 final class ImageViewController: UIViewController {
     
-    private let imageView = UIImageView()
+    private let imageView: UIImageView = .init()
     
-    private let test = UIView()
+    private let loadingIndicator: UIActivityIndicatorView = .init()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -24,18 +24,30 @@ final class ImageViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
+        /// Request that image be "as tall as possible".
         let superTall = imageView.heightAnchor.constraint(equalToConstant: .superTall)
         superTall.isActive = true
         superTall.priority = .defaultLow
         
-        /// Constrain image height and width.
+        /// Constrain image' height and width to be within our own.
         imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor).isActive = true
         imageView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor).isActive = true
+        
+        /// Center indicator view.
+        view.addSubview(loadingIndicator)
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        loadingIndicator.hidesWhenStopped = true
     }
     
     func configure(media: Media) -> Void {
         if let urlString = media.url {
-            imageView.sd_setImage(with: URL(string: urlString)) { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+            loadingIndicator.startAnimating()
+            imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+                self?.loadingIndicator.stopAnimating()
                 if let error = error {
                     NetLog.warning("Image Loading Error \(error)")
                 }
