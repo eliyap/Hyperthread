@@ -29,6 +29,8 @@ final class ImageViewController: UIViewController {
     
     fileprivate var mediaModel: MediaModel? = nil
     
+    private let symbolView: UIImageView = .init()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         view.addSubview(imageView)
@@ -56,6 +58,18 @@ final class ImageViewController: UIViewController {
         ])
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         loadingIndicator.hidesWhenStopped = true
+        
+        /// Center symbol view. 
+        view.addSubview(symbolView)             
+        NSLayoutConstraint.activate([
+            symbolView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            symbolView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+        symbolView.translatesAutoresizingMaskIntoConstraints = false
+        view.bringSubviewToFront(symbolView)
+
+        // TEMP
+        
     }
     
     func configure(media: Media) -> Void {
@@ -73,15 +87,54 @@ final class ImageViewController: UIViewController {
                     if image == nil {
                         NetLog.error("Failed to load image! \(#file)")
                     }
+                    
+                    /// Hide video symbol.
+                    self?.symbolView.isHidden = true
                 }
             }
+        
         case .animated_gif:
-            break
+            if let urlString = media.previewImageUrl {
+                loadingIndicator.startAnimating()
+                imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+                    self?.loadingIndicator.stopAnimating()
+                    if let error = error {
+                        NetLog.warning("Image Loading Error \(error)")
+                    }
+                    if image == nil {
+                        NetLog.error("Failed to load image! \(#file)")
+                    }
+                    
+                    /// Show video symbol.
+                    let config = UIImage.SymbolConfiguration(hierarchicalColor: .label)
+                        .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
+                    self?.symbolView.image = UIImage(systemName: "gift.circle", withConfiguration: config)
+                    self?.symbolView.isHidden = false
+                }
+            }
+        
         case .video:
-            break
+            if let urlString = media.previewImageUrl {
+                loadingIndicator.startAnimating()
+                imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+                    self?.loadingIndicator.stopAnimating()
+                    if let error = error {
+                        NetLog.warning("Image Loading Error \(error)")
+                    }
+                    if image == nil {
+                        NetLog.error("Failed to load image! \(#file)")
+                    }
+                    
+                    /// Show video symbol.
+                    let config = UIImage.SymbolConfiguration(hierarchicalColor: .label)
+                        .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
+                    self?.symbolView.image = UIImage(systemName: "play.circle", withConfiguration: config)
+                    self?.symbolView.isHidden = false
+                }
+            }
         case .none:
             TableLog.error("Unrecognized type with value \(media.type)")
-        }    
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
