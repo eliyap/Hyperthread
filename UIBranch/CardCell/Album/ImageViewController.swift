@@ -8,11 +8,26 @@
 import UIKit
 import SDWebImage
 
+/// View model for the `Media` Realm Object.
+fileprivate struct MediaModel {
+    var type: MediaType.RawValue
+    var url: String?
+    var previewImageUrl: String?
+    
+    init(media: Media) {
+        self.type = media.type
+        self.url = media.url
+        self.previewImageUrl = media.previewImageUrl
+    }
+}
+
 final class ImageViewController: UIViewController {
     
     private let imageView: UIImageView = .init()
     
     private let loadingIndicator: UIActivityIndicatorView = .init()
+    
+    fileprivate var mediaModel: MediaModel? = nil
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -44,6 +59,8 @@ final class ImageViewController: UIViewController {
     }
     
     func configure(media: Media) -> Void {
+        mediaModel = .init(media: media)
+        
         if let urlString = media.url {
             loadingIndicator.startAnimating()
             imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
@@ -60,6 +77,8 @@ final class ImageViewController: UIViewController {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
+        
+        
         
         /// Code stub for future big-image zoom and pan view.
         /*
