@@ -42,8 +42,9 @@ final class UserView: UIStackView {
         handleLabel.adjustsFontForContentSizeCategory = true
         handleLabel.textColor = .secondaryLabel
         
-        /// Allow handle to be truncated if space is insufficient.
-        /// We want this to be truncated before the username is.
+        /// Compress Twitter handle, then long username, but never the symbol!
+        symbolButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        nameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         handleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         /// Configure Symbol.
