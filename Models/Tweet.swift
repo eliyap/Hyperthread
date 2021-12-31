@@ -64,6 +64,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     
     @Persisted
     var retweeting: ID?
+    public static let retweetingPropertyName = "retweeting"
     
     @Persisted
     var quoting: ID?
@@ -352,5 +353,12 @@ extension Realm {
                 tweet.dangling.remove(.retweet)
             }
         }
+    }
+}
+
+extension Tweet {
+    var picUrlString: String? {
+        guard let urls = entities?.urls else { return nil }
+        return urls.map(\.display_url).last { $0.starts(with: "pic.twitter.com/") }
     }
 }

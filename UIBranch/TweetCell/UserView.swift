@@ -16,7 +16,14 @@ final class UserView: UIStackView {
     private let handleLabel = UILabel()
     fileprivate let _spacing: CGFloat = 5
 
-    init() {
+    /// Combine communication line.
+    weak var line: CellEventLine? = nil
+    
+    /// Track the current User ID.
+    private var userID: User.ID? = nil
+    
+    init(line: CellEventLine? = nil) {
+        self.line = line
         super.init(frame: .zero)
         axis = .horizontal
         alignment = .firstBaseline
@@ -35,8 +42,9 @@ final class UserView: UIStackView {
         handleLabel.adjustsFontForContentSizeCategory = true
         handleLabel.textColor = .secondaryLabel
         
-        /// Allow handle to be truncated if space is insufficient.
-        /// We want this to be truncated before the username is.
+        /// Compress Twitter handle, then long username, but never the symbol!
+        symbolButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        nameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         handleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         /// Configure Symbol.
@@ -46,6 +54,8 @@ final class UserView: UIStackView {
     }
 
     public func configure(tweet: Tweet, user: User?, timestamp: Date) {
+        self.userID = user?.id
+        
         if let user = user {
             nameLabel.text = user.name
             handleLabel.text = "@" + user.handle
@@ -58,17 +68,28 @@ final class UserView: UIStackView {
         switch tweet.primaryReferenceType {
         case .replied_to:
             symbolButton.isHidden = false
-            symbolButton.setImage(UIImage(systemName: "arrowshape.turn.up.left.fill"), for: .normal)
+            symbolButton.setImage(UIImage(systemName: ReplySymbol.name), for: .normal)
         case .quoted:
             symbolButton.isHidden = false
-            symbolButton.setImage(UIImage(systemName: "quote.bubble.fill"), for: .normal)
+            symbolButton.setImage(UIImage(systemName: QuoteSymbol.name), for: .normal)
         default:
             symbolButton.isHidden = true
             
             /// Placeholder image prevents height shrinking to zero, which leads to graphical glitches.
             symbolButton.setImage(UIImage(systemName: "circle"), for: .normal)
         }
-        
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        /// Don't count as a cell touch.
+//        super.touchesEnded(touches, with: event)
+        guard let userID = userID else {
+            NetLog.error("Missing User ID on username tap!")
+            assert(false)
+            return
+        }
+
+        line?.events.send(.usernameTouch(userID))
     }
 
     required init(coder: NSCoder) {

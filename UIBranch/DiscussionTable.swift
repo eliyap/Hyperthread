@@ -95,9 +95,7 @@ extension DiscussionTable: SplitDelegate {
 }
 
 final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
-    private let realm = try! Realm()
-    private var token: NotificationToken! = nil
-
+    
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<TweetSection, Node>
     
@@ -107,20 +105,6 @@ final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
         cellProvider: @escaping CellProvider
     ) {
         super.init(tableView: tableView, cellProvider: cellProvider)
-        /// Immediately defuse unwrapped nil.
-        token = discussion?.observe { change in
-            switch change {
-            case .change(let object, let properties):
-                /// Discard values.
-                (_, _) = (object, properties)
-                break
-            case .deleted:
-                break
-            case .error(let error):
-                fatalError("\(error)")
-            }
-        }
-        
         
         var snapshot = Snapshot()
         if let discussion = discussion {
@@ -134,9 +118,5 @@ final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
         self.apply(snapshot, animatingDifferences: false)
     }
     
-    deinit {
-        if let token = token {
-            token.invalidate()
-        }
-    }
+    deinit { }
 }

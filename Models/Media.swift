@@ -32,6 +32,10 @@ final class Media: EmbeddedObject {
 
     @Persisted
     var type: MediaType.RawValue
+    public var mediaType: MediaType! {
+        get { .init(rawValue: type) }
+        set { type = newValue.rawValue }
+    }
 
     @Persisted
     var width: Int

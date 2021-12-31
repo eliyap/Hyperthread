@@ -9,16 +9,20 @@ import UIKit
 import RealmSwift
 import Realm
 import Twig
+import Combine
 
 final class CardTeaserCell: ControlledCell {
     
     public static let reuseID = "CardTeaserCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
+    /// Combine
+    private let line: CellEventLine = .init()
+    
     /// Component
     let cardBackground = CardBackground(inset: CardTeaserCell.borderInset)
     let stackView = UIStackView()
-    let userView = UserView()
+    let userView: UserView
     let tweetTextView = TweetTextView()
     let albumVC = AlbumController()
     let retweetView = RetweetView()
@@ -30,8 +34,11 @@ final class CardTeaserCell: ControlledCell {
     
     public static let borderInset: CGFloat = 6
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
+    
+    private var cancellable: Set<AnyCancellable> = []
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.userView = .init(line: line)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         /// Do not change color when selected.
@@ -79,6 +86,27 @@ final class CardTeaserCell: ControlledCell {
 
         /// Apply default styling.
         self.resetStyle()
+        
+        line.events
+            .sink { [weak self] event in
+                switch event {
+                case .usernameTouch(let id):
+                    self?.handleUsernameTouch(id: id)
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    private func handleUsernameTouch(id: User.ID) -> Void {
+        let modal: UserModalViewController = .init(userID: id)
+        if let sheetController = modal.sheetPresentationController {
+            sheetController.detents = [
+                .medium(),
+                .large(),
+            ]
+            sheetController.prefersGrabberVisible = true
+        }
+        controller.present(modal, animated: true) { }
     }
 
     public func configure(discussion: Discussion, tweet: Tweet, author: User?, realm: Realm) {
@@ -209,6 +237,7 @@ final class CardTeaserCell: ControlledCell {
     deinit {
         token?.invalidate()
         TableLog.debug("\(Self.description()) de-initialized.", print: true, true)
+        cancellable.forEach { $0.cancel() }
     }
 }
 

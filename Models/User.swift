@@ -27,8 +27,9 @@ final class User: Object, Identifiable, UserIdentifiable {
     /// Whether our user follows this Twitter user.
     /// - Note: not included in `RawUser` object, hence we default initialize it.
     @Persisted
-    var following: Bool
+    var following: FollowingPropertyType
     static let followingPropertyName = "following"
+    public typealias FollowingPropertyType = Bool
     
     /// The date window fetched for this user.
     @Persisted

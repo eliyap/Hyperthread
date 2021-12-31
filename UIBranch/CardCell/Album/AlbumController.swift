@@ -21,6 +21,8 @@ class AlbumController: UIPageViewController {
     /// Maximum frame aspect ratio, so that tall images don't stretch the cell.
     private let threshholdAR: CGFloat = 0.667
     
+    /// Displays the total number of images, and the one you're currently on.
+    /// e.g. `1/4`.
     private let countButton: UIButton
     
     /// The upcoming page number.
@@ -77,7 +79,7 @@ class AlbumController: UIPageViewController {
             /// Get new views.
             controllers = Array(tweet.media).map { media in
                 let vc = ImageViewController()
-                vc.configure(media: media)
+                vc.configure(media: media, picUrlString: tweet.picUrlString)
                 vc.view.backgroundColor = .flat
                 return vc
             }
