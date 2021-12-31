@@ -39,14 +39,6 @@ final class User: Object, Identifiable, UserIdentifiable {
         set { _timelineWindow = .init(newValue) }
     }
     
-    init(raw: RawV1User, following: Bool) {
-        super.init()
-        self.id = "\(raw.id)"
-        self.name = raw.name
-        self.handle = raw.screen_name
-        self.following = following
-    }
-    
     init(raw: RawIncludeUser, following: Bool) {
         super.init()
         self.id = raw.id
