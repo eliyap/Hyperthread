@@ -33,7 +33,7 @@ final class RetweetView: UIStackView {
         retweetLabels = []
         
         let retweeters = realm.objects(Tweet.self)
-            .filter("retweeting == '\(tweet.id)'")
+            .filter("\(Tweet.retweetingPropertyName) == '\(tweet.id)'")
             .map(\.authorID)
         retweeters.forEach { userID in
             let user = realm.user(id: userID)!

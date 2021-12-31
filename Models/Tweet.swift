@@ -64,6 +64,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     
     @Persisted
     var retweeting: ID?
+    public static let retweetingPropertyName = "retweeting"
     
     @Persisted
     var quoting: ID?
