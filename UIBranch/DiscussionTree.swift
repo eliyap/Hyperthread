@@ -60,7 +60,7 @@ extension Node: Hashable {
 
 extension Discussion {
     /// Returns the root node of a discussion tree data structure.
-    func makeTree() -> Node {
+    func makeTree(airport: Airport) -> Node {
         let realm = try! Realm()
         
         /// Initialize the root node.
@@ -94,6 +94,12 @@ extension Discussion {
                     - PR-id \(PRID)
                     - Tweet: \(t)
                     """)
+                if realm.tweet(id: PRID) != nil {
+                    ModelLog.error("Primary Reference was present but not attached! id \(PRID)")
+                }
+                
+                airport.request(id: PRID)
+                
                 #warning("TODO: dev crash here.")
                 continue
             }

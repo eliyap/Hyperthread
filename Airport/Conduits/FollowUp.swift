@@ -12,7 +12,7 @@ import Twig
 
 final class FollowUp: Conduit<Void, Never> {
     /// An additional "intake" for follow up on follow up.
-    private let recycle = PassthroughSubject<[Tweet.ID], Never>()
+    public let recycle = PassthroughSubject<[Tweet.ID], Never>()
     
     override init() {
         super.init()

@@ -30,6 +30,8 @@ final class DiscussionTable: UITableViewController {
     
     typealias DDS = NodeDDS
     
+    private let airport: Airport = .init()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
@@ -52,7 +54,7 @@ final class DiscussionTable: UITableViewController {
         self.tableView = UITableView()
         tableView.register(CardHeaderCell.self, forCellReuseIdentifier: CardHeaderCell.reuseID)
         tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
-        dds = DDS(discussion: discussion, tableView: tableView, cellProvider: cellProvider)
+        dds = .init(discussion: discussion, airport: airport, tableView: tableView, cellProvider: cellProvider)
     }
     
     private func cellProvider(tableView: UITableView, indexPath: IndexPath, node: Node) -> UITableViewCell? {
@@ -96,20 +98,24 @@ extension DiscussionTable: SplitDelegate {
 
 final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
     
+    weak var airport: Airport!
+    
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<TweetSection, Node>
     
     init(
         discussion: Discussion?,
+        airport: Airport,
         tableView: UITableView, 
         cellProvider: @escaping CellProvider
     ) {
+        self.airport = airport
         super.init(tableView: tableView, cellProvider: cellProvider)
         
         var snapshot = Snapshot()
         if let discussion = discussion {
             var flatTree = [Node]()
-            discussion.makeTree().assemble(&flatTree)
+            discussion.makeTree(airport: airport).assemble(&flatTree)
             
             snapshot.appendSections([.root, .discussion])
             snapshot.appendItems([flatTree[0]], toSection: .root)
