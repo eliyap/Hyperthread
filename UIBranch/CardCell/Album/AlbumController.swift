@@ -79,7 +79,7 @@ class AlbumController: UIPageViewController {
             /// Get new views.
             controllers = Array(tweet.media).map { media in
                 let vc = ImageViewController()
-                vc.configure(media: media)
+                vc.configure(media: media, picUrlString: tweet.picUrlString)
                 vc.view.backgroundColor = .flat
                 return vc
             }

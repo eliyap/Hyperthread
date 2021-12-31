@@ -11,13 +11,21 @@ import SDWebImage
 /// View model for the `Media` Realm Object.
 fileprivate struct MediaModel {
     var mediaType: MediaType
+    
+    /// Link to image asset, if `mediaType` is `.photo`.
     var url: String?
+    
+    /// Link for a preview frame for videos and GIFs.
     var previewImageUrl: String?
     
-    init(media: Media) {
+    /// The appended `pic.twitter.com` string, a fallback for linking out to Twitter's website for videos and GIFs.
+    var picUrlString: String?
+    
+    init(media: Media, picUrlString: String?) {
         self.mediaType = media.mediaType
         self.url = media.url
         self.previewImageUrl = media.previewImageUrl
+        self.picUrlString = picUrlString
     }
 }
 
@@ -72,8 +80,11 @@ final class ImageViewController: UIViewController {
         
     }
     
-    func configure(media: Media) -> Void {
-        mediaModel = .init(media: media)
+    func configure(media: Media, picUrlString: String?) -> Void {
+        mediaModel = .init(media: media, picUrlString: picUrlString)
+        
+        let videoSymbolConfig = UIImage.SymbolConfiguration(hierarchicalColor: .label)
+            .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
         
         switch media.mediaType {
         case .photo:
@@ -94,6 +105,7 @@ final class ImageViewController: UIViewController {
             }
         
         case .animated_gif:
+            Swift.debugPrint("GIF object \(media)" as NSString)
             if let urlString = media.previewImageUrl {
                 loadingIndicator.startAnimating()
                 imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
@@ -106,14 +118,13 @@ final class ImageViewController: UIViewController {
                     }
                     
                     /// Show video symbol.
-                    let config = UIImage.SymbolConfiguration(hierarchicalColor: .label)
-                        .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
-                    self?.symbolView.image = UIImage(systemName: "gift.circle", withConfiguration: config)
+                    self?.symbolView.image = UIImage(systemName: "gift.circle", withConfiguration: videoSymbolConfig)
                     self?.symbolView.isHidden = false
                 }
             }
         
         case .video:
+            Swift.debugPrint("Video object \(media)" as NSString)
             if let urlString = media.previewImageUrl {
                 loadingIndicator.startAnimating()
                 imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
@@ -126,9 +137,7 @@ final class ImageViewController: UIViewController {
                     }
                     
                     /// Show video symbol.
-                    let config = UIImage.SymbolConfiguration(hierarchicalColor: .label)
-                        .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
-                    self?.symbolView.image = UIImage(systemName: "play.circle", withConfiguration: config)
+                    self?.symbolView.image = UIImage(systemName: "play.circle", withConfiguration: videoSymbolConfig)
                     self?.symbolView.isHidden = false
                 }
             }
@@ -145,26 +154,37 @@ final class ImageViewController: UIViewController {
             assert(false)
             return
         }
-
         
         switch mediaModel.mediaType {
         case .photo:
             break
         case .video, .animated_gif:
-            guard let urlString = mediaModel.url else {
-                TableLog.error("Missing true URL!")
-                assert(false)
-                #warning("TODO: surface to user a real error!")
+            guard let urlString = mediaModel.picUrlString else {
+                showAlert(message: "Sorry, we couldn't find a video URL.")
                 return
             }
-            guard let url = URL(string: urlString) else {
-                TableLog.error("Invalid URL!")
-                assert(false)
+            guard var url = URL(string: urlString) else {
+                showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
                 return
             }
-            UIApplication.shared.open(url)
+            
+            /// Account for `https://` possibly not being prepended.
+            if UIApplication.shared.canOpenURL(url) == false {
+                guard let correctedUrl = URL(string: "https://" + urlString) else {
+                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
+                    return
+                }
+                url = correctedUrl
+            }
+            
+            UIApplication.shared.open(url) { success in
+                if success == false {
+                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
+                }
+            }
         }
         
+        #warning("Code Stub.")
         /// Code stub for future big-image zoom and pan view.
         /*
         let modal = LargeImageViewController()

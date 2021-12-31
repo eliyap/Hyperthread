@@ -355,3 +355,10 @@ extension Realm {
         }
     }
 }
+
+extension Tweet {
+    var picUrlString: String? {
+        guard let urls = entities?.urls else { return nil }
+        return urls.map(\.display_url).last { $0.starts(with: "pic.twitter.com/") }
+    }
+}
