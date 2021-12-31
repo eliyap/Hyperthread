@@ -15,7 +15,7 @@ func showAlert(title: String? = "⚠️ Error! ⚠️", message: String?, action
     guard let scene = getWindowScene() else { return }
     guard let vc = scene.keyWindow?.rootViewController else { return }
     let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    let ok = UIAlertAction(title: "😞", style: .default) { _ in }
+    let ok = UIAlertAction(title: action, style: .default) { _ in }
     ac.addAction(ok)
     vc.present(ac, animated: true)
 }
