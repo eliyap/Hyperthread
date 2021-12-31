@@ -89,7 +89,12 @@ extension Discussion {
                 continue
             }
             guard let PRNode = nodes.first(where: {$0.tweet.id == PRID}) else {
-                assert(false, "Could not find primary reference.")
+                ModelLog.error("""
+                    Could not find primary reference.
+                    - PR-id \(PRID)
+                    - Tweet: \(t)
+                    """)
+                #warning("TODO: dev crash here.")
                 continue
             }
             let newNode = Node(t, depth: PRNode.depth + 1, parent: PRNode, user: realm.user(id: t.authorID)!)
