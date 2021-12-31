@@ -95,9 +95,9 @@ extension String {
                 continue
             }
             
-            /// By convention(?), quote tweets have the quoted URL at the end.
-            /// If URL references the quote, we can safely remove it, IF it is not also a reply.
             if
+                /// By convention(?), quote tweets have the quoted URL at the end.
+                /// If URL references the quote, we can safely remove it, IF it is not also a reply.
                 tweet.quoting != nil,
                 tweet.quoting == tweet.primaryReference,
                 target.upperBound == endIndex,
@@ -106,7 +106,15 @@ extension String {
                 /// Set variable so we know not to look for this URL in the future.
                 removedURLs.append(url.display_url)
                 replaceSubrange(target, with: "")
-            } else {
+            } else if
+                /// If the tweet has media, and this looks like a media link, omit the URL.
+                tweet.media.isNotEmpty,
+                url.display_url.starts(with: "pic.twitter.com/")
+            {
+                /// Set variable so we know not to look for this URL in the future.
+                removedURLs.append(url.display_url)
+                replaceSubrange(target, with: "")
+            } else  {
                 replaceSubrange(target, with: url.display_url)
             }
         }
