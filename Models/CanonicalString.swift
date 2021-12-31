@@ -66,7 +66,7 @@ extension String {
             /// Ensure @mention is right after the `cursor`.
             /// Use `lowercased` for case-insensitive matching, due to Twitter matches @-handles case-insensitively.
             guard self[cursor..<endIndex].lowercased().starts(with: atHandle.lowercased()) else {
-                if contains(atHandle) == false {
+                if lowercased().contains(atHandle.lowercased()) == false {
                     ModelLog.warning("Mention \(atHandle) not found in \(self)")
                 }
                 break
