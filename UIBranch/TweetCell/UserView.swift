@@ -67,10 +67,10 @@ final class UserView: UIStackView {
         switch tweet.primaryReferenceType {
         case .replied_to:
             symbolButton.isHidden = false
-            symbolButton.setImage(UIImage(systemName: "arrowshape.turn.up.left.fill"), for: .normal)
+            symbolButton.setImage(UIImage(systemName: ReplySymbol.name), for: .normal)
         case .quoted:
             symbolButton.isHidden = false
-            symbolButton.setImage(UIImage(systemName: "quote.bubble.fill"), for: .normal)
+            symbolButton.setImage(UIImage(systemName: QuoteSymbol.name), for: .normal)
         default:
             symbolButton.isHidden = true
             
