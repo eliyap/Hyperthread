@@ -34,6 +34,13 @@ internal extension UserDefaults {
             set(encoded, forKey: #function)
         }
     }
+    
+    /// When the home timeline endpoint returns, call this function to expand the global user target window.
+    func expandUserTimelineWindow(tweets: [RawHydratedTweet]) -> Void {
+        if let window: DateWindow = .init(tweets: tweets) {
+            userTimelineWindow = userTimelineWindow.union(window)
+        }
+    }
 }
 
 internal extension DateWindow {
