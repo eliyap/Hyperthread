@@ -15,7 +15,7 @@ final class TimelineConduit: Conduit<Void, Never> {
     public override init() {
         super.init()
         pipeline = intake
-            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
+            .joinFollowing()
             .map { (_, following) -> [TimelineConduit.Request] in
                 return TimelineConduit.getRequests(followingIDs: following)
             }
@@ -53,7 +53,7 @@ final class TimelineConduit: Conduit<Void, Never> {
 
                 return publisher.eraseToAnyPublisher()
             }
-            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
+            .joinFollowing()
             .sink(receiveCompletion: { (completion: Subscribers.Completion) in
                 NetLog.error("Unexpected completion: \(completion)")
                 assert(false)

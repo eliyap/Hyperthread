@@ -54,7 +54,7 @@ final class FollowUp: Conduit<Void, Never> {
             .v2Fetch()
             /// Synchronize
             .receive(on: Airport.scheduler)
-            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
+            .joinFollowing()
             .sink { [weak self] data, following in
                 let (tweets, included, users, media) = data
                 do {
