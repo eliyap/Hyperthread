@@ -98,6 +98,31 @@ final class TimelineConduit: Conduit<Void, Never> {
                 }
             })
     }
+    
+    fileprivate static func getRequests(followingIDs: [User.ID]) -> [TimelineConduit.Request] {
+        /// Fetch complete `User` objects from Realm database.
+        let realm = try! Realm()
+        let users = followingIDs.compactMap(realm.user(id:))
+        assert(users.count == followingIDs.count, "Users missing from realm database!")
+        
+        var result: [TimelineConduit.Request] = []
+        
+        /// - Note: We assume that this value was updated as needed before the function call.
+        let global = UserDefaults.groupSuite.userTimelineWindow
+        
+        /// Check what portions of the user timeline are un-fetched.
+        for user in users {
+            let (earlier, later) = global.subtracting(user.timelineWindow)
+            if let earlier = earlier {
+                result.append(Request(id: user.id, startTime: earlier.start, endTime: earlier.end))
+            }
+            if let later = later {
+                result.append(Request(id: user.id, startTime: later.start, endTime: later.end))
+            }
+        }
+        
+        return result
+    }
 }
 
 extension TimelineConduit {
