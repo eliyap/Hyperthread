@@ -56,9 +56,10 @@ final class FollowUp: Conduit<Void, Never> {
             .receive(on: Airport.scheduler)
             .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
             .sink { [weak self] data, following in
-                let (tweets, _, users, media) = data
+                let (tweets, included, users, media) = data
                 do {
-                    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: following)
+                    /// Safe to insert `included`, as we make no assumptions around `Relevance`.
+                    try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: following)
                     
                     /// Remove tweets from list.
                     for tweet in tweets {
