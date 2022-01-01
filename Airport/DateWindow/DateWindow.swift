@@ -8,6 +8,37 @@
 import Foundation
 import RealmSwift
 
+/** # Dev Notes – 22.01.01
+ *  Entities
+ *  - home date window
+ *  	- the max and min dates in a home timeline fetch
+ *  - global date window
+ *  	- interval over which we expect all followed users to have all tweets fetched
+ *  	- may be thought of as the summation of all prior home timeline fetches
+ *  - user date window
+ *  	- actual date window over which we have fetched this user's timeline
+ * 
+ *  Responding to events
+ *  - home timeline fetch
+ *  	- widen the global date window by forming a union with the home timeline window
+ *  		- **Note**: what if the home and global windows are disjoint sets? that would suggest we missed something. I'll make it a dev crash for now
+ *  	- then perform a follow up fetch
+ *  - follow up fetch
+ *  	- should be performed at start up
+ *  	- also performed after a home timeline widening
+ *  	- compare each user's window to the global window, fetch the difference
+ *  - a user is newly followed
+ *  	- initialize their user date window to `.new()` i.e. an empty window
+ *  	- then perform a follow up fetch, this should cause them to be totally caught up to the global date window. 
+ * 
+ *  We can fetch deeper into the past using the user timeline endpoint than we can using the home timeline endpoint
+ *
+ *  we want to expand the global date window even after the home timeline window refuses to return more data.
+ *
+ *  We will accomplish this via the pre-fetching system: whenever a tweet is loaded, check if the global date window's `start`  is less than a day before the tweet
+ *  if it is, expand the target by a day. 
+ */
+
 public struct DateWindow {
     public var start: Date
     public var duration: TimeInterval
@@ -46,7 +77,7 @@ public struct DateWindow {
         return result
     }
     
-    /// Capped at either end by the passed dates
+    /// The `DateWindow` capped at either end by the passed dates.
     mutating func capped(start: Date? = nil, end: Date? = nil) -> Void {
         var s = self.start
         var e = self.end
@@ -60,25 +91,7 @@ public struct DateWindow {
     }
 }
 
-internal final class RealmDateWindow: EmbeddedObject {
-    @Persisted
-    var start: Date
-    
-    @Persisted
-    var end: Date
-    
-    override init() {
-        super.init()
-        self.start = Date()
-        self.end = Date()
-    }
-    
-    init(_ window: DateWindow) {
-        super.init()
-        self.start = window.start
-        self.end = window.end
-    }
-}
+extension DateWindow: Codable { }
 
 extension DateWindow {
     static func fromHomeTimeline(in store: UserDefaults) -> Self? {
@@ -101,34 +114,5 @@ extension DateWindow {
         }
         
         return .init(start: start, end: end)
-    }
-}
-
-extension DateWindow: Codable { }
-
-internal extension UserDefaults {
-    /**
-     Store the window of time over which we have fetched *all* User Timelines (v2 API).
-     If no window is known, default to `.new()`, a zero width window anchored at the current `Date`.
-     */
-    var userTimelineWindow: DateWindow {
-        get {
-            guard let data = object(forKey: #function) as? Data else {
-                DefaultsLog.debug("No Date Window found.", print: true, true)
-                return .new()
-            }
-            guard let loaded = try? JSONDecoder().decode(DateWindow.self, from: data) else {
-                assert(false, "Could not decode \(DateWindow.self)")
-                return .new()
-            }
-            return loaded
-        }
-        set {
-            guard let encoded = try? JSONEncoder().encode(newValue) else {
-                assert(false, "Could not encode!")
-                return
-            }
-            set(encoded, forKey: #function)
-        }
     }
 }

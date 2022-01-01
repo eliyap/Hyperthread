@@ -16,16 +16,18 @@ final class TimelineConduit: Conduit<Void, Never> {
         super.init()
         pipeline = intake
             .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
-            .map { (_, following) -> [Request] in
-                /// Check up to 1 day before.
+            .map { (_, following) -> [TimelineConduit.Request] in
+                /// Add an extra day to the start of the home timeline window.
                 var homeWindow = DateWindow.fromHomeTimeline(in: .groupSuite) ?? .new()
                 homeWindow.start.addTimeInterval(-.day)
                 homeWindow.duration += .day
                 
                 Swift.debugPrint("Home Window \(homeWindow)")
                 
+                /// The periods of time for which we need to fetch tweets for each user.
                 var requests: [Request] = []
                 
+                /// Fetch complete `User` objects from Realm database.
                 let realm = try! Realm()
                 let users = following.compactMap(realm.user(id:))
                 assert(users.count == following.count, "Users missing from realm database!")
@@ -43,7 +45,9 @@ final class TimelineConduit: Conduit<Void, Never> {
                 
                 return requests
             }
+            /// Transform array into a stream of `Request`s.
             .flatMap { $0.publisher }
+            /// Perform a paginated fetch for each `Request`.
             .flatMap { (request: Request) -> AnyPublisher<RawData, Error> in
                 /// Check that credentials are present.
                 guard let credentials = Auth.shared.credentials else {
@@ -77,8 +81,8 @@ final class TimelineConduit: Conduit<Void, Never> {
             }
             .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
             .sink(receiveCompletion: { (completion: Subscribers.Completion) in
-                #warning("TODO")
-                ///
+                NetLog.error("Unexpected completion: \(completion)")
+                assert(false)
             }, receiveValue: { (rawData, followingIDs) in
                 let (tweets, _, users, media) = rawData
                 do {
