@@ -179,3 +179,80 @@ fileprivate actor FollowingClearingHouse {
         }
     }
 }
+
+fileprivate actor FollowingClearingHouse🆕 {
+    public typealias Output = [User.ID]
+    public typealias Handler = (Output) -> ()
+    
+    /// Memoized Output.
+    private let local: Sealed🆕<Output> = .init(initial: nil, timer: FollowingEndpoint.staleTimer)
+    
+    /// Completion handlers for when the fetch returns.
+    private var queue: [Handler] = []
+    
+    /// Whether a request is currently in progress.
+    private var isFetching: Bool = false
+    
+    /// Singleton Class.
+    public static let shared: FollowingClearingHouse🆕 = .init()
+    private init(){}
+    
+    public func request(handler: @escaping Handler) async -> Void {
+        if let stored = await local.value {
+            handler(stored)
+        } else {
+            queue.append(handler)
+            await dispatch()
+        }
+    }
+    
+    private func dispatch() async -> Void {
+        guard isFetching == false else { return }
+        isFetching = true
+        
+        let output: Output = await fetch()
+        
+        /// Call and release closures.
+        queue.forEach { $0(output) }
+        queue = []
+        
+        /// Memoize fresh value.
+        await local.seal(output)
+        
+        isFetching = false
+    }
+    
+    private func fetch() async -> Output {
+        /// Assume credentials are available.
+        guard let credentials = Auth.shared.credentials else {
+            NetLog.error("Tried to fetch, but credentials missing!")
+            assert(false)
+            return []
+        }
+        
+        guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
+            NetLog.error("Failed to fetch following list!")
+            assert(false)
+            
+            /// If the fetch fails, fall back on local Realm storage.
+            let realm = try! await Realm()
+            let ids: [User.ID] = realm.objects(User.self)
+                .filter("\(User.followingPropertyName) == YES")
+                .map(\.id)
+            return ids
+        }
+        
+        NetLog.debug("Successfully fetched \(rawUsers.count) following users", print: true, true)
+        
+        /// Store fetched results.
+        do {
+            let realm = try! await Realm()
+            try realm.storeFollowing(raw: Array(rawUsers))
+            return rawUsers.map(\.id)
+        } catch {
+            NetLog.error("Failed to store following list!")
+            assert(false, "Failed to store following list!")
+            return []
+        }
+    }
+}
