@@ -143,6 +143,9 @@ fileprivate actor FollowingClearingHouse {
     private init(){}
     
     public func getFollowing() async -> Output {
+        
+        NetLog.debug("Following API request dispatched at \(Date())", print: true, true)
+        
         if let stored = local.value {
             return stored
         } else {
@@ -237,6 +240,9 @@ fileprivate actor FollowingClearingHouse🆕 {
     }
     
     private func fetch() async -> Output {
+        
+        NetLog.debug("Following API request dispatched at \(Date())", print: true, true)
+        
         /// Assume credentials are available.
         guard let credentials = Auth.shared.credentials else {
             NetLog.error("Tried to fetch, but credentials missing!")
