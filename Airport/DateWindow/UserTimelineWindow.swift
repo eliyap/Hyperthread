@@ -56,8 +56,8 @@ internal extension DateWindow {
     }
     
     func union(_ other: DateWindow) -> DateWindow {
-        if overlaps(with: other) == false {
-            Logger.general.warning("No overlap between DateWindows \(self) and \(other)")
+        if overlaps(with: other) == false, other.duration > 0, self.duration > 0 {
+            Logger.general.warning("No overlap between non-zero DateWindows \(self) and \(other)")
         }
         
         return .init(
