@@ -15,35 +15,13 @@ final class TimelineConduit: Conduit<Void, Never> {
     public override init() {
         super.init()
         pipeline = intake
-            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
-            .map { (_, following) -> [Request] in
-                /// Check up to 1 day before.
-                var homeWindow = DateWindow.fromHomeTimeline(in: .groupSuite) ?? .new()
-                homeWindow.start.addTimeInterval(-.day)
-                homeWindow.duration += .day
-                
-                Swift.debugPrint("Home Window \(homeWindow)")
-                
-                var requests: [Request] = []
-                
-                let realm = try! Realm()
-                let users = following.compactMap(realm.user(id:))
-                assert(users.count == following.count, "Users missing from realm database!")
-                
-                /// Check what portions of the user timeline are un-fetched.
-                for user in users {
-                    let (a, b) = homeWindow.subtracting(user.timelineWindow)
-                    if let a = a {
-                        requests.append(Request(id: user.id, startTime: a.start, endTime: a.end))
-                    }
-                    if let b = b {
-                        requests.append(Request(id: user.id, startTime: b.start, endTime: b.end))
-                    }
-                }
-                
-                return requests
+            .joinFollowing()
+            .map { (_, following) -> [TimelineConduit.Request] in
+                return TimelineConduit.getRequests(followingIDs: following)
             }
+            /// Transform array into a stream of `Request`s.
             .flatMap { $0.publisher }
+            /// Perform a paginated fetch for each `Request`.
             .flatMap { (request: Request) -> AnyPublisher<RawData, Error> in
                 /// Check that credentials are present.
                 guard let credentials = Auth.shared.credentials else {
@@ -75,24 +53,64 @@ final class TimelineConduit: Conduit<Void, Never> {
 
                 return publisher.eraseToAnyPublisher()
             }
-            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
+            .joinFollowing()
             .sink(receiveCompletion: { (completion: Subscribers.Completion) in
-                #warning("TODO")
-                ///
+                NetLog.error("Unexpected completion: \(completion)")
+                assert(false)
             }, receiveValue: { (rawData, followingIDs) in
-                let (tweets, _, users, media) = rawData
+                let (tweets, included, users, media) = rawData
                 do {
                     NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
-                    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: followingIDs)
                     
-                    /// Immediately check for follow up.
-                    #warning("TODO")
-//                    followUp.intake.send()
+                    /// Safe to insert `included`, as we make no assumptions around `Relevance`.
+                    try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
                 } catch {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
                 }
+                
+                let uniqueAuthorIDs = Set(tweets.map(\.authorID))
+                if uniqueAuthorIDs.count > 1 {
+                    NetLog.error("""
+                        "User timeline returned multi-user blob, which should never happen!
+                        - \(uniqueAuthorIDs)
+                        """)
+                    assert(false)
+                } else if uniqueAuthorIDs.isEmpty {
+                    /* do nothing */
+                } else {
+                    let userID = uniqueAuthorIDs.first!
+                }
+                
+                /// Immediately check for follow up.
+                #warning("TODO")
+//                    followUp.intake.send()
             })
+    }
+    
+    fileprivate static func getRequests(followingIDs: [User.ID]) -> [TimelineConduit.Request] {
+        /// Fetch complete `User` objects from Realm database.
+        let realm = try! Realm()
+        let users = followingIDs.compactMap(realm.user(id:))
+        assert(users.count == followingIDs.count, "Users missing from realm database!")
+        
+        var result: [TimelineConduit.Request] = []
+        
+        /// - Note: We assume that this value was updated as needed before the function call.
+        let global = UserDefaults.groupSuite.userTimelineWindow
+        
+        /// Check what portions of the user timeline are un-fetched.
+        for user in users {
+            let (earlier, later) = global.subtracting(user.timelineWindow)
+            if let earlier = earlier {
+                result.append(Request(id: user.id, startTime: earlier.start, endTime: earlier.end))
+            }
+            if let later = later {
+                result.append(Request(id: user.id, startTime: later.start, endTime: later.end))
+            }
+        }
+        
+        return result
     }
 }
 

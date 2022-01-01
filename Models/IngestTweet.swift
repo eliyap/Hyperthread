@@ -10,9 +10,7 @@ import RealmSwift
 import Twig
 
 /**
- Accepts raw data from the Twitter v2 API.
- - Warning: Do not feed `include`d `Tweet`s!
-            These may be missing media keys, or be of a different `Relevance` than the main payload!
+ Accepts raw data from the Twitter v2 API, including `included` tweets,
  */
 func ingestRaw(
     rawTweets: [RawHydratedTweet],
@@ -29,6 +27,14 @@ func ingestRaw(
             let user = User(raw: rawUser, following: following)
             realm.add(user, update: .modified)
         }
+    }
+    
+    /// Reject tweets with missing media (usually happens because they were "included".
+    let mediaKeys = rawMedia.map(\.media_key)
+    let rawTweets = rawTweets.filter { rawTweet in
+        /// If keys exist, check they are all present.
+        guard let keys = rawTweet.attachments?.media_keys else { return true }
+        return keys.allSatisfy { mediaKeys.contains($0) }
     }
     
     /// Insert Tweets into local database.
@@ -80,10 +86,9 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
-            /// Check `relevance` value in Realm, to avoid ovewriting an existing value (if any).
-            let checkedRelevance = realm.tweet(id: rawTweet.id)?.relevance ?? relevance
-            
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: checkedRelevance)
+            /// - Note: **intentionally** overwrite existing `relevance`, which may have resulted
+            ///         from user timeline fetch.
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: relevance)
             realm.add(tweet, update: .modified)
             
             /// Safety check: we count on the user never being missing!

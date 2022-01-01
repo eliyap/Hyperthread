@@ -66,6 +66,10 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
                     /// Update home timeline boundaries.
                     self?.updateBoundaries(tweets: tweets)
                     
+                    /// Update user date window target, request based on expanded window.
+                    UserDefaults.groupSuite.expandUserTimelineWindow(tweets: tweets)
+                    timelineConduit.intake.send()
+                    
                     /// Immediately check for follow up.
                     followUp.intake.send()
                     

@@ -54,11 +54,12 @@ final class FollowUp: Conduit<Void, Never> {
             .v2Fetch()
             /// Synchronize
             .receive(on: Airport.scheduler)
-            .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
+            .joinFollowing()
             .sink { [weak self] data, following in
-                let (tweets, _, users, media) = data
+                let (tweets, included, users, media) = data
                 do {
-                    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: following)
+                    /// Safe to insert `included`, as we make no assumptions around `Relevance`.
+                    try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: following)
                     
                     /// Remove tweets from list.
                     for tweet in tweets {
@@ -116,65 +117,97 @@ extension Publisher where Output == [Tweet.ID], Failure == Never {
     }
 }
 
-/**
- An element in our Combine machinery.
- Dispenses a list of IDs you follow that is guaranteed to be recent.
- */
-final class FollowingFetcher<Input, Failure: Error>
-    : DeferredBuffer<Input, [User.ID], Failure>
-{
-    override func _fetch(_ onCompletion: @escaping ([User.ID]) -> Void) {
-        Task {
-            let ids = await FollowingClearingHouse.shared.getFollowing()
-            onCompletion(ids)
+extension Publisher {
+    func joinFollowing() -> Publishers.FlatMap<Future<(Output, [User.ID]), Failure>, Self> {
+        flatMap { (value: Output) in
+            Future { promise  in
+                Task<Void, Never> {
+                    await FollowingClearingHouse🆕.shared.request { ids in
+                        promise(.success((value, ids)))
+                    }
+                }
+            }
         }
     }
 }
 
 /// Centralized reference for following, to avoid multiple fetchers pummeling the API.
-fileprivate actor FollowingClearingHouse {
+fileprivate actor FollowingClearingHouse🆕 {
     public typealias Output = [User.ID]
+    public typealias Handler = (Output) -> ()
     
     /// Memoized Output.
-    private let local: Sealed<Output> = .init(initial: nil, timer: FollowingEndpoint.staleTimer)
+    private let local: Sealed🆕<Output> = .init(initial: nil, timer: FollowingEndpoint.staleTimer)
     
-    public static let shared: FollowingClearingHouse = .init()
+    /// Completion handlers for when the fetch returns.
+    private var queue: [Handler] = []
+    
+    /// Whether a request is currently in progress.
+    private var isFetching: Bool = false
+    
+    /// Singleton Class.
+    public static let shared: FollowingClearingHouse🆕 = .init()
     private init(){}
     
-    public func getFollowing() async -> Output {
-        if let stored = local.value {
-            return stored
+    public func request(handler: @escaping Handler) async -> Void {
+        if let stored = await local.value {
+            handler(stored)
         } else {
-            /// Assume credentials are available.
-            guard let credentials = Auth.shared.credentials else {
-                NetLog.error("Tried to fetch, but credentials missing!")
-                assert(false)
-                return []
-            }
+            queue.append(handler)
+            await dispatch()
+        }
+    }
+    
+    private func dispatch() async -> Void {
+        guard isFetching == false else { return }
+        isFetching = true
+        
+        let output: Output = await fetch()
+        
+        /// Call and release closures.
+        queue.forEach { $0(output) }
+        queue = []
+        
+        /// Memoize fresh value.
+        await local.seal(output)
+        
+        isFetching = false
+    }
+    
+    private func fetch() async -> Output {
+        
+        NetLog.debug("Following API request dispatched at \(Date())", print: true, true)
+        
+        /// Assume credentials are available.
+        guard let credentials = Auth.shared.credentials else {
+            NetLog.error("Tried to fetch, but credentials missing!")
+            assert(false)
+            return []
+        }
+        
+        guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
+            NetLog.error("Failed to fetch following list!")
+            assert(false)
             
-            guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
-                NetLog.error("Failed to fetch following list!")
-                
-                /// If the fetch fails, fall back on local Realm storage.
-                let realm = try! await Realm()
-                let ids: [User.ID] = realm.objects(User.self)
-                    .filter("\(User.followingPropertyName) == YES")
-                    .map(\.id)
-                return ids
-            }
-            
-            NetLog.debug("Successfully fetched \(rawUsers.count) following users", print: true, true)
-            
-            /// Store fetched results.
-            do {
-                let realm = try! await Realm()
-                try realm.storeFollowing(raw: Array(rawUsers))
-                return rawUsers.map(\.id)
-            } catch {
-                NetLog.error("Failed to store following list!")
-                assert(false, "Failed to store following list!")
-                return []
-            }
+            /// If the fetch fails, fall back on local Realm storage.
+            let realm = try! await Realm()
+            let ids: [User.ID] = realm.objects(User.self)
+                .filter("\(User.followingPropertyName) == YES")
+                .map(\.id)
+            return ids
+        }
+        
+        NetLog.debug("Successfully fetched \(rawUsers.count) following users", print: true, true)
+        
+        /// Store fetched results.
+        do {
+            let realm = try! await Realm()
+            try realm.storeFollowing(raw: Array(rawUsers))
+            return rawUsers.map(\.id)
+        } catch {
+            NetLog.error("Failed to store following list!")
+            assert(false, "Failed to store following list!")
+            return []
         }
     }
 }

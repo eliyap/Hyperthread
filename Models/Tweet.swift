@@ -144,7 +144,8 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
             /// - Note: order of images is significant, so we MUST NOT use the `Set` trick for de-duping!
             for key in keys.removingDuplicates() {
                 guard let match = rawMedia.first(where: {$0.media_key == key}) else {
-                    Swift.debugPrint("Failed to find match for \(key)")
+                    ModelLog.error("Failed to find match for \(key)")
+                    assert(false)
                     continue
                 }
                 media.append(Media(raw: match))

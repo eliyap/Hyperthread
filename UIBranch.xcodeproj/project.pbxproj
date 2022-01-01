@@ -51,7 +51,6 @@
 		2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C927616FDA0099477D /* GetHeight.swift */; };
 		2266D0CC276197E20099477D /* ShowAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0CB276197E20099477D /* ShowAlert.swift */; };
 		22680A84276AA651008827F8 /* Sealed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A83276AA651008827F8 /* Sealed.swift */; };
-		22680A8A276AA710008827F8 /* DeferredBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A89276AA710008827F8 /* DeferredBuffer.swift */; };
 		22680A8E276AFCD4008827F8 /* TimelineConduit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8D276AFCD4008827F8 /* TimelineConduit.swift */; };
 		22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A8F276B4159008827F8 /* PublicMetrics.swift */; };
 		22680A92276B41B1008827F8 /* Relevance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22680A91276B41B1008827F8 /* Relevance.swift */; };
@@ -68,6 +67,8 @@
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* UserModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* UserModalView.swift */; };
 		228D71ED277C1D2300E306BD /* CellEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EC277C1D2300E306BD /* CellEvent.swift */; };
+		228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EF2780128300E306BD /* RealmDateWindow.swift */; };
+		228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71F12780142200E306BD /* UserTimelineWindow.swift */; };
 		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
 		22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9062773059E00C4EE99 /* Transaction.swift */; };
 		22BE9C0D27606A280080E475 /* Supertall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BE9C0C27606A280080E475 /* Supertall.swift */; };
@@ -156,7 +157,6 @@
 		2266D0C927616FDA0099477D /* GetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetHeight.swift; sourceTree = "<group>"; };
 		2266D0CB276197E20099477D /* ShowAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAlert.swift; sourceTree = "<group>"; };
 		22680A83276AA651008827F8 /* Sealed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sealed.swift; sourceTree = "<group>"; };
-		22680A89276AA710008827F8 /* DeferredBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferredBuffer.swift; sourceTree = "<group>"; };
 		22680A8D276AFCD4008827F8 /* TimelineConduit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineConduit.swift; sourceTree = "<group>"; };
 		22680A8F276B4159008827F8 /* PublicMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicMetrics.swift; sourceTree = "<group>"; };
 		22680A91276B41B1008827F8 /* Relevance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relevance.swift; sourceTree = "<group>"; };
@@ -173,6 +173,8 @@
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* UserModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModalView.swift; sourceTree = "<group>"; };
 		228D71EC277C1D2300E306BD /* CellEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellEvent.swift; sourceTree = "<group>"; };
+		228D71EF2780128300E306BD /* RealmDateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDateWindow.swift; sourceTree = "<group>"; };
+		228D71F12780142200E306BD /* UserTimelineWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTimelineWindow.swift; sourceTree = "<group>"; };
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
 		22A9E9062773059E00C4EE99 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		22BE9C0C27606A280080E475 /* Supertall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supertall.swift; sourceTree = "<group>"; };
@@ -330,7 +332,7 @@
 				223BBF5F27377E8700375530 /* Airport.swift */,
 				228D71E5277A805900E306BD /* Conduits */,
 				22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */,
-				228D71E6277A953500E306BD /* DateWindow.swift */,
+				228D71EE2780127400E306BD /* DateWindow */,
 			);
 			path = Airport;
 			sourceTree = "<group>";
@@ -412,13 +414,22 @@
 			path = Conduits;
 			sourceTree = "<group>";
 		};
+		228D71EE2780127400E306BD /* DateWindow */ = {
+			isa = PBXGroup;
+			children = (
+				228D71E6277A953500E306BD /* DateWindow.swift */,
+				228D71EF2780128300E306BD /* RealmDateWindow.swift */,
+				228D71F12780142200E306BD /* UserTimelineWindow.swift */,
+			);
+			path = DateWindow;
+			sourceTree = "<group>";
+		};
 		22A9E9032771D76500C4EE99 /* Operators */ = {
 			isa = PBXGroup;
 			children = (
 				223BBF6227377E8900375530 /* LatchBuffer.swift */,
 				223BBF6027377E8800375530 /* AsyncMap.swift */,
 				22680A83276AA651008827F8 /* Sealed.swift */,
-				22680A89276AA710008827F8 /* DeferredBuffer.swift */,
 			);
 			path = Operators;
 			sourceTree = "<group>";
@@ -661,7 +672,6 @@
 				22BFD7A1277402B700E46DF1 /* FollowUp.swift in Sources */,
 				22D127E12740655900932614 /* IconView.swift in Sources */,
 				224F88D5275E5C8700085678 /* ImageViewController.swift in Sources */,
-				22680A8A276AA710008827F8 /* DeferredBuffer.swift in Sources */,
 				2266D0CC276197E20099477D /* ShowAlert.swift in Sources */,
 				223BBF862738572C00375530 /* MainTable.swift in Sources */,
 				223BBF6F27377EC300375530 /* Discussion.swift in Sources */,
@@ -670,6 +680,7 @@
 				22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */,
 				223BBF6527377E8900375530 /* IngestTweet.swift in Sources */,
 				2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */,
+				228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */,
 				223BBF7127377EC300375530 /* Query.swift in Sources */,
 				223BBF6627377E8900375530 /* LatchBuffer.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
@@ -709,6 +720,7 @@
 				22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				228D71EB277C1BD400E306BD /* UserModalView.swift in Sources */,
+				228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
 				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
 				22680A84276AA651008827F8 /* Sealed.swift in Sources */,

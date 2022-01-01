@@ -10,7 +10,7 @@ import Foundation
 /** Tracks the "staleness" of a wrapped value.
     A value is "stale" if it was last fetched more than `Timer` seconds ago.
  */
-final class Sealed<Wrapped> {
+actor Sealed🆕<Wrapped> {
     
     /// Number of seconds before data is declared stale.
     public let timer: TimeInterval
@@ -37,11 +37,13 @@ final class Sealed<Wrapped> {
         return wrapped
     }
     
-    required init(initial: Wrapped? = nil, timer: TimeInterval) {
+    init(initial: Wrapped? = nil, timer: TimeInterval) {
         self.timer = timer
         /// When an initial value is provided, mark it as fresh.
         if let initial = initial {
-            seal(initial)
+            /// `seal` without invoking function.
+            wrapped = initial
+            lastFetched = Date()
         }
     }
 }
