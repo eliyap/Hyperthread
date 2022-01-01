@@ -68,6 +68,23 @@ final class TimelineConduit: Conduit<Void, Never> {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
                 }
+                
+                let uniqueAuthorIDs = Set(tweets.map(\.authorID))
+                if uniqueAuthorIDs.count > 1 {
+                    NetLog.error("""
+                        "User timeline returned multi-user blob, which should never happen!
+                        - \(uniqueAuthorIDs)
+                        """)
+                    assert(false)
+                } else if uniqueAuthorIDs.isEmpty {
+                    /* do nothing */
+                } else {
+                    let userID = uniqueAuthorIDs.first!
+                }
+                
+                /// Immediately check for follow up.
+                #warning("TODO")
+//                    followUp.intake.send()
             })
     }
     
