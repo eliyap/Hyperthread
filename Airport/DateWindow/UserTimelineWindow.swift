@@ -45,8 +45,7 @@ internal extension UserDefaults {
 
 internal extension DateWindow {
     /// Intended for use with the Home Timeline return value.
-    init?(rawData: RawData) {
-        let tweets: [RawHydratedTweet] = rawData.0
+    init?(tweets: [RawHydratedTweet]) {
         guard tweets.isNotEmpty else {
             return nil
         }
