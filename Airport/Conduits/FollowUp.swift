@@ -117,72 +117,6 @@ extension Publisher where Output == [Tweet.ID], Failure == Never {
     }
 }
 
-/**
- An element in our Combine machinery.
- Dispenses a list of IDs you follow that is guaranteed to be recent.
- */
-final class FollowingFetcher<Input, Failure: Error>
-    : DeferredBuffer<Input, [User.ID], Failure>
-{
-    override func _fetch(_ onCompletion: @escaping ([User.ID]) -> Void) {
-        Task {
-            let ids = await FollowingClearingHouse.shared.getFollowing()
-            onCompletion(ids)
-        }
-    }
-}
-
-/// Centralized reference for following, to avoid multiple fetchers pummeling the API.
-fileprivate actor FollowingClearingHouse {
-    public typealias Output = [User.ID]
-    
-    /// Memoized Output.
-    private let local: Sealed<Output> = .init(initial: nil, timer: FollowingEndpoint.staleTimer)
-    
-    public static let shared: FollowingClearingHouse = .init()
-    private init(){}
-    
-    public func getFollowing() async -> Output {
-        
-        NetLog.debug("Following API request dispatched at \(Date())", print: true, true)
-        
-        if let stored = local.value {
-            return stored
-        } else {
-            /// Assume credentials are available.
-            guard let credentials = Auth.shared.credentials else {
-                NetLog.error("Tried to fetch, but credentials missing!")
-                assert(false)
-                return []
-            }
-            
-            guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
-                NetLog.error("Failed to fetch following list!")
-                
-                /// If the fetch fails, fall back on local Realm storage.
-                let realm = try! await Realm()
-                let ids: [User.ID] = realm.objects(User.self)
-                    .filter("\(User.followingPropertyName) == YES")
-                    .map(\.id)
-                return ids
-            }
-            
-            NetLog.debug("Successfully fetched \(rawUsers.count) following users", print: true, true)
-            
-            /// Store fetched results.
-            do {
-                let realm = try! await Realm()
-                try realm.storeFollowing(raw: Array(rawUsers))
-                return rawUsers.map(\.id)
-            } catch {
-                NetLog.error("Failed to store following list!")
-                assert(false, "Failed to store following list!")
-                return []
-            }
-        }
-    }
-}
-
 extension Publisher {
     func joinFollowing() -> Publishers.FlatMap<Future<(Output, [User.ID]), Failure>, Self> {
         flatMap { (value: Output) in
@@ -197,6 +131,7 @@ extension Publisher {
     }
 }
 
+/// Centralized reference for following, to avoid multiple fetchers pummeling the API.
 fileprivate actor FollowingClearingHouse🆕 {
     public typealias Output = [User.ID]
     public typealias Handler = (Output) -> ()
