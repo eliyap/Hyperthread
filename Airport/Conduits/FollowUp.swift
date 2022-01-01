@@ -180,6 +180,20 @@ fileprivate actor FollowingClearingHouse {
     }
 }
 
+extension Publisher {
+    func joinFollowing() -> Publishers.FlatMap<Future<(Output, [User.ID]), Failure>, Self> {
+        flatMap { (value: Output) in
+            Future { promise  in
+                Task<Void, Never> {
+                    await FollowingClearingHouse🆕.shared.request { ids in
+                        promise(.success((value, ids)))
+                    }
+                }
+            }
+        }
+    }
+}
+
 fileprivate actor FollowingClearingHouse🆕 {
     public typealias Output = [User.ID]
     public typealias Handler = (Output) -> ()
