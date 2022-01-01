@@ -58,14 +58,12 @@ final class TimelineConduit: Conduit<Void, Never> {
                 NetLog.error("Unexpected completion: \(completion)")
                 assert(false)
             }, receiveValue: { (rawData, followingIDs) in
-                let (tweets, _, users, media) = rawData
+                let (tweets, included, users, media) = rawData
                 do {
                     NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
-                    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, following: followingIDs)
                     
-                    /// Immediately check for follow up.
-                    #warning("TODO")
-//                    followUp.intake.send()
+                    /// Safe to insert `included`, as we make no assumptions around `Relevance`.
+                    try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
                 } catch {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
