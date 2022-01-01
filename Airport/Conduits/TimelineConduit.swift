@@ -17,33 +17,7 @@ final class TimelineConduit: Conduit<Void, Never> {
         pipeline = intake
             .deferredBuffer(FollowingFetcher.self, timer: FollowingEndpoint.staleTimer)
             .map { (_, following) -> [TimelineConduit.Request] in
-                /// Add an extra day to the start of the home timeline window.
-                var homeWindow = DateWindow.fromHomeTimeline(in: .groupSuite) ?? .new()
-                homeWindow.start.addTimeInterval(-.day)
-                homeWindow.duration += .day
-                
-                Swift.debugPrint("Home Window \(homeWindow)")
-                
-                /// The periods of time for which we need to fetch tweets for each user.
-                var requests: [Request] = []
-                
-                /// Fetch complete `User` objects from Realm database.
-                let realm = try! Realm()
-                let users = following.compactMap(realm.user(id:))
-                assert(users.count == following.count, "Users missing from realm database!")
-                
-                /// Check what portions of the user timeline are un-fetched.
-                for user in users {
-                    let (a, b) = homeWindow.subtracting(user.timelineWindow)
-                    if let a = a {
-                        requests.append(Request(id: user.id, startTime: a.start, endTime: a.end))
-                    }
-                    if let b = b {
-                        requests.append(Request(id: user.id, startTime: b.start, endTime: b.end))
-                    }
-                }
-                
-                return requests
+                return TimelineConduit.getRequests(followingIDs: following)
             }
             /// Transform array into a stream of `Request`s.
             .flatMap { $0.publisher }
