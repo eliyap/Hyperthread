@@ -83,7 +83,7 @@ final class ImageViewController: UIViewController {
     func configure(media: Media, picUrlString: String?) -> Void {
         mediaModel = .init(media: media, picUrlString: picUrlString)
         
-        let videoSymbolConfig = UIImage.SymbolConfiguration(hierarchicalColor: .label)
+        let videoSymbolConfig = UIImage.SymbolConfiguration(hierarchicalColor: .white)
             .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
         
         switch media.mediaType {
