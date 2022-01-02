@@ -77,7 +77,7 @@ final class TimelineConduit: Conduit<Void, Never> {
                         """)
                     assert(false)
                 } else if uniqueAuthorIDs.isEmpty {
-                    /* do nothing */
+                    /** Do nothing. **/
                 } else {
                     let userID = uniqueAuthorIDs.first!
                 }
