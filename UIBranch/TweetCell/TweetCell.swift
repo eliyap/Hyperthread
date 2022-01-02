@@ -20,35 +20,40 @@ final class ColorMarker: UIStackView {
         super.init(frame: .zero)
         axis = .vertical
         alignment = .center
-        translatesAutoresizingMaskIntoConstraints = false
         
         addArrangedSubview(symbolButton)
         addArrangedSubview(bottomLine)
         
-        bottomLine.translatesAutoresizingMaskIntoConstraints = false
-        bottomLine.layer.cornerRadius = colorMarkerWidth / 2
-        NSLayoutConstraint.activate([
-            bottomLine.widthAnchor.constraint(equalToConstant: colorMarkerWidth),
-        ])
-        let superTall = bottomLine.heightAnchor.constraint(equalToConstant: .superTall)
-        superTall.priority = .defaultLow
-        superTall.isActive = true
-        
         /// Configure Symbol.
         var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
         config = config.applying(UIImage.SymbolConfiguration(textStyle: .footnote))
-        symbolButton.translatesAutoresizingMaskIntoConstraints = false
         symbolButton.setPreferredSymbolConfiguration(config, forImageIn: .normal)
         symbolButton.setImage(UIImage(systemName: "circle"), for: .normal)
     }
     
     public func constrain(to view: UIView) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             trailingAnchor.constraint(equalTo: view.trailingAnchor),
             topAnchor.constraint(equalTo: view.topAnchor),
             bottomAnchor.constraint(equalTo: view.bottomAnchor),
             heightAnchor.constraint(equalTo: view.heightAnchor),
         ])
+        
+        bottomLine.translatesAutoresizingMaskIntoConstraints = false
+        
+        /// Shape the button as a vertical capsule shape.
+        bottomLine.layer.cornerRadius = colorMarkerWidth / 2
+        NSLayoutConstraint.activate([
+            bottomLine.widthAnchor.constraint(equalToConstant: colorMarkerWidth),
+        ])
+        
+        /// Request line be "as tall as possible".
+        let superTall = bottomLine.heightAnchor.constraint(equalToConstant: .superTall)
+        superTall.priority = .defaultLow
+        superTall.isActive = true
+        
+        symbolButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
     public func configure(node: Node) -> Void {
