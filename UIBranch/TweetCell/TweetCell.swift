@@ -11,7 +11,7 @@ import Twig
 
 final class ColorMarker: UIStackView {
     
-    private let topLine = UIButton()
+    private let symbolButton = UIButton()
     private let bottomLine = UIButton()
     
     private let colorMarkerWidth: CGFloat = 1.5
@@ -20,34 +20,56 @@ final class ColorMarker: UIStackView {
         super.init(frame: .zero)
         axis = .vertical
         alignment = .center
-        spacing = 5
-        distribution = .fillEqually
         translatesAutoresizingMaskIntoConstraints = false
         
-        addArrangedSubview(topLine)
+        addArrangedSubview(symbolButton)
         addArrangedSubview(bottomLine)
         
-        topLine.translatesAutoresizingMaskIntoConstraints = false
         bottomLine.translatesAutoresizingMaskIntoConstraints = false
-        topLine.layer.cornerRadius = colorMarkerWidth / 2
         bottomLine.layer.cornerRadius = colorMarkerWidth / 2
         NSLayoutConstraint.activate([
-            topLine.widthAnchor.constraint(equalToConstant: colorMarkerWidth),
             bottomLine.widthAnchor.constraint(equalToConstant: colorMarkerWidth),
         ])
+        let superTall = bottomLine.heightAnchor.constraint(equalToConstant: .superTall)
+        superTall.priority = .defaultLow
+        superTall.isActive = true
+        
+        /// Configure Symbol.
+        var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
+        config = config.applying(UIImage.SymbolConfiguration(textStyle: .footnote))
+        symbolButton.translatesAutoresizingMaskIntoConstraints = false
+        symbolButton.setPreferredSymbolConfiguration(config, forImageIn: .normal)
+        symbolButton.setImage(UIImage(systemName: "circle"), for: .normal)
     }
     
     public func constrain(to view: UIView) -> Void {
         NSLayoutConstraint.activate([
-            trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -TweetCell.inset),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor),
             topAnchor.constraint(equalTo: view.topAnchor),
             bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            heightAnchor.constraint(equalTo: view.heightAnchor),
         ])
     }
     
     public func configure(node: Node) -> Void {
-        topLine.backgroundColor = SCColors[(node.depth - 1) % SCColors.count]
         bottomLine.backgroundColor = SCColors[(node.depth - 1) % SCColors.count]
+        
+        switch node.tweet.primaryReferenceType {
+        
+        case .replied_to:
+            symbolButton.isHidden = false
+            symbolButton.setImage(UIImage(systemName: ReplySymbol.name), for: .normal)
+        
+        case .quoted:
+            symbolButton.isHidden = false
+            symbolButton.setImage(UIImage(systemName: QuoteSymbol.name), for: .normal)
+        
+        default:
+            symbolButton.isHidden = true
+
+            /// Placeholder image prevents height shrinking to zero, which leads to graphical glitches.
+            symbolButton.setImage(UIImage(systemName: "circle"), for: .normal)
+        }
     }
     
     required init(coder: NSCoder) {
