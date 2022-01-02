@@ -10,7 +10,7 @@ import Foundation
 /** Tracks the "staleness" of a wrapped value.
     A value is "stale" if it was last fetched more than `Timer` seconds ago.
  */
-actor Sealed🆕<Wrapped> {
+actor Sealed<Wrapped> {
     
     /// Number of seconds before data is declared stale.
     public let timer: TimeInterval
