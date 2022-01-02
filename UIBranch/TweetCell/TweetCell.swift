@@ -11,10 +11,10 @@ import Twig
 
 final class ColorMarker: UIStackView {
     
-    let topLine = UIButton()
-    let bottomLine = UIButton()
+    private let topLine = UIButton()
+    private let bottomLine = UIButton()
     
-    private let lineWidth: CGFloat = 1.5
+    private let colorMarkerWidth: CGFloat = 1.5
     
     init() {
         super.init(frame: .zero)
@@ -29,11 +29,11 @@ final class ColorMarker: UIStackView {
         
         topLine.translatesAutoresizingMaskIntoConstraints = false
         bottomLine.translatesAutoresizingMaskIntoConstraints = false
-        topLine.layer.cornerRadius = lineWidth / 2
-        bottomLine.layer.cornerRadius = lineWidth / 2
+        topLine.layer.cornerRadius = colorMarkerWidth / 2
+        bottomLine.layer.cornerRadius = colorMarkerWidth / 2
         NSLayoutConstraint.activate([
-            topLine.widthAnchor.constraint(equalToConstant: lineWidth),
-            bottomLine.widthAnchor.constraint(equalToConstant: lineWidth),
+            topLine.widthAnchor.constraint(equalToConstant: colorMarkerWidth),
+            bottomLine.widthAnchor.constraint(equalToConstant: colorMarkerWidth),
         ])
     }
     
@@ -78,7 +78,6 @@ final class TweetCell: ControlledCell {
     /// Variable Constraint.
     var indentConstraint: NSLayoutConstraint
     
-    private let colorBarWidth: CGFloat = 1.5
     public static let inset: CGFloat = 8
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -95,7 +94,6 @@ final class TweetCell: ControlledCell {
         
         /// Add color bar.
         depthSpacer.addSubview(colorMarker)
-        colorMarker.translatesAutoresizingMaskIntoConstraints = false
         colorMarker.constrain(to: depthSpacer)
         
         /// Configure Depth Stack View.
