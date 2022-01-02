@@ -39,16 +39,17 @@ final class TimelineConduit: Conduit<Void, Never> {
                     /// Fetch asynchronously until there are no more pages.
                     var nextToken: String? = nil
                     repeat {
-                        let (tweets, users, media, token) = try await userTimeline(
+                        let (tweets, included, users, media, token) = try await userTimeline(
                             userID: request.id,
                             credentials: credentials,
                             startTime: request.startTime,
                             endTime: request.endTime,
                             nextToken: nextToken
                         )
-                        publisher.send((tweets, [], users, media))
+                        publisher.send((tweets, included, users, media))
                         nextToken = token
                     } while (nextToken != nil)
+                    publisher.send(completion: .finished)
                 }
 
                 return publisher.eraseToAnyPublisher()
