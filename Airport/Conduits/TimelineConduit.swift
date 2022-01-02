@@ -69,6 +69,7 @@ final class TimelineConduit: Conduit<Void, Never> {
                     assert(false, "\(error)")
                 }
                 
+                /// Check the the tweets are indeed from only one `User`.
                 let uniqueAuthorIDs = Set(tweets.map(\.authorID))
                 if uniqueAuthorIDs.count > 1 {
                     NetLog.error("""
@@ -80,12 +81,39 @@ final class TimelineConduit: Conduit<Void, Never> {
                     /** Do nothing. **/
                 } else {
                     let userID = uniqueAuthorIDs.first!
+                    Self.updateUserWindow(userID: userID, rawTweets: tweets)
                 }
                 
                 /// Immediately check for follow up.
                 #warning("TODO")
 //                    followUp.intake.send()
             })
+    }
+    
+    fileprivate static func updateUserWindow(userID: User.ID, rawTweets: [RawHydratedTweet]) -> Void {
+        guard rawTweets.isNotEmpty else { return }
+        
+        let realm = try! Realm()
+        guard let user = realm.user(id: userID) else {
+            NetLog.error("Could not find user with ID \(userID)")
+            assert(false)
+            return
+        }
+        
+        let blobWindow: DateWindow = .init(
+            start: rawTweets.map(\.created_at).min()!,
+            end: rawTweets.map(\.created_at).max()!
+        )
+        
+        do {
+            try realm.writeWithToken { token in
+                user.timelineWindow = user.timelineWindow.union(blobWindow)
+                print("Updated Window \(user.name) \(user.timelineWindow)")
+            }
+        } catch {
+            ModelLog.error("Failed to update user with id \(userID)")
+            assert(false)
+        }
     }
     
     fileprivate static func getRequests(followingIDs: [User.ID]) -> [TimelineConduit.Request] {
