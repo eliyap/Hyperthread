@@ -8,6 +8,76 @@
 import UIKit
 import RealmSwift
 import Twig
+import SDWebImage
+
+final class ProfileImageView: UIView {
+    
+    private let imageView: UIImageView
+    
+    private let placeholder: UIImage? = .init(
+        systemName: "person.crop.circle",
+        withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .tertiarySystemBackground)
+    )
+    
+    init() {
+        self.imageView = .init(image: placeholder)
+        super.init(frame: .zero)
+        addSubview(imageView)
+        
+        constrain()
+    }
+    
+    private func constrain() -> Void {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        /// Ensure an aspect ratio of 1.
+        NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalTo: widthAnchor)
+        ])
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            imageView.heightAnchor.constraint(equalTo: heightAnchor),
+            imageView.widthAnchor.constraint(equalTo: widthAnchor),
+        ])
+
+        /// Request for view to be "as short as possible".
+        let imageShort = imageView.heightAnchor.constraint(equalToConstant: .zero)
+        imageShort.priority = .defaultHigh
+        imageShort.isActive = true
+        
+        let selfShort = self.heightAnchor.constraint(equalToConstant: .zero)
+        selfShort.priority = .defaultHigh
+        selfShort.isActive = true
+    }
+    
+    func configure(user: User?) -> Void {
+        guard let user = user else {
+            imageView.image = nil
+            return
+        }
+        
+        guard let imageUrl = user.resolvedProfileImageUrl else {
+            ModelLog.warning("Could not resolve profile image url for User \(user)")
+            return
+        }
+        
+        imageView.sd_setImage(with: imageUrl, placeholderImage: placeholder) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+            if let error = error {
+                NetLog.warning("Image Loading Error \(error)")
+            }
+            if image == nil {
+                NetLog.error("Failed to load image! \(#file)")
+            }
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
 
 final class UserView: UIStackView {
     
