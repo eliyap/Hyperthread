@@ -9,13 +9,59 @@ import UIKit
 import RealmSwift
 import Twig
 
+final class ColorMarker: UIStackView {
+    
+    let topLine = UIButton()
+    let bottomLine = UIButton()
+    
+    private let lineWidth: CGFloat = 1.5
+    
+    init() {
+        super.init(frame: .zero)
+        axis = .vertical
+        alignment = .center
+        spacing = 5
+        distribution = .fillEqually
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        addArrangedSubview(topLine)
+        addArrangedSubview(bottomLine)
+        
+        topLine.translatesAutoresizingMaskIntoConstraints = false
+        bottomLine.translatesAutoresizingMaskIntoConstraints = false
+        topLine.layer.cornerRadius = lineWidth / 2
+        bottomLine.layer.cornerRadius = lineWidth / 2
+        NSLayoutConstraint.activate([
+            topLine.widthAnchor.constraint(equalToConstant: lineWidth),
+            bottomLine.widthAnchor.constraint(equalToConstant: lineWidth),
+        ])
+    }
+    
+    public func constrain(to view: UIView) -> Void {
+        NSLayoutConstraint.activate([
+            trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -TweetCell.inset),
+            topAnchor.constraint(equalTo: view.topAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+    }
+    
+    public func configure(node: Node) -> Void {
+        topLine.backgroundColor = SCColors[(node.depth - 1) % SCColors.count]
+        bottomLine.backgroundColor = SCColors[(node.depth - 1) % SCColors.count]
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 final class TweetCell: ControlledCell {
     
     public static let reuseID = "TweetCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
     let depthStack = UIStackView()
-    let colorBar = UIButton()
+    let colorMarker = ColorMarker()
     let depthSpacer = UIView()
     
     /// Component Views
@@ -33,10 +79,10 @@ final class TweetCell: ControlledCell {
     var indentConstraint: NSLayoutConstraint
     
     private let colorBarWidth: CGFloat = 1.5
-    private let inset: CGFloat = 8
+    public static let inset: CGFloat = 8
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        let triangleSize = self.inset * 1.5
+        let triangleSize = Self.inset * 1.5
         self.triangleView = TriangleView(size: triangleSize)
         
         /// Create inactive constraint.
@@ -48,15 +94,9 @@ final class TweetCell: ControlledCell {
 //        triangleView.constrain(to: safeAreaLayoutGuide)
         
         /// Add color bar.
-        depthSpacer.addSubview(colorBar)
-        colorBar.translatesAutoresizingMaskIntoConstraints = false
-        colorBar.layer.cornerRadius = colorBarWidth / 2
-        NSLayoutConstraint.activate([
-            colorBar.widthAnchor.constraint(equalToConstant: colorBarWidth),
-            colorBar.trailingAnchor.constraint(equalTo: depthSpacer.trailingAnchor, constant: -inset),
-            colorBar.topAnchor.constraint(equalTo: depthSpacer.topAnchor),
-            colorBar.bottomAnchor.constraint(equalTo: depthSpacer.bottomAnchor),
-        ])
+        depthSpacer.addSubview(colorMarker)
+        colorMarker.translatesAutoresizingMaskIntoConstraints = false
+        colorMarker.constrain(to: depthSpacer)
         
         /// Configure Depth Stack View.
         controller.view.addSubview(depthStack)
@@ -65,10 +105,10 @@ final class TweetCell: ControlledCell {
         depthStack.addArrangedSubview(depthSpacer); NSLayoutConstraint.activate([indentConstraint])
         depthStack.addArrangedSubview(stackView)
         NSLayoutConstraint.activate([
-            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: inset),
-            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: inset),
-            depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -inset),
-            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -inset),
+            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: Self.inset),
+            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: Self.inset),
+            depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -Self.inset),
+            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -Self.inset),
         ])
 
         /// Configure Main Stack View.
@@ -127,7 +167,7 @@ final class TweetCell: ControlledCell {
         separatorInset = UIEdgeInsets(top: 0, left: indent + indentSize, bottom: 0, right: 0)
         
         /// Use non-capped depth to determine color.
-        colorBar.backgroundColor = SCColors[(node.depth - 1) % SCColors.count]
+        colorMarker.configure(node: node)
     }
     
     required init?(coder: NSCoder) {
