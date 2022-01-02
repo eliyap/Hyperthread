@@ -137,7 +137,7 @@ fileprivate actor FollowingClearingHouse🆕 {
     public typealias Handler = (Output) -> ()
     
     /// Memoized Output.
-    private let local: Sealed🆕<Output> = .init(initial: nil, timer: FollowingEndpoint.staleTimer)
+    private let local: Sealed<Output> = .init(initial: nil, timer: FollowingEndpoint.staleTimer)
     
     /// Completion handlers for when the fetch returns.
     private var queue: [Handler] = []
