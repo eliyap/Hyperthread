@@ -122,7 +122,7 @@ extension Publisher {
         flatMap { (value: Output) in
             Future { promise  in
                 Task<Void, Never> {
-                    await FollowingClearingHouse🆕.shared.request { ids in
+                    await FollowingClearingHouse.shared.request { ids in
                         promise(.success((value, ids)))
                     }
                 }
@@ -132,7 +132,7 @@ extension Publisher {
 }
 
 /// Centralized reference for following, to avoid multiple fetchers pummeling the API.
-fileprivate actor FollowingClearingHouse🆕 {
+fileprivate actor FollowingClearingHouse {
     public typealias Output = [User.ID]
     public typealias Handler = (Output) -> ()
     
@@ -146,7 +146,7 @@ fileprivate actor FollowingClearingHouse🆕 {
     private var isFetching: Bool = false
     
     /// Singleton Class.
-    public static let shared: FollowingClearingHouse🆕 = .init()
+    public static let shared: FollowingClearingHouse = .init()
     private init(){}
     
     public func request(handler: @escaping Handler) async -> Void {
