@@ -19,7 +19,7 @@ final class ProfileImageView: UIView {
     
     private let placeholder: UIImage? = .init(
         systemName: "person.crop.circle",
-        withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .tertiarySystemBackground)
+        withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .quaternaryLabel)
     )
     
     init() {
