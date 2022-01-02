@@ -15,7 +15,7 @@ final class CardHeaderCell: ControlledCell {
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Component
-    let cardBackground = CardBackground(inset: CardTeaserCell.borderInset)
+    let cardBackground = CardBackground()
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()

@@ -14,6 +14,9 @@ final class ProfileImageView: UIView {
     
     private let imageView: UIImageView
     
+    /// Make sure corner radii compose nicely.
+    public class var cornerRadius: CGFloat { CardBackground.cornerRadius - CardBackground.inset }
+    
     private let placeholder: UIImage? = .init(
         systemName: "person.crop.circle",
         withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .tertiarySystemBackground)
@@ -23,6 +26,10 @@ final class ProfileImageView: UIView {
         self.imageView = .init(image: placeholder)
         super.init(frame: .zero)
         addSubview(imageView)
+        
+        imageView.layer.cornerRadius = Self.cornerRadius
+        imageView.layer.cornerCurve = .continuous
+        imageView.clipsToBounds = true
         
         constrain()
     }

@@ -20,7 +20,7 @@ final class CardTeaserCell: ControlledCell {
     private let line: CellEventLine = .init()
     
     /// Component
-    let cardBackground = CardBackground(inset: CardTeaserCell.borderInset)
+    let cardBackground = CardBackground()
     let stackView = UIStackView()
     let userView: UserView
     let tweetTextView = TweetTextView()
