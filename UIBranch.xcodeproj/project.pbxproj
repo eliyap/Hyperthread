@@ -10,6 +10,7 @@
 		220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDeque.swift */; };
 		22193DA2278280CD005A7708 /* URLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA1278280CD005A7708 /* URLError.swift */; };
 		22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA327829C5E005A7708 /* ProfileImageView.swift */; };
+		22193DA627829CBD005A7708 /* ColorMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA527829CBC005A7708 /* ColorMarkerView.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
 		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
 		221A2992275D680900C283FE /* AlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A2991275D680900C283FE /* AlbumController.swift */; };
@@ -115,6 +116,7 @@
 		220101D327545B94005C1385 /* ViewControllerDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDeque.swift; sourceTree = "<group>"; };
 		22193DA1278280CD005A7708 /* URLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLError.swift; sourceTree = "<group>"; };
 		22193DA327829C5E005A7708 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
+		22193DA527829CBC005A7708 /* ColorMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ColorMarkerView.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/TweetCell/ColorMarkerView.swift; sourceTree = "<absolute>"; };
 		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
 		221A2991275D680900C283FE /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
 		221A2993275D943E00C283FE /* RemoveDuplicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveDuplicates.swift; sourceTree = "<group>"; };
@@ -443,6 +445,7 @@
 			isa = PBXGroup;
 			children = (
 				22D127DD2740651C00932614 /* TweetCell.swift */,
+				22193DA527829CBC005A7708 /* ColorMarkerView.swift */,
 				22D127EB274070CD00932614 /* MetricButtons.swift */,
 				22A9E9042772A86700C4EE99 /* TimestampButton.swift */,
 				22D127ED2740713500932614 /* TimeDifference.swift */,
@@ -728,6 +731,7 @@
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				228D71EB277C1BD400E306BD /* UserModalView.swift in Sources */,
 				228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */,
+				22193DA627829CBD005A7708 /* ColorMarkerView.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
 				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
 				22680A84276AA651008827F8 /* Sealed.swift in Sources */,
