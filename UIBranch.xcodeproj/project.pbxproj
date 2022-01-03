@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDeque.swift */; };
+		22193DA2278280CD005A7708 /* URLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA1278280CD005A7708 /* URLError.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
 		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
 		221A2992275D680900C283FE /* AlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A2991275D680900C283FE /* AlbumController.swift */; };
@@ -111,6 +112,7 @@
 
 /* Begin PBXFileReference section */
 		220101D327545B94005C1385 /* ViewControllerDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDeque.swift; sourceTree = "<group>"; };
+		22193DA1278280CD005A7708 /* URLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLError.swift; sourceTree = "<group>"; };
 		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
 		221A2991275D680900C283FE /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
 		221A2993275D943E00C283FE /* RemoveDuplicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveDuplicates.swift; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 				22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */,
 				22BFD7A82775883F00E46DF1 /* Collection.isNotEmpty.swift */,
 				228D71E8277AC06100E306BD /* TimeInterval.swift */,
+				22193DA1278280CD005A7708 /* URLError.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -698,6 +701,7 @@
 				22BFD7A92775883F00E46DF1 /* Collection.isNotEmpty.swift in Sources */,
 				22760A4B274AE63000F28F0A /* SummaryLine.swift in Sources */,
 				223BBF6327377E8900375530 /* Airport.swift in Sources */,
+				22193DA2278280CD005A7708 /* URLError.swift in Sources */,
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
