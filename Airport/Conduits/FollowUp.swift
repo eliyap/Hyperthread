@@ -11,10 +11,14 @@ import RealmSwift
 import Twig
 
 final class FollowUp: Conduit<Void, Never> {
+    /// Conduit Object with which to request user objects.
+    private weak var userFetcher: UserFetcher?
+    
     /// An additional "intake" for follow up on follow up.
     public let recycle = PassthroughSubject<[Tweet.ID], Never>()
     
-    override init() {
+    init(userFetcher: UserFetcher) {
+        self.userFetcher = userFetcher
         super.init()
         var inFlight: Set<Tweet.ID> = []
         
@@ -73,12 +77,17 @@ final class FollowUp: Conduit<Void, Never> {
                     /// Perform linking and request follow up.
                     let toRecycle = try linkUnlinked()
                     self?.recycle.send(Array(toRecycle))
-                    
-                    /// Check for further follow up.
-                    self?.intake.send()
                 } catch {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
+                }
+                
+                /// Check for further follow up.
+                self?.intake.send()
+                
+                let missingUsers = findMissingMentions(tweets: tweets, users: users)
+                for userID in missingUsers {
+                    self?.userFetcher?.intake.send(userID)
                 }
             }
     }

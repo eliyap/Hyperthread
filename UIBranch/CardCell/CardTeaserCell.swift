@@ -263,6 +263,9 @@ extension CardTeaserCell: UITextViewDelegate {
 
 extension ControlledCell: TweetViewDelegate {
     func open(userID: User.ID) {
+        #warning("DEBUG")
+        UserFetcher.shared.intake.send(userID)
+        
         let realm = try! Realm()
         guard realm.user(id: userID) != nil else {
             showAlert(message: "Could not find that user.")
@@ -288,4 +291,20 @@ extension ControlledCell: TweetViewDelegate {
         #warning("Not Implemented")
         NOT_IMPLEMENTED()
     }
+}
+
+#warning("place this somewhere else")
+func findMissingMentions(
+    tweets: [RawHydratedTweet],
+    includes: [RawHydratedTweet] = [],
+    users: [RawUser]
+) -> [User.ID] {
+    let mentionedIDs: [User.ID] = (tweets + includes)
+        .compactMap(\.entities?.mentions)
+        .flatMap { $0 }
+        .map(\.id)
+    
+    let fetchedIDs = users.map(\.id)
+    
+    return mentionedIDs.filter { fetchedIDs.contains($0) == false }
 }

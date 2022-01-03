@@ -23,15 +23,17 @@ final class Airport {
      */
     public static let scheduler = DispatchQueue.main
     
-    private let followUp: FollowUp = .init()
+    private let followUp: FollowUp
     private let newIngest: HomeIngest<TimelineNewFetcher>
     private let oldIngest: HomeIngest<TimelineOldFetcher>
-    private let timelineConduit: TimelineConduit = .init()
+    private let timelineConduit: TimelineConduit
     private let userFetcher: UserFetcher = .init()
     
     init() {
-        self.newIngest = .init(followUp: followUp, timelineConduit: timelineConduit)
-        self.oldIngest = .init(followUp: followUp, timelineConduit: timelineConduit)
+        self.followUp = .init(userFetcher: userFetcher)
+        self.timelineConduit = .init(userFetcher: userFetcher)
+        self.newIngest = .init(followUp: followUp, timelineConduit: timelineConduit, userFetcher: userFetcher)
+        self.oldIngest = .init(followUp: followUp, timelineConduit: timelineConduit, userFetcher: userFetcher)
     }
     
     public func requestNew(onFetched completion: @escaping () -> Void) {
@@ -63,15 +65,15 @@ internal class UserFetcher: Conduit<User.ID, Never> {
         self.pipeline = intake
             .buffer(size: UInt(UserEndpoint.maxResults), timer)
             .filter(\.isNotEmpty)
-            .asyncTryMap { (ids: [User.ID]) in
+            .asyncTryMap { (ids: [User.ID]) -> [RawUser] in
                 /// Only proceed if credentials are loaded.
                 guard let credentials = Auth.shared.credentials else {
                     NetLog.error("Tried to load users without credentials!")
                     assert(false)
-                    return
+                    return []
                 }
             
-                try await users(userIDs: ids, credentials: credentials)
+                return try await users(userIDs: ids, credentials: credentials)
             }
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -82,7 +84,8 @@ internal class UserFetcher: Conduit<User.ID, Never> {
                     NetLog.error("Unexpected completion!")
                     assert(false)
                 }
-            }, receiveValue: { _ in
+            }, receiveValue: { rawUsers in
+                Swift.debugPrint("Received \(rawUsers.count) users")
                 #warning("TODO")
             })
     }

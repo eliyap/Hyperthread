@@ -12,7 +12,11 @@ import RealmSwift
 
 final class TimelineConduit: Conduit<Void, Never> {
     
-    public override init() {
+    /// Conduit Object with which to request user objects.
+    private weak var userFetcher: UserFetcher?
+    
+    public init(userFetcher: UserFetcher) {
+        self.userFetcher = userFetcher
         super.init()
         pipeline = intake
             .joinFollowing()
@@ -58,7 +62,7 @@ final class TimelineConduit: Conduit<Void, Never> {
             .sink(receiveCompletion: { (completion: Subscribers.Completion) in
                 NetLog.error("Unexpected completion: \(completion)")
                 assert(false)
-            }, receiveValue: { (rawData, followingIDs) in
+            }, receiveValue: { [weak self] (rawData, followingIDs) in
                 let (tweets, included, users, media) = rawData
                 do {
                     NetLog.debug("Received \(tweets.count) user timeline tweets.", print: false, true)
@@ -88,6 +92,11 @@ final class TimelineConduit: Conduit<Void, Never> {
                 /// Immediately check for follow up.
                 #warning("TODO")
 //                    followUp.intake.send()
+                
+                let missingUsers = findMissingMentions(tweets: tweets, users: users)
+                for userID in missingUsers {
+                    self?.userFetcher?.intake.send(userID)
+                }
             })
     }
     
