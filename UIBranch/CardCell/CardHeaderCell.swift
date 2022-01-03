@@ -104,10 +104,12 @@ extension CardHeaderCell: UITextViewDelegate {
 extension CardHeaderCell: TweetViewDelegate {
     func open(userID: User.ID) {
         #warning("Not Implemented")
+        NOT_IMPLEMENTED()
     }
     
     func open(hashtag: String) {
         #warning("Not Implemented")
+        NOT_IMPLEMENTED()
     }
 }
 
