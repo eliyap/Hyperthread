@@ -61,7 +61,7 @@ final class TimelineConduit: Conduit<Void, Never> {
             }, receiveValue: { (rawData, followingIDs) in
                 let (tweets, included, users, media) = rawData
                 do {
-                    NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
+                    NetLog.debug("Received \(tweets.count) user timeline tweets.", print: false, true)
                     
                     /// Safe to insert `included`, as we make no assumptions around `Relevance`.
                     try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
