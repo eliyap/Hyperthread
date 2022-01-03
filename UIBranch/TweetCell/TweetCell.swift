@@ -25,8 +25,6 @@ final class TweetCell: ControlledCell {
     let albumVC = AlbumController()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
-    // TODO: add profile image
-    // TODO: add retweet marker
     private let triangleView: TriangleView
     
     /// Variable Constraint.
@@ -101,7 +99,6 @@ final class TweetCell: ControlledCell {
         
         /// Hide by default.
         triangleView.isHidden = true
-        
     }
 
     /// Arbitrary number. Test Later.
