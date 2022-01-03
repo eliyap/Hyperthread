@@ -71,12 +71,17 @@ final class ProfileImageView: UIView {
             return
         }
         
-        imageView.sd_setImage(with: imageUrl, placeholderImage: placeholder) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-            if let error = error {
+        imageView.sd_setImage(with: imageUrl, placeholderImage: placeholder) { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+            if let error = error, error.isOfflineError == false {
                 NetLog.warning("Image Loading Error \(error)")
             }
             if image == nil {
-                NetLog.error("Failed to load image! \(#file)")
+                if let error = error, error.isOfflineError {
+                    /** Do nothing. **/
+                } else {
+                    NetLog.warning("Failed to load image! \(#file)")
+                }
+                
             }
         }
     }
