@@ -50,6 +50,7 @@ extension Tweet {
         /// Hyperlink substituted links.
         string.addHyperlinks(from: self, removedURLs: removedURLs, linkedRanges: &linkedRanges)
         string.linkAtMentions(tweet: self, linkedRanges: &linkedRanges, removedHandles: removedHandles)
+        string.linkTags(tweet: self, linkedRanges: &linkedRanges)
         
         return string
     }
@@ -216,7 +217,40 @@ extension NSMutableAttributedString {
             }
             linkedRanges.append(intRange)
             
-            addAttribute(.link, value: "handle://\(mention.id)", range: intRange)
+            addAttribute(.link, value: UserURL.urlString(mention: mention), range: intRange)
+        }
+    }
+    
+    func linkTags(tweet: Tweet, linkedRanges: inout [NSRange]) -> Void {
+        let sortedTags: [Tag] = tweet.entities?.hashtags.sorted(by: {$0.start < $1.start}) ?? []
+        for tag in sortedTags {
+            let hashtag = "#" + tag.tag
+            
+            /// Perform case insensitive search, just as Twitter does.
+            guard let target = string.range(of: hashtag, options: .caseInsensitive) else {
+                ModelLog.warning("Could not find \(hashtag) in \(string)")
+                continue
+            }
+            
+            /// Transform substring range to `NSRange` boundaries.
+            guard let intRange = nsRange(target) else {
+                ModelLog.warning("Could not cast offsets")
+                continue
+            }
+
+            /// Check for overlapping links, which should never happen.
+            guard linkedRanges.allSatisfy({NSIntersectionRange($0, intRange).length == .zero}) else {
+                ModelLog.warning("""
+                    Found intsersection of @mention and url!
+                    - ranges \(linkedRanges)
+                    - hashtag \(hashtag)
+                    - text \(tweet.text)
+                    """)
+                continue
+            }
+            linkedRanges.append(intRange)
+            
+            addAttribute(.link, value: HashtagURL.urlString(tag: tag), range: intRange)
         }
     }
     
