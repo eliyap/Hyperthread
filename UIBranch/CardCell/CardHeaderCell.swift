@@ -96,7 +96,47 @@ final class CardHeaderCell: ControlledCell {
  */
 extension CardHeaderCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        UIApplication.shared.open(URL)
+        open(url: URL)
         return false
     }
+}
+
+extension CardHeaderCell: TweetViewDelegate {
+    func open(userID: User.ID) {
+        #warning("Not Implemented")
+    }
+    
+    func open(hashtag: String) {
+        #warning("Not Implemented")
+    }
+}
+
+protocol TweetViewDelegate {
+    func open(userID: User.ID) -> Void
+    func open(hashtag: String) -> Void
+}
+
+extension TweetViewDelegate {
+    func open(url: URL) -> Void {
+        switch url.scheme {
+        case UserURL.scheme:
+            print("User URL? \(url.absoluteString)")
+        case HashtagURL.scheme:
+            print("Hashtag URL? \(url.absoluteString)")
+        default:
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+            } else {
+                showAlert(message: "Failed to open url: \(url.absoluteString)")
+            }
+        }
+    }
+}
+
+struct HashtagURL {
+    public static let scheme = "hashtag"
+}
+
+struct UserURL {
+    public static let scheme = "handle"
 }

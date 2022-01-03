@@ -246,7 +246,17 @@ final class CardTeaserCell: ControlledCell {
  */
 extension CardTeaserCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        UIApplication.shared.open(URL)
+        open(url: URL)
         return false
+    }
+}
+
+extension CardTeaserCell: TweetViewDelegate {
+    func open(userID: User.ID) {
+        #warning("Not Implemented")
+    }
+    
+    func open(hashtag: String) {
+        #warning("Not Implemented")
     }
 }
