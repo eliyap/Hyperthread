@@ -130,7 +130,7 @@ extension NSMutableAttributedString {
         guard let urls = tweet.entities?.urls else { return }
         
         /// Track ranges to avoid overlaps.
-        var urlRanges: [NSRange] = []
+        var linkedRanges: [NSRange] = []
         
         /**
          Iterate from beginning to end, taking care to attach a new link _after_ the previous link.
@@ -161,7 +161,7 @@ extension NSMutableAttributedString {
                 ModelLog.warning("Could not cast offsets")
                 continue
             }
-            urlRanges.append(intRange)
+            linkedRanges.append(intRange)
             
             /// As of November 2021, Twitter truncated URLs. They *may* have changed this.
             if url.expanded_url.contains("…") {
@@ -190,10 +190,10 @@ extension NSMutableAttributedString {
                 continue
             }
             
-            guard urlRanges.allSatisfy({NSIntersectionRange($0, intRange).length == .zero}) else {
+            guard linkedRanges.allSatisfy({NSIntersectionRange($0, intRange).length == .zero}) else {
                 ModelLog.warning("""
                     Found intsersection of @mention and url!
-                    - ranges \(urlRanges)
+                    - ranges \(linkedRanges)
                     - handle \(atHandle)
                     - text \(tweet.text)
                     """)
