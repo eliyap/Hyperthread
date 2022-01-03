@@ -102,14 +102,19 @@ final class TweetCell: ControlledCell {
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
         
+        /// Ensure glyph size doesn't bug out.
         depthStack.spacing = .zero
         depthSpacer.setContentHuggingPriority(.required, for: .horizontal)
         colorMarker.setContentHuggingPriority(.required, for: .horizontal)
         stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
+        /// Ensure glyph size doesn't bug out.
         depthSpacer.setContentCompressionResistancePriority(.required, for: .horizontal)
         colorMarker.setContentCompressionResistancePriority(.required, for: .horizontal)
         stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        stackView.subviews.forEach {
+            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        }
         
         backgroundColor = .flat
         
