@@ -14,17 +14,18 @@ final class TweetCell: ControlledCell {
     public static let reuseID = "TweetCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
+    /// Indentation views.
     let depthStack = UIStackView()
     let colorMarker = ColorMarkerView()
     let depthSpacer = UIView()
     
-    /// Component Views
-    let stackView = UIStackView()
-    let userView = UserView()
-    let tweetTextView = TweetTextView()
-    let albumVC = AlbumController()
-    let retweetView = RetweetView()
-    let metricsView = MetricsView()
+    /// Tweet component views.
+    private let stackView = UIStackView()
+    private let userView = UserView()
+    private let tweetTextView = TweetTextView()
+    private let albumVC = AlbumController()
+    private let retweetView = RetweetView()
+    private let metricsView = MetricsView()
     private let triangleView: TriangleView
     
     /// Variable Constraint.
