@@ -48,6 +48,7 @@ extension Tweet {
         
         /// Hyperlink substituted links.
         string.addHyperlinks(from: self, removedURLs: removedURLs, linkedRanges: &linkedRanges)
+        string.linkAtMentions(tweet: self, linkedRanges: &linkedRanges)
         
         return string
     }
@@ -173,7 +174,9 @@ extension NSMutableAttributedString {
                 addAttribute(.link, value: url.expanded_url, range: intRange)
             }
         }
-        
+    }
+    
+    func linkAtMentions(tweet: Tweet, linkedRanges: inout [NSRange]) -> Void {
         let sortedMentions: [Mention] = tweet.entities?.mentions.sorted(by: {$0.start < $1.start}) ?? []
         for mention in sortedMentions {
             let atHandle = "@" + mention.handle
