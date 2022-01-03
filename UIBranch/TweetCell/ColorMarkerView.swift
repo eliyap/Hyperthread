@@ -25,20 +25,13 @@ final class ColorMarkerView: UIStackView {
         
         /// Configure Symbol.
         var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
-        config = config.applying(UIImage.SymbolConfiguration(textStyle: .footnote))
+        config = config.applying(UIImage.SymbolConfiguration(textStyle: .caption2))
         symbolButton.setPreferredSymbolConfiguration(config, forImageIn: .normal)
         symbolButton.setImage(UIImage(systemName: "circle"), for: .normal)
     }
     
-    public func constrain(to view: UIView) -> Void {
+    public func constrain() -> Void {
         translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topAnchor.constraint(equalTo: view.topAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            heightAnchor.constraint(equalTo: view.heightAnchor),
-        ])
-        
         coloredLine.translatesAutoresizingMaskIntoConstraints = false
         
         /// Shape the button as a vertical capsule shape.
@@ -53,6 +46,13 @@ final class ColorMarkerView: UIStackView {
         superTall.isActive = true
         
         symbolButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            /// Bind width to symbol, prevents view from growing too wide.
+            widthAnchor.constraint(equalTo: symbolButton.widthAnchor),
+            /// Enforce aspect ratio 1.
+            symbolButton.widthAnchor.constraint(equalTo: symbolButton.heightAnchor),
+        ])
     }
     
     public func configure(node: Node) -> Void {
@@ -62,11 +62,11 @@ final class ColorMarkerView: UIStackView {
         
         case .replied_to:
             symbolButton.isHidden = false
-            symbolButton.setImage(UIImage(systemName: ReplySymbol.name), for: .normal)
+            symbolButton.setImage(UIImage(systemName: ReplySymbol.hollowName), for: .normal)
         
         case .quoted:
             symbolButton.isHidden = false
-            symbolButton.setImage(UIImage(systemName: QuoteSymbol.name), for: .normal)
+            symbolButton.setImage(UIImage(systemName: QuoteSymbol.hollowName), for: .normal)
         
         default:
             symbolButton.isHidden = true

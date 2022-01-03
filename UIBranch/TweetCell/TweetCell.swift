@@ -15,9 +15,9 @@ final class TweetCell: ControlledCell {
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Indentation views.
-    let depthStack = UIStackView()
-    let colorMarker = ColorMarkerView()
-    let depthSpacer = UIView()
+    private let depthStack = UIStackView()
+    private let colorMarker = ColorMarkerView()
+    private let depthSpacer = UIView()
     
     /// Tweet component views.
     private let stackView = UIStackView()
@@ -43,28 +43,34 @@ final class TweetCell: ControlledCell {
 //        addSubview(triangleView)
 //        triangleView.constrain(to: safeAreaLayoutGuide)
         
-        /// Add color bar.
-        depthSpacer.addSubview(colorMarker)
-        colorMarker.constrain(to: depthSpacer)
         
         /// Configure Depth Stack View.
         controller.view.addSubview(depthStack)
         depthStack.axis = .horizontal
         depthStack.translatesAutoresizingMaskIntoConstraints = false
         
-        /// Spacer causes "indentation" in the cell view.
-        depthStack.addArrangedSubview(depthSpacer)
-        NSLayoutConstraint.activate([indentConstraint])
-        
-        
-        /// Bind to edges, with insets.
+        /// Bind stack to edges, with insets.
+        /// Leading edge has no inset due to color marker.
         NSLayoutConstraint.activate([
             depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: Self.inset),
-            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: Self.inset),
+            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: .zero),
             depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -Self.inset),
             depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -Self.inset),
         ])
 
+        /// Add spacer, which causes "indentation" in the cell view.
+        depthStack.addArrangedSubview(depthSpacer)
+        NSLayoutConstraint.activate([indentConstraint])
+        
+        /// Add color bar.
+        depthStack.addArrangedSubview(colorMarker)
+        colorMarker.constrain()
+        NSLayoutConstraint.activate([
+            colorMarker.heightAnchor.constraint(equalTo: depthStack.heightAnchor),
+            colorMarker.topAnchor.constraint(equalTo: depthStack.topAnchor),
+            colorMarker.bottomAnchor.constraint(equalTo: depthStack.bottomAnchor),
+        ])
+        
         /// Configure Main Stack View.
         depthStack.addArrangedSubview(stackView)
         stackView.axis = .vertical
@@ -95,7 +101,16 @@ final class TweetCell: ControlledCell {
             metricsView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
-
+        
+        depthStack.spacing = .zero
+        depthSpacer.setContentHuggingPriority(.required, for: .horizontal)
+        colorMarker.setContentHuggingPriority(.required, for: .horizontal)
+        stackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        
+        depthSpacer.setContentCompressionResistancePriority(.required, for: .horizontal)
+        colorMarker.setContentCompressionResistancePriority(.required, for: .horizontal)
+        stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        
         backgroundColor = .flat
         
         /// Hide by default.
@@ -112,8 +127,8 @@ final class TweetCell: ControlledCell {
         metricsView.configure(node.tweet)
         albumVC.configure(tweet: node.tweet)
         
-        /// Set indentation depth (minimum 1).
-        let depth = min(maxDepth, node.depth)
+        /// Set indentation depth, decrementing to account for 1 indexing.
+        let depth = min(maxDepth, node.depth - 1)
         let indent = indentSize * CGFloat(depth)
         let newConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: indent)
         replace(object: self, on: \.indentConstraint, with: newConstraint)

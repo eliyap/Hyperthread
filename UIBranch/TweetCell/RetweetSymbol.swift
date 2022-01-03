@@ -15,10 +15,12 @@ enum RetweetSymbol {
 
 enum ReplySymbol {
     static let name = "arrowshape.turn.up.left.fill"
+    static let hollowName = "arrowshape.turn.up.left"
     static let config = UIImage.SymbolConfiguration(weight: .regular)
 }
 
 enum QuoteSymbol {
     static let name = "quote.bubble.fill"
+    static let hollowName = "quote.bubble"
     static let config = UIImage.SymbolConfiguration(weight: .regular)
 }
