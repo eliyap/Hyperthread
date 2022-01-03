@@ -189,7 +189,8 @@ extension NSMutableAttributedString {
                 ModelLog.warning("Could not cast offsets")
                 continue
             }
-            
+
+            /// Check for overlapping links, which should never happen.
             guard linkedRanges.allSatisfy({NSIntersectionRange($0, intRange).length == .zero}) else {
                 ModelLog.warning("""
                     Found intsersection of @mention and url!
@@ -199,6 +200,7 @@ extension NSMutableAttributedString {
                     """)
                 continue
             }
+            linkedRanges.append(intRange)
             
             addAttribute(.link, value: "handle://\(mention.id)", range: intRange)
         }
