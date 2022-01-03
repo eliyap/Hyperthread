@@ -43,8 +43,11 @@ extension Tweet {
             .foregroundColor: UIColor.label,
         ])
         
+        /// Track link-attributed ranges to avoid overlaps.
+        var linkedRanges: [NSRange] = []
+        
         /// Hyperlink substituted links.
-        string.addHyperlinks(from: self, removedURLs: removedURLs)
+        string.addHyperlinks(from: self, removedURLs: removedURLs, linkedRanges: &linkedRanges)
         
         return string
     }
@@ -126,11 +129,8 @@ extension NSMutableAttributedString {
     /// Hyperlink substituted links.
     /// - Parameters:
     ///   - quotedDisplayURL: optional, for debugging. The URL of the quoted tweet (if any), which is appended to the tweet text by convention.
-    func addHyperlinks(from tweet: Tweet, removedURLs: [String]) -> Void {
+    func addHyperlinks(from tweet: Tweet, removedURLs: [String], linkedRanges: inout [NSRange]) -> Void {
         guard let urls = tweet.entities?.urls else { return }
-        
-        /// Track ranges to avoid overlaps.
-        var linkedRanges: [NSRange] = []
         
         /**
          Iterate from beginning to end, taking care to attach a new link _after_ the previous link.
