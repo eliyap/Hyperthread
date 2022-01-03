@@ -101,18 +101,6 @@ extension CardHeaderCell: UITextViewDelegate {
     }
 }
 
-extension CardHeaderCell: TweetViewDelegate {
-    func open(userID: User.ID) {
-        #warning("Not Implemented")
-        NOT_IMPLEMENTED()
-    }
-    
-    func open(hashtag: String) {
-        #warning("Not Implemented")
-        NOT_IMPLEMENTED()
-    }
-}
-
 protocol TweetViewDelegate {
     func open(userID: User.ID) -> Void
     func open(hashtag: String) -> Void
@@ -141,7 +129,7 @@ struct HashtagURL {
         "\(scheme)://\(tag.tag)"
     }
     static func tag(from url: URL) -> User.ID {
-        url.path
+        return url.host ?? ""
     }
 }
 
@@ -151,6 +139,6 @@ struct UserURL {
         "\(scheme)://\(mention.id)"
     }
     static func id(from url: URL) -> User.ID {
-        url.path
+        url.host ?? ""
     }
 }
