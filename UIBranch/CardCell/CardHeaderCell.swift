@@ -135,8 +135,14 @@ extension TweetViewDelegate {
 
 struct HashtagURL {
     public static let scheme = "hashtag"
+    static func urlString(tag: Tag) -> String {
+        "\(scheme)://\(tag.tag)"
+    }
 }
 
 struct UserURL {
     public static let scheme = "handle"
+    static func urlString(mention: Mention) -> String {
+        "\(scheme)://\(mention.id)"
+    }
 }
