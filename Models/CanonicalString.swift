@@ -129,6 +129,9 @@ extension NSMutableAttributedString {
     func addHyperlinks(from tweet: Tweet, removedURLs: [String]) -> Void {
         guard let urls = tweet.entities?.urls else { return }
         
+        /// Track ranges to avoid overlaps.
+        var urlRanges: [NSRange] = []
+        
         /**
          Iterate from beginning to end, taking care to attach a new link _after_ the previous link.
          `lastTarget` tracks the previous URL range.
@@ -154,25 +157,64 @@ extension NSMutableAttributedString {
             lastTarget = target
             
             /// Transform substring range to `NSRange` boundaries.
-            guard
-                let low16 = target.lowerBound.samePosition(in: string.utf16),
-                let upp16 = target.upperBound.samePosition(in: string.utf16)
-            else {
+            guard let intRange = nsRange(target) else {
                 ModelLog.warning("Could not cast offsets")
                 continue
             }
-            let lowInt = string.utf16.distance(from: string.utf16.startIndex, to: low16)
-            let uppInt = string.utf16.distance(from: string.utf16.startIndex, to: upp16)
+            urlRanges.append(intRange)
             
             /// As of November 2021, Twitter truncated URLs. They *may* have changed this.
             if url.expanded_url.contains("…") {
                 ModelLog.warning("Truncted URL \(url.expanded_url)")
                 
                 /// Fall back to the `t.co` link.
-                addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
+                addAttribute(.link, value: url.url, range: intRange)
             } else {
-                addAttribute(.link, value: url.expanded_url, range: NSMakeRange(lowInt, uppInt-lowInt))
+                addAttribute(.link, value: url.expanded_url, range: intRange)
             }
         }
+        
+        let sortedMentions: [Mention] = tweet.entities?.mentions.sorted(by: {$0.start < $1.start}) ?? []
+        for mention in sortedMentions {
+            let atHandle = "@" + mention.handle
+            
+            /// Perform case insensitive search, just as Twitter does.
+            guard let target = string.range(of: atHandle, options: .caseInsensitive) else {
+                /// It's normal to fail to find @mentions, since many are removed from the string.
+                continue
+            }
+            
+            /// Transform substring range to `NSRange` boundaries.
+            guard let intRange = nsRange(target) else {
+                ModelLog.warning("Could not cast offsets")
+                continue
+            }
+            
+            guard urlRanges.allSatisfy({NSIntersectionRange($0, intRange).length == .zero}) else {
+                ModelLog.warning("""
+                    Found intsersection of @mention and url!
+                    - ranges \(urlRanges)
+                    - handle \(atHandle)
+                    - text \(tweet.text)
+                    """)
+                continue
+            }
+            
+            addAttribute(.link, value: "handle://\(mention.id)", range: intRange)
+        }
+    }
+    
+    /// Transform substring range to `NSRange` boundaries.
+    fileprivate func nsRange(_ strRange: Range<String.Index>) -> NSRange? {
+        guard
+            let low16 = strRange.lowerBound.samePosition(in: string.utf16),
+            let upp16 = strRange.upperBound.samePosition(in: string.utf16)
+        else {
+            return nil
+        }
+        let lowInt = string.utf16.distance(from: string.utf16.startIndex, to: low16)
+        let uppInt = string.utf16.distance(from: string.utf16.startIndex, to: upp16)
+        
+        return NSMakeRange(lowInt, uppInt-lowInt)
     }
 }
