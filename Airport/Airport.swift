@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import Twig
+import RealmSwift
 
 final class Airport {
     
@@ -26,6 +27,7 @@ final class Airport {
     private let newIngest: HomeIngest<TimelineNewFetcher>
     private let oldIngest: HomeIngest<TimelineOldFetcher>
     private let timelineConduit: TimelineConduit = .init()
+    private let userFetcher: UserFetcher = .init()
     
     init() {
         self.newIngest = .init(followUp: followUp, timelineConduit: timelineConduit)
@@ -44,5 +46,44 @@ final class Airport {
     public func request(id: Tweet.ID) -> Void {
         /// Inject the ID directly.
         followUp.recycle.send([id])
+    }
+}
+
+internal class UserFetcher: Conduit<User.ID, Never> {
+    
+    public static let shared: UserFetcher = .init()
+    
+    override init() {
+        /// - Note: tolerance set to 100% to prevent performance hits.
+        /// Docs: https://developer.apple.com/documentation/foundation/timer/1415085-tolerance
+        let timer = Timer.publish(every: 0.05, tolerance: 0.05, on: .main, in: .default)
+            .autoconnect()
+        
+        super.init()
+        self.pipeline = intake
+            .buffer(size: UInt(UserEndpoint.maxResults), timer)
+            .filter(\.isNotEmpty)
+            .asyncTryMap { (ids: [User.ID]) in
+                /// Only proceed if credentials are loaded.
+                guard let credentials = Auth.shared.credentials else {
+                    NetLog.error("Tried to load users without credentials!")
+                    assert(false)
+                    return
+                }
+            
+                try await users(userIDs: ids, credentials: credentials)
+            }
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .failure(let error):
+                    NetLog.error(error.localizedDescription)
+                    assert(false)
+                case .finished:
+                    NetLog.error("Unexpected completion!")
+                    assert(false)
+                }
+            }, receiveValue: { _ in
+                #warning("TODO")
+            })
     }
 }
