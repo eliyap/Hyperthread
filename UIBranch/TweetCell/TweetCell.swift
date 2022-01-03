@@ -37,10 +37,8 @@ final class TweetCell: ControlledCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         let triangleSize = Self.inset * 1.5
         self.triangleView = TriangleView(size: triangleSize)
-        
-        /// Create inactive constraint.
         self.indentConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: .zero)
-        
+
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
 //        addSubview(triangleView)
@@ -54,8 +52,13 @@ final class TweetCell: ControlledCell {
         controller.view.addSubview(depthStack)
         depthStack.axis = .horizontal
         depthStack.translatesAutoresizingMaskIntoConstraints = false
-        depthStack.addArrangedSubview(depthSpacer); NSLayoutConstraint.activate([indentConstraint])
-        depthStack.addArrangedSubview(stackView)
+        
+        /// Spacer causes "indentation" in the cell view.
+        depthStack.addArrangedSubview(depthSpacer)
+        NSLayoutConstraint.activate([indentConstraint])
+        
+        
+        /// Bind to edges, with insets.
         NSLayoutConstraint.activate([
             depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: Self.inset),
             depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: Self.inset),
@@ -64,6 +67,7 @@ final class TweetCell: ControlledCell {
         ])
 
         /// Configure Main Stack View.
+        depthStack.addArrangedSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -110,7 +114,7 @@ final class TweetCell: ControlledCell {
         metricsView.configure(node.tweet)
         albumVC.configure(tweet: node.tweet)
         
-        /// Set indentation depth.
+        /// Set indentation depth (minimum 1).
         let depth = min(maxDepth, node.depth)
         let indent = indentSize * CGFloat(depth)
         let newConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: indent)
