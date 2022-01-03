@@ -11,7 +11,7 @@ import UIKit
 final class ColorMarkerView: UIStackView {
     
     private let symbolButton = UIButton()
-    private let bottomLine = UIButton()
+    private let coloredLine = UIButton()
     
     private let colorMarkerWidth: CGFloat = 1.5
     
@@ -21,7 +21,7 @@ final class ColorMarkerView: UIStackView {
         alignment = .center
         
         addArrangedSubview(symbolButton)
-        addArrangedSubview(bottomLine)
+        addArrangedSubview(coloredLine)
         
         /// Configure Symbol.
         var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
@@ -39,16 +39,16 @@ final class ColorMarkerView: UIStackView {
             heightAnchor.constraint(equalTo: view.heightAnchor),
         ])
         
-        bottomLine.translatesAutoresizingMaskIntoConstraints = false
+        coloredLine.translatesAutoresizingMaskIntoConstraints = false
         
         /// Shape the button as a vertical capsule shape.
-        bottomLine.layer.cornerRadius = colorMarkerWidth / 2
+        coloredLine.layer.cornerRadius = colorMarkerWidth / 2
         NSLayoutConstraint.activate([
-            bottomLine.widthAnchor.constraint(equalToConstant: colorMarkerWidth),
+            coloredLine.widthAnchor.constraint(equalToConstant: colorMarkerWidth),
         ])
         
         /// Request line be "as tall as possible".
-        let superTall = bottomLine.heightAnchor.constraint(equalToConstant: .superTall)
+        let superTall = coloredLine.heightAnchor.constraint(equalToConstant: .superTall)
         superTall.priority = .defaultLow
         superTall.isActive = true
         
@@ -56,7 +56,7 @@ final class ColorMarkerView: UIStackView {
     }
     
     public func configure(node: Node) -> Void {
-        bottomLine.backgroundColor = SCColors[(node.depth - 1) % SCColors.count]
+        coloredLine.backgroundColor = SCColors[(node.depth - 1) % SCColors.count]
         
         switch node.tweet.primaryReferenceType {
         
