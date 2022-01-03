@@ -86,7 +86,21 @@ internal class UserFetcher: Conduit<User.ID, Never> {
                 }
             }, receiveValue: { rawUsers in
                 Swift.debugPrint("Received \(rawUsers.count) users")
-                #warning("TODO")
+                let realm = try! Realm()
+                do {
+                    try realm.writeWithToken { token in
+                        for rawUser in rawUsers {
+                            /// Defer to local database, otherwise assume false.
+                            let isFollowing = realm.user(id: rawUser.id)?.following ?? false
+                            
+                            let user = User(raw: rawUser, following: isFollowing)
+                            realm.add(user, update: .modified)
+                        }
+                    }
+                } catch {
+                    ModelLog.error("Failed to store users with error \(error)")
+                    assert(false)
+                }
             })
     }
 }
