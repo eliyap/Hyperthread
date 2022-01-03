@@ -122,9 +122,9 @@ extension TweetViewDelegate {
     func open(url: URL) -> Void {
         switch url.scheme {
         case UserURL.scheme:
-            print("User URL? \(url.absoluteString)")
+            open(userID: UserURL.id(from: url))
         case HashtagURL.scheme:
-            print("Hashtag URL? \(url.absoluteString)")
+            open(hashtag: HashtagURL.tag(from: url))
         default:
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url)
@@ -140,11 +140,17 @@ struct HashtagURL {
     static func urlString(tag: Tag) -> String {
         "\(scheme)://\(tag.tag)"
     }
+    static func tag(from url: URL) -> User.ID {
+        url.path
+    }
 }
 
 struct UserURL {
     public static let scheme = "handle"
     static func urlString(mention: Mention) -> String {
         "\(scheme)://\(mention.id)"
+    }
+    static func id(from url: URL) -> User.ID {
+        url.path
     }
 }
