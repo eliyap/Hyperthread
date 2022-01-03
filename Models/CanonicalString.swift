@@ -25,13 +25,14 @@ extension Tweet {
             .replacingOccurrences(of: "&amp;", with: "&")
          
         var removedURLs: [String] = []
+        var removedHandles: Set<String> = []
         
         if let node = node {
             /// The user @handles in the reply chain.
             let replyHandles: Set<String> = node.getReplyHandles()
             
             /** Remove replying @mentions. */
-            text.removeReplyAtMentions(in: self, replyHandles: replyHandles)
+            removedHandles = text.removeReplyAtMentions(in: self, replyHandles: replyHandles)
         }
         
         /// Replace `t.co` links with truncated links.
@@ -48,7 +49,7 @@ extension Tweet {
         
         /// Hyperlink substituted links.
         string.addHyperlinks(from: self, removedURLs: removedURLs, linkedRanges: &linkedRanges)
-        string.linkAtMentions(tweet: self, linkedRanges: &linkedRanges)
+        string.linkAtMentions(tweet: self, linkedRanges: &linkedRanges, removedHandles: removedHandles)
         
         return string
     }
@@ -57,11 +58,13 @@ extension Tweet {
 extension String {
     
     /** Remove replying @mentions. */
-    mutating func removeReplyAtMentions(in tweet: Tweet, replyHandles: Set<String>) -> Void {
-        guard let mentions = tweet.entities?.mentions else { return }
+    @discardableResult
+    mutating func removeReplyAtMentions(in tweet: Tweet, replyHandles: Set<String>) -> Set<String> {
+        guard let mentions = tweet.entities?.mentions else { return [] }
         
         let sortedMentions = mentions.sorted(by: {$0.start < $1.start})
         var cursor: String.Index = startIndex
+        var removedHandles: Set<String> = []
         
         /// Look for @mentions in the order they appear, advancing `cursor` to the end of each mention.
         for mention in sortedMentions {
@@ -82,10 +85,13 @@ extension String {
             }
             let range = range(of: atHandle + " ") ?? range(of: atHandle)!
             cursor = range.upperBound
+            removedHandles.insert(atHandle)
         }
         
         /// Erase everything before cursor.
         removeSubrange(startIndex..<cursor)
+        
+        return removedHandles
     }
     
     /// Replace `t.co` links with truncated links.
@@ -176,14 +182,19 @@ extension NSMutableAttributedString {
         }
     }
     
-    func linkAtMentions(tweet: Tweet, linkedRanges: inout [NSRange]) -> Void {
+    /// - Parameters:
+    ///   - removedHandles: the @handles that were already removed from the string, which we may skip over.
+    func linkAtMentions(tweet: Tweet, linkedRanges: inout [NSRange], removedHandles: Set<String>) -> Void {
         let sortedMentions: [Mention] = tweet.entities?.mentions.sorted(by: {$0.start < $1.start}) ?? []
         for mention in sortedMentions {
             let atHandle = "@" + mention.handle
             
             /// Perform case insensitive search, just as Twitter does.
             guard let target = string.range(of: atHandle, options: .caseInsensitive) else {
-                /// It's normal to fail to find @mentions, since many are removed from the string.
+                /// It's normal to fail to find @mentions if they were removed from the string.
+                if removedHandles.contains(atHandle) == false {
+                    ModelLog.warning("Could not find \(atHandle) in \(string)")
+                }
                 continue
             }
             
