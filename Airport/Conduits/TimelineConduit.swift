@@ -109,7 +109,7 @@ final class TimelineConduit: Conduit<Void, Never> {
         do {
             try realm.writeWithToken { token in
                 user.timelineWindow = user.timelineWindow.union(blobWindow)
-                print("Updated Window \(user.name) \(user.timelineWindow)")
+                ModelLog.debug("Updated Window \(user.name) \(user.timelineWindow)")
             }
         } catch {
             ModelLog.error("Failed to update user with id \(userID)")
