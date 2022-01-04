@@ -13,19 +13,23 @@ final class UserModalViewController: UIViewController {
     
     public static let inset = CardTeaserCell.borderInset
     
+    /// Component Views.
+    private let doneBtn: UIButton
     private let stackView: UIStackView
-    
     private let userView: UserView = .init(line: nil, constrainLines: false)
     private let followingLine: FollowingLine
+    private let spacer: UIView
 
     private let userID: User.ID
     
     private var token: NotificationToken? = nil
     
     init(userID: User.ID) {
+        self.doneBtn = .init(configuration: .plain(), primaryAction: nil)
         self.userID = userID
         self.stackView = .init()
         self.followingLine = .init()
+        self.spacer = .init()
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .automatic
         view.backgroundColor = .systemBackground
@@ -36,8 +40,12 @@ final class UserModalViewController: UIViewController {
         stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
+        stackView.addArrangedSubview(doneBtn)
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(followingLine)
+        stackView.addArrangedSubview(spacer)
+        
+        doneBtn.setTitle("Done", for: .normal)
         
         let realm = try! Realm()
         guard let user = realm.user(id: userID) else {
