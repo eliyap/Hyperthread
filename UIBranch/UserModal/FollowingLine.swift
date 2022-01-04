@@ -1,5 +1,5 @@
 //
-//  UserModalView.swift
+//  FollowingLine.swift
 //  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 29/12/21.
