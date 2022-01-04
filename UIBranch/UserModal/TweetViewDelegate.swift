@@ -33,25 +33,27 @@ extension TweetViewDelegate {
 
 extension ControlledCell: TweetViewDelegate {
     func open(userID: User.ID) {
-        let realm = try! Realm()
-        guard realm.user(id: userID) != nil else {
-            showAlert(message: "Could not find that user.")
+        Task {
+            /// Check if user is present.
+            let realm = try! await Realm()
+            if realm.user(id: userID) == nil {
+                ModelLog.error("Could not find user with id \(userID)")
+                
+                /// If not, delay presentation until they've been fetched.
+                /// - Note: if frequent, we may wish to add a `UIActivityIndicator`.
+                await UserFetcher.fetchAndStoreUsers(ids: [userID])
+            }
             
-            ModelLog.error("Could not find user with id \(userID)")
-            UserFetcher.shared.intake.send(userID)
-            
-            return
+            let modal: UserModalViewController = .init(userID: userID)
+            if let sheetController = modal.sheetPresentationController {
+                sheetController.detents = [
+                    .medium(),
+                    .large(),
+                ]
+                sheetController.prefersGrabberVisible = true
+            }
+            controller.present(modal, animated: true) { }
         }
-        
-        let modal: UserModalViewController = .init(userID: userID)
-        if let sheetController = modal.sheetPresentationController {
-            sheetController.detents = [
-                .medium(),
-                .large(),
-            ]
-            sheetController.prefersGrabberVisible = true
-        }
-        controller.present(modal, animated: true) { }
     }
     
     func open(hashtag: String) {
