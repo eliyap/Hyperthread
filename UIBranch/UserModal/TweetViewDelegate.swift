@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import RealmSwift
 
 protocol TweetViewDelegate {
     func open(userID: User.ID) -> Void
@@ -32,9 +33,6 @@ extension TweetViewDelegate {
 
 extension ControlledCell: TweetViewDelegate {
     func open(userID: User.ID) {
-        #warning("DEBUG")
-        UserFetcher.shared.intake.send(userID)
-        
         let realm = try! Realm()
         guard realm.user(id: userID) != nil else {
             showAlert(message: "Could not find that user.")
