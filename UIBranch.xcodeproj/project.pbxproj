@@ -13,6 +13,7 @@
 		22193DA627829CBD005A7708 /* ColorMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA527829CBC005A7708 /* ColorMarkerView.swift */; };
 		22193DAA2783DD5E005A7708 /* FollowingCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA92783DD5E005A7708 /* FollowingCache.swift */; };
 		22193DAC2783E158005A7708 /* UserTimelineFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DAB2783E158005A7708 /* UserTimelineFetch.swift */; };
+		22193DAF27840477005A7708 /* URLScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DAE27840477005A7708 /* URLScheme.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
 		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
 		221A2992275D680900C283FE /* AlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A2991275D680900C283FE /* AlbumController.swift */; };
@@ -120,6 +121,7 @@
 		22193DA527829CBC005A7708 /* ColorMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ColorMarkerView.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/TweetCell/ColorMarkerView.swift; sourceTree = "<absolute>"; };
 		22193DA92783DD5E005A7708 /* FollowingCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingCache.swift; sourceTree = "<group>"; };
 		22193DAB2783E158005A7708 /* UserTimelineFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTimelineFetch.swift; sourceTree = "<group>"; };
+		22193DAE27840477005A7708 /* URLScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLScheme.swift; sourceTree = "<group>"; };
 		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
 		221A2991275D680900C283FE /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
 		221A2993275D943E00C283FE /* RemoveDuplicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveDuplicates.swift; sourceTree = "<group>"; };
@@ -239,6 +241,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22193DAD27840466005A7708 /* UserModal */ = {
+			isa = PBXGroup;
+			children = (
+				22193DAE27840477005A7708 /* URLScheme.swift */,
+			);
+			path = UserModal;
+			sourceTree = "<group>";
+		};
 		222161F02741A8D300220F0C /* CardCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,6 +301,7 @@
 				2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */,
 				222161F52741D7FF00220F0C /* DiscussionTree.swift */,
 				22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */,
+				22193DAD27840466005A7708 /* UserModal */,
 				222161F02741A8D300220F0C /* CardCell */,
 				22D127DF2740653900932614 /* TweetCell */,
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
@@ -724,6 +735,7 @@
 				22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */,
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
+				22193DAF27840477005A7708 /* URLScheme.swift in Sources */,
 				221A2994275D943E00C283FE /* RemoveDuplicates.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				221A2992275D680900C283FE /* AlbumController.swift in Sources */,
