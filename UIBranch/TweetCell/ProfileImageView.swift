@@ -38,7 +38,7 @@ final class ProfileImageView: UIView {
         
         /// Ensure an aspect ratio of 1.
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalTo: widthAnchor)
+            heightAnchor.constraint(equalTo: widthAnchor),
         ])
         
         imageView.translatesAutoresizingMaskIntoConstraints = false

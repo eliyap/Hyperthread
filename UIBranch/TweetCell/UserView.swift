@@ -30,6 +30,16 @@ final class UserView: UIStackView {
         alignment = .firstBaseline
         spacing = _spacing
 
+        /// Construct view hierarchy.
+        addArrangedSubview(profileImage)
+        addArrangedSubview(vStack)
+        vStack.axis = .vertical
+        vStack.alignment = .leading
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        vStack.spacing = .zero
+        vStack.addArrangedSubview(nameLabel)
+        vStack.addArrangedSubview(handleLabel)
+        
         nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         nameLabel.adjustsFontForContentSizeCategory = true
         
@@ -41,33 +51,23 @@ final class UserView: UIStackView {
         nameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         handleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
+        nameLabel.numberOfLines = .zero
+        
         constrain()
     }
     
     func constrain() -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         
-        addArrangedSubview(profileImage)
         NSLayoutConstraint.activate([
             profileImage.heightAnchor.constraint(equalTo: heightAnchor),
-        ])
-        
-        addArrangedSubview(vStack)
-        vStack.axis = .vertical
-        vStack.alignment = .leading
-        vStack.translatesAutoresizingMaskIntoConstraints = false
-        vStack.spacing = .zero
-        vStack.addArrangedSubview(nameLabel)
-        vStack.addArrangedSubview(handleLabel)
-        NSLayoutConstraint.activate([
             vStack.heightAnchor.constraint(equalTo: heightAnchor),
         ])
         
-        /// Combats the image "as short as possible" preference, avoiding a "crushed" view.
+        /// Combats the profile image "as short as possible" preference, avoiding a "crushed" view.
         vStack.setContentCompressionResistancePriority(.required, for: .vertical)
         nameLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         handleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-        
     }
 
     public func configure(tweet: Tweet, user: User?, timestamp: Date) {
