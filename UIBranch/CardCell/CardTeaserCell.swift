@@ -241,19 +241,3 @@ extension CardTeaserCell: UITextViewDelegate {
         return false
     }
 }
-
-#warning("place this somewhere else")
-func findMissingMentions(
-    tweets: [RawHydratedTweet],
-    includes: [RawHydratedTweet] = [],
-    users: [RawUser]
-) -> [User.ID] {
-    let mentionedIDs: [User.ID] = (tweets + includes)
-        .compactMap(\.entities?.mentions)
-        .flatMap { $0 }
-        .map(\.id)
-    
-    let fetchedIDs = users.map(\.id)
-    
-    return mentionedIDs.filter { fetchedIDs.contains($0) == false }
-}

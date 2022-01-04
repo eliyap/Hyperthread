@@ -6,6 +6,7 @@
 //
 
 import RealmSwift
+import Twig
 
 extension Realm {
     func tweet(id: Tweet.ID) -> Tweet? {
@@ -71,4 +72,21 @@ extension Discussion {
             ).@count > 0
         ).@count > 0
         """)
+}
+
+/** From a `RawData` blob, find the users which were mentioned but not included.
+ */
+func findMissingMentions(
+    tweets: [RawHydratedTweet],
+    includes: [RawHydratedTweet] = [],
+    users: [RawUser]
+) -> [User.ID] {
+    let mentionedIDs: [User.ID] = (tweets + includes)
+        .compactMap(\.entities?.mentions)
+        .flatMap { $0 }
+        .map(\.id)
+    
+    let fetchedIDs = users.map(\.id)
+    
+    return mentionedIDs.filter { fetchedIDs.contains($0) == false }
 }
