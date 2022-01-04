@@ -23,7 +23,7 @@ final class UserView: UIStackView {
     /// Track the current User ID.
     private var userID: User.ID? = nil
     
-    init(line: CellEventLine? = nil) {
+    init(line: CellEventLine? = nil, constrainLines: Bool = true) {
         self.line = line
         super.init(frame: .zero)
         axis = .horizontal
@@ -51,7 +51,11 @@ final class UserView: UIStackView {
         nameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         handleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
-        nameLabel.numberOfLines = .zero
+        if constrainLines == false {
+            /// Permit name and handle to wrap multiple lines.
+            nameLabel.numberOfLines = 0
+            handleLabel.numberOfLines = 0
+        }
         
         constrain()
     }
