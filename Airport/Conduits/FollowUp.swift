@@ -58,7 +58,10 @@ final class FollowUp: Conduit<Void, Never> {
             .v2Fetch()
             /// Synchronize
             .receive(on: Airport.scheduler)
-            .joinFollowing()
+            .asyncMap { rawData -> (RawData, FollowingCache.Output) in
+                let followingIDs = await FollowingCache.shared.request()
+                return (rawData, followingIDs)
+            }
             .sink { [weak self] data, following in
                 let (tweets, included, users, media) = data
                 do {
@@ -123,100 +126,5 @@ extension Publisher where Output == [Tweet.ID], Failure == Never {
                 }
             }
             .eraseToAnyPublisher()
-    }
-}
-
-extension Publisher {
-    func joinFollowing() -> Publishers.FlatMap<Future<(Output, [User.ID]), Failure>, Self> {
-        flatMap { (value: Output) in
-            Future { promise  in
-                Task<Void, Never> {
-                    await FollowingClearingHouse.shared.request { ids in
-                        promise(.success((value, ids)))
-                    }
-                }
-            }
-        }
-    }
-}
-
-/// Centralized reference for following, to avoid multiple fetchers pummeling the API.
-fileprivate actor FollowingClearingHouse {
-    public typealias Output = [User.ID]
-    public typealias Handler = (Output) -> ()
-    
-    /// Memoized Output.
-    private let local: Sealed<Output> = .init(initial: nil, timer: FollowingEndpoint.staleTimer)
-    
-    /// Completion handlers for when the fetch returns.
-    private var queue: [Handler] = []
-    
-    /// Whether a request is currently in progress.
-    private var isFetching: Bool = false
-    
-    /// Singleton Class.
-    public static let shared: FollowingClearingHouse = .init()
-    private init(){}
-    
-    public func request(handler: @escaping Handler) async -> Void {
-        if let stored = await local.value {
-            handler(stored)
-        } else {
-            queue.append(handler)
-            await dispatch()
-        }
-    }
-    
-    private func dispatch() async -> Void {
-        guard isFetching == false else { return }
-        isFetching = true
-        
-        let output: Output = await fetch()
-        
-        /// Call and release closures.
-        queue.forEach { $0(output) }
-        queue = []
-        
-        /// Memoize fresh value.
-        await local.seal(output)
-        
-        isFetching = false
-    }
-    
-    private func fetch() async -> Output {
-        
-        NetLog.debug("Following API request dispatched at \(Date())", print: true, true)
-        
-        /// Assume credentials are available.
-        guard let credentials = Auth.shared.credentials else {
-            NetLog.error("Tried to fetch, but credentials missing!")
-            assert(false)
-            return []
-        }
-        
-        guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
-            NetLog.error("Failed to fetch following list!")
-            assert(false)
-            
-            /// If the fetch fails, fall back on local Realm storage.
-            let realm = try! await Realm()
-            let ids: [User.ID] = realm.objects(User.self)
-                .filter("\(User.followingPropertyName) == YES")
-                .map(\.id)
-            return ids
-        }
-        
-        NetLog.debug("Successfully fetched \(rawUsers.count) following users", print: true, true)
-        
-        /// Store fetched results.
-        do {
-            let realm = try! await Realm()
-            try realm.storeFollowing(raw: Array(rawUsers))
-            return rawUsers.map(\.id)
-        } catch {
-            NetLog.error("Failed to store following list!")
-            assert(false, "Failed to store following list!")
-            return []
-        }
     }
 }
