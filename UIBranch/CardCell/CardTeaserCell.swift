@@ -16,10 +16,10 @@ final class CardTeaserCell: ControlledCell {
     public static let reuseID = "CardTeaserCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
-    /// Combine
+    /// Combine communication line.
     private let line: CellEventLine = .init()
     
-    /// Component
+    /// Component views.
     let cardBackground = CardBackground()
     let stackView = UIStackView()
     let userView: UserView
