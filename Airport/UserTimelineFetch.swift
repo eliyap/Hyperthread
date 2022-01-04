@@ -80,7 +80,11 @@ fileprivate func updateUserWindow(request: TimelineRequest, tweets: [RawHydrated
     ///         as there might be no tweets in the requested `DateWindow`, causing an erroneous no-op.
     do {
         try realm.writeWithToken { token in
-            user.timelineWindow = user.timelineWindow.union(request.window)
+            /// Cap end window at present `Date`, to avoid curtailing future fetches.
+            var window = request.window
+            window.end = min(Date(), window.end)
+            
+            user.timelineWindow = user.timelineWindow.union(window)
             ModelLog.debug("Updated Window \(user.name) \(user.timelineWindow)")
         }
     } catch {
