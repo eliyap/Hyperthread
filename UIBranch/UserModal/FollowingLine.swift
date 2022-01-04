@@ -11,6 +11,8 @@ import RealmSwift
 
 final class FollowingLine: UIStackView { 
 
+    public static let inset = CardTeaserCell.borderInset
+    
     private let followingLabel: UILabel
     private let followingButton: UIButton
 
@@ -24,10 +26,25 @@ final class FollowingLine: UIStackView {
     
     init() {
         self.followingLabel = .init()
-        self.followingButton = .init(configuration: .filled(), primaryAction: nil)
+        
+        var buttonConfig: UIButton.Configuration = .filled()
+        buttonConfig.cornerStyle = .fixed
+        buttonConfig.background.cornerRadius = Self.inset
+        self.followingButton = .init(configuration: buttonConfig, primaryAction: nil)
+        
         super.init(frame: .zero)
         axis = .horizontal
         translatesAutoresizingMaskIntoConstraints = false
+        spacing = UIStackView.spacingUseSystem
+        
+        /// Inset subviews from edges.
+        /// Source: https://useyourloaf.com/blog/adding-padding-to-a-stack-view/
+        isLayoutMarginsRelativeArrangement = true
+        directionalLayoutMargins = NSDirectionalEdgeInsets(top: Self.inset, leading: Self.inset, bottom: Self.inset, trailing: Self.inset)
+        
+        layer.cornerRadius = Self.inset * 2
+        layer.borderWidth = 1.00
+        layer.borderColor = UIColor.secondarySystemFill.cgColor
         
         let action = UIAction(handler: { [weak self] action in
             let realm = try! Realm()

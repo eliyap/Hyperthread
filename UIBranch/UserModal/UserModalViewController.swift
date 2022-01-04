@@ -38,6 +38,7 @@ final class UserModalViewController: UIViewController {
         view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .center
+        stackView.spacing = Self.inset
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
         stackView.addArrangedSubview(doneBtn)
@@ -111,6 +112,7 @@ final class UserModalViewController: UIViewController {
     
     private func configure(user: User) -> Void {
         userView.configure(user: user)
+        followingLine.configure(userID: user.id, following: user.following)
     }
     
     @objc
