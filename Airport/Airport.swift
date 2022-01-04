@@ -71,43 +71,44 @@ internal class UserFetcher: Conduit<User.ID, Never> {
                     assert(false)
                 }
             }, receiveValue: { ids in
-                Task { await fetchAndStoreUsers(ids: ids) }
+                Task { await Self.fetchAndStoreUsers(ids: ids) }
             })
     }
-}
-
-internal func fetchAndStoreUsers(ids: [User.ID]) async -> Void {
-    /// Only proceed if credentials are loaded.
-    guard let credentials = Auth.shared.credentials else {
-        NetLog.error("Tried to load users without credentials!")
-        assert(false)
-        return
-    }
     
-    var rawUsers: [RawUser] = []
-    do {
-        rawUsers = try await users(userIDs: ids, credentials: credentials)
-    } catch {
-        NetLog.error("User Endpoint fetch failed with error \(error)")
-        assert(false)
-        return
-    }
-    
-    NetLog.debug("Received \(rawUsers.count) users")
-    
-    let realm = try! await Realm()
-    do {
-        try realm.writeWithToken { token in
-            for rawUser in rawUsers {
-                /// Defer to local database, otherwise assume false.
-                let isFollowing = realm.user(id: rawUser.id)?.following ?? false
-                
-                let user = User(raw: rawUser, following: isFollowing)
-                realm.add(user, update: .modified)
-            }
+    internal static func fetchAndStoreUsers(ids: [User.ID]) async -> Void {
+        /// Only proceed if credentials are loaded.
+        guard let credentials = Auth.shared.credentials else {
+            NetLog.error("Tried to load users without credentials!")
+            assert(false)
+            return
         }
-    } catch {
-        ModelLog.error("Failed to store users with error \(error)")
-        assert(false)
+        
+        var rawUsers: [RawUser] = []
+        do {
+            rawUsers = try await users(userIDs: ids, credentials: credentials)
+        } catch {
+            NetLog.error("User Endpoint fetch failed with error \(error)")
+            assert(false)
+            return
+        }
+        
+        NetLog.debug("Received \(rawUsers.count) users")
+        
+        let realm = try! await Realm()
+        do {
+            try realm.writeWithToken { token in
+                for rawUser in rawUsers {
+                    /// Defer to local database, otherwise assume false.
+                    let isFollowing = realm.user(id: rawUser.id)?.following ?? false
+                    
+                    let user = User(raw: rawUser, following: isFollowing)
+                    realm.add(user, update: .modified)
+                }
+            }
+        } catch {
+            ModelLog.error("Failed to store users with error \(error)")
+            assert(false)
+        }
     }
+
 }
