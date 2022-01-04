@@ -38,7 +38,7 @@ final class ProfileImageView: UIView {
         
         /// Ensure an aspect ratio of 1.
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalTo: widthAnchor),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
         ])
         
         /// Pin image bounds to view bounds.
@@ -46,7 +46,8 @@ final class ProfileImageView: UIView {
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            imageView.heightAnchor.constraint(equalTo: heightAnchor),
+            imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
+            imageView.heightAnchor.constraint(lessThanOrEqualToConstant: 50),
             imageView.widthAnchor.constraint(equalTo: widthAnchor),
         ])
 
