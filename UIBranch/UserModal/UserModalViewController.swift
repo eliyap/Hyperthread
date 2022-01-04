@@ -66,10 +66,10 @@ final class UserModalViewController: UIViewController {
     private func constrain() -> Void {
         /// Inset edges.
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: Self.inset),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Self.inset),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.inset),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Self.inset),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Self.inset),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Self.inset),
+            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Self.inset),
+            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Self.inset),
         ])
         
         /// Make user view "as short as possible".
