@@ -98,25 +98,7 @@ final class CardTeaserCell: ControlledCell {
     }
     
     private func handleUsernameTouch(userID: User.ID) -> Void {
-        let realm = try! Realm()
-        guard realm.user(id: userID) != nil else {
-            showAlert(message: "Could not find that user.")
-            
-            ModelLog.error("Could not find user with id \(userID)")
-            UserFetcher.shared.intake.send(userID)
-            
-            return
-        }
-        
-        let modal: UserModalViewController = .init(userID: userID)
-        if let sheetController = modal.sheetPresentationController {
-            sheetController.detents = [
-                .medium(),
-                .large(),
-            ]
-            sheetController.prefersGrabberVisible = true
-        }
-        controller.present(modal, animated: true) { }
+        open(userID: userID)
     }
 
     public func configure(discussion: Discussion, tweet: Tweet, author: User?, realm: Realm) {
