@@ -74,7 +74,7 @@ final class UserView: UIStackView {
         handleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    public func configure(tweet: Tweet, user: User?, timestamp: Date) {
+    public func configure(user: User?, timestamp: Date) {
         self.userID = user?.id
         
         profileImage.configure(user: user)
@@ -87,7 +87,6 @@ final class UserView: UIStackView {
             nameLabel.text = "⚠️ UNKNOWN USER"
             handleLabel.text = "@⚠️"
         }
-        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
