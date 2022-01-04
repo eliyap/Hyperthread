@@ -50,6 +50,8 @@ final class TweetCell: ControlledCell {
 //        addSubview(triangleView)
 //        triangleView.constrain(to: safeAreaLayoutGuide)
         
+        /// Set delegate so we can route custom URL schemes.
+        tweetTextView.delegate = self
         
         /// Configure Depth Stack View.
         controller.view.addSubview(depthStack)
@@ -166,5 +168,15 @@ final class TweetCell: ControlledCell {
     
     deinit {
         cancellable.forEach { $0.cancel() }
+    }
+}
+
+/**
+ Re-direct URL taps to open link in Safari.
+ */
+extension TweetCell: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        open(url: URL)
+        return false
     }
 }
