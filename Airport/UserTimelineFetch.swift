@@ -69,8 +69,8 @@ fileprivate func updateUserWindow(request: TimelineRequest, tweets: [RawHydrated
     
     /// Check assumption that tweets are within request window.
     if
-        (tweets.map(\.created_at).min()! < request.window.start) ||
-        (tweets.map(\.created_at).max()! > request.window.end)
+        ((tweets.map(\.created_at).min() ?? .distantFuture) < request.window.start) ||
+        ((tweets.map(\.created_at).max() ?? .distantPast) > request.window.end)
     {
         NetLog.error("Found tweet outside of window!")
         assert(false)
