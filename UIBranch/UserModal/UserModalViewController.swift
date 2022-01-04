@@ -11,13 +11,9 @@ import RealmSwift
 
 #warning("View Incomplete")
 final class UserModalViewController: UIViewController {
-    /**
-    set up stack view, pin constraints,
-    add username and handle label view, check for text scaling
-    add following / not following button,
-    hook up to realm stuff.
-    */
-
+    
+    public static let inset = CardTeaserCell.borderInset
+    
     private let stackView: UIStackView
     
     private let userView: UserView = .init(line: nil, constrainLines: false)
@@ -42,15 +38,8 @@ final class UserModalViewController: UIViewController {
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
 
         stackView.addArrangedSubview(userView)
-        
         stackView.addArrangedSubview(followingLine)
         
         let realm = try! Realm()
@@ -62,6 +51,23 @@ final class UserModalViewController: UIViewController {
         }
         configure(user: user)
         registerToken(userID: userID)
+        
+        constrain()
+    }
+    
+    private func constrain() -> Void {
+        /// Inset edges.
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: Self.inset),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Self.inset),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.inset),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Self.inset),
+        ])
+        
+        /// Make user view "as short as possible".
+        let shortSqueeze = userView.heightAnchor.constraint(equalToConstant: .zero)
+        shortSqueeze.priority = .defaultLow
+        shortSqueeze.isActive = true
     }
     
     private func registerToken(userID: User.ID) -> Void {
