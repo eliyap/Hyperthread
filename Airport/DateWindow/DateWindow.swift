@@ -42,7 +42,16 @@ import RealmSwift
 public struct DateWindow {
     public var start: Date
     public var duration: TimeInterval
-    public var end: Date { start.addingTimeInterval(duration) }
+    public var end: Date {
+        get {
+            start.addingTimeInterval(duration)
+        }
+        set {
+            precondition(newValue >= start, "End cannot be before start!")
+            let newDuration = newValue.timeIntervalSince(start)
+            duration = newDuration
+        }
+    }
     
     init(start: Date, duration: TimeInterval) {
         precondition(duration >= 0, "Duration must be non-negative!")
@@ -51,7 +60,7 @@ public struct DateWindow {
     }
     
     init(start: Date, end: Date) {
-        precondition(end >= start, "End cannot be after start!")
+        precondition(end >= start, "End cannot be before start!")
         self.init(start: start, duration: end.timeIntervalSince(start))
     }
     

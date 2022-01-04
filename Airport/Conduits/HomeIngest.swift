@@ -21,7 +21,6 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
     private weak var followUp: FollowUp?
     
     /// Conduit Object with which to request user timeline fetches.
-    private weak var timelineConduit: TimelineConduit?
     
     /// Conduit Object with which to request user objects.
     private weak var userFetcher: UserFetcher?
@@ -31,12 +30,10 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
     
     public init(
         followUp: FollowUp,
-        timelineConduit: TimelineConduit,
         userFetcher: UserFetcher
     ) {
         super.init()
         self.followUp = followUp
-        self.timelineConduit = timelineConduit
         self.userFetcher = userFetcher
         
         let fetcher = Fetcher()
@@ -76,7 +73,7 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
                     
                     /// Update user date window target, request based on expanded window.
                     UserDefaults.groupSuite.expandUserTimelineWindow(tweets: tweets)
-                    timelineConduit.intake.send()
+                    Task { await fetchTimelines() }
                     
                     /// Immediately check for follow up.
                     followUp.intake.send()
