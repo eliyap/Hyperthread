@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 import Twig
 
-func fetchFollowing() async -> Void {
+func fetchTimelines() async -> Void {
     /// Check that credentials are present.
     guard let credentials = Auth.shared.credentials else {
         NetLog.error("Credentials missing.")
