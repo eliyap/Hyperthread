@@ -9,53 +9,28 @@ import Foundation
 import UIKit
 import RealmSwift
 
-final class UserModalViewController: UIViewController {
+final class UserModalViewController: UINavigationController {
     
     public static let inset = CardTeaserCell.borderInset
     
     /// Component Views.
-    private let doneBtn: UIButton
-    private let stackView: UIStackView
-    private let userView: UserView = .init(line: nil, constrainLines: false)
-    private let followingLine: FollowingLine
-    private let spacer: UIView
+    private let sheetView: UserSheetView
 
-    private let userID: User.ID
-    
-    private var token: NotificationToken? = nil
-    
     init(userID: User.ID) {
-        self.doneBtn = .init(configuration: .plain(), primaryAction: nil)
-        self.userID = userID
-        self.stackView = .init()
-        self.followingLine = .init()
-        self.spacer = .init()
+        let realm = try! Realm()
+        self.sheetView = .init()
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .automatic
+        view.addSubview(sheetView)
         view.backgroundColor = .systemBackground
         
-        /// Configure `UIStackView`.
-        view.addSubview(stackView)
-        stackView.axis = .vertical
-        stackView.alignment = .center
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
-        stackView.addArrangedSubview(doneBtn)
-        stackView.addArrangedSubview(userView)
-        stackView.addArrangedSubview(followingLine)
-        stackView.addArrangedSubview(spacer)
-        
-        doneBtn.setTitle("Done", for: .normal)
-        
-        let realm = try! Realm()
         guard let user = realm.user(id: userID) else {
             ModelLog.error("Could not find user with ID \(userID)")
             showAlert(message: "Could not find that user!")
             dismiss(animated: true)
             return
         }
-        configure(user: user)
-        registerToken(userID: userID)
+        sheetView.configure(user: user)
         
         constrain()
     }
@@ -63,16 +38,62 @@ final class UserModalViewController: UIViewController {
     private func constrain() -> Void {
         /// Inset edges.
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: Self.inset),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Self.inset),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.inset),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Self.inset),
+            sheetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Self.inset + navigationBar.frame.height),
+            sheetView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Self.inset),
+            sheetView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Self.inset),
+            sheetView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Self.inset),
         ])
+    }
+    
+    @objc
+    private func followingButtonOnTap() -> Void {
+        Swift.debugPrint("Tap!")
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class UserSheetView: UIStackView {
+    public static let inset = CardTeaserCell.borderInset
+    
+    /// Component Views.
+    private let userView: UserView = .init(line: nil, constrainLines: false)
+    private let followingLine: FollowingLine
+    private let spacer: UIView
+
+    private var token: NotificationToken? = nil
+    
+    init() {
+        self.followingLine = .init()
+        self.spacer = .init()
+        super.init(frame: .zero)
+        
+        /// Configure `UIStackView`.
+        axis = .vertical
+        alignment = .center
+        translatesAutoresizingMaskIntoConstraints = false
+
+        addArrangedSubview(userView)
+        addArrangedSubview(followingLine)
+        addArrangedSubview(spacer)
+
+        constrain()
+    }
+    
+    private func constrain() -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
         
         /// Make user view "as short as possible".
         let shortSqueeze = userView.heightAnchor.constraint(equalToConstant: .zero)
         shortSqueeze.priority = .defaultLow
         shortSqueeze.isActive = true
+    }
+    
+    public func configure(user: User) -> Void {
+        userView.configure(user: user)
+        registerToken(userID: user.id)
     }
     
     private func registerToken(userID: User.ID) -> Void {
@@ -101,16 +122,12 @@ final class UserModalViewController: UIViewController {
         }
     }
     
-    private func configure(user: User) -> Void {
-        userView.configure(user: user)
-    }
-    
     @objc
     private func followingButtonOnTap() -> Void {
         Swift.debugPrint("Tap!")
     }
     
-    required init?(coder: NSCoder) {
+    required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
