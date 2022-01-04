@@ -46,7 +46,7 @@ final class UserModalViewController: UIViewController {
         guard let user = realm.user(id: userID) else {
             ModelLog.error("Could not find user with ID \(userID)")
             showAlert(message: "Could not find that user!")
-            #warning("close view here")
+            dismiss(animated: true)
             return
         }
         configure(user: user)
