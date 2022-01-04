@@ -23,7 +23,11 @@ extension TweetViewDelegate {
             open(hashtag: HashtagURL.tag(from: url))
         default:
             if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
+                UIApplication.shared.open(url) { success in
+                    if success == false {
+                        showAlert(message: "Failed to open url: \(url.absoluteString)")
+                    }
+                }
             } else {
                 showAlert(message: "Failed to open url: \(url.absoluteString)")
             }
