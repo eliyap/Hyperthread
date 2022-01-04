@@ -8,16 +8,21 @@
 import UIKit
 import RealmSwift
 import Twig
+import Combine
 
 final class CardHeaderCell: ControlledCell {
     
     public static let reuseID = "CardHeaderCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
-    /// Component
+    /// Combine communication line.
+    private let line: CellEventLine = .init()
+    private var cancellable: Set<AnyCancellable> = []
+
+    /// Component views.
     let cardBackground = CardBackground()
     let stackView = UIStackView()
-    let userView = UserView()
+    let userView: UserView
     let tweetTextView = TweetTextView()
     let albumVC = AlbumController()
     let retweetView = RetweetView()
@@ -27,6 +32,7 @@ final class CardHeaderCell: ControlledCell {
     private let inset: CGFloat = 6
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.userView = .init(line: line)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         /// Do not change color when selected.
@@ -74,6 +80,15 @@ final class CardHeaderCell: ControlledCell {
         cardBackground.backgroundColor = .card
         cardBackground.layer.borderWidth = 1.00
         cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        
+        line.events
+            .sink { [weak self] event in
+                switch event {
+                case .usernameTouch(let userID):
+                    self?.open(userID: userID)
+                }
+            }
+            .store(in: &cancellable)
     }
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
@@ -88,6 +103,10 @@ final class CardHeaderCell: ControlledCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        cancellable.forEach { $0.cancel() }
     }
 }
 

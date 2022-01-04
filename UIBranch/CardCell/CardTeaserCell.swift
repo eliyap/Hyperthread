@@ -18,7 +18,8 @@ final class CardTeaserCell: ControlledCell {
     
     /// Combine communication line.
     private let line: CellEventLine = .init()
-    
+    private var cancellable: Set<AnyCancellable> = []
+
     /// Component views.
     let cardBackground = CardBackground()
     let stackView = UIStackView()
@@ -35,8 +36,6 @@ final class CardTeaserCell: ControlledCell {
     public static let borderInset: CGFloat = 6
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
     
-    private var cancellable: Set<AnyCancellable> = []
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
         super.init(style: style, reuseIdentifier: reuseIdentifier)

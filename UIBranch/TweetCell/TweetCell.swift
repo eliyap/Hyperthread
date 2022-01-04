@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import Twig
+import Combine
 
 final class TweetCell: ControlledCell {
     
@@ -19,9 +20,13 @@ final class TweetCell: ControlledCell {
     private let colorMarker = ColorMarkerView()
     private let depthSpacer = UIView()
     
+    /// Combine communication line.
+    private let line: CellEventLine = .init()
+    private var cancellable: Set<AnyCancellable> = []
+
     /// Tweet component views.
     private let stackView = UIStackView()
-    private let userView = UserView()
+    private let userView: UserView
     private let tweetTextView = TweetTextView()
     private let albumVC = AlbumController()
     private let retweetView = RetweetView()
@@ -34,6 +39,8 @@ final class TweetCell: ControlledCell {
     public static let inset: CGFloat = 8
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.userView = .init(line: line)
+        
         let triangleSize = Self.inset * 1.5
         self.triangleView = TriangleView(size: triangleSize)
         self.indentConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: .zero)
@@ -120,6 +127,15 @@ final class TweetCell: ControlledCell {
         
         /// Hide by default.
         triangleView.isHidden = true
+        
+        line.events
+            .sink { [weak self] event in
+                switch event {
+                case .usernameTouch(let userID):
+                    self?.open(userID: userID)
+                }
+            }
+            .store(in: &cancellable)
     }
 
     /// Arbitrary number. Test Later.
@@ -146,5 +162,9 @@ final class TweetCell: ControlledCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        cancellable.forEach { $0.cancel() }
     }
 }
