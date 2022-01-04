@@ -8,16 +8,21 @@
 import UIKit
 import RealmSwift
 import Twig
+import Combine
 
 final class CardHeaderCell: ControlledCell {
     
     public static let reuseID = "CardHeaderCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
-    /// Component
+    /// Combine communication line.
+    private let line: CellEventLine = .init()
+    private var cancellable: Set<AnyCancellable> = []
+
+    /// Component views.
     let cardBackground = CardBackground()
     let stackView = UIStackView()
-    let userView = UserView()
+    let userView: UserView
     let tweetTextView = TweetTextView()
     let albumVC = AlbumController()
     let retweetView = RetweetView()
@@ -27,6 +32,7 @@ final class CardHeaderCell: ControlledCell {
     private let inset: CGFloat = 6
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.userView = .init(line: line)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         /// Do not change color when selected.
@@ -74,10 +80,19 @@ final class CardHeaderCell: ControlledCell {
         cardBackground.backgroundColor = .card
         cardBackground.layer.borderWidth = 1.00
         cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        
+        line.events
+            .sink { [weak self] event in
+                switch event {
+                case .usernameTouch(let userID):
+                    self?.open(userID: userID)
+                }
+            }
+            .store(in: &cancellable)
     }
 
     public func configure(tweet: Tweet, author: User, realm: Realm) {
-        userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
+        userView.configure(user: author)
         tweetTextView.attributedText = tweet.attributedString
         retweetView.configure(tweet: tweet, realm: realm)
         metricsView.configure(tweet)
@@ -89,6 +104,10 @@ final class CardHeaderCell: ControlledCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        cancellable.forEach { $0.cancel() }
+    }
 }
 
 /**
@@ -98,47 +117,5 @@ extension CardHeaderCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         open(url: URL)
         return false
-    }
-}
-
-protocol TweetViewDelegate {
-    func open(userID: User.ID) -> Void
-    func open(hashtag: String) -> Void
-}
-
-extension TweetViewDelegate {
-    func open(url: URL) -> Void {
-        switch url.scheme {
-        case UserURL.scheme:
-            open(userID: UserURL.id(from: url))
-        case HashtagURL.scheme:
-            open(hashtag: HashtagURL.tag(from: url))
-        default:
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
-            } else {
-                showAlert(message: "Failed to open url: \(url.absoluteString)")
-            }
-        }
-    }
-}
-
-struct HashtagURL {
-    public static let scheme = "hashtag"
-    static func urlString(tag: Tag) -> String {
-        "\(scheme)://\(tag.tag)"
-    }
-    static func tag(from url: URL) -> User.ID {
-        return url.host ?? ""
-    }
-}
-
-struct UserURL {
-    public static let scheme = "handle"
-    static func urlString(mention: Mention) -> String {
-        "\(scheme)://\(mention.id)"
-    }
-    static func id(from url: URL) -> User.ID {
-        url.host ?? ""
     }
 }

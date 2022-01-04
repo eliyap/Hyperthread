@@ -33,20 +33,26 @@ final class ProfileImageView: UIView {
         constrain()
     }
     
+    public static let maxSize: CGFloat = 100
     private func constrain() -> Void {
         self.translatesAutoresizingMaskIntoConstraints = false
         
-        /// Ensure an aspect ratio of 1.
+        /// Ensure an image aspect ratio of 1.
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalTo: widthAnchor)
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
         ])
         
+        /// Pin image bounds to view bounds.
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            imageView.heightAnchor.constraint(equalTo: heightAnchor),
             imageView.widthAnchor.constraint(equalTo: widthAnchor),
+            
+            /// Allow view to be taller than square image, accomodating tall text views
+            /// (e.g. multiple lines with large dynamic type).
+            imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
+            imageView.heightAnchor.constraint(lessThanOrEqualToConstant: Self.maxSize),
         ])
 
         /// Request for view to be "as short as possible".

@@ -13,6 +13,9 @@
 		22193DA627829CBD005A7708 /* ColorMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA527829CBC005A7708 /* ColorMarkerView.swift */; };
 		22193DAA2783DD5E005A7708 /* FollowingCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA92783DD5E005A7708 /* FollowingCache.swift */; };
 		22193DAC2783E158005A7708 /* UserTimelineFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DAB2783E158005A7708 /* UserTimelineFetch.swift */; };
+		22193DAF27840477005A7708 /* URLScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DAE27840477005A7708 /* URLScheme.swift */; };
+		22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB02784050F005A7708 /* TweetViewDelegate.swift */; };
+		22193DB327840923005A7708 /* UserModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB227840923005A7708 /* UserModalViewController.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
 		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
 		221A2992275D680900C283FE /* AlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A2991275D680900C283FE /* AlbumController.swift */; };
@@ -69,7 +72,7 @@
 		228D71E4277A800B00E306BD /* Conduit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E3277A800B00E306BD /* Conduit.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
-		228D71EB277C1BD400E306BD /* UserModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* UserModalView.swift */; };
+		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
 		228D71ED277C1D2300E306BD /* CellEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EC277C1D2300E306BD /* CellEvent.swift */; };
 		228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EF2780128300E306BD /* RealmDateWindow.swift */; };
 		228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71F12780142200E306BD /* UserTimelineWindow.swift */; };
@@ -120,6 +123,9 @@
 		22193DA527829CBC005A7708 /* ColorMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ColorMarkerView.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/TweetCell/ColorMarkerView.swift; sourceTree = "<absolute>"; };
 		22193DA92783DD5E005A7708 /* FollowingCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingCache.swift; sourceTree = "<group>"; };
 		22193DAB2783E158005A7708 /* UserTimelineFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTimelineFetch.swift; sourceTree = "<group>"; };
+		22193DAE27840477005A7708 /* URLScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLScheme.swift; sourceTree = "<group>"; };
+		22193DB02784050F005A7708 /* TweetViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetViewDelegate.swift; sourceTree = "<group>"; };
+		22193DB227840923005A7708 /* UserModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModalViewController.swift; sourceTree = "<group>"; };
 		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
 		221A2991275D680900C283FE /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
 		221A2993275D943E00C283FE /* RemoveDuplicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveDuplicates.swift; sourceTree = "<group>"; };
@@ -179,7 +185,7 @@
 		228D71E3277A800B00E306BD /* Conduit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conduit.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
-		228D71EA277C1BD400E306BD /* UserModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModalView.swift; sourceTree = "<group>"; };
+		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
 		228D71EC277C1D2300E306BD /* CellEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellEvent.swift; sourceTree = "<group>"; };
 		228D71EF2780128300E306BD /* RealmDateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDateWindow.swift; sourceTree = "<group>"; };
 		228D71F12780142200E306BD /* UserTimelineWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTimelineWindow.swift; sourceTree = "<group>"; };
@@ -239,6 +245,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22193DAD27840466005A7708 /* UserModal */ = {
+			isa = PBXGroup;
+			children = (
+				22193DAE27840477005A7708 /* URLScheme.swift */,
+				22193DB02784050F005A7708 /* TweetViewDelegate.swift */,
+				22193DB227840923005A7708 /* UserModalViewController.swift */,
+				228D71EA277C1BD400E306BD /* FollowingLine.swift */,
+			);
+			path = UserModal;
+			sourceTree = "<group>";
+		};
 		222161F02741A8D300220F0C /* CardCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,6 +308,7 @@
 				2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */,
 				222161F52741D7FF00220F0C /* DiscussionTree.swift */,
 				22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */,
+				22193DAD27840466005A7708 /* UserModal */,
 				222161F02741A8D300220F0C /* CardCell */,
 				22D127DF2740653900932614 /* TweetCell */,
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
@@ -458,7 +476,6 @@
 				22193DA327829C5E005A7708 /* ProfileImageView.swift */,
 				22D127E42740659E00932614 /* RetweetView.swift */,
 				22D127E927406F9700932614 /* RetweetSymbol.swift */,
-				228D71EA277C1BD400E306BD /* UserModalView.swift */,
 				228D71EC277C1D2300E306BD /* CellEvent.swift */,
 			);
 			path = TweetCell;
@@ -669,6 +686,7 @@
 				228D71E4277A800B00E306BD /* Conduit.swift in Sources */,
 				228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */,
 				224F88D7275E5CD300085678 /* ImageAnimate.swift in Sources */,
+				22193DB327840923005A7708 /* UserModalViewController.swift in Sources */,
 				22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */,
 				22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */,
 				22D127EC274070CD00932614 /* MetricButtons.swift in Sources */,
@@ -724,6 +742,7 @@
 				22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */,
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
+				22193DAF27840477005A7708 /* URLScheme.swift in Sources */,
 				221A2994275D943E00C283FE /* RemoveDuplicates.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				221A2992275D680900C283FE /* AlbumController.swift in Sources */,
@@ -733,10 +752,11 @@
 				22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */,
 				22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
-				228D71EB277C1BD400E306BD /* UserModalView.swift in Sources */,
+				228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */,
 				228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */,
 				22193DA627829CBD005A7708 /* ColorMarkerView.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
+				22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */,
 				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
 				22680A84276AA651008827F8 /* Sealed.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,

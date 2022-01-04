@@ -16,10 +16,11 @@ final class CardTeaserCell: ControlledCell {
     public static let reuseID = "CardTeaserCell"
     override var reuseIdentifier: String? { Self.reuseID }
     
-    /// Combine
+    /// Combine communication line.
     private let line: CellEventLine = .init()
-    
-    /// Component
+    private var cancellable: Set<AnyCancellable> = []
+
+    /// Component views.
     let cardBackground = CardBackground()
     let stackView = UIStackView()
     let userView: UserView
@@ -35,8 +36,6 @@ final class CardTeaserCell: ControlledCell {
     public static let borderInset: CGFloat = 6
     private lazy var inset: CGFloat = CardTeaserCell.borderInset
     
-    private var cancellable: Set<AnyCancellable> = []
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -98,29 +97,11 @@ final class CardTeaserCell: ControlledCell {
     }
     
     private func handleUsernameTouch(userID: User.ID) -> Void {
-        let realm = try! Realm()
-        guard realm.user(id: userID) != nil else {
-            showAlert(message: "Could not find that user.")
-            
-            ModelLog.error("Could not find user with id \(userID)")
-            UserFetcher.shared.intake.send(userID)
-            
-            return
-        }
-        
-        let modal: UserModalViewController = .init(userID: userID)
-        if let sheetController = modal.sheetPresentationController {
-            sheetController.detents = [
-                .medium(),
-                .large(),
-            ]
-            sheetController.prefersGrabberVisible = true
-        }
-        controller.present(modal, animated: true) { }
+        open(userID: userID)
     }
 
     public func configure(discussion: Discussion, tweet: Tweet, author: User?, realm: Realm) {
-        userView.configure(tweet: tweet, user: author, timestamp: tweet.createdAt)
+        userView.configure(user: author)
         tweetTextView.attributedText = tweet.attributedString
         retweetView.configure(tweet: tweet, realm: realm)
         summaryView.configure(discussion, realm: realm)
@@ -259,52 +240,4 @@ extension CardTeaserCell: UITextViewDelegate {
         open(url: URL)
         return false
     }
-}
-
-extension ControlledCell: TweetViewDelegate {
-    func open(userID: User.ID) {
-        #warning("DEBUG")
-        UserFetcher.shared.intake.send(userID)
-        
-        let realm = try! Realm()
-        guard realm.user(id: userID) != nil else {
-            showAlert(message: "Could not find that user.")
-            
-            ModelLog.error("Could not find user with id \(userID)")
-            UserFetcher.shared.intake.send(userID)
-            
-            return
-        }
-        
-        let modal: UserModalViewController = .init(userID: userID)
-        if let sheetController = modal.sheetPresentationController {
-            sheetController.detents = [
-                .medium(),
-                .large(),
-            ]
-            sheetController.prefersGrabberVisible = true
-        }
-        controller.present(modal, animated: true) { }
-    }
-    
-    func open(hashtag: String) {
-        #warning("Not Implemented")
-        NOT_IMPLEMENTED()
-    }
-}
-
-#warning("place this somewhere else")
-func findMissingMentions(
-    tweets: [RawHydratedTweet],
-    includes: [RawHydratedTweet] = [],
-    users: [RawUser]
-) -> [User.ID] {
-    let mentionedIDs: [User.ID] = (tweets + includes)
-        .compactMap(\.entities?.mentions)
-        .flatMap { $0 }
-        .map(\.id)
-    
-    let fetchedIDs = users.map(\.id)
-    
-    return mentionedIDs.filter { fetchedIDs.contains($0) == false }
 }

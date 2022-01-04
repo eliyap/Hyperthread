@@ -23,13 +23,23 @@ final class UserView: UIStackView {
     /// Track the current User ID.
     private var userID: User.ID? = nil
     
-    init(line: CellEventLine? = nil) {
+    init(line: CellEventLine? = nil, constrainLines: Bool = true) {
         self.line = line
         super.init(frame: .zero)
         axis = .horizontal
         alignment = .firstBaseline
         spacing = _spacing
 
+        /// Construct view hierarchy.
+        addArrangedSubview(profileImage)
+        addArrangedSubview(vStack)
+        vStack.axis = .vertical
+        vStack.alignment = .leading
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        vStack.spacing = .zero
+        vStack.addArrangedSubview(nameLabel)
+        vStack.addArrangedSubview(handleLabel)
+        
         nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         nameLabel.adjustsFontForContentSizeCategory = true
         
@@ -41,36 +51,30 @@ final class UserView: UIStackView {
         nameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         handleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
+        if constrainLines == false {
+            /// Permit name and handle to wrap multiple lines.
+            nameLabel.numberOfLines = 0
+            handleLabel.numberOfLines = 0
+        }
+        
         constrain()
     }
     
     func constrain() -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         
-        addArrangedSubview(profileImage)
         NSLayoutConstraint.activate([
             profileImage.heightAnchor.constraint(equalTo: heightAnchor),
-        ])
-        
-        addArrangedSubview(vStack)
-        vStack.axis = .vertical
-        vStack.alignment = .leading
-        vStack.translatesAutoresizingMaskIntoConstraints = false
-        vStack.spacing = .zero
-        vStack.addArrangedSubview(nameLabel)
-        vStack.addArrangedSubview(handleLabel)
-        NSLayoutConstraint.activate([
             vStack.heightAnchor.constraint(equalTo: heightAnchor),
         ])
         
-        /// Combats the image "as short as possible" preference, avoiding a "crushed" view.
+        /// Combats the profile image "as short as possible" preference, avoiding a "crushed" view.
         vStack.setContentCompressionResistancePriority(.required, for: .vertical)
         nameLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         handleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-        
     }
 
-    public func configure(tweet: Tweet, user: User?, timestamp: Date) {
+    public func configure(user: User?) {
         self.userID = user?.id
         
         profileImage.configure(user: user)
@@ -83,7 +87,6 @@ final class UserView: UIStackView {
             nameLabel.text = "⚠️ UNKNOWN USER"
             handleLabel.text = "@⚠️"
         }
-        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

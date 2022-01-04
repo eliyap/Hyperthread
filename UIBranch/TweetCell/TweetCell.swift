@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import Twig
+import Combine
 
 final class TweetCell: ControlledCell {
     
@@ -19,9 +20,13 @@ final class TweetCell: ControlledCell {
     private let colorMarker = ColorMarkerView()
     private let depthSpacer = UIView()
     
+    /// Combine communication line.
+    private let line: CellEventLine = .init()
+    private var cancellable: Set<AnyCancellable> = []
+
     /// Tweet component views.
     private let stackView = UIStackView()
-    private let userView = UserView()
+    private let userView: UserView
     private let tweetTextView = TweetTextView()
     private let albumVC = AlbumController()
     private let retweetView = RetweetView()
@@ -34,6 +39,8 @@ final class TweetCell: ControlledCell {
     public static let inset: CGFloat = 8
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.userView = .init(line: line)
+        
         let triangleSize = Self.inset * 1.5
         self.triangleView = TriangleView(size: triangleSize)
         self.indentConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: .zero)
@@ -43,6 +50,8 @@ final class TweetCell: ControlledCell {
 //        addSubview(triangleView)
 //        triangleView.constrain(to: safeAreaLayoutGuide)
         
+        /// Set delegate so we can route custom URL schemes.
+        tweetTextView.delegate = self
         
         /// Configure Depth Stack View.
         controller.view.addSubview(depthStack)
@@ -120,13 +129,22 @@ final class TweetCell: ControlledCell {
         
         /// Hide by default.
         triangleView.isHidden = true
+        
+        line.events
+            .sink { [weak self] event in
+                switch event {
+                case .usernameTouch(let userID):
+                    self?.open(userID: userID)
+                }
+            }
+            .store(in: &cancellable)
     }
 
     /// Arbitrary number. Test Later.
     private let maxDepth = 14
     private let indentSize: CGFloat = 10
     public func configure(node: Node, author: User, realm: Realm) {
-        userView.configure(tweet: node.tweet, user: author, timestamp: node.tweet.createdAt)
+        userView.configure(user: author)
         tweetTextView.attributedText = node.tweet.fullText(context: node)
         retweetView.configure(tweet: node.tweet, realm: realm)
         metricsView.configure(node.tweet)
@@ -146,5 +164,19 @@ final class TweetCell: ControlledCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        cancellable.forEach { $0.cancel() }
+    }
+}
+
+/**
+ Re-direct URL taps to open link in Safari.
+ */
+extension TweetCell: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        open(url: URL)
+        return false
     }
 }

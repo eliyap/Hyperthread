@@ -55,7 +55,9 @@ class ViewController: PMViewController {
                     let credentials = try await accessToken(callbackURL: url.absoluteString)
                     Auth.shared.state = .loggedIn(cred: credentials)
                     UserDefaults.groupSuite.oAuthCredentials = credentials
-                    #warning("TODO: fetch following users on login to speed up fetch")
+                
+                    /// Fetch following on login to speed up later processing.
+                    _ = await FollowingCache.shared.request()
                 } catch {
                     Auth.shared.state = .failed(error)
                 }
