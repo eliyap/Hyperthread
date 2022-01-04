@@ -41,6 +41,7 @@ final class ProfileImageView: UIView {
             heightAnchor.constraint(equalTo: widthAnchor),
         ])
         
+        /// Pin image bounds to view bounds.
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
