@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 import RealmSwift
 
-#warning("View Incomplete")
 final class UserModalViewController: UIViewController {
     
     public static let inset = CardTeaserCell.borderInset
@@ -19,8 +18,6 @@ final class UserModalViewController: UIViewController {
     private let userView: UserView = .init(line: nil, constrainLines: false)
     private let followingLine: FollowingLine
 
-    #warning("TODO: add profile view")
-    
     private let userID: User.ID
     
     private var token: NotificationToken? = nil
