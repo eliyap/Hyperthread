@@ -46,6 +46,9 @@ final class UserModalViewController: UIViewController {
         stackView.addArrangedSubview(spacer)
         
         doneBtn.setTitle("Done", for: .normal)
+        doneBtn.addAction(UIAction(handler: { [weak self] action in
+            self?.dismiss(animated: true)
+        }), for: .touchUpInside)
         
         let realm = try! Realm()
         guard let user = realm.user(id: userID) else {
@@ -73,6 +76,11 @@ final class UserModalViewController: UIViewController {
         let shortSqueeze = userView.heightAnchor.constraint(equalToConstant: .zero)
         shortSqueeze.priority = .defaultLow
         shortSqueeze.isActive = true
+        
+        doneBtn.contentHorizontalAlignment = .trailing
+        NSLayoutConstraint.activate([
+            doneBtn.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+        ])
     }
     
     private func registerToken(userID: User.ID) -> Void {
