@@ -18,19 +18,19 @@ final class FollowingLine: UIStackView {
 
     /// In future, localize these strings.
     private let followingText = "Following"
-    private let followingButtonText = "Unfollow"
     private let notFollowingText = "Not following"
-    private let notFollowingButtonText = "Follow"
-
+    
     private var userID: User.ID? = nil
+    
+    private var followingConfig: UIButton.Configuration
+    private var notFollowingConfig: UIButton.Configuration
+    private static let font: UIFont = .preferredFont(forTextStyle: .body)
     
     init() {
         self.followingLabel = .init()
-        
-        var buttonConfig: UIButton.Configuration = .filled()
-        buttonConfig.cornerStyle = .fixed
-        buttonConfig.background.cornerRadius = Self.inset
-        self.followingButton = .init(configuration: buttonConfig, primaryAction: nil)
+        self.followingConfig = Self.makeFollowingConfig()
+        self.notFollowingConfig = Self.makeNotFollowingConfig()
+        self.followingButton = .init(configuration: followingConfig, primaryAction: nil)
         
         super.init(frame: .zero)
         axis = .horizontal
@@ -68,6 +68,8 @@ final class FollowingLine: UIStackView {
         })
         followingButton.addAction(action, for: .touchUpInside)
         
+        followingLabel.font = Self.font
+        
         addArrangedSubview(followingLabel)
         addArrangedSubview(followingButton)
     }
@@ -76,13 +78,27 @@ final class FollowingLine: UIStackView {
         self.userID = userID
         if following {
             followingLabel.text = followingText
-            followingButton.setTitle(followingButtonText, for: .normal)
-            followingButton.configuration = .gray()
+            followingButton.configuration = followingConfig
         } else {
             followingLabel.text = notFollowingText
-            followingButton.setTitle(notFollowingButtonText, for: .normal)
-            followingButton.configuration = .filled()
+            followingButton.configuration = notFollowingConfig
         }
+    }
+    
+    private static func makeFollowingConfig() -> UIButton.Configuration {
+        var config: UIButton.Configuration = .filled()
+        config.cornerStyle = .fixed
+        config.background.cornerRadius = Self.inset
+        config.attributedTitle = .init("Unfollow", attributes: .init([.font: Self.font]))
+        return config
+    }
+    
+    private static func makeNotFollowingConfig() -> UIButton.Configuration {
+        var config: UIButton.Configuration = .gray()
+        config.cornerStyle = .fixed
+        config.background.cornerRadius = Self.inset
+        config.attributedTitle = .init("Follow", attributes: .init([.font: Self.font]))
+        return config
     }
     
     required init(coder: NSCoder) {
