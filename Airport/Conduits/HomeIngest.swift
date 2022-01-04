@@ -81,8 +81,6 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
                     /// Immediately check for follow up.
                     followUp.intake.send()
                     
-                    timelineConduit.intake.send()
-                    
                     self?.removeAll()
                 } catch {
                     ModelLog.error("\(error)")
