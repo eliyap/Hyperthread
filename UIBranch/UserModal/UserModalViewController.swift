@@ -20,8 +20,7 @@ final class UserModalViewController: UIViewController {
 
     private let stackView: UIStackView
     
-    private let nameLabel: UILabel
-    private let handleLabel: UILabel
+    private let userView: UserView = .init(line: nil, constrainLines: false)
     private let followingLine: FollowingLine
 
     #warning("TODO: add profile view")
@@ -33,8 +32,6 @@ final class UserModalViewController: UIViewController {
     init(userID: User.ID) {
         self.userID = userID
         self.stackView = .init()
-        self.nameLabel = .init()
-        self.handleLabel = .init()
         self.followingLine = .init()
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .automatic
@@ -52,18 +49,18 @@ final class UserModalViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
-        nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-        nameLabel.adjustsFontForContentSizeCategory = true
-        stackView.addArrangedSubview(nameLabel)
-        
-        handleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        handleLabel.adjustsFontForContentSizeCategory = true
-        handleLabel.textColor = .secondaryLabel
-        stackView.addArrangedSubview(handleLabel)
+        stackView.addArrangedSubview(userView)
         
         stackView.addArrangedSubview(followingLine)
         
-        configure(userID: userID)
+        let realm = try! Realm()
+        guard let user = realm.user(id: userID) else {
+            ModelLog.error("Could not find user with ID \(userID)")
+            showAlert(message: "Could not find that user!")
+            #warning("close view here")
+            return
+        }
+        configure(user: user)
         registerToken(userID: userID)
     }
     
@@ -93,20 +90,8 @@ final class UserModalViewController: UIViewController {
         }
     }
     
-    private func configure(userID: User.ID) -> Void {
-        let realm = try! Realm()
-        
-        if let user = realm.user(id: userID) {
-            nameLabel.text = user.name
-            handleLabel.text = "@" + user.handle
-            followingLine.configure(userID: userID, following: user.following)
-        } else {
-            TableLog.error("Could not find user with \(userID)")
-            nameLabel.text = "⚠️ UNKNOWN USER"
-            handleLabel.text = "@⚠️"
-            followingLine.configure(userID: userID, following: false)
-        }
-        
+    private func configure(user: User) -> Void {
+        userView.configure(user: user)
     }
     
     @objc
