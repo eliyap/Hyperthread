@@ -46,32 +46,33 @@ final class FollowingLine: UIStackView {
         layer.borderWidth = 1.00
         layer.borderColor = UIColor.secondarySystemFill.cgColor
         
-        let action = UIAction(handler: { [weak self] action in
-            let realm = try! Realm()
-            guard let userID = self?.userID else {
-                assert(false, "Missing userID!")
-                return
-            }
-            guard let user = realm.user(id: userID) else {
-                TableLog.error("Missing user with id \(userID)")
-                assert(false)
-                return
-            }
-            do {
-                try realm.write { user.following.toggle() }
-            } catch {
-                TableLog.error("Error in editing following: \(error)")
-                assert(false)
-                return
-            }
-
-        })
+        let action = UIAction(handler: onButtonTap(_:))
         followingButton.addAction(action, for: .touchUpInside)
         
         followingLabel.font = Self.font
         
         addArrangedSubview(followingLabel)
         addArrangedSubview(followingButton)
+    }
+    
+    private func onButtonTap(_: UIAction) -> Void {
+        let realm = try! Realm()
+        guard let userID = userID else {
+            assert(false, "Missing userID!")
+            return
+        }
+        guard let user = realm.user(id: userID) else {
+            TableLog.error("Missing user with id \(userID)")
+            assert(false)
+            return
+        }
+        do {
+            try realm.write { user.following.toggle() }
+        } catch {
+            TableLog.error("Error in editing following: \(error)")
+            assert(false)
+            return
+        }
     }
     
     func configure(userID: User.ID, following: User.FollowingPropertyType) -> Void {
@@ -97,7 +98,7 @@ final class FollowingLine: UIStackView {
         var config: UIButton.Configuration = .gray()
         config.cornerStyle = .fixed
         config.background.cornerRadius = Self.inset
-        config.attributedTitle = .init("Follow", attributes: .init([.font: Self.font]))
+        config.attributedTitle = .init("Follow", attributes: .init([.font: Self.font, .foregroundColor: UIColor.label]))
         return config
     }
     
