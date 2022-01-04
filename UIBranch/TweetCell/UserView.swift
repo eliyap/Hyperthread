@@ -74,7 +74,7 @@ final class UserView: UIStackView {
         handleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    public func configure(user: User?, timestamp: Date) {
+    public func configure(user: User?) {
         self.userID = user?.id
         
         profileImage.configure(user: user)
