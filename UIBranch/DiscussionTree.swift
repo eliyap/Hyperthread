@@ -118,21 +118,24 @@ extension Node {
         
         var curr: Node? = self
         
-        while let c = curr {
+        /// Check that parent exists and that this tweet is a reply to the parent.
+        /// - Note: exclude the current tweet, otherwise all leading @mentions would be omitted.
+        while
+            let c = curr,
+            c.tweet.isReply,
+            let p = c.parent,
+            c.tweet.replying_to == p.id
+        {
             /// Include the author and any accounts they @mention.
-            result.insert(c.author.handle)
-            if let handles = c.tweet.entities?.mentions.map(\.handle) {
+            result.insert(p.author.handle)
+            if let handles = p.tweet.entities?.mentions.map(\.handle) {
                 for handle in handles {
                     result.insert(handle)
                 }
             }
             
-            /// Move upwards only if tweet was replying.
-            guard
-                c.tweet.isReply,
-                c.tweet.replying_to == c.parent?.id
-            else { break }
-            curr = c.parent
+            ///  Advance upwards.
+            curr = p
         }
         
         return result

@@ -102,3 +102,27 @@ internal extension Realm {
         }
     }
 }
+
+extension User {
+    var resolvedProfileImageUrl: URL? {
+        guard let str = profileImageUrl else { return nil }
+        
+        /// Attempt to get full resolution image.
+        /// Source: https://stackoverflow.com/questions/50190620/getting-bigger-resolution-profile-image-from-twitter-api
+        let originalStr = str.replacingOccurrences(of: "_normal.", with: ".")
+        if
+            let url = URL(string: originalStr),
+            UIApplication.shared.canOpenURL(url)
+        {
+            return url
+        } else if
+            /// Fall back to provided string.
+            let url = URL(string: str),
+            UIApplication.shared.canOpenURL(url)
+        {
+            return url
+        } else {
+            return nil
+        }
+    }
+}

@@ -25,13 +25,14 @@ extension Tweet {
             .replacingOccurrences(of: "&amp;", with: "&")
          
         var removedURLs: [String] = []
+        var removedHandles: Set<String> = []
         
         if let node = node {
             /// The user @handles in the reply chain.
             let replyHandles: Set<String> = node.getReplyHandles()
             
             /** Remove replying @mentions. */
-            text.removeReplyAtMentions(in: self, replyHandles: replyHandles)
+            removedHandles = text.removeReplyAtMentions(in: self, replyHandles: replyHandles)
         }
         
         /// Replace `t.co` links with truncated links.
@@ -43,8 +44,13 @@ extension Tweet {
             .foregroundColor: UIColor.label,
         ])
         
+        /// Track link-attributed ranges to avoid overlaps.
+        var linkedRanges: [NSRange] = []
+        
         /// Hyperlink substituted links.
-        string.addHyperlinks(from: self, removedURLs: removedURLs)
+        string.addHyperlinks(from: self, removedURLs: removedURLs, linkedRanges: &linkedRanges)
+        string.linkAtMentions(tweet: self, linkedRanges: &linkedRanges, removedHandles: removedHandles)
+        string.linkTags(tweet: self, linkedRanges: &linkedRanges)
         
         return string
     }
@@ -53,11 +59,13 @@ extension Tweet {
 extension String {
     
     /** Remove replying @mentions. */
-    mutating func removeReplyAtMentions(in tweet: Tweet, replyHandles: Set<String>) -> Void {
-        guard let mentions = tweet.entities?.mentions else { return }
+    @discardableResult
+    mutating func removeReplyAtMentions(in tweet: Tweet, replyHandles: Set<String>) -> Set<String> {
+        guard let mentions = tweet.entities?.mentions else { return [] }
         
         let sortedMentions = mentions.sorted(by: {$0.start < $1.start})
         var cursor: String.Index = startIndex
+        var removedHandles: Set<String> = []
         
         /// Look for @mentions in the order they appear, advancing `cursor` to the end of each mention.
         for mention in sortedMentions {
@@ -78,10 +86,13 @@ extension String {
             }
             let range = range(of: atHandle + " ") ?? range(of: atHandle)!
             cursor = range.upperBound
+            removedHandles.insert(atHandle)
         }
         
         /// Erase everything before cursor.
         removeSubrange(startIndex..<cursor)
+        
+        return removedHandles
     }
     
     /// Replace `t.co` links with truncated links.
@@ -126,7 +137,7 @@ extension NSMutableAttributedString {
     /// Hyperlink substituted links.
     /// - Parameters:
     ///   - quotedDisplayURL: optional, for debugging. The URL of the quoted tweet (if any), which is appended to the tweet text by convention.
-    func addHyperlinks(from tweet: Tweet, removedURLs: [String]) -> Void {
+    func addHyperlinks(from tweet: Tweet, removedURLs: [String], linkedRanges: inout [NSRange]) -> Void {
         guard let urls = tweet.entities?.urls else { return }
         
         /**
@@ -154,25 +165,106 @@ extension NSMutableAttributedString {
             lastTarget = target
             
             /// Transform substring range to `NSRange` boundaries.
-            guard
-                let low16 = target.lowerBound.samePosition(in: string.utf16),
-                let upp16 = target.upperBound.samePosition(in: string.utf16)
-            else {
+            guard let intRange = nsRange(target) else {
                 ModelLog.warning("Could not cast offsets")
                 continue
             }
-            let lowInt = string.utf16.distance(from: string.utf16.startIndex, to: low16)
-            let uppInt = string.utf16.distance(from: string.utf16.startIndex, to: upp16)
+            linkedRanges.append(intRange)
             
             /// As of November 2021, Twitter truncated URLs. They *may* have changed this.
             if url.expanded_url.contains("…") {
                 ModelLog.warning("Truncted URL \(url.expanded_url)")
                 
                 /// Fall back to the `t.co` link.
-                addAttribute(.link, value: url.url, range: NSMakeRange(lowInt, uppInt-lowInt))
+                addAttribute(.link, value: url.url, range: intRange)
             } else {
-                addAttribute(.link, value: url.expanded_url, range: NSMakeRange(lowInt, uppInt-lowInt))
+                addAttribute(.link, value: url.expanded_url, range: intRange)
             }
         }
+    }
+    
+    /// - Parameters:
+    ///   - removedHandles: the @handles that were already removed from the string, which we may skip over.
+    func linkAtMentions(tweet: Tweet, linkedRanges: inout [NSRange], removedHandles: Set<String>) -> Void {
+        let sortedMentions: [Mention] = tweet.entities?.mentions.sorted(by: {$0.start < $1.start}) ?? []
+        for mention in sortedMentions {
+            let atHandle = "@" + mention.handle
+            
+            /// Perform case insensitive search, just as Twitter does.
+            guard let target = string.range(of: atHandle, options: .caseInsensitive) else {
+                /// It's normal to fail to find @mentions if they were removed from the string.
+                if removedHandles.contains(atHandle) == false {
+                    ModelLog.warning("Could not find \(atHandle) in \(string)")
+                }
+                continue
+            }
+            
+            /// Transform substring range to `NSRange` boundaries.
+            guard let intRange = nsRange(target) else {
+                ModelLog.warning("Could not cast offsets")
+                continue
+            }
+
+            /// Check for overlapping links, which should never happen.
+            guard linkedRanges.allSatisfy({NSIntersectionRange($0, intRange).length == .zero}) else {
+                ModelLog.warning("""
+                    Found intsersection of @mention and url!
+                    - ranges \(linkedRanges)
+                    - handle \(atHandle)
+                    - text \(tweet.text)
+                    """)
+                continue
+            }
+            linkedRanges.append(intRange)
+            
+            addAttribute(.link, value: UserURL.urlString(mention: mention), range: intRange)
+        }
+    }
+    
+    func linkTags(tweet: Tweet, linkedRanges: inout [NSRange]) -> Void {
+        let sortedTags: [Tag] = tweet.entities?.hashtags.sorted(by: {$0.start < $1.start}) ?? []
+        for tag in sortedTags {
+            let hashtag = "#" + tag.tag
+            
+            /// Perform case insensitive search, just as Twitter does.
+            guard let target = string.range(of: hashtag, options: .caseInsensitive) else {
+                ModelLog.warning("Could not find \(hashtag) in \(string)")
+                continue
+            }
+            
+            /// Transform substring range to `NSRange` boundaries.
+            guard let intRange = nsRange(target) else {
+                ModelLog.warning("Could not cast offsets")
+                continue
+            }
+
+            /// Check for overlapping links, which should never happen.
+            guard linkedRanges.allSatisfy({NSIntersectionRange($0, intRange).length == .zero}) else {
+                ModelLog.warning("""
+                    Found intsersection of @mention and url!
+                    - ranges \(linkedRanges)
+                    - hashtag \(hashtag)
+                    - text \(tweet.text)
+                    """)
+                continue
+            }
+            linkedRanges.append(intRange)
+            
+            addAttribute(.link, value: HashtagURL.urlString(tag: tag), range: intRange)
+        }
+    }
+    
+    /// Transform substring range to `NSRange` boundaries.
+    fileprivate func nsRange(_ strRange: Range<String.Index>) -> NSRange? {
+        guard
+            let low16 = strRange.lowerBound.samePosition(in: string.utf16),
+            let upp16 = strRange.upperBound.samePosition(in: string.utf16)
+        else {
+            return nil
+        }
+        let lowInt = string.utf16.distance(from: string.utf16.startIndex, to: low16)
+        let uppInt = string.utf16.distance(from: string.utf16.startIndex, to: upp16)
+        
+        return NSMakeRange(lowInt, uppInt-lowInt)
     }
 }

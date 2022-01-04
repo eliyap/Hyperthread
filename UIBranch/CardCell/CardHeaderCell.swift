@@ -15,7 +15,7 @@ final class CardHeaderCell: ControlledCell {
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Component
-    let cardBackground = CardBackground(inset: CardTeaserCell.borderInset)
+    let cardBackground = CardBackground()
     let stackView = UIStackView()
     let userView = UserView()
     let tweetTextView = TweetTextView()
@@ -96,7 +96,49 @@ final class CardHeaderCell: ControlledCell {
  */
 extension CardHeaderCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        UIApplication.shared.open(URL)
+        open(url: URL)
         return false
+    }
+}
+
+protocol TweetViewDelegate {
+    func open(userID: User.ID) -> Void
+    func open(hashtag: String) -> Void
+}
+
+extension TweetViewDelegate {
+    func open(url: URL) -> Void {
+        switch url.scheme {
+        case UserURL.scheme:
+            open(userID: UserURL.id(from: url))
+        case HashtagURL.scheme:
+            open(hashtag: HashtagURL.tag(from: url))
+        default:
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+            } else {
+                showAlert(message: "Failed to open url: \(url.absoluteString)")
+            }
+        }
+    }
+}
+
+struct HashtagURL {
+    public static let scheme = "hashtag"
+    static func urlString(tag: Tag) -> String {
+        "\(scheme)://\(tag.tag)"
+    }
+    static func tag(from url: URL) -> User.ID {
+        return url.host ?? ""
+    }
+}
+
+struct UserURL {
+    public static let scheme = "handle"
+    static func urlString(mention: Mention) -> String {
+        "\(scheme)://\(mention.id)"
+    }
+    static func id(from url: URL) -> User.ID {
+        url.host ?? ""
     }
 }

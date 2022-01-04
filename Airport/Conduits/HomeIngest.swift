@@ -18,18 +18,26 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
         .autoconnect()
     
     /// Conduit Object with which to request follow up fetches.
-    weak var followUp: FollowUp?
+    private weak var followUp: FollowUp?
     
     /// Conduit Object with which to request user timeline fetches.
-    weak var timelineConduit: TimelineConduit?
+    private weak var timelineConduit: TimelineConduit?
+    
+    /// Conduit Object with which to request user objects.
+    private weak var userFetcher: UserFetcher?
     
     /// Completion handlers to be executed and discarded when a fetch completes successfully.
     private var onFetched: [() -> Void] = []
     
-    public init(followUp: FollowUp, timelineConduit: TimelineConduit) {
+    public init(
+        followUp: FollowUp,
+        timelineConduit: TimelineConduit,
+        userFetcher: UserFetcher
+    ) {
         super.init()
         self.followUp = followUp
         self.timelineConduit = timelineConduit
+        self.userFetcher = userFetcher
         
         let fetcher = Fetcher()
         
@@ -73,12 +81,15 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
                     /// Immediately check for follow up.
                     followUp.intake.send()
                     
-                    timelineConduit.intake.send()
-                    
                     self?.removeAll()
                 } catch {
                     ModelLog.error("\(error)")
                     assert(false, "\(error)")
+                }
+                
+                let missingUsers = findMissingMentions(tweets: tweets, users: users)
+                for userID in missingUsers {
+                    self?.userFetcher?.intake.send(userID)
                 }
             })
     }

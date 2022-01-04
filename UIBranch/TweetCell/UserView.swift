@@ -11,7 +11,8 @@ import Twig
 
 final class UserView: UIStackView {
     
-    private let symbolButton = UIButton()
+    private let vStack: UIStackView = .init()
+    private let profileImage: ProfileImageView = .init()
     private let nameLabel = UILabel()
     private let handleLabel = UILabel()
     fileprivate let _spacing: CGFloat = 5
@@ -29,12 +30,6 @@ final class UserView: UIStackView {
         alignment = .firstBaseline
         spacing = _spacing
 
-        translatesAutoresizingMaskIntoConstraints = false
-        
-        addArrangedSubview(symbolButton)
-        addArrangedSubview(nameLabel)
-        addArrangedSubview(handleLabel)
-
         nameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         nameLabel.adjustsFontForContentSizeCategory = true
         
@@ -43,18 +38,42 @@ final class UserView: UIStackView {
         handleLabel.textColor = .secondaryLabel
         
         /// Compress Twitter handle, then long username, but never the symbol!
-        symbolButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         nameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         handleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
-        /// Configure Symbol.
-        var config = UIImage.SymbolConfiguration.init(paletteColors: [.secondaryLabel])
-        config = config.applying(UIImage.SymbolConfiguration(textStyle: .headline))
-        symbolButton.setPreferredSymbolConfiguration(config, forImageIn: .normal)
+        constrain()
+    }
+    
+    func constrain() -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        addArrangedSubview(profileImage)
+        NSLayoutConstraint.activate([
+            profileImage.heightAnchor.constraint(equalTo: heightAnchor),
+        ])
+        
+        addArrangedSubview(vStack)
+        vStack.axis = .vertical
+        vStack.alignment = .leading
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        vStack.spacing = .zero
+        vStack.addArrangedSubview(nameLabel)
+        vStack.addArrangedSubview(handleLabel)
+        NSLayoutConstraint.activate([
+            vStack.heightAnchor.constraint(equalTo: heightAnchor),
+        ])
+        
+        /// Combats the image "as short as possible" preference, avoiding a "crushed" view.
+        vStack.setContentCompressionResistancePriority(.required, for: .vertical)
+        nameLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        handleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        
     }
 
     public func configure(tweet: Tweet, user: User?, timestamp: Date) {
         self.userID = user?.id
+        
+        profileImage.configure(user: user)
         
         if let user = user {
             nameLabel.text = user.name
@@ -65,19 +84,6 @@ final class UserView: UIStackView {
             handleLabel.text = "@⚠️"
         }
         
-        switch tweet.primaryReferenceType {
-        case .replied_to:
-            symbolButton.isHidden = false
-            symbolButton.setImage(UIImage(systemName: ReplySymbol.name), for: .normal)
-        case .quoted:
-            symbolButton.isHidden = false
-            symbolButton.setImage(UIImage(systemName: QuoteSymbol.name), for: .normal)
-        default:
-            symbolButton.isHidden = true
-            
-            /// Placeholder image prevents height shrinking to zero, which leads to graphical glitches.
-            symbolButton.setImage(UIImage(systemName: "circle"), for: .normal)
-        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

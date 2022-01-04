@@ -20,7 +20,7 @@ final class CardTeaserCell: ControlledCell {
     private let line: CellEventLine = .init()
     
     /// Component
-    let cardBackground = CardBackground(inset: CardTeaserCell.borderInset)
+    let cardBackground = CardBackground()
     let stackView = UIStackView()
     let userView: UserView
     let tweetTextView = TweetTextView()
@@ -90,15 +90,25 @@ final class CardTeaserCell: ControlledCell {
         line.events
             .sink { [weak self] event in
                 switch event {
-                case .usernameTouch(let id):
-                    self?.handleUsernameTouch(id: id)
+                case .usernameTouch(let userID):
+                    self?.handleUsernameTouch(userID: userID)
                 }
             }
             .store(in: &cancellable)
     }
     
-    private func handleUsernameTouch(id: User.ID) -> Void {
-        let modal: UserModalViewController = .init(userID: id)
+    private func handleUsernameTouch(userID: User.ID) -> Void {
+        let realm = try! Realm()
+        guard realm.user(id: userID) != nil else {
+            showAlert(message: "Could not find that user.")
+            
+            ModelLog.error("Could not find user with id \(userID)")
+            UserFetcher.shared.intake.send(userID)
+            
+            return
+        }
+        
+        let modal: UserModalViewController = .init(userID: userID)
         if let sheetController = modal.sheetPresentationController {
             sheetController.detents = [
                 .medium(),
@@ -246,7 +256,55 @@ final class CardTeaserCell: ControlledCell {
  */
 extension CardTeaserCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        UIApplication.shared.open(URL)
+        open(url: URL)
         return false
     }
+}
+
+extension ControlledCell: TweetViewDelegate {
+    func open(userID: User.ID) {
+        #warning("DEBUG")
+        UserFetcher.shared.intake.send(userID)
+        
+        let realm = try! Realm()
+        guard realm.user(id: userID) != nil else {
+            showAlert(message: "Could not find that user.")
+            
+            ModelLog.error("Could not find user with id \(userID)")
+            UserFetcher.shared.intake.send(userID)
+            
+            return
+        }
+        
+        let modal: UserModalViewController = .init(userID: userID)
+        if let sheetController = modal.sheetPresentationController {
+            sheetController.detents = [
+                .medium(),
+                .large(),
+            ]
+            sheetController.prefersGrabberVisible = true
+        }
+        controller.present(modal, animated: true) { }
+    }
+    
+    func open(hashtag: String) {
+        #warning("Not Implemented")
+        NOT_IMPLEMENTED()
+    }
+}
+
+#warning("place this somewhere else")
+func findMissingMentions(
+    tweets: [RawHydratedTweet],
+    includes: [RawHydratedTweet] = [],
+    users: [RawUser]
+) -> [User.ID] {
+    let mentionedIDs: [User.ID] = (tweets + includes)
+        .compactMap(\.entities?.mentions)
+        .flatMap { $0 }
+        .map(\.id)
+    
+    let fetchedIDs = users.map(\.id)
+    
+    return mentionedIDs.filter { fetchedIDs.contains($0) == false }
 }

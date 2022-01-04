@@ -12,7 +12,11 @@ import RealmSwift
 
 final class TimelineConduit: Conduit<Void, Never> {
     
-    public override init() {
+    /// Conduit Object with which to request user objects.
+    private weak var userFetcher: UserFetcher?
+    
+    public init(userFetcher: UserFetcher) {
+        self.userFetcher = userFetcher
         super.init()
         pipeline = intake
             .joinFollowing()
@@ -58,10 +62,10 @@ final class TimelineConduit: Conduit<Void, Never> {
             .sink(receiveCompletion: { (completion: Subscribers.Completion) in
                 NetLog.error("Unexpected completion: \(completion)")
                 assert(false)
-            }, receiveValue: { (rawData, followingIDs) in
+            }, receiveValue: { [weak self] (rawData, followingIDs) in
                 let (tweets, included, users, media) = rawData
                 do {
-                    NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
+                    NetLog.debug("Received \(tweets.count) user timeline tweets.", print: false, true)
                     
                     /// Safe to insert `included`, as we make no assumptions around `Relevance`.
                     try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
@@ -88,6 +92,11 @@ final class TimelineConduit: Conduit<Void, Never> {
                 /// Immediately check for follow up.
                 #warning("TODO")
 //                    followUp.intake.send()
+                
+                let missingUsers = findMissingMentions(tweets: tweets, users: users)
+                for userID in missingUsers {
+                    self?.userFetcher?.intake.send(userID)
+                }
             })
     }
     
@@ -109,7 +118,7 @@ final class TimelineConduit: Conduit<Void, Never> {
         do {
             try realm.writeWithToken { token in
                 user.timelineWindow = user.timelineWindow.union(blobWindow)
-                print("Updated Window \(user.name) \(user.timelineWindow)")
+                ModelLog.debug("Updated Window \(user.name) \(user.timelineWindow)")
             }
         } catch {
             ModelLog.error("Failed to update user with id \(userID)")

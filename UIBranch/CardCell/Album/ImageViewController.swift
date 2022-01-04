@@ -83,64 +83,93 @@ final class ImageViewController: UIViewController {
     func configure(media: Media, picUrlString: String?) -> Void {
         mediaModel = .init(media: media, picUrlString: picUrlString)
         
-        let videoSymbolConfig = UIImage.SymbolConfiguration(hierarchicalColor: .label)
-            .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
-        
         switch media.mediaType {
         case .photo:
             if let urlString = media.url {
-                loadingIndicator.startAnimating()
-                imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-                    self?.loadingIndicator.stopAnimating()
-                    if let error = error {
-                        NetLog.warning("Image Loading Error \(error)")
-                    }
-                    if image == nil {
-                        NetLog.error("Failed to load image! \(#file)")
-                    }
-                    
-                    /// Hide video symbol.
-                    self?.symbolView.isHidden = true
+                loadImage(url: URL(string: urlString)) { [weak self] in
+                    self?.setSymbol(.hidden)
                 }
             }
         
         case .animated_gif:
             if let urlString = media.previewImageUrl {
-                loadingIndicator.startAnimating()
-                imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-                    self?.loadingIndicator.stopAnimating()
-                    if let error = error {
-                        NetLog.warning("Image Loading Error \(error)")
-                    }
-                    if image == nil {
-                        NetLog.error("Failed to load image! \(#file)")
-                    }
-                    
-                    /// Show video symbol.
-                    self?.symbolView.image = UIImage(systemName: "gift.circle", withConfiguration: videoSymbolConfig)
-                    self?.symbolView.isHidden = false
+                loadImage(url: URL(string: urlString)) { [weak self] in
+                    self?.setSymbol(.GIF)
                 }
             }
         
         case .video:
             if let urlString = media.previewImageUrl {
-                loadingIndicator.startAnimating()
-                imageView.sd_setImage(with: URL(string: urlString)) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-                    self?.loadingIndicator.stopAnimating()
-                    if let error = error {
-                        NetLog.warning("Image Loading Error \(error)")
-                    }
-                    if image == nil {
-                        NetLog.error("Failed to load image! \(#file)")
-                    }
-                    
-                    /// Show video symbol.
-                    self?.symbolView.image = UIImage(systemName: "play.circle", withConfiguration: videoSymbolConfig)
-                    self?.symbolView.isHidden = false
+                loadImage(url: URL(string: urlString)) { [weak self] in
+                    self?.setSymbol(.video)
                 }
             }
+        
         case .none:
             TableLog.error("Unrecognized type with value \(media.type)")
+        }
+    }
+    
+    private func loadImage(url: URL?, completion: @escaping () -> ()) -> Void {
+        loadingIndicator.startAnimating()
+        imageView.sd_setImage(with: url) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+            self?.loadingIndicator.stopAnimating()
+            completion()
+            
+            if let error = error {
+                if error.isOfflineError {
+                    self?.setSymbol(.offline)
+                } else {
+                    self?.setSymbol(.error)
+                    NetLog.warning("Image Loading Error \(error)")	
+                }
+            }
+            if image == nil {
+                if let error = error, error.isOfflineError {
+                    /** Do nothing. **/
+                } else {
+                    NetLog.error("Failed to load image! \(#file)")
+                }
+            }
+        }
+    }
+    
+    private enum Symbol {
+        case hidden
+        case GIF
+        case video
+        case offline
+        case error
+    }
+    private func setSymbol(_ symbol: Symbol) -> Void {
+        
+        switch symbol {
+        case .hidden:
+            symbolView.isHidden = true
+        
+        case .GIF:
+            let config = UIImage.SymbolConfiguration(hierarchicalColor: .white)
+                .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
+            symbolView.isHidden = false
+            symbolView.image = UIImage(systemName: "gift.circle", withConfiguration: config)
+        
+        case .video:
+            let config = UIImage.SymbolConfiguration(hierarchicalColor: .white)
+                .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
+            symbolView.isHidden = false
+            symbolView.image = UIImage(systemName: "play.circle", withConfiguration: config)
+        
+        case .offline:
+            let config = UIImage.SymbolConfiguration(hierarchicalColor: .tertiaryLabel)
+                .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
+            symbolView.isHidden = false
+            symbolView.image = UIImage(systemName: "wifi.slash", withConfiguration: config)
+        
+        case .error:
+            let config = UIImage.SymbolConfiguration(hierarchicalColor: .tertiaryLabel)
+                .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
+            symbolView.isHidden = false
+            symbolView.image = UIImage(systemName: "wifi.exclamationmark", withConfiguration: config)
         }
     }
     

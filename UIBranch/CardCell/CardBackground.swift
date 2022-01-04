@@ -9,24 +9,23 @@ import UIKit
 
 final class CardBackground: UIButton {
     
-    /// How far the view will be inset from its superview.
-    private let inset: CGFloat
     public let triangleView: TriangleView
     
-    init(inset: CGFloat) {
-        self.inset = inset
-        let size = inset * 3
-        self.triangleView = TriangleView(size: size)
+    /// How far the view will be inset from its superview.
+    public static let inset = CardTeaserCell.borderInset
+    public class var cornerRadius: CGFloat { Self.inset * 2 }
+    
+    init() {
+        self.triangleView = TriangleView(size: Self.inset * 3)
         super.init(frame: .zero)
         
         /// Round corners.
-        let radius = inset * 2
-        layer.cornerRadius = radius
+        layer.cornerRadius = Self.cornerRadius
         layer.cornerCurve = .continuous
         
         let clipper = CornerClipView()
         addSubview(clipper)
-        clipper.constrain(to: self, cornerRadius: radius)
+        clipper.constrain(to: self, cornerRadius: Self.cornerRadius)
         
         /// Align view to top right, with fixed size.
         clipper.addSubview(triangleView)
@@ -39,10 +38,10 @@ final class CardBackground: UIButton {
     public func constrain(to guide: UILayoutGuide) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: guide.topAnchor, constant: inset),
-            bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -inset),
-            leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: inset),
-            trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -inset),
+            topAnchor.constraint(equalTo: guide.topAnchor, constant: Self.inset),
+            bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -Self.inset),
+            leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: Self.inset),
+            trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -Self.inset),
         ])
     }
     
