@@ -21,6 +21,7 @@ final class FollowingLine: UIStackView {
     private let followingText = "Following"
     private let notFollowingText = "Not following"
     
+    /// Tracks user state.
     private var userID: User.ID
     private var following: Bool
     
@@ -165,6 +166,7 @@ final class FollowingLine: UIStackView {
     
     func configure(user: User) -> Void {
         self.userID = user.id
+        self.following = user.following
         
         /// Look up full user object.
         let realm = try! Realm()
@@ -174,7 +176,7 @@ final class FollowingLine: UIStackView {
             return
         }
         
-        if user.following {
+        if following {
             followingLabel.text = followingText
             followingButton.configuration = followingConfig
         } else {
