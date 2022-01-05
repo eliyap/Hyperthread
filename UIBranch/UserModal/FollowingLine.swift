@@ -79,12 +79,46 @@ final class FollowingLine: UIStackView {
             return
         }
         
+        if following {
+            performUnfollow(userID: userID, credentials: credentials)
+        } else {
+            performFollow(userID: userID, credentials: credentials)
+        }
+        
+        
+    }
+    
+    private func performFollow(userID: User.ID, credentials: OAuthCredentials) -> Void {
         Task {
-            print("access token \(credentials.oauth_token)")
-            print("access token secret \(credentials.oauth_token_secret)")
-            
             #warning("TEMP try!")
-            let result = try! await _follow(userID: userID, credentials: credentials)
+            let result = try! await follow(userID: userID, credentials: credentials)
+            print(result)
+        }
+        
+        #warning("Update realm here")
+//        let realm = try! Realm()
+//        guard let userID = userID else {
+//            assert(false, "Missing userID!")
+//            return
+//        }
+//        guard let user = realm.user(id: userID) else {
+//            TableLog.error("Missing user with id \(userID)")
+//            assert(false)
+//            return
+//        }
+//        do {
+//            try realm.write { user.following.toggle() }
+//        } catch {
+//            TableLog.error("Error in editing following: \(error)")
+//            assert(false)
+//            return
+//        }
+    }
+    
+    private func performUnfollow(userID: User.ID, credentials: OAuthCredentials) -> Void {
+        Task {
+            #warning("TEMP try!")
+            let result = try! await unfollow(userID: userID, credentials: credentials)
             print(result)
         }
         
