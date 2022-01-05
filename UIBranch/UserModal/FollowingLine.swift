@@ -88,29 +88,42 @@ final class FollowingLine: UIStackView {
     
     private func performFollow(userID: User.ID, credentials: OAuthCredentials) -> Void {
         Task {
-            #warning("TEMP try!")
-            let result = try! await follow(userID: userID, credentials: credentials)
-            print(result)
+            var result: FollowingRequestResult
+            do {
+                result = try await follow(userID: userID, credentials: credentials)
+                print(result)
+            } catch {
+                NetLog.error("Follow request failed with error \(error)")
+                showAlert(message: "Failed to follow user.")
+                return
+            }
+            
+            guard result.following else {
+                #warning("intentionally do not re-enable follow button here.")
+                if result.pending_follow {
+                    showAlert(title: "Protected User", message: "User may approve follow request. Please check back later!")
+                } else {
+                    NetLog.error("Illegal response from follow endpoint: \(result)")
+                    showAlert(message: "Failed to follow user.")
+                }
+                return
+            }
+            
+            let realm = try! await Realm()
+            do {
+                try realm.writeWithToken { token in
+                    realm.updateRelevanceOnFollow(token, userID: userID)
+                    
+                    guard let user = realm.user(id: userID) else {
+                        throw RealmError.missingObject
+                    }
+                    user.following = true
+                }
+            } catch {
+                ModelLog.error("Failed to update storage after follow! Error: \(error)")
+                assert(false)
+            }
         }
-        
-        #warning("Update realm here")
-//        let realm = try! Realm()
-//        guard let userID = userID else {
-//            assert(false, "Missing userID!")
-//            return
-//        }
-//        guard let user = realm.user(id: userID) else {
-//            TableLog.error("Missing user with id \(userID)")
-//            assert(false)
-//            return
-//        }
-//        do {
-//            try realm.write { user.following.toggle() }
-//        } catch {
-//            TableLog.error("Error in editing following: \(error)")
-//            assert(false)
-//            return
-//        }
     }
     
     private func performUnfollow(userID: User.ID, credentials: OAuthCredentials) -> Void {
