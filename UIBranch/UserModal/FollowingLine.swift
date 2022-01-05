@@ -84,8 +84,6 @@ final class FollowingLine: UIStackView {
         } else {
             performFollow(userID: userID, credentials: credentials)
         }
-        
-        
     }
     
     private func performFollow(userID: User.ID, credentials: OAuthCredentials) -> Void {
@@ -159,6 +157,11 @@ final class FollowingLine: UIStackView {
         } else {
             followingLabel.text = notFollowingText
             followingButton.configuration = notFollowingConfig
+        }
+        
+        /// Do not allow the user to interact with themselves, or they might go blind.
+        if user.id == "\(Auth.shared.credentials?.user_id ?? .zero)" {
+            isHidden = true
         }
     }
     
