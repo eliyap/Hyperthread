@@ -48,6 +48,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     /// Fortunately, we can assume that a Tweet will never change users.
     @Persisted
     var authorID: User.ID
+    public static let authorIDPropertyName = "authorID"
     
     /// - Note: Tweet must belong to a unique ``Conversation``.
     @Persisted(originProperty: Conversation.tweetsPropertyName)
