@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import RealmSwift
+import Twig
 
 final class FollowingLine: UIStackView { 
 
@@ -20,13 +21,17 @@ final class FollowingLine: UIStackView {
     private let followingText = "Following"
     private let notFollowingText = "Not following"
     
-    private var userID: User.ID? = nil
+    private var userID: User.ID
+    private var following: Bool
     
     private var followingConfig: UIButton.Configuration
     private var notFollowingConfig: UIButton.Configuration
     private static let font: UIFont = .preferredFont(forTextStyle: .body)
     
-    init() {
+    init(user: User) {
+        self.userID = user.id
+        self.following = user.following
+        
         self.followingLabel = .init()
         self.followingConfig = Self.makeFollowingConfig()
         self.notFollowingConfig = Self.makeNotFollowingConfig()
@@ -53,31 +58,68 @@ final class FollowingLine: UIStackView {
         
         addArrangedSubview(followingLabel)
         addArrangedSubview(followingButton)
+        
+        let loading = UIActivityIndicatorView()
+        followingButton.addSubview(loading)
+        loading.startAnimating()
     }
     
     private func onButtonTap(_: UIAction) -> Void {
-        let realm = try! Realm()
-        guard let userID = userID else {
-            assert(false, "Missing userID!")
-            return
-        }
-        guard let user = realm.user(id: userID) else {
-            TableLog.error("Missing user with id \(userID)")
+        followingButton.isEnabled = false
+        
+        guard let credentials = Auth.shared.credentials else {
+            TableLog.error("Could not load credentials in user modal view!")
             assert(false)
+            showAlert(message: "Failed to send follow request")
             return
         }
-        do {
-            try realm.write { user.following.toggle() }
-        } catch {
-            TableLog.error("Error in editing following: \(error)")
-            assert(false)
+
+        guard userID != "\(credentials.user_id)" else {
+            assert(false, "Cannot follow self!")
             return
         }
+        
+        Task {
+            print("access token \(credentials.oauth_token)")
+            print("access token secret \(credentials.oauth_token_secret)")
+            
+            #warning("TEMP try!")
+            let result = try! await _follow(userID: userID, credentials: credentials)
+            print(result)
+        }
+        
+        #warning("Update realm here")
+//        let realm = try! Realm()
+//        guard let userID = userID else {
+//            assert(false, "Missing userID!")
+//            return
+//        }
+//        guard let user = realm.user(id: userID) else {
+//            TableLog.error("Missing user with id \(userID)")
+//            assert(false)
+//            return
+//        }
+//        do {
+//            try realm.write { user.following.toggle() }
+//        } catch {
+//            TableLog.error("Error in editing following: \(error)")
+//            assert(false)
+//            return
+//        }
     }
     
-    func configure(userID: User.ID, following: User.FollowingPropertyType) -> Void {
-        self.userID = userID
-        if following {
+    func configure(user: User) -> Void {
+        self.userID = user.id
+        
+        /// Look up full user object.
+        let realm = try! Realm()
+        guard let user = realm.user(id: userID) else {
+            TableLog.error("Could not find user with id \(userID)")
+            showAlert(message: "Could not find user")
+            return
+        }
+        
+        if user.following {
             followingLabel.text = followingText
             followingButton.configuration = followingConfig
         } else {

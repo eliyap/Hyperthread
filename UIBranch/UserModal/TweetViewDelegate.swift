@@ -48,7 +48,13 @@ extension ControlledCell: TweetViewDelegate {
                 await UserFetcher.fetchAndStoreUsers(ids: [userID])
             }
             
-            let modal: UserModalViewController = .init(userID: userID)
+            guard let user = realm.user(id: userID) else {
+                ModelLog.error("Could not find user with ID \(userID)")
+                showAlert(message: "Could not find that user!")
+                return
+            }
+            
+            let modal: UserModalViewController = .init(user: user)
             if let sheetController = modal.sheetPresentationController {
                 sheetController.detents = [
                     .medium(),
