@@ -90,3 +90,25 @@ func findMissingMentions(
     
     return mentionedIDs.filter { fetchedIDs.contains($0) == false }
 }
+
+extension Realm {
+    func updateRelevanceOnFollow(_ token: TransactionToken, user: User) -> Void {
+        let usersTweets = objects(Tweet.self)
+            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == \(user.id)"))
+        
+        /// Update all relevance metrics.
+        for tweet in usersTweets {
+            tweet.relevance = .init(tweet: tweet, following: [user.id])
+        }
+    }
+    
+    func updateRelevanceOnUnfollow(_ token: TransactionToken, user: User) -> Void {
+        let usersTweets = objects(Tweet.self)
+            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == \(user.id)"))
+        
+        /// Update all relevance metrics.
+        for tweet in usersTweets {
+            tweet.relevance = .irrelevant
+        }
+    }
+}
