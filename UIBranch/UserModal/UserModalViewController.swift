@@ -84,18 +84,16 @@ final class UserModalViewController: UIViewController {
         token = user.observe { [weak self] change in
             switch change {
             case .change(_, let properties):
-                for property in properties {
-                    /// Perform user lookup to update object.
-                    /// Look up full user object.
-                    let realm = try! Realm()
-                    guard let user = realm.user(id: userID) else {
-                        TableLog.error("Could not find user with id \(userID)")
-                        showAlert(message: "Could not find user")
-                        return
-                    }
-                    
-                    self?.followingLine.configure(user: user)
+                /// Perform user lookup to update object.
+                /// Look up full user object.
+                let realm = try! Realm()
+                guard let user = realm.user(id: userID) else {
+                    TableLog.error("Could not find user with id \(userID)")
+                    showAlert(message: "Could not find user")
+                    return
                 }
+                
+                self?.followingLine.configure(user: user)    
             case .error(let error):
                 TableLog.error("Key Path Listenener Error: \(error)")
                 assert(false)
