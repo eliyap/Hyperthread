@@ -17,6 +17,7 @@
 		22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB02784050F005A7708 /* TweetViewDelegate.swift */; };
 		22193DB327840923005A7708 /* UserModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB227840923005A7708 /* UserModalViewController.swift */; };
 		22193DB527859D2D005A7708 /* RealmError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB427859D2B005A7708 /* RealmError.swift */; };
+		22193DB72785A878005A7708 /* OnFollow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB62785A878005A7708 /* OnFollow.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
 		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
 		221A2992275D680900C283FE /* AlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A2991275D680900C283FE /* AlbumController.swift */; };
@@ -128,6 +129,7 @@
 		22193DB02784050F005A7708 /* TweetViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetViewDelegate.swift; sourceTree = "<group>"; };
 		22193DB227840923005A7708 /* UserModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModalViewController.swift; sourceTree = "<group>"; };
 		22193DB427859D2B005A7708 /* RealmError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmError.swift; sourceTree = "<group>"; };
+		22193DB62785A878005A7708 /* OnFollow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnFollow.swift; sourceTree = "<group>"; };
 		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
 		221A2991275D680900C283FE /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
 		221A2993275D943E00C283FE /* RemoveDuplicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveDuplicates.swift; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 				223BBF5F27377E8700375530 /* Airport.swift */,
 				22193DA92783DD5E005A7708 /* FollowingCache.swift */,
 				22193DAB2783E158005A7708 /* UserTimelineFetch.swift */,
+				22193DB62785A878005A7708 /* OnFollow.swift */,
 				228D71E5277A805900E306BD /* Conduits */,
 				22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */,
 				228D71EE2780127400E306BD /* DateWindow */,
@@ -737,6 +740,7 @@
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
+				22193DB72785A878005A7708 /* OnFollow.swift in Sources */,
 				222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,

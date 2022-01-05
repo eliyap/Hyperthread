@@ -114,31 +114,7 @@ final class FollowingLine: UIStackView {
             return
         }
         
-        let realm = try! await Realm()
-        do {
-            try realm.writeWithToken { token in
-                /// Upgrade relevance so that existing tweets are surfaced.
-                realm.updateRelevanceOnFollow(token, userID: userID)
-                
-                guard let user = realm.user(id: userID) else {
-                    throw RealmError.missingObject
-                }
-                /// Update following status.
-                user.following = true
-                
-                /// Bring user timeline up to speed (Part 1).
-                user.timelineWindow = .new()
-            }
-        } catch {
-            ModelLog.error("Failed to update storage after follow! Error: \(error)")
-            assert(false)
-        }
-        
-        Task {
-            /// Bring user timeline up to speed (Part 2 – Fin).
-            /// Don't block the UI for this background task.
-            await fetchTimelines()
-        }
+        onFollow(userIDs: [userID])
     }
     
     private func performUnfollow(userID: User.ID, credentials: OAuthCredentials) -> Void {
