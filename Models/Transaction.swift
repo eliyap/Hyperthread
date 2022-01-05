@@ -21,11 +21,11 @@ public extension Realm {
     @discardableResult
     func writeWithToken<Result>(
         withoutNotifying tokens: [NotificationToken] = [],
-        _ block: (TransactionToken
-    ) -> Result) throws -> Result {
+        _ block: (TransactionToken) throws -> Result
+    ) throws -> Result {
         try write(withoutNotifying: tokens) {
             /// Pass in a token object to demarkate that we are in a write transaction.
-            block(TransactionToken())
+            try block(TransactionToken())
         }
     }
 }
