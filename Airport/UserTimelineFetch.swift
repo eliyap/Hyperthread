@@ -34,7 +34,7 @@ func fetchTimelines() async -> Void {
 fileprivate func execute(_ request: TimelineRequest, credentials: OAuthCredentials, followingIDs: [User.ID]) async -> Void {
     let (tweets, included, users, media) = await fetchRawTimeline(request: request, credentials: credentials)
     do {
-        NetLog.debug("Received \(tweets.count) user timeline tweets.", print: false, true)
+        NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
         
         /// Safe to insert `included`, as we make no assumptions around `Relevance`.
         try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
