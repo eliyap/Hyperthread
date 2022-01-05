@@ -143,25 +143,6 @@ final class FollowingLine: UIStackView {
         }
         
         return true
-        
-        #warning("Update realm here")
-//        let realm = try! Realm()
-//        guard let userID = userID else {
-//            assert(false, "Missing userID!")
-//            return
-//        }
-//        guard let user = realm.user(id: userID) else {
-//            TableLog.error("Missing user with id \(userID)")
-//            assert(false)
-//            return
-//        }
-//        do {
-//            try realm.write { user.following.toggle() }
-//        } catch {
-//            TableLog.error("Error in editing following: \(error)")
-//            assert(false)
-//            return
-//        }
     }
     
     func configure(user: User) -> Void {
