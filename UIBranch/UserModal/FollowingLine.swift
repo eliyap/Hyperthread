@@ -102,7 +102,6 @@ final class FollowingLine: UIStackView {
         var result: FollowingRequestResult
         do {
             result = try await follow(userID: userID, credentials: credentials)
-            print(result)
         } catch {
             NetLog.error("Follow request failed with error \(error)")
             showAlert(message: "Failed to follow user.")
@@ -122,12 +121,24 @@ final class FollowingLine: UIStackView {
         return true
     }
     
-    private func performUnfollow(userID: User.ID, credentials: OAuthCredentials) -> Void {
-        Task {
-            #warning("TEMP try!")
-            let result = try! await unfollow(userID: userID, credentials: credentials)
-            print(result)
+    /// - Returns: whether the request completed successfully.
+    private func performUnfollow(userID: User.ID, credentials: OAuthCredentials) async -> Bool {
+        var result: Bool
+        do {
+            result = try await unfollow(userID: userID, credentials: credentials)
+        } catch {
+            NetLog.error("Follow request failed with error \(error)")
+            showAlert(message: "Failed to follow user.")
+            return false
         }
+        
+        guard result == false else {
+            NetLog.error("Illegal response from follow endpoint: \(result)")
+            showAlert(message: "Failed to follow user.")
+            return false
+        }
+        
+        return true
         
         #warning("Update realm here")
 //        let realm = try! Realm()

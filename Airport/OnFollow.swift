@@ -43,4 +43,3 @@ internal func onFollow(userIDs: [User.ID]) -> Void {
         await fetchTimelines()
     }
 }
-
