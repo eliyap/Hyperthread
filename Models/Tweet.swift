@@ -307,6 +307,10 @@ extension Tweet: ReplyIdentifiable {
     var replyID: String? { replying_to }
 }
 
+extension Tweet: RetweetIdentifiable {
+    var retweetID: String? { retweeting }
+}
+
 extension Realm {
     /// Find tweets with possibly dangling
     internal func updateDangling() throws -> Void {
