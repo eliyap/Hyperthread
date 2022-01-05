@@ -93,10 +93,12 @@ final class UserModalViewController: UIViewController {
                     return
                 }
                 
-                self?.followingLine.configure(user: user)    
+                self?.followingLine.configure(user: user)
+            
             case .error(let error):
                 TableLog.error("Key Path Listenener Error: \(error)")
                 assert(false)
+            
             case .deleted:
                 TableLog.error("User with id \(userID) deleted!")
                 assert(false)
