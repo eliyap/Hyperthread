@@ -65,8 +65,6 @@ final class FollowingLine: UIStackView {
     }
     
     private func onButtonTap(_: UIAction) -> Void {
-        followingButton.isEnabled = false
-        
         guard let credentials = Auth.shared.credentials else {
             TableLog.error("Could not load credentials in user modal view!")
             assert(false)
@@ -79,50 +77,67 @@ final class FollowingLine: UIStackView {
             return
         }
         
-        if following {
-            performUnfollow(userID: userID, credentials: credentials)
-        } else {
-            performFollow(userID: userID, credentials: credentials)
+        Task {
+            followingButton.isEnabled = false
+            
+            if following {
+                await performUnfollow(userID: userID, credentials: credentials)
+            } else {
+                await performFollow(userID: userID, credentials: credentials)
+            }
+
+            /// Re-enable button now that work is done.
+            followingButton.isEnabled = true
         }
+        
     }
     
-    private func performFollow(userID: User.ID, credentials: OAuthCredentials) -> Void {
-        Task {
-            var result: FollowingRequestResult
-            do {
-                result = try await follow(userID: userID, credentials: credentials)
-                print(result)
-            } catch {
-                NetLog.error("Follow request failed with error \(error)")
+    private func performFollow(userID: User.ID, credentials: OAuthCredentials) async -> Void {
+        var result: FollowingRequestResult
+        do {
+            result = try await follow(userID: userID, credentials: credentials)
+            print(result)
+        } catch {
+            NetLog.error("Follow request failed with error \(error)")
+            showAlert(message: "Failed to follow user.")
+            return
+        }
+        
+        guard result.following else {
+            #warning("intentionally do not re-enable follow button here.")
+            if result.pending_follow {
+                showAlert(title: "Protected User", message: "User may approve follow request. Please check back later!")
+            } else {
+                NetLog.error("Illegal response from follow endpoint: \(result)")
                 showAlert(message: "Failed to follow user.")
-                return
             }
-            
-            guard result.following else {
-                #warning("intentionally do not re-enable follow button here.")
-                if result.pending_follow {
-                    showAlert(title: "Protected User", message: "User may approve follow request. Please check back later!")
-                } else {
-                    NetLog.error("Illegal response from follow endpoint: \(result)")
-                    showAlert(message: "Failed to follow user.")
+            return
+        }
+        
+        let realm = try! await Realm()
+        do {
+            try realm.writeWithToken { token in
+                /// Upgrade relevance so that existing tweets are surfaced.
+                realm.updateRelevanceOnFollow(token, userID: userID)
+                
+                guard let user = realm.user(id: userID) else {
+                    throw RealmError.missingObject
                 }
-                return
+                /// Update following status.
+                user.following = true
+                
+                /// Bring user timeline up to speed (Part 1).
+                user.timelineWindow = .new()
             }
-            
-            let realm = try! await Realm()
-            do {
-                try realm.writeWithToken { token in
-                    realm.updateRelevanceOnFollow(token, userID: userID)
-                    
-                    guard let user = realm.user(id: userID) else {
-                        throw RealmError.missingObject
-                    }
-                    user.following = true
-                }
-            } catch {
-                ModelLog.error("Failed to update storage after follow! Error: \(error)")
-                assert(false)
-            }
+        } catch {
+            ModelLog.error("Failed to update storage after follow! Error: \(error)")
+            assert(false)
+        }
+        
+        Task {
+            /// Bring user timeline up to speed (Part 2 – Fin).
+            /// Don't block the UI for this background task.
+            await fetchTimelines()
         }
     }
     
