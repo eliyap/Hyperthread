@@ -92,19 +92,19 @@ func findMissingMentions(
 }
 
 extension Realm {
-    func updateRelevanceOnFollow(_ token: TransactionToken, user: User) -> Void {
+    func updateRelevanceOnFollow(_ token: TransactionToken, userID: User.ID) -> Void {
         let usersTweets = objects(Tweet.self)
-            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == \(user.id)"))
+            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == %@", userID))
         
         /// Update all relevance metrics.
         for tweet in usersTweets {
-            tweet.relevance = .init(tweet: tweet, following: [user.id])
+            tweet.relevance = .init(tweet: tweet, following: [userID])
         }
     }
     
-    func updateRelevanceOnUnfollow(_ token: TransactionToken, user: User) -> Void {
+    func updateRelevanceOnUnfollow(_ token: TransactionToken, userID: User.ID) -> Void {
         let usersTweets = objects(Tweet.self)
-            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == \(user.id)"))
+            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == \(userID)"))
         
         /// Update all relevance metrics.
         for tweet in usersTweets {
