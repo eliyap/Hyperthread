@@ -83,7 +83,11 @@ final class FollowingLine: UIStackView {
             if following {
                 await performUnfollow(userID: userID, credentials: credentials)
             } else {
-                await performFollow(userID: userID, credentials: credentials)
+                let success = await performFollow(userID: userID, credentials: credentials)
+                if success {
+                    onFollow(userIDs: [userID])
+                    followingButton.isEnabled = true
+                }
             }
 
             /// Re-enable button now that work is done.
@@ -92,7 +96,9 @@ final class FollowingLine: UIStackView {
         
     }
     
-    private func performFollow(userID: User.ID, credentials: OAuthCredentials) async -> Void {
+    /// Perform network task, and validate result.
+    /// Return value indicates success
+    private func performFollow(userID: User.ID, credentials: OAuthCredentials) async -> Bool {
         var result: FollowingRequestResult
         do {
             result = try await follow(userID: userID, credentials: credentials)
@@ -100,21 +106,20 @@ final class FollowingLine: UIStackView {
         } catch {
             NetLog.error("Follow request failed with error \(error)")
             showAlert(message: "Failed to follow user.")
-            return
+            return false
         }
         
         guard result.following else {
-            #warning("intentionally do not re-enable follow button here.")
             if result.pending_follow {
                 showAlert(title: "Protected User", message: "User may approve follow request. Please check back later!")
+                return true
             } else {
                 NetLog.error("Illegal response from follow endpoint: \(result)")
                 showAlert(message: "Failed to follow user.")
+                return false
             }
-            return
         }
-        
-        onFollow(userIDs: [userID])
+        return true
     }
     
     private func performUnfollow(userID: User.ID, credentials: OAuthCredentials) -> Void {
