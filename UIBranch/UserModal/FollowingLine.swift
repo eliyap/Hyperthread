@@ -81,7 +81,11 @@ final class FollowingLine: UIStackView {
             followingButton.isEnabled = false
             
             if following {
-                await performUnfollow(userID: userID, credentials: credentials)
+                let success = await performUnfollow(userID: userID, credentials: credentials)
+                if success {
+                    onUnfollow(userIDs: [userID])
+                    followingButton.isEnabled = true
+                }
             } else {
                 let success = await performFollow(userID: userID, credentials: credentials)
                 if success {
@@ -93,7 +97,6 @@ final class FollowingLine: UIStackView {
             /// Re-enable button now that work is done.
             followingButton.isEnabled = true
         }
-        
     }
     
     /// Perform network task, and validate result.
@@ -127,8 +130,8 @@ final class FollowingLine: UIStackView {
         do {
             result = try await unfollow(userID: userID, credentials: credentials)
         } catch {
-            NetLog.error("Follow request failed with error \(error)")
-            showAlert(message: "Failed to follow user.")
+            NetLog.error("Unfollow request failed with error \(error)")
+            showAlert(message: "Failed to unfollow user.")
             return false
         }
         

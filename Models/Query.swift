@@ -104,7 +104,7 @@ extension Realm {
     
     func updateRelevanceOnUnfollow(_ token: TransactionToken, userID: User.ID) -> Void {
         let usersTweets = objects(Tweet.self)
-            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == \(userID)"))
+            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == %@", userID))
         
         /// Update all relevance metrics.
         for tweet in usersTweets {
