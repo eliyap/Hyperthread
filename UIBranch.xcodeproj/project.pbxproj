@@ -16,6 +16,7 @@
 		22193DAF27840477005A7708 /* URLScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DAE27840477005A7708 /* URLScheme.swift */; };
 		22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB02784050F005A7708 /* TweetViewDelegate.swift */; };
 		22193DB327840923005A7708 /* UserModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB227840923005A7708 /* UserModalViewController.swift */; };
+		22193DB527859D2D005A7708 /* RealmError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB427859D2B005A7708 /* RealmError.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
 		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
 		221A2992275D680900C283FE /* AlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A2991275D680900C283FE /* AlbumController.swift */; };
@@ -126,6 +127,7 @@
 		22193DAE27840477005A7708 /* URLScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLScheme.swift; sourceTree = "<group>"; };
 		22193DB02784050F005A7708 /* TweetViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetViewDelegate.swift; sourceTree = "<group>"; };
 		22193DB227840923005A7708 /* UserModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModalViewController.swift; sourceTree = "<group>"; };
+		22193DB427859D2B005A7708 /* RealmError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmError.swift; sourceTree = "<group>"; };
 		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
 		221A2991275D680900C283FE /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
 		221A2993275D943E00C283FE /* RemoveDuplicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveDuplicates.swift; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 				22760A4E274B136200F28F0A /* Media.swift */,
 				2248FF4F2745BEA100C6DEF9 /* Entities.swift */,
 				223BBF6127377E8800375530 /* IngestTweet.swift */,
+				22193DB427859D2B005A7708 /* RealmError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -763,6 +766,7 @@
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
 				22BFD7A3277405F100E46DF1 /* HomeIngest.swift in Sources */,
+				22193DB527859D2D005A7708 /* RealmError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
