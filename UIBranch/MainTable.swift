@@ -409,24 +409,27 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     @objc
     public func fetchOldTweets() {
         Task {
-            guard Auth.shared.credentials != nil else {
-                NetLog.warning("Tried to load tweets with nil credentials!")
-                return
+            do {
+                try await homeTimelineFetch(TimelineOldFetcher.self)
+                await ReferenceCrawler.shared.performFollowUp()
+            } catch {
+                NetLog.error("\(error)")
+                assert(false)
             }
-            
-            airport.requestOld()
+            #warning("Perform new refresh animation here.")
         }
     }
     
     @objc
     public func fetchNewTweets(onFetched completion: @escaping () -> Void) {
         Task {
-            guard Auth.shared.credentials != nil else {
-                NetLog.warning("Tried to load tweets with nil credentials!")
-                return
+            do {
+                try await homeTimelineFetch(TimelineNewFetcher.self)
+                await ReferenceCrawler.shared.performFollowUp()
+            } catch {
+                NetLog.error("\(error)")
+                assert(false)
             }
-            
-            airport.requestNew(onFetched: completion)
         }
     }
     
