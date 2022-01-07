@@ -29,7 +29,6 @@ final class CardTeaserCell: ControlledCell {
     let retweetView = RetweetView()
     let hairlineView = SpacedSeparator(vertical: CardTeaserCell.borderInset, horizontal: CardTeaserCell.borderInset)
     let summaryView = SummaryView()
-    // TODO: add profile image
     
     var token: NotificationToken? = nil
     
