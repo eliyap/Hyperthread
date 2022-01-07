@@ -27,6 +27,11 @@ actor ReferenceCrawler {
     
     private var inFlight: Set<Tweet.ID> = []
     
+    /// Dispatch a fetch request for a single tweet.
+    public func fetchSingle(id: Tweet.ID) async -> Void {
+        await intermediate(conversationsDangling: [], discussionsDangling: [], unlinked: [id])
+    }
+    
     public func performFollowUp() async -> Void {
         var conversationsDangling: Set<Tweet.ID> = []
         var discussionsDangling: Set<Tweet.ID> = []
@@ -109,13 +114,12 @@ actor ReferenceCrawler {
                     mentionsCollector.formUnion(list)
                 }
             }
-            
         }
         
         /// Set constant to dispel error.
         let mentions = mentionsCollector
         
-        /// Dispatch task for missing users. Not necessary to continue
+        /// Dispatch task for missing users. Not necessary to continue.
         Task {
             await withTaskGroup(of: Void.self) { group in
                 mentions
