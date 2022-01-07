@@ -535,6 +535,7 @@
 				223BBF2427377BE500375530 /* Frameworks */,
 				223BBF2527377BE500375530 /* Resources */,
 				0BC796273172916157EBF55D /* [CP] Embed Pods Frameworks */,
+				22D25729278804B7005FC3D8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -677,6 +678,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperthread/Pods-Hyperthread-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		22D25729278804B7005FC3D8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "if [[ ${CONFIGURATION} == \"Debug\" ]]; then\n    bundlePath=\"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}\"\n    cp -R \"${SRCROOT}/AppData/ReloadTests.xcappdata\" $bundlePath\nfi\n";
 		};
 		C2F4D91FEDE3D8A0ECE530D0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
