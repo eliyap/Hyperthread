@@ -33,7 +33,6 @@ final class TimelineNewFetcher: HomeTimelineFetcher {
         /// Decrementing sinceID effectively re-fetches the most recent tweet.
         if let strID = sinceID, let intID = Int(strID) {
             sinceID = "\(intID - 1)"
-            print("Done!")
         }
         
         return try await timeline(credentials: credentials, sinceID: sinceID, maxID: nil)
