@@ -83,7 +83,6 @@
 		22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9062773059E00C4EE99 /* Transaction.swift */; };
 		22BE9C0D27606A280080E475 /* Supertall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BE9C0C27606A280080E475 /* Supertall.swift */; };
 		22BFD7A1277402B700E46DF1 /* FollowUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A0277402B700E46DF1 /* FollowUp.swift */; };
-		22BFD7A3277405F100E46DF1 /* HomeIngest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A2277405F100E46DF1 /* HomeIngest.swift */; };
 		22BFD7A52774620600E46DF1 /* HomeTimelineFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */; };
 		22BFD7A72775882000E46DF1 /* Collection<Enum>.max.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */; };
 		22BFD7A92775883F00E46DF1 /* Collection.isNotEmpty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A82775883F00E46DF1 /* Collection.isNotEmpty.swift */; };
@@ -205,7 +204,6 @@
 		22A9E9062773059E00C4EE99 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		22BE9C0C27606A280080E475 /* Supertall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supertall.swift; sourceTree = "<group>"; };
 		22BFD7A0277402B700E46DF1 /* FollowUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUp.swift; sourceTree = "<group>"; };
-		22BFD7A2277405F100E46DF1 /* HomeIngest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeIngest.swift; sourceTree = "<group>"; };
 		22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTimelineFetcher.swift; sourceTree = "<group>"; };
 		22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection<Enum>.max.swift"; sourceTree = "<group>"; };
 		22BFD7A82775883F00E46DF1 /* Collection.isNotEmpty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.isNotEmpty.swift; sourceTree = "<group>"; };
@@ -469,7 +467,6 @@
 			children = (
 				228D71E3277A800B00E306BD /* Conduit.swift */,
 				22BFD7A0277402B700E46DF1 /* FollowUp.swift */,
-				22BFD7A2277405F100E46DF1 /* HomeIngest.swift */,
 			);
 			path = Conduits;
 			sourceTree = "<group>";
@@ -829,7 +826,6 @@
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
-				22BFD7A3277405F100E46DF1 /* HomeIngest.swift in Sources */,
 				22193DB527859D2D005A7708 /* RealmError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
