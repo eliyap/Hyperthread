@@ -96,6 +96,7 @@
 		22D127EC274070CD00932614 /* MetricButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127EB274070CD00932614 /* MetricButtons.swift */; };
 		22D127EE2740713500932614 /* TimeDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127ED2740713500932614 /* TimeDifference.swift */; };
 		22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D257262787E402005FC3D8 /* LoadAppData.swift */; };
+		22D2572B27882334005FC3D8 /* AsyncFollowUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2572A27882334005FC3D8 /* AsyncFollowUp.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
 		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
 		22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F24640274DC20200AE17AD /* CanonicalString.swift */; };
@@ -214,6 +215,7 @@
 		22D127EB274070CD00932614 /* MetricButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricButtons.swift; sourceTree = "<group>"; };
 		22D127ED2740713500932614 /* TimeDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeDifference.swift; sourceTree = "<group>"; };
 		22D257262787E402005FC3D8 /* LoadAppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadAppData.swift; sourceTree = "<group>"; };
+		22D2572A27882334005FC3D8 /* AsyncFollowUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFollowUp.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
 		22F24640274DC20200AE17AD /* CanonicalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CanonicalString.swift; path = /Users/SAM/Documents/UIBranch/Models/CanonicalString.swift; sourceTree = "<absolute>"; };
@@ -459,6 +461,7 @@
 			children = (
 				228D71E3277A800B00E306BD /* Conduit.swift */,
 				22BFD7A0277402B700E46DF1 /* FollowUp.swift */,
+				22D2572A27882334005FC3D8 /* AsyncFollowUp.swift */,
 				22BFD7A2277405F100E46DF1 /* HomeIngest.swift */,
 			);
 			path = Conduits;
@@ -776,6 +779,7 @@
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
 				22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */,
 				22193DB72785A878005A7708 /* OnFollow.swift in Sources */,
+				22D2572B27882334005FC3D8 /* AsyncFollowUp.swift in Sources */,
 				222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,
