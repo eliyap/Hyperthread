@@ -61,7 +61,7 @@ func findMissingMentions(
     tweets: [RawHydratedTweet],
     includes: [RawHydratedTweet] = [],
     users: [RawUser]
-) -> [User.ID] {
+) -> Set<User.ID> {
     let mentionedIDs: [User.ID] = (tweets + includes)
         .compactMap(\.entities?.mentions)
         .flatMap { $0 }
@@ -69,7 +69,8 @@ func findMissingMentions(
     
     let fetchedIDs = users.map(\.id)
     
-    return mentionedIDs.filter { fetchedIDs.contains($0) == false }
+    return Set(mentionedIDs)
+        .filter { fetchedIDs.contains($0) == false }
 }
 
 extension Realm {
