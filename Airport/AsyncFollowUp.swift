@@ -16,13 +16,100 @@ public enum UserError: Error {
     case fetch(Error)
     case credentials
     case database
+    case nilSelf /// Special case for when `weak` resolves to `nil`.
 }
 
 actor ReferenceCrawler {
     
+    /// Singleton Object.
+    public static let shared: ReferenceCrawler = .init()
+    private init() {}
+    
     private var inFlight: Set<Tweet.ID> = []
     
-    private func fetch(ids: [Tweet.ID]) async -> Result<Void, UserError> {
+    public func performFollowUp() async -> Void {
+        var conversationsDangling: Set<Tweet.ID> = []
+        var discussionsDangling: Set<Tweet.ID> = []
+        
+        repeat {
+            conversationsDangling = Self.getDiscussionsDangling()
+            discussionsDangling = Self.getDiscussionsDangling()
+            await intermediate(conversationsDangling: conversationsDangling, discussionsDangling: discussionsDangling)
+        } while conversationsDangling.isNotEmpty
+        
+        /// Continue to follow up dangling `Discussion` references
+        /// even after we've chased down all the `Conversation`s.
+        Task {
+            var conversationsDangling: Set<Tweet.ID> = []
+            var discussionsDangling: Set<Tweet.ID> = []
+            repeat {
+                /// Though we *think* conversations are done, feel free to be proven wrong.
+                conversationsDangling = Self.getDiscussionsDangling()
+                if conversationsDangling.isNotEmpty {
+                    NetLog.warning("Unexpected conversation follow up!")
+                }
+                
+                discussionsDangling = Self.getDiscussionsDangling()
+                await intermediate(
+                    conversationsDangling: conversationsDangling,
+                    discussionsDangling: discussionsDangling
+                )
+            } while conversationsDangling.isNotEmpty || discussionsDangling.isNotEmpty
+        }
+    }
+    
+    private func intermediate(
+        conversationsDangling: Set<Tweet.ID>,
+        discussionsDangling: Set<Tweet.ID>
+    ) async {
+        /// Join lists.
+        let fetchList = conversationsDangling.union(discussionsDangling)
+            /// Check that we're not already fetching these.
+            .filter { inFlight.contains($0) == false }
+        
+        /// Record that these tweets are being fetched.
+        inFlight.formUnion(fetchList)
+        
+        var mentionsCollector: MentionList = []
+        await withTaskGroup(of: FetchResult.self) { group in
+            fetchList
+                .chunks(ofCount: TweetEndpoint.maxResults)
+                .forEach { chunk in
+                    group.addTask { [weak self] in
+                        await self?.fetch(ids: Array(chunk)) ?? .failure(.nilSelf)
+                    }
+                }
+            
+            /// Collect mention list together.
+            for await result in group {
+                if case .success(let list) = result {
+                    mentionsCollector.formUnion(list)
+                }
+            }
+            
+        }
+        
+        /// Set constant to dispel error.
+        let mentions = mentionsCollector
+        
+        /// Dispatch task for missing users. Not necessary to continue
+        Task {
+            await withTaskGroup(of: Void.self) { group in
+                mentions
+                    .chunks(ofCount: UserEndpoint.maxResults)
+                    .forEach { chunk in
+                        group.addTask {
+                            await UserFetcher.fetchAndStoreUsers(ids: Array(chunk))
+                        }
+                    }
+            }
+        }
+    }
+    
+    /// List of users mentioned that need to be fetched.
+    private typealias MentionList = Set<User.ID>
+    private typealias FetchResult = Result<MentionList, UserError>
+    private func fetch(ids: [Tweet.ID]) async -> FetchResult {
         guard let credentials = Auth.shared.credentials else {
             return .failure(.credentials)
         }
@@ -52,20 +139,8 @@ actor ReferenceCrawler {
             return .failure(.database)
         }
         
-        /// Dispatch task for missing users. Not necessary to continue iterating.
-        Task {
-            await withTaskGroup(of: Void.self) { group in
-                findMissingMentions(tweets: tweets, users: users)
-                    .chunks(ofCount: UserEndpoint.maxResults)
-                    .forEach { chunk in
-                        group.addTask {
-                            await UserFetcher.fetchAndStoreUsers(ids: Array(chunk))
-                        }
-                    }
-            }
-        }
-        
-        return .success(Void())
+        let missingMentions = findMissingMentions(tweets: tweets, users: users)
+        return .success(missingMentions)
     }
     
     /// Perform `Realm` work to store the fetched data.
@@ -78,6 +153,45 @@ actor ReferenceCrawler {
         
         let realm = try! Realm()
         try realm.updateDangling()
+    }
+    
+    private static func getConversationsDangling() -> Set<Tweet.ID> {
+        let realm = try! Realm()
+        
+        /// Find all conversations without a `Discussion`.
+        /// - Note: We do **not** apply a `Relevance` filter here.
+        ///   - Consider the case where
+        ///     - you follow C, but not B or A,
+        ///     - C quotes B, who quotes A.
+        ///   - C's conversation is "relevant", but B's is not.
+        ///   - Nevertheless B's conversation must be followed up to complete the `Discussion`.
+        let c = realm.objects(Conversation.self)
+            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "\(Conversation.discussionPropertyName).@count == 0")
+            ]))
+        NetLog.debug("\(c.count) conversations requiring follow up.", print: true, true)
+        
+        return c
+            .map { $0.getFollowUp() }
+            .reduce(Set<Tweet.ID>()) { $0.union($1) }
+    }
+    
+    private static func getDiscussionsDangling() -> Set<Tweet.ID> {
+        let realm = try! Realm()
+        
+        let d = realm.objects(Discussion.self)
+            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
+            /// Check if any `Tweet` is above the relevance threshold.
+            Discussion.minRelevancePredicate,
+            
+            /// Check if any `Tweet` has dangling references.
+            Discussion.danglingReferencePredicate,
+        ]))
+        NetLog.debug("\(d.count) discussions requiring follow up.", print: true, true)
+        
+        return d
+            .map { $0.getFollowUp() }
+            .reduce(Set<Tweet.ID>()) { $0.union($1) }
     }
 }
 
