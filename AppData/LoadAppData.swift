@@ -3,8 +3,8 @@
 //  Hyperthread
 //
 //  Source:
-//  https://www.codementor.io/@paulzabelin/xcode-app-data-suni6p4ma
-//
+//  https://jellystyle.com/2018/01/preloading-app-data
+//  Modified by Elijah Yap
 
 import Foundation
 
