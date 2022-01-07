@@ -25,7 +25,7 @@ final class FollowUp: Conduit<Void, Never> {
         let intakePublisher = intake
             /// Synchronize
             .receive(on: Airport.scheduler)
-            .map { (_) -> Set<Tweet.ID> in
+            .map { (_: Void) -> Set<Tweet.ID> in
                 let realm = try! Realm()
                 var toFetch: Set<Tweet.ID> = []
                 
