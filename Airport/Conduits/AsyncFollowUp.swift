@@ -18,7 +18,16 @@ actor ReferenceCrawler {
     private var inFlight: Set<Tweet.ID> = []
     
     public func performFollowUp() -> Void {
-//        var dangling
+        var dangling: Set<Tweet.ID> = []
+        var convDangling: Set<Tweet.ID> = []
+        var discDangling: Set<Tweet.ID> = []
+        
+        repeat {
+            convDangling = getConversationDangling()
+            discDangling = getDiscussionDangling()
+            dangling = convDangling.union(discDangling)
+            
+        } while convDangling.isNotEmpty
     }
     
     /// Find dangling references in local database.
