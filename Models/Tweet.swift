@@ -191,10 +191,6 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     public static func generateFake() -> Tweet {
         .init(Void())
     }
-    
-    public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
-        Set(referenced.filter { realm.tweet(id: $0) == nil })
-    }
 }
 
 extension Tweet {
