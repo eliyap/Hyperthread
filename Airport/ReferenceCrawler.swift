@@ -131,7 +131,7 @@ actor ReferenceCrawler {
                     .chunks(ofCount: UserEndpoint.maxResults)
                     .forEach { chunk in
                         group.addTask {
-                            await UserFetcher.fetchAndStoreUsers(ids: Array(chunk))
+                            await fetchAndStoreUsers(ids: Array(chunk))
                         }
                     }
             }

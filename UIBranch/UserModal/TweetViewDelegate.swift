@@ -45,7 +45,7 @@ extension ControlledCell: TweetViewDelegate {
                 
                 /// If not, delay presentation until they've been fetched.
                 /// - Note: if frequent, we may wish to add a `UIActivityIndicator`.
-                await UserFetcher.fetchAndStoreUsers(ids: [userID])
+                await fetchAndStoreUsers(ids: [userID])
             }
             
             guard let user = realm.user(id: userID) else {
