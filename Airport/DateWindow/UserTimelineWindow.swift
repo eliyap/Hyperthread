@@ -58,7 +58,7 @@ internal extension DateWindow {
 internal extension DateWindow {
     
     func overlaps(with other: DateWindow) -> Bool {
-        other.end > self.start && self.end > other.start
+        other.end >= self.start && self.end >= other.start
     }
     
     func union(_ other: DateWindow) -> DateWindow {
