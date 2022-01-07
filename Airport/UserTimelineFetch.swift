@@ -28,6 +28,9 @@ func fetchTimelines(window: DateWindow? = nil) async -> Void {
                 await execute(request, credentials: credentials, followingIDs: followingIDs)
             }
         }
+        
+        /// Return when all tasks in group complete.
+        await group.waitForAll()
     }
 }
 
