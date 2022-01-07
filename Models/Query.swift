@@ -96,6 +96,9 @@ extension Realm {
         let usersTweets = objects(Tweet.self)
             .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == %@", userID))
         
+        /// Check that returned set is non-empty.
+        ModelLog.debug("Setting relevance for \(usersTweets.count) tweets.", print: true, true)
+        
         /// Update all relevance metrics.
         for tweet in usersTweets {
             tweet.relevance = .init(tweet: tweet, following: [userID])
