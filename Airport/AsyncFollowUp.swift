@@ -19,6 +19,8 @@ public enum UserError: Error {
     case nilSelf /// Special case for when `weak` resolves to `nil`.
 }
 
+/** Handles the "follow up" logic for `Conversation`s and `Discussion`s.
+ */
 actor ReferenceCrawler {
     
     /// Singleton Object.
@@ -32,6 +34,9 @@ actor ReferenceCrawler {
         await intermediate(conversationsDangling: [], discussionsDangling: [], unlinked: [id])
     }
     
+    /// Follow up `Conversation`s without a `Discussion` and relevant `Discussions` with dangling references.
+    /// Returns when all `Conversation`s are followed up, but continues fetching `Discussions` asynchronously.
+    /// Rationale: Linking `Conversation`s can result in new `Discussion`s being added, which is more disruptive to the UI.
     public func performFollowUp() async -> Void {
         var conversationsDangling: Set<Tweet.ID> = []
         var discussionsDangling: Set<Tweet.ID> = []
