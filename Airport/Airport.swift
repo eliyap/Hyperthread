@@ -23,22 +23,9 @@ final class Airport {
      */
     public static let scheduler = DispatchQueue.main
     
-    private let newIngest: HomeIngest<TimelineNewFetcher>
-    private let oldIngest: HomeIngest<TimelineOldFetcher>
     private let userFetcher: UserFetcher = .init()
     
     init() {
-        self.newIngest = .init(userFetcher: userFetcher)
-        self.oldIngest = .init(userFetcher: userFetcher)
-    }
-    
-    public func requestNew(onFetched completion: @escaping () -> Void) {
-        newIngest.add(completion)
-        newIngest.intake.send()
-    }
-    
-    public func requestOld() {
-        oldIngest.intake.send()
     }
 }
 
