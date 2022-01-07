@@ -30,11 +30,23 @@ actor ReferenceCrawler {
     public func performFollowUp() async -> Void {
         var conversationsDangling: Set<Tweet.ID> = []
         var discussionsDangling: Set<Tweet.ID> = []
-        
+        var unlinked: Set<Tweet.ID> = []
         repeat {
             conversationsDangling = Self.getDiscussionsDangling()
             discussionsDangling = Self.getDiscussionsDangling()
-            await intermediate(conversationsDangling: conversationsDangling, discussionsDangling: discussionsDangling)
+            await intermediate(
+                conversationsDangling: conversationsDangling,
+                discussionsDangling: discussionsDangling,
+                unlinked: unlinked
+            )
+            
+            /// Perform linking.
+            do {
+                unlinked = try linkUnlinked()
+            } catch {
+                ModelLog.error("Linking error: \(error)")
+                assert(false)
+            }
         } while conversationsDangling.isNotEmpty
         
         /// Continue to follow up dangling `Discussion` references
@@ -42,6 +54,7 @@ actor ReferenceCrawler {
         Task {
             var conversationsDangling: Set<Tweet.ID> = []
             var discussionsDangling: Set<Tweet.ID> = []
+            var unlinked: Set<Tweet.ID> = []
             repeat {
                 /// Though we *think* conversations are done, feel free to be proven wrong.
                 conversationsDangling = Self.getDiscussionsDangling()
@@ -52,15 +65,25 @@ actor ReferenceCrawler {
                 discussionsDangling = Self.getDiscussionsDangling()
                 await intermediate(
                     conversationsDangling: conversationsDangling,
-                    discussionsDangling: discussionsDangling
+                    discussionsDangling: discussionsDangling,
+                    unlinked: unlinked
                 )
+                
+                /// Perform linking.
+                do {
+                    unlinked = try linkUnlinked()
+                } catch {
+                    ModelLog.error("Linking error: \(error)")
+                    assert(false)
+                }
             } while conversationsDangling.isNotEmpty || discussionsDangling.isNotEmpty
         }
     }
     
     private func intermediate(
         conversationsDangling: Set<Tweet.ID>,
-        discussionsDangling: Set<Tweet.ID>
+        discussionsDangling: Set<Tweet.ID>,
+        unlinked: Set<Tweet.ID>
     ) async {
         /// Join lists.
         let fetchList = conversationsDangling.union(discussionsDangling)
@@ -194,4 +217,3 @@ actor ReferenceCrawler {
             .reduce(Set<Tweet.ID>()) { $0.union($1) }
     }
 }
-
