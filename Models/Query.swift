@@ -44,6 +44,8 @@ extension Discussion {
         """)
     
     /// Check if any `Tweet` has dangling references.
+    /// - Note: `>` comparison works because `ReferenceSet` is an `OptionSet`,
+    ///         but `!=` is arguably clearer.
     static let danglingReferencePredicate = NSPredicate(format: """
         SUBQUERY(\(Discussion.conversationsPropertyName), $c,
             SUBQUERY(\(Conversation.tweetsPropertyName), $t,
