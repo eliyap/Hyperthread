@@ -255,13 +255,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		220C57F92787E14500BDB381 /* App Data */ = {
+		220C57F92787E14500BDB381 /* AppData */ = {
 			isa = PBXGroup;
 			children = (
 				220C57FA2787E16400BDB381 /* ReloadTests.xcappdata */,
 				22D257262787E402005FC3D8 /* LoadAppData.swift */,
 			);
-			path = "App Data";
+			path = AppData;
 			sourceTree = "<group>";
 		};
 		22193DAD27840466005A7708 /* UserModal */ = {
@@ -293,7 +293,7 @@
 		223BBF1E27377BE500375530 = {
 			isa = PBXGroup;
 			children = (
-				220C57F92787E14500BDB381 /* App Data */,
+				220C57F92787E14500BDB381 /* AppData */,
 				223BBF7F2738476B00375530 /* Misc */,
 				223BBF7227377EE500375530 /* Logging */,
 				223BBF6727377EAD00375530 /* Models */,
