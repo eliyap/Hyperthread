@@ -18,6 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /// Make opaque so that custom refresh controller doesn't show through.
         setOpaqueNavbar()
         
+        #if DEBUG
+        loadAppData()
+        #endif
+        
         return true
     }
 

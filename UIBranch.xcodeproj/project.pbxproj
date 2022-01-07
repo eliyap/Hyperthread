@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDeque.swift */; };
+		220C57FB2787E16400BDB381 /* ReloadTests.xcappdata in Resources */ = {isa = PBXBuildFile; fileRef = 220C57FA2787E16400BDB381 /* ReloadTests.xcappdata */; };
 		22193DA2278280CD005A7708 /* URLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA1278280CD005A7708 /* URLError.swift */; };
 		22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA327829C5E005A7708 /* ProfileImageView.swift */; };
 		22193DA627829CBD005A7708 /* ColorMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA527829CBC005A7708 /* ColorMarkerView.swift */; };
@@ -95,6 +96,7 @@
 		22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E927406F9700932614 /* RetweetSymbol.swift */; };
 		22D127EC274070CD00932614 /* MetricButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127EB274070CD00932614 /* MetricButtons.swift */; };
 		22D127EE2740713500932614 /* TimeDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127ED2740713500932614 /* TimeDifference.swift */; };
+		22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D257262787E402005FC3D8 /* LoadAppData.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
 		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
 		22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F24640274DC20200AE17AD /* CanonicalString.swift */; };
@@ -121,6 +123,7 @@
 
 /* Begin PBXFileReference section */
 		220101D327545B94005C1385 /* ViewControllerDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDeque.swift; sourceTree = "<group>"; };
+		220C57FA2787E16400BDB381 /* ReloadTests.xcappdata */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ReloadTests.xcappdata; sourceTree = "<group>"; };
 		22193DA1278280CD005A7708 /* URLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLError.swift; sourceTree = "<group>"; };
 		22193DA327829C5E005A7708 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		22193DA527829CBC005A7708 /* ColorMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ColorMarkerView.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/TweetCell/ColorMarkerView.swift; sourceTree = "<absolute>"; };
@@ -211,6 +214,7 @@
 		22D127E927406F9700932614 /* RetweetSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetweetSymbol.swift; sourceTree = "<group>"; };
 		22D127EB274070CD00932614 /* MetricButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricButtons.swift; sourceTree = "<group>"; };
 		22D127ED2740713500932614 /* TimeDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeDifference.swift; sourceTree = "<group>"; };
+		22D257262787E402005FC3D8 /* LoadAppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadAppData.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
 		22F24640274DC20200AE17AD /* CanonicalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CanonicalString.swift; path = /Users/SAM/Documents/UIBranch/Models/CanonicalString.swift; sourceTree = "<absolute>"; };
@@ -251,6 +255,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		220C57F92787E14500BDB381 /* App Data */ = {
+			isa = PBXGroup;
+			children = (
+				220C57FA2787E16400BDB381 /* ReloadTests.xcappdata */,
+				22D257262787E402005FC3D8 /* LoadAppData.swift */,
+			);
+			path = "App Data";
+			sourceTree = "<group>";
+		};
 		22193DAD27840466005A7708 /* UserModal */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,6 +293,7 @@
 		223BBF1E27377BE500375530 = {
 			isa = PBXGroup;
 			children = (
+				220C57F92787E14500BDB381 /* App Data */,
 				223BBF7F2738476B00375530 /* Misc */,
 				223BBF7227377EE500375530 /* Logging */,
 				223BBF6727377EAD00375530 /* Models */,
@@ -624,6 +638,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				223BBF3727377BE600375530 /* LaunchScreen.storyboard in Resources */,
+				220C57FB2787E16400BDB381 /* ReloadTests.xcappdata in Resources */,
 				223BBF3427377BE600375530 /* Assets.xcassets in Resources */,
 				223BBF3227377BE500375530 /* Main.storyboard in Resources */,
 			);
@@ -743,6 +758,7 @@
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
+				22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */,
 				22193DB72785A878005A7708 /* OnFollow.swift in Sources */,
 				222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
