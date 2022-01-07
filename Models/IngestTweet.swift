@@ -149,7 +149,8 @@ fileprivate func link(_ token: Realm.TransactionToken, conversation: Conversatio
     
     /// Remove conversations that are standalone discussions.
     guard let rootPRID: Tweet.ID = root.primaryReference else {
-        /// Recognize conversation as its own discussion.
+        /// Since the `root` has no references, its conversation is the `Discussion.root`.
+        /// Recognize the conversation as its own discussion.
         conversation.upstream = root.id
         realm.add(Discussion(root: conversation))
         
