@@ -33,27 +33,6 @@ extension Realm {
     }
 }
 
-extension Realm {
-    
-    func conversationsWithFollowUp() -> Results<Conversation> {
-        objects(Conversation.self)
-            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "\(Conversation.discussionPropertyName).@count == 0")
-            ]))
-    }
-    
-    func discussionsWithFollowUp() -> Results<Discussion> {
-        objects(Discussion.self)
-            .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
-                /// Check if any `Tweet` is above the relevance threshold.
-                Discussion.minRelevancePredicate,
-                
-                /// Check if any `Tweet` has dangling references.
-                Discussion.danglingReferencePredicate,
-            ]))
-    }
-}
-    
 extension Discussion {
     /// Check if any `Tweet` is above the relevance threshold.
     static let minRelevancePredicate = NSPredicate(format: """

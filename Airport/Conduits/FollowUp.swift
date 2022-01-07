@@ -29,13 +29,30 @@ final class FollowUp: Conduit<Void, Never> {
                 let realm = try! Realm()
                 var toFetch: Set<Tweet.ID> = []
                 
-                let c = realm.conversationsWithFollowUp()
+                /// Find all conversations without a `Discussion`.
+                /// - Note: We do **not** apply a `Relevance` filter here.
+                ///   - Consider the case where 
+                ///     - you follow C, but not B or A,
+                ///     - C quotes B, who quotes A.
+                ///   - C's conversation is "relevant", but B's is not. 
+                ///   - Nevertheless B's conversation must be followed up to complete the `Discussion`.
+                let c = realm.objects(Conversation.self)
+                    .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
+                        NSPredicate(format: "\(Conversation.discussionPropertyName).@count == 0")
+                    ]))
                 toFetch.formUnion(c
                     .map { $0.getFollowUp() }
                     .reduce(Set<Tweet.ID>()) { $0.union($1) }
                 )
                 
-                let d = realm.discussionsWithFollowUp()
+                let d = realm.objects(Discussion.self)
+                    .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
+                    /// Check if any `Tweet` is above the relevance threshold.
+                    Discussion.minRelevancePredicate,
+                    
+                    /// Check if any `Tweet` has dangling references.
+                    Discussion.danglingReferencePredicate,
+                ]))
                 toFetch.formUnion(d
                     .map { $0.getFollowUp() }
                     .reduce(Set<Tweet.ID>()) { $0.union($1) }
