@@ -46,6 +46,7 @@ fileprivate func execute(_ request: TimelineRequest, credentials: OAuthCredentia
     }
 }
 
+/// Update the `User`'s `DateWindow`, which records the time-period over which we fetched all their `Tweet`s.
 fileprivate func updateUserWindow(request: TimelineRequest, tweets: [RawHydratedTweet]) {
     /// Check tweets are indeed from only one `User`.
     /// Ignore `included` since they might be from other users.
