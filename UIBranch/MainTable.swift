@@ -222,8 +222,16 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 self.scrollAction()
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                TableLog.debug("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.", print: true, true)
+                #if DEBUG
+                var report = ["MainTable: \(results.count) discussions"]
+                if deletions.isNotEmpty { report.append("(-)\(deletions.count)")}
+                if insertions.isNotEmpty { report.append("(+)\(insertions.count)")}
+                if modifications.isNotEmpty { report.append("(~)\(modifications.count)")}
+                TableLog.debug(report.joined(separator: ", "), print: true, true)
+                
                 TableLog.debug("Insertion indices: \(insertions)", print: true, false)
+                #endif
+                
                 self.setContents(to: results, animated: false)
                 
                 /// Only restore scroll position if items were added to the top of the queue.
