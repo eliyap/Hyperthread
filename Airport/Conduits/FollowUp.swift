@@ -72,7 +72,7 @@ final class FollowUp: Conduit<Void, Never> {
                     for tweet in tweets {
                         inFlight.remove(tweet.id)
                     }
-                    NetLog.debug("Follow up has \(inFlight.count) in flight.", print: true, true)
+                    NetLog.debug("Follow up has \(inFlight.count) in flight.", print: false, true)
                     
                     let realm = try! Realm()
                     try realm.updateDangling()

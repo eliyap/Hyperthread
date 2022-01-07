@@ -241,7 +241,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         var snapshot = Snapshot()
         snapshot.appendSections([.Main])
         snapshot.appendItems(Array(results), toSection: .Main)
-        TableLog.debug("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.", print: true)
+        TableLog.debug("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.", print: false)
         apply(snapshot, animatingDifferences: animated)
         
         fetcher.numDiscussions = results.count
