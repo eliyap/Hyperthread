@@ -1,6 +1,9 @@
 **/xcuserdata/
 **/xcshareddata/
 
+# Stored Data, do not upload because it may contain API Keys
+**/*.xcappdata
+
 ### CocoaPods Realm ###
 # Unused Platforms
 Pods/Realm/core/realm-monorepo.xcframework/watchos*
