@@ -97,7 +97,7 @@
 		22D127EE2740713500932614 /* TimeDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127ED2740713500932614 /* TimeDifference.swift */; };
 		22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D257262787E402005FC3D8 /* LoadAppData.swift */; };
 		22D2572E27883A56005FC3D8 /* ScrollPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2572D27883A56005FC3D8 /* ScrollPosition.swift */; };
-		22D2573127883F75005FC3D8 /* AsyncFollowUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573027883F75005FC3D8 /* AsyncFollowUp.swift */; };
+		22D2573127883F75005FC3D8 /* ReferenceCrawler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */; };
 		22D257342788459D005FC3D8 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 22D257332788459D005FC3D8 /* Algorithms */; };
 		22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
@@ -219,7 +219,7 @@
 		22D127ED2740713500932614 /* TimeDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeDifference.swift; sourceTree = "<group>"; };
 		22D257262787E402005FC3D8 /* LoadAppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadAppData.swift; sourceTree = "<group>"; };
 		22D2572D27883A56005FC3D8 /* ScrollPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollPosition.swift; sourceTree = "<group>"; };
-		22D2573027883F75005FC3D8 /* AsyncFollowUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFollowUp.swift; sourceTree = "<group>"; };
+		22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceCrawler.swift; sourceTree = "<group>"; };
 		22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncHomeTimeline.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
@@ -385,7 +385,7 @@
 				223BBF5F27377E8700375530 /* Airport.swift */,
 				22193DA92783DD5E005A7708 /* FollowingCache.swift */,
 				22193DAB2783E158005A7708 /* UserTimelineFetch.swift */,
-				22D2573027883F75005FC3D8 /* AsyncFollowUp.swift */,
+				22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */,
 				22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */,
 				22193DB62785A878005A7708 /* OnFollow.swift */,
 				22193DB92785C20B005A7708 /* OnUnfollow.swift */,
@@ -782,7 +782,7 @@
 				220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */,
 				22680A92276B41B1008827F8 /* Relevance.swift in Sources */,
 				222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */,
-				22D2573127883F75005FC3D8 /* AsyncFollowUp.swift in Sources */,
+				22D2573127883F75005FC3D8 /* ReferenceCrawler.swift in Sources */,
 				228D71E7277A953500E306BD /* DateWindow.swift in Sources */,
 				22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
