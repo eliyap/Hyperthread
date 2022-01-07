@@ -86,7 +86,7 @@ actor ReferenceCrawler {
         unlinked: Set<Tweet.ID>
     ) async {
         /// Join lists.
-        let fetchList = conversationsDangling.union(discussionsDangling)
+        let fetchList = conversationsDangling.union(discussionsDangling).union(unlinked)
             /// Check that we're not already fetching these.
             .filter { inFlight.contains($0) == false }
         
