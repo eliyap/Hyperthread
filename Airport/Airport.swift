@@ -22,38 +22,11 @@ final class Airport {
         https://www.avanderlee.com/combine/runloop-main-vs-dispatchqueue-main/
      */
     public static let scheduler = DispatchQueue.main
-    
-    private let userFetcher: UserFetcher = .init()
-    
     init() {
     }
 }
 
 internal class UserFetcher: Conduit<User.ID, Never> {
-    
-    override init() {
-        /// - Note: tolerance set to 100% to prevent performance hits.
-        /// Docs: https://developer.apple.com/documentation/foundation/timer/1415085-tolerance
-        let timer = Timer.publish(every: 0.05, tolerance: 0.05, on: .main, in: .default)
-            .autoconnect()
-        
-        super.init()
-        self.pipeline = intake
-            .buffer(size: UInt(UserEndpoint.maxResults), timer)
-            .filter(\.isNotEmpty)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .failure(let error):
-                    NetLog.error(error.localizedDescription)
-                    assert(false)
-                case .finished:
-                    NetLog.error("Unexpected completion!")
-                    assert(false)
-                }
-            }, receiveValue: { ids in
-                Task { await Self.fetchAndStoreUsers(ids: ids) }
-            })
-    }
     
     internal static func fetchAndStoreUsers(ids: [User.ID]) async -> Void {
         /// Only proceed if credentials are loaded.
