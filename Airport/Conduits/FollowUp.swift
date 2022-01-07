@@ -52,7 +52,9 @@ final class FollowUp: Conduit<Void, Never> {
             }
             .map { (ids: [Tweet.ID]) -> [Tweet.ID] in
                 inFlight.formUnion(ids)
-                NetLog.debug("Requesting \(ids.count) tweets", print: true, true)
+                if ids.isNotEmpty {
+                    NetLog.debug("Follow up requesting \(ids.count) tweets", print: true, true)
+                }
                 return ids
             }
             .v2Fetch()
