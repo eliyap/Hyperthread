@@ -170,6 +170,7 @@ final class MainTable: UITableViewController {
         }
         
         let path = tablePos.indexPath
+        TableLog.debug("Now scrolling to path \(path).", print: true, true)
         guard path.row < tableView.numberOfRows(inSection: 0) else {
             TableLog.error("Out of bounds index path! \(path)")
             return
