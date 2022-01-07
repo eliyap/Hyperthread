@@ -18,7 +18,6 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
         .autoconnect()
     
     /// Conduit Object with which to request follow up fetches.
-    private weak var followUp: FollowUp?
     
     /// Conduit Object with which to request user timeline fetches.
     
@@ -28,12 +27,8 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
     /// Completion handlers to be executed and discarded when a fetch completes successfully.
     private var onFetched: [() -> Void] = []
     
-    public init(
-        followUp: FollowUp,
-        userFetcher: UserFetcher
-    ) {
+    public init(userFetcher: UserFetcher) {
         super.init()
-        self.followUp = followUp
         self.userFetcher = userFetcher
         
         let fetcher = Fetcher()
@@ -76,7 +71,7 @@ final class HomeIngest<Fetcher: HomeTimelineFetcher>: Conduit<Void, Never> {
                     Task { await fetchTimelines() }
                     
                     /// Immediately check for follow up.
-                    followUp.intake.send()
+                    Task { await ReferenceCrawler.shared.performFollowUp() }
                     
                     self?.removeAll()
                 } catch {
