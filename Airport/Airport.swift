@@ -23,15 +23,13 @@ final class Airport {
      */
     public static let scheduler = DispatchQueue.main
     
-    private let followUp: FollowUp
     private let newIngest: HomeIngest<TimelineNewFetcher>
     private let oldIngest: HomeIngest<TimelineOldFetcher>
     private let userFetcher: UserFetcher = .init()
     
     init() {
-        self.followUp = .init(userFetcher: userFetcher)
-        self.newIngest = .init(followUp: followUp, userFetcher: userFetcher)
-        self.oldIngest = .init(followUp: followUp, userFetcher: userFetcher)
+        self.newIngest = .init(userFetcher: userFetcher)
+        self.oldIngest = .init(userFetcher: userFetcher)
     }
     
     public func requestNew(onFetched completion: @escaping () -> Void) {
@@ -110,5 +108,4 @@ internal class UserFetcher: Conduit<User.ID, Never> {
             assert(false)
         }
     }
-
 }
