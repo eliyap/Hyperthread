@@ -48,6 +48,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     /// Fortunately, we can assume that a Tweet will never change users.
     @Persisted
     var authorID: User.ID
+    public static let authorIDPropertyName = "authorID"
     
     /// - Note: Tweet must belong to a unique ``Conversation``.
     @Persisted(originProperty: Conversation.tweetsPropertyName)
@@ -190,10 +191,6 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     public static func generateFake() -> Tweet {
         .init(Void())
     }
-    
-    public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
-        Set(referenced.filter { realm.tweet(id: $0) == nil })
-    }
 }
 
 extension Tweet {
@@ -304,6 +301,10 @@ extension Realm {
 
 extension Tweet: ReplyIdentifiable {
     var replyID: String? { replying_to }
+}
+
+extension Tweet: RetweetIdentifiable {
+    var retweetID: String? { retweeting }
 }
 
 extension Realm {

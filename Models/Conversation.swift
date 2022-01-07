@@ -39,9 +39,9 @@ final class Conversation: Object, Identifiable {
     var tweets: List<Tweet>
     public static let tweetsPropertyName = "tweets"
     
-    public func getFollowUp(realm: Realm) -> Set<Tweet.ID> {
+    public func getFollowUp() -> Set<Tweet.ID> {
         tweets
-            .map { $0.getFollowUp(realm: realm) }
+            .map(\.danglingReferences)
             .reduce([]) { $0.union($1) }
     }
     

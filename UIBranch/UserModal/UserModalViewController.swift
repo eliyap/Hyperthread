@@ -9,26 +9,24 @@ import Foundation
 import UIKit
 import RealmSwift
 
-#warning("View Incomplete")
 final class UserModalViewController: UIViewController {
     
     public static let inset = CardTeaserCell.borderInset
     
+    /// Component Views.
+    private let doneBtn: UIButton
     private let stackView: UIStackView
-    
     private let userView: UserView = .init(line: nil, constrainLines: false)
     private let followingLine: FollowingLine
+    private let spacer: UIView
 
-    #warning("TODO: add profile view")
-    
-    private let userID: User.ID
-    
     private var token: NotificationToken? = nil
     
-    init(userID: User.ID) {
-        self.userID = userID
+    init(user: User) {
+        self.doneBtn = .init(configuration: .plain(), primaryAction: nil)
         self.stackView = .init()
-        self.followingLine = .init()
+        self.followingLine = .init(user: user)
+        self.spacer = .init()
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .automatic
         view.backgroundColor = .systemBackground
@@ -37,20 +35,21 @@ final class UserModalViewController: UIViewController {
         view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .center
+        stackView.spacing = Self.inset
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
+        stackView.addArrangedSubview(doneBtn)
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(followingLine)
+        stackView.addArrangedSubview(spacer)
         
-        let realm = try! Realm()
-        guard let user = realm.user(id: userID) else {
-            ModelLog.error("Could not find user with ID \(userID)")
-            showAlert(message: "Could not find that user!")
-            dismiss(animated: true)
-            return
-        }
+        doneBtn.setTitle("Done", for: .normal)
+        doneBtn.addAction(UIAction(handler: { [weak self] action in
+            self?.dismiss(animated: true)
+        }), for: .touchUpInside)
+        
         configure(user: user)
-        registerToken(userID: userID)
+        registerToken(user: user)
         
         constrain()
     }
@@ -58,37 +57,48 @@ final class UserModalViewController: UIViewController {
     private func constrain() -> Void {
         /// Inset edges.
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: Self.inset),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Self.inset),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.inset),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Self.inset),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Self.inset),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Self.inset),
+            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Self.inset),
+            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Self.inset),
         ])
         
         /// Make user view "as short as possible".
         let shortSqueeze = userView.heightAnchor.constraint(equalToConstant: .zero)
         shortSqueeze.priority = .defaultLow
         shortSqueeze.isActive = true
+        
+        doneBtn.contentHorizontalAlignment = .trailing
+        NSLayoutConstraint.activate([
+            doneBtn.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+        ])
     }
     
-    private func registerToken(userID: User.ID) -> Void {
+    private func registerToken(user: User) -> Void {
+        /// Kill old token, just in case.
         token?.invalidate()
-        let realm = try! Realm()
-        token = realm.user(id: userID)?.observe { [weak self] change in
+        
+        /// Bind id locally, to prevent threading mistakes with Realm.
+        let userID = user.id
+        
+        token = user.observe { [weak self] change in
             switch change {
             case .change(_, let properties):
-                for property in properties {
-                    if property.name == User.followingPropertyName {
-                        guard let following = property.newValue as? User.FollowingPropertyType else {
-                            TableLog.error("Incorrect type \(type(of: property.newValue))")
-                            assert(false)
-                            return
-                        }
-                        self?.followingLine.configure(userID: userID, following: following)
-                    }
+                /// Perform user lookup to update object.
+                /// Look up full user object.
+                let realm = try! Realm()
+                guard let user = realm.user(id: userID) else {
+                    TableLog.error("Could not find user with id \(userID)")
+                    showAlert(message: "Could not find user")
+                    return
                 }
+                
+                self?.followingLine.configure(user: user)
+            
             case .error(let error):
                 TableLog.error("Key Path Listenener Error: \(error)")
                 assert(false)
+            
             case .deleted:
                 TableLog.error("User with id \(userID) deleted!")
                 assert(false)
@@ -98,6 +108,7 @@ final class UserModalViewController: UIViewController {
     
     private func configure(user: User) -> Void {
         userView.configure(user: user)
+        followingLine.configure(user: user)
     }
     
     @objc

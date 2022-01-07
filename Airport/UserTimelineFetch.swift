@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 import Twig
 
-func fetchTimelines() async -> Void {
+func fetchTimelines(window: DateWindow? = nil) async -> Void {
     /// Check that credentials are present.
     guard let credentials = Auth.shared.credentials else {
         NetLog.error("Credentials missing.")
@@ -18,7 +18,7 @@ func fetchTimelines() async -> Void {
     }
     
     let followingIDs = await FollowingCache.shared.request()
-    let requests: [TimelineRequest] = getRequests(followingIDs: followingIDs)
+    let requests: [TimelineRequest] = getRequests(followingIDs: followingIDs, window: window)
     
     /// Dispatch requests concurrently.
     /// Article: https://www.swiftbysundell.com/articles/swift-concurrency-multiple-tasks-in-parallel/
@@ -28,13 +28,16 @@ func fetchTimelines() async -> Void {
                 await execute(request, credentials: credentials, followingIDs: followingIDs)
             }
         }
+        
+        /// Return when all tasks in group complete.
+        await group.waitForAll()
     }
 }
 
 fileprivate func execute(_ request: TimelineRequest, credentials: OAuthCredentials, followingIDs: [User.ID]) async -> Void {
     let (tweets, included, users, media) = await fetchRawTimeline(request: request, credentials: credentials)
     do {
-        NetLog.debug("Received \(tweets.count) user timeline tweets.", print: false, true)
+        NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
         
         /// Safe to insert `included`, as we make no assumptions around `Relevance`.
         try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
@@ -46,6 +49,7 @@ fileprivate func execute(_ request: TimelineRequest, credentials: OAuthCredentia
     }
 }
 
+/// Update the `User`'s `DateWindow`, which records the time-period over which we fetched all their `Tweet`s.
 fileprivate func updateUserWindow(request: TimelineRequest, tweets: [RawHydratedTweet]) {
     /// Check tweets are indeed from only one `User`.
     /// Ignore `included` since they might be from other users.
@@ -128,7 +132,7 @@ fileprivate func fetchRawTimeline(
     return (tweets, included, users, media)
 }
 
-fileprivate func getRequests(followingIDs: [User.ID]) -> [TimelineRequest] {
+fileprivate func getRequests(followingIDs: [User.ID], window: DateWindow? = nil) -> [TimelineRequest] {
     /// Fetch complete `User` objects from Realm database.
     let realm = try! Realm()
     let users = followingIDs.compactMap(realm.user(id:))
@@ -136,8 +140,11 @@ fileprivate func getRequests(followingIDs: [User.ID]) -> [TimelineRequest] {
     
     var result: [TimelineRequest] = []
     
-    /// - Note: We assume that this value was updated as needed before the function call.
-    let global = UserDefaults.groupSuite.userTimelineWindow
+    
+    /// Use `window` if provided.
+    let global = window
+        /// - Note: We assume that this value was updated as needed before the function call.
+        ?? UserDefaults.groupSuite.userTimelineWindow
     
     /// Check what portions of the user timeline are un-fetched.
     for user in users {

@@ -97,10 +97,10 @@ extension Discussion {
                 if realm.tweet(id: PRID) != nil {
                     ModelLog.error("Primary Reference was present but not attached! id \(PRID)")
                 }
+
+                Task { await ReferenceCrawler.shared.fetchSingle(id: PRID) }
+                assert(false)
                 
-                airport.request(id: PRID)
-                
-                #warning("TODO: dev crash here.")
                 continue
             }
             let newNode = Node(t, depth: PRNode.depth + 1, parent: PRNode, user: realm.user(id: t.authorID)!)

@@ -13,7 +13,8 @@ extension UIViewController {
     func getNavBarHeight() -> CGFloat {
         let guess: CGFloat = 50 /// An observed value.
         guard let height = navigationController?.navigationBar.frame.height else {
-            Logger.general.warning("Could not determine nav bar height!")
+            /// 22.01.07: this is a common, non-problematic failure.
+            Logger.general.debug("Could not determine nav bar height!", print: false, false)
             return guess
         }
         return height
@@ -22,7 +23,8 @@ extension UIViewController {
     func getStatusBarHeight() -> CGFloat {
         let guess: CGFloat = 20 /// An observed value.
         guard let height = getWindowScene()?.statusBarManager?.statusBarFrame.height else {
-            Logger.general.warning("Could not determine status bar height!")
+            /// 22.01.07: this is a common, non-problematic failure.
+            Logger.general.debug("Could not determine status bar height!", print: false, false)
             return guess
         }
         return height

@@ -58,7 +58,7 @@ internal extension DateWindow {
 internal extension DateWindow {
     
     func overlaps(with other: DateWindow) -> Bool {
-        other.end > self.start && self.end > other.start
+        other.end >= self.start && self.end >= other.start
     }
     
     func union(_ other: DateWindow) -> DateWindow {
@@ -67,7 +67,13 @@ internal extension DateWindow {
         if self.duration == .zero { return other }
         
         if overlaps(with: other) == false, other.duration > 0, self.duration > 0 {
-            Logger.general.warning("No overlap between non-zero DateWindows \(self) and \(other)")
+            Logger.general.warning("""
+                No overlap between non-zero DateWindows!
+                - 1st: \(self)
+                - 2nd: \(other)
+                - 1st-2nd Gap: \(self.start.timeIntervalSince(other.end))
+                - 2nd-1st Gap: \(other.start.timeIntervalSince(self.end))
+                """)
         }
         
         return .init(

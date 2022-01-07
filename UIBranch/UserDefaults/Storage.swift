@@ -59,41 +59,4 @@ extension UserDefaults {
             set(newValue, forKey: Self.maxIDKey)
         }
     }
-
-    fileprivate static let scrollPositionKey = "scrollPosition"
-    var scrollPosition: TableScrollPosition? {
-        get {
-            guard let data = object(forKey: Self.scrollPositionKey) as? Data else {
-                return nil
-            }
-            guard let loaded = try? JSONDecoder().decode(TableScrollPosition.self, from: data) else {
-                assert(false, "Could not decode TableScrollPosition!")
-                return nil
-            }
-            return loaded
-        }
-        set {
-            guard let encoded = try? JSONEncoder().encode(newValue) else {
-                assert(false, "Could not encode!")
-                return
-            }
-            set(encoded, forKey: Self.scrollPositionKey)
-        }
-    }
-    
-    /// Returns whether the operation was successful.
-    @discardableResult
-    func incrementScrollPositionRow() -> Bool {
-        guard let val = scrollPosition else { return false }
-        var path = val.indexPath
-        path.row += 1
-        scrollPosition = TableScrollPosition(indexPath: path, offset: val.offset)
-        return true
-    }
-}
-
-/// A "bookmark" for saving scroll position.
-struct TableScrollPosition: Codable, Hashable {
-    let indexPath: IndexPath
-    let offset: CGFloat
 }

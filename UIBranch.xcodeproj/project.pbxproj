@@ -16,6 +16,9 @@
 		22193DAF27840477005A7708 /* URLScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DAE27840477005A7708 /* URLScheme.swift */; };
 		22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB02784050F005A7708 /* TweetViewDelegate.swift */; };
 		22193DB327840923005A7708 /* UserModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB227840923005A7708 /* UserModalViewController.swift */; };
+		22193DB527859D2D005A7708 /* RealmError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB427859D2B005A7708 /* RealmError.swift */; };
+		22193DB72785A878005A7708 /* OnFollow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB62785A878005A7708 /* OnFollow.swift */; };
+		22193DBA2785C20B005A7708 /* OnUnfollow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DB92785C20B005A7708 /* OnUnfollow.swift */; };
 		221A296D275D36B700C283FE /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 221A296C275D36B700C283FE /* SDWebImage */; };
 		221A2970275D533D00C283FE /* ControlledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A296F275D533D00C283FE /* ControlledCell.swift */; };
 		221A2992275D680900C283FE /* AlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A2991275D680900C283FE /* AlbumController.swift */; };
@@ -80,7 +83,6 @@
 		22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9062773059E00C4EE99 /* Transaction.swift */; };
 		22BE9C0D27606A280080E475 /* Supertall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BE9C0C27606A280080E475 /* Supertall.swift */; };
 		22BFD7A1277402B700E46DF1 /* FollowUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A0277402B700E46DF1 /* FollowUp.swift */; };
-		22BFD7A3277405F100E46DF1 /* HomeIngest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A2277405F100E46DF1 /* HomeIngest.swift */; };
 		22BFD7A52774620600E46DF1 /* HomeTimelineFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */; };
 		22BFD7A72775882000E46DF1 /* Collection<Enum>.max.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */; };
 		22BFD7A92775883F00E46DF1 /* Collection.isNotEmpty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A82775883F00E46DF1 /* Collection.isNotEmpty.swift */; };
@@ -92,6 +94,11 @@
 		22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127E927406F9700932614 /* RetweetSymbol.swift */; };
 		22D127EC274070CD00932614 /* MetricButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127EB274070CD00932614 /* MetricButtons.swift */; };
 		22D127EE2740713500932614 /* TimeDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D127ED2740713500932614 /* TimeDifference.swift */; };
+		22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D257262787E402005FC3D8 /* LoadAppData.swift */; };
+		22D2572E27883A56005FC3D8 /* ScrollPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2572D27883A56005FC3D8 /* ScrollPosition.swift */; };
+		22D2573127883F75005FC3D8 /* ReferenceCrawler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */; };
+		22D257342788459D005FC3D8 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 22D257332788459D005FC3D8 /* Algorithms */; };
+		22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
 		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
 		22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F24640274DC20200AE17AD /* CanonicalString.swift */; };
@@ -118,6 +125,7 @@
 
 /* Begin PBXFileReference section */
 		220101D327545B94005C1385 /* ViewControllerDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDeque.swift; sourceTree = "<group>"; };
+		220C57FA2787E16400BDB381 /* ReloadTests.xcappdata */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ReloadTests.xcappdata; sourceTree = "<group>"; };
 		22193DA1278280CD005A7708 /* URLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLError.swift; sourceTree = "<group>"; };
 		22193DA327829C5E005A7708 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		22193DA527829CBC005A7708 /* ColorMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ColorMarkerView.swift; path = /Users/SAM/Documents/UIBranch/UIBranch/TweetCell/ColorMarkerView.swift; sourceTree = "<absolute>"; };
@@ -126,6 +134,9 @@
 		22193DAE27840477005A7708 /* URLScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLScheme.swift; sourceTree = "<group>"; };
 		22193DB02784050F005A7708 /* TweetViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetViewDelegate.swift; sourceTree = "<group>"; };
 		22193DB227840923005A7708 /* UserModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModalViewController.swift; sourceTree = "<group>"; };
+		22193DB427859D2B005A7708 /* RealmError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmError.swift; sourceTree = "<group>"; };
+		22193DB62785A878005A7708 /* OnFollow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnFollow.swift; sourceTree = "<group>"; };
+		22193DB92785C20B005A7708 /* OnUnfollow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnUnfollow.swift; sourceTree = "<group>"; };
 		221A296F275D533D00C283FE /* ControlledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledCell.swift; sourceTree = "<group>"; };
 		221A2991275D680900C283FE /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
 		221A2993275D943E00C283FE /* RemoveDuplicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveDuplicates.swift; sourceTree = "<group>"; };
@@ -193,7 +204,6 @@
 		22A9E9062773059E00C4EE99 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		22BE9C0C27606A280080E475 /* Supertall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supertall.swift; sourceTree = "<group>"; };
 		22BFD7A0277402B700E46DF1 /* FollowUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUp.swift; sourceTree = "<group>"; };
-		22BFD7A2277405F100E46DF1 /* HomeIngest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeIngest.swift; sourceTree = "<group>"; };
 		22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTimelineFetcher.swift; sourceTree = "<group>"; };
 		22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection<Enum>.max.swift"; sourceTree = "<group>"; };
 		22BFD7A82775883F00E46DF1 /* Collection.isNotEmpty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.isNotEmpty.swift; sourceTree = "<group>"; };
@@ -205,6 +215,10 @@
 		22D127E927406F9700932614 /* RetweetSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetweetSymbol.swift; sourceTree = "<group>"; };
 		22D127EB274070CD00932614 /* MetricButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricButtons.swift; sourceTree = "<group>"; };
 		22D127ED2740713500932614 /* TimeDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeDifference.swift; sourceTree = "<group>"; };
+		22D257262787E402005FC3D8 /* LoadAppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadAppData.swift; sourceTree = "<group>"; };
+		22D2572D27883A56005FC3D8 /* ScrollPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollPosition.swift; sourceTree = "<group>"; };
+		22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceCrawler.swift; sourceTree = "<group>"; };
+		22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncHomeTimeline.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
 		22F24640274DC20200AE17AD /* CanonicalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CanonicalString.swift; path = /Users/SAM/Documents/UIBranch/Models/CanonicalString.swift; sourceTree = "<absolute>"; };
@@ -224,6 +238,7 @@
 				22F2463D274CA41800AE17AD /* BlackBox in Frameworks */,
 				221A296D275D36B700C283FE /* SDWebImage in Frameworks */,
 				223BBF5D27377E4600375530 /* Twig in Frameworks */,
+				22D257342788459D005FC3D8 /* Algorithms in Frameworks */,
 				E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -245,6 +260,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		220C57F92787E14500BDB381 /* AppData */ = {
+			isa = PBXGroup;
+			children = (
+				220C57FA2787E16400BDB381 /* ReloadTests.xcappdata */,
+				22D257262787E402005FC3D8 /* LoadAppData.swift */,
+			);
+			path = AppData;
+			sourceTree = "<group>";
+		};
 		22193DAD27840466005A7708 /* UserModal */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,6 +298,7 @@
 		223BBF1E27377BE500375530 = {
 			isa = PBXGroup;
 			children = (
+				220C57F92787E14500BDB381 /* AppData */,
 				223BBF7F2738476B00375530 /* Misc */,
 				223BBF7227377EE500375530 /* Logging */,
 				223BBF6727377EAD00375530 /* Models */,
@@ -315,7 +340,7 @@
 				223BBF7D273846BE00375530 /* LoginState.swift */,
 				223BBF792737867800375530 /* AuthView.swift */,
 				223BBF83273847E900375530 /* LoginViewController.swift */,
-				223BBF7727377F5100375530 /* Storage.swift */,
+				22D2572C27883A35005FC3D8 /* UserDefaults */,
 				222161F32741C2F400220F0C /* AssetColors.swift */,
 				223BBF3027377BE500375530 /* Main.storyboard */,
 				223BBF3327377BE600375530 /* Assets.xcassets */,
@@ -358,6 +383,10 @@
 				223BBF5F27377E8700375530 /* Airport.swift */,
 				22193DA92783DD5E005A7708 /* FollowingCache.swift */,
 				22193DAB2783E158005A7708 /* UserTimelineFetch.swift */,
+				22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */,
+				22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */,
+				22193DB62785A878005A7708 /* OnFollow.swift */,
+				22193DB92785C20B005A7708 /* OnUnfollow.swift */,
 				228D71E5277A805900E306BD /* Conduits */,
 				22BFD7A42774620600E46DF1 /* HomeTimelineFetcher.swift */,
 				228D71EE2780127400E306BD /* DateWindow */,
@@ -381,6 +410,7 @@
 				22760A4E274B136200F28F0A /* Media.swift */,
 				2248FF4F2745BEA100C6DEF9 /* Entities.swift */,
 				223BBF6127377E8800375530 /* IngestTweet.swift */,
+				22193DB427859D2B005A7708 /* RealmError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -437,7 +467,6 @@
 			children = (
 				228D71E3277A800B00E306BD /* Conduit.swift */,
 				22BFD7A0277402B700E46DF1 /* FollowUp.swift */,
-				22BFD7A2277405F100E46DF1 /* HomeIngest.swift */,
 			);
 			path = Conduits;
 			sourceTree = "<group>";
@@ -481,6 +510,15 @@
 			path = TweetCell;
 			sourceTree = "<group>";
 		};
+		22D2572C27883A35005FC3D8 /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				223BBF7727377F5100375530 /* Storage.swift */,
+				22D2572D27883A56005FC3D8 /* ScrollPosition.swift */,
+			);
+			path = UserDefaults;
+			sourceTree = "<group>";
+		};
 		B0EEE3B548932ECDAC7403EE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -512,6 +550,7 @@
 				223BBF2427377BE500375530 /* Frameworks */,
 				223BBF2527377BE500375530 /* Resources */,
 				0BC796273172916157EBF55D /* [CP] Embed Pods Frameworks */,
+				22D25729278804B7005FC3D8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -522,6 +561,7 @@
 				223BBF5C27377E4600375530 /* Twig */,
 				22F2463C274CA41800AE17AD /* BlackBox */,
 				221A296C275D36B700C283FE /* SDWebImage */,
+				22D257332788459D005FC3D8 /* Algorithms */,
 			);
 			productName = UIBranch;
 			productReference = 223BBF2727377BE500375530 /* Hyperthread.app */;
@@ -597,6 +637,7 @@
 			mainGroup = 223BBF1E27377BE500375530;
 			packageReferences = (
 				221A296B275D36B700C283FE /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				22D257322788459D005FC3D8 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = 223BBF2827377BE500375530 /* Products */;
 			projectDirPath = "";
@@ -653,6 +694,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hyperthread/Pods-Hyperthread-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		22D25729278804B7005FC3D8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "if [[ ${CONFIGURATION} == \"Debug\" ]]; then\n    bundlePath=\"${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}\"\n    cp -R \"${SRCROOT}/AppData/ReloadTests.xcappdata\" $bundlePath\nfi\n";
 		};
 		C2F4D91FEDE3D8A0ECE530D0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -711,6 +769,7 @@
 				22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */,
 				223BBF6527377E8900375530 /* IngestTweet.swift in Sources */,
 				2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */,
+				22D2572E27883A56005FC3D8 /* ScrollPosition.swift in Sources */,
 				228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */,
 				223BBF7127377EC300375530 /* Query.swift in Sources */,
 				223BBF6627377E8900375530 /* LatchBuffer.swift in Sources */,
@@ -720,6 +779,7 @@
 				220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */,
 				22680A92276B41B1008827F8 /* Relevance.swift in Sources */,
 				222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */,
+				22D2573127883F75005FC3D8 /* ReferenceCrawler.swift in Sources */,
 				228D71E7277A953500E306BD /* DateWindow.swift in Sources */,
 				22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
@@ -734,6 +794,8 @@
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
+				22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */,
+				22193DB72785A878005A7708 /* OnFollow.swift in Sources */,
 				222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,
@@ -741,6 +803,7 @@
 				223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */,
 				22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */,
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
+				22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */,
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
 				22193DAF27840477005A7708 /* URLScheme.swift in Sources */,
 				221A2994275D943E00C283FE /* RemoveDuplicates.swift in Sources */,
@@ -749,6 +812,7 @@
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
 				22760A49274ADFA900F28F0A /* ReadStatus.swift in Sources */,
 				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
+				22193DBA2785C20B005A7708 /* OnUnfollow.swift in Sources */,
 				22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */,
 				22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
@@ -762,7 +826,7 @@
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
-				22BFD7A3277405F100E46DF1 /* HomeIngest.swift in Sources */,
+				22193DB527859D2D005A7708 /* RealmError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1140,6 +1204,14 @@
 				kind = branch;
 			};
 		};
+		22D257322788459D005FC3D8 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1151,6 +1223,11 @@
 		223BBF5C27377E4600375530 /* Twig */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Twig;
+		};
+		22D257332788459D005FC3D8 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22D257322788459D005FC3D8 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
 		};
 		22F2463C274CA41800AE17AD /* BlackBox */ = {
 			isa = XCSwiftPackageProductDependency;

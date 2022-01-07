@@ -170,6 +170,7 @@ final class MainTable: UITableViewController {
         }
         
         let path = tablePos.indexPath
+        TableLog.debug("Now scrolling to path \(path).", print: true, true)
         guard path.row < tableView.numberOfRows(inSection: 0) else {
             TableLog.error("Out of bounds index path! \(path)")
             return
@@ -222,8 +223,16 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 self.scrollAction()
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                TableLog.debug("Update: \(results.count) discussions, \(deletions.count) deletions, \(insertions.count) insertions, \(modifications.count) modifications.", print: true, true)
+                #if DEBUG
+                var report = ["MainTable: \(results.count) discussions"]
+                if deletions.isNotEmpty { report.append("(-)\(deletions.count)")}
+                if insertions.isNotEmpty { report.append("(+)\(insertions.count)")}
+                if modifications.isNotEmpty { report.append("(~)\(modifications.count)")}
+                TableLog.debug(report.joined(separator: ", "), print: true, true)
+                
                 TableLog.debug("Insertion indices: \(insertions)", print: true, false)
+                #endif
+                
                 self.setContents(to: results, animated: false)
                 
                 /// Only restore scroll position if items were added to the top of the queue.
@@ -241,7 +250,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         var snapshot = Snapshot()
         snapshot.appendSections([.Main])
         snapshot.appendItems(Array(results), toSection: .Main)
-        TableLog.debug("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.", print: true)
+        TableLog.debug("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.", print: false)
         apply(snapshot, animatingDifferences: animated)
         
         fetcher.numDiscussions = results.count
@@ -401,24 +410,27 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     @objc
     public func fetchOldTweets() {
         Task {
-            guard Auth.shared.credentials != nil else {
-                NetLog.warning("Tried to load tweets with nil credentials!")
-                return
+            do {
+                try await homeTimelineFetch(TimelineOldFetcher.self)
+                await ReferenceCrawler.shared.performFollowUp()
+            } catch {
+                NetLog.error("\(error)")
+                assert(false)
             }
-            
-            airport.requestOld()
+            #warning("Perform new refresh animation here.")
         }
     }
     
     @objc
     public func fetchNewTweets(onFetched completion: @escaping () -> Void) {
         Task {
-            guard Auth.shared.credentials != nil else {
-                NetLog.warning("Tried to load tweets with nil credentials!")
-                return
+            do {
+                try await homeTimelineFetch(TimelineNewFetcher.self)
+                await ReferenceCrawler.shared.performFollowUp()
+            } catch {
+                NetLog.error("\(error)")
+                assert(false)
             }
-            
-            airport.requestNew(onFetched: completion)
         }
     }
     

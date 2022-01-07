@@ -45,10 +45,16 @@ extension ControlledCell: TweetViewDelegate {
                 
                 /// If not, delay presentation until they've been fetched.
                 /// - Note: if frequent, we may wish to add a `UIActivityIndicator`.
-                await UserFetcher.fetchAndStoreUsers(ids: [userID])
+                await fetchAndStoreUsers(ids: [userID])
             }
             
-            let modal: UserModalViewController = .init(userID: userID)
+            guard let user = realm.user(id: userID) else {
+                ModelLog.error("Could not find user with ID \(userID)")
+                showAlert(message: "Could not find that user!")
+                return
+            }
+            
+            let modal: UserModalViewController = .init(user: user)
             if let sheetController = modal.sheetPresentationController {
                 sheetController.detents = [
                     .medium(),
