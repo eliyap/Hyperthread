@@ -77,6 +77,9 @@ extension UserDefaults {
                 assert(false, "Could not encode!")
                 return
             }
+            if let newValue = newValue {
+                TableLog.debug("Saved scroll position \(newValue)", print: true, true)
+            }
             set(encoded, forKey: Self.scrollPositionKey)
         }
     }

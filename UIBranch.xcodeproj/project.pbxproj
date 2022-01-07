@@ -334,7 +334,7 @@
 				223BBF7D273846BE00375530 /* LoginState.swift */,
 				223BBF792737867800375530 /* AuthView.swift */,
 				223BBF83273847E900375530 /* LoginViewController.swift */,
-				223BBF7727377F5100375530 /* Storage.swift */,
+				22D2572C27883A35005FC3D8 /* UserDefaults */,
 				222161F32741C2F400220F0C /* AssetColors.swift */,
 				223BBF3027377BE500375530 /* Main.storyboard */,
 				223BBF3327377BE600375530 /* Assets.xcassets */,
@@ -501,6 +501,14 @@
 				228D71EC277C1D2300E306BD /* CellEvent.swift */,
 			);
 			path = TweetCell;
+			sourceTree = "<group>";
+		};
+		22D2572C27883A35005FC3D8 /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				223BBF7727377F5100375530 /* Storage.swift */,
+			);
+			path = UserDefaults;
 			sourceTree = "<group>";
 		};
 		B0EEE3B548932ECDAC7403EE /* Frameworks */ = {
