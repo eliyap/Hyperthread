@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDeque.swift */; };
-		220C57FB2787E16400BDB381 /* ReloadTests.xcappdata in Resources */ = {isa = PBXBuildFile; fileRef = 220C57FA2787E16400BDB381 /* ReloadTests.xcappdata */; };
 		22193DA2278280CD005A7708 /* URLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA1278280CD005A7708 /* URLError.swift */; };
 		22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA327829C5E005A7708 /* ProfileImageView.swift */; };
 		22193DA627829CBD005A7708 /* ColorMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA527829CBC005A7708 /* ColorMarkerView.swift */; };
@@ -639,7 +638,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				223BBF3727377BE600375530 /* LaunchScreen.storyboard in Resources */,
-				220C57FB2787E16400BDB381 /* ReloadTests.xcappdata in Resources */,
 				223BBF3427377BE600375530 /* Assets.xcassets in Resources */,
 				223BBF3227377BE500375530 /* Main.storyboard in Resources */,
 			);
