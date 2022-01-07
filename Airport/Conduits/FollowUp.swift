@@ -31,7 +31,7 @@ final class FollowUp: Conduit<Void, Never> {
                 
                 let c = realm.conversationsWithFollowUp()
                 toFetch.formUnion(c
-                    .map { $0.getFollowUp(realm: realm) }
+                    .map { $0.getFollowUp() }
                     .reduce(Set<Tweet.ID>()) { $0.union($1) }
                 )
                 
