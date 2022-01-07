@@ -40,11 +40,6 @@ final class Airport {
     public func requestOld() {
         oldIngest.intake.send()
     }
-    
-    public func request(id: Tweet.ID) -> Void {
-        /// Inject the ID directly.
-        followUp.recycle.send([id])
-    }
 }
 
 internal class UserFetcher: Conduit<User.ID, Never> {
