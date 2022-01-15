@@ -64,14 +64,16 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     @Persisted
     var replying_to: ID?
     
-    /// If this tweet is a reply, this property represents the ID of the author this tweet is a reply to.
+    /// If this tweet is a reply, this represents the ID of the author this tweet is a reply to.
     @Persisted
     var inReplyToUserID: User.ID?
     
+    /// If this tweet is a retweet, this represents the ID of retweeted tweet.
     @Persisted
     var retweeting: ID?
     public static let retweetingPropertyName = "retweeting"
     
+    /// If this tweet is a quote, this represents the ID of quoted tweet.
     @Persisted
     var quoting: ID?
     
