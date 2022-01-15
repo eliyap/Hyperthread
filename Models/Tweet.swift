@@ -63,6 +63,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     /// If this tweet is a reply, this property represents the ID of the tweet this is a reply to.
     @Persisted
     var replying_to: ID?
+    public static let replyingPropertyName = "replying_to"
     
     /// If this tweet is a reply, this represents the ID of the author this tweet is a reply to.
     @Persisted
@@ -76,6 +77,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     /// If this tweet is a quote, this represents the ID of quoted tweet.
     @Persisted
     var quoting: ID?
+    public static let quotingPropertyName = "quoting"
     
     /// - Note: Realm requires embedded objects to be optional.
     @Persisted
