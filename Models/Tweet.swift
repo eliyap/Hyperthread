@@ -86,14 +86,6 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     @Persisted
     var read: Bool
     
-    /// Whether this tweet was available from Twitter.
-    /// - if `true`, it is a normal, public tweet.
-    /// - if `false`, the tweet could not be retrieved.
-    ///   - typically due to being deleted or from a protected user
-    ///   - other values, like the text, etc. will be placeholder values
-    @Persisted
-    var available: Bool
-    
     /// Attached images, videos, GIFs, etc.
     @Persisted
     var media: List<Media>
@@ -166,32 +158,11 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         }
         
         self.relevance = relevance
-        self.available = true
     }
     
     override required init() {
         super.init()
     }
-    
-    // MARK: - Unavailable Tweet
-    private init(id: Tweet.ID) {
-        super.init()
-        
-        self.id = id
-        self.createdAt = Date()
-        self.text = "This tweet is not available."
-        self.conversation_id = id
-        self.metrics = PublicMetrics(like_count: 0, retweet_count: 0, reply_count: 0, quote_count: 0)
-        self.authorID = OwnUserID
-        
-        /// Mark read, since unavailable tweets are unimportant.
-        self.read = true
-        
-        self.available = false
-    }
-    
-    /// Wrapper factory function.
-    public static func createUnavailable(id: ID) -> Tweet { .init(id: id) }
     
     // MARK: - Fake Test Tweet
     private init(_: Void) {
@@ -204,7 +175,6 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         self.metrics = PublicMetrics(like_count: 0, retweet_count: 0, reply_count: 0, quote_count: 0)
         self.authorID = OwnUserID
         self.read = false
-        self.available = true
     }
     
     /// Test method for creating a fake tweet.
