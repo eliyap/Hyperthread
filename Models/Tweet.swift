@@ -82,9 +82,19 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     var entities: Entities?
     
     /// Whether the user has read this tweet.
+    /// App internal, not from Twitter.
     @Persisted
     var read: Bool
     
+    /// Whether this tweet was available from Twitter.
+    /// - if `true`, it is a normal, public tweet.
+    /// - if `false`, the tweet could not be retrieved.
+    ///   - typically due to being deleted or from a protected user
+    ///   - other values, like the text, etc. will be placeholder values
+    @Persisted
+    var available: Bool
+    
+    /// Attached images, videos, GIFs, etc.
     @Persisted
     var media: List<Media>
     
@@ -156,26 +166,12 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         }
         
         self.relevance = relevance
+        self.available = true
     }
     
     override required init() {
         super.init()
     }
-    
-    // MARK: - Ephemeral Variables
-    
-    /**
-     Memoize the canonical display `NSAttributedString` for teaser & header displays (where there is no `context`).
-     This should never change because it is calculated using
-     - `entities`
-     - `text`
-     
-     These should never change, so we can safely memoize.
-     */
-    /// Memoized display string.
-    lazy var attributedString: NSAttributedString = {
-        fullText(context: nil)
-    }()
     
     /// Test method for creating a fake tweet.
     private init(_: Void) {
@@ -188,11 +184,24 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         self.metrics = PublicMetrics(like_count: 0, retweet_count: 0, reply_count: 0, quote_count: 0)
         self.authorID = OwnUserID
         self.read = false
+        self.available = true
     }
     
     public static func generateFake() -> Tweet {
         .init(Void())
     }
+    
+    // MARK: - Ephemeral Variables
+    
+    /**
+     Memoize the canonical display `NSAttributedString` for teaser & header displays (where there is no `context`).
+     This should never change because it is calculated using
+     - `entities`
+     - `text`
+     
+     These should never change, so we can safely memoize.
+     */
+    lazy var attributedString: NSAttributedString = fullText(context: nil)
 }
 
 extension Tweet {
