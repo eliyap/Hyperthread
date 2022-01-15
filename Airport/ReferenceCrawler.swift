@@ -123,6 +123,16 @@ actor ReferenceCrawler {
             return results
         }
         
+        /// Check if any tweets failed to land. There should be none.
+        /// - Note: tweets may fail to land due to being deleted.
+        if inFlight.isNotEmpty {
+            NetLog.error("""
+                \(inFlight.count) tweets still in flight!
+                IDs \(inFlight)
+                """)
+            assert(false)
+        }
+        
         /// Dispatch task for missing users. Not necessary to continue.
         Task {
             await withTaskGroup(of: Void.self) { group in
