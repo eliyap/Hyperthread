@@ -103,8 +103,7 @@ actor ReferenceCrawler {
         /// Record that these tweets are being fetched.
         inFlight.formUnion(fetchList)
         
-        var mentionsCollector: MentionList = []
-        await withTaskGroup(of: FetchResult.self) { group in
+        let mentions: MentionList = await withTaskGroup(of: FetchResult.self) { group -> MentionList in
             fetchList
                 .chunks(ofCount: TweetEndpoint.maxResults)
                 .forEach { chunk in
@@ -113,16 +112,16 @@ actor ReferenceCrawler {
                     }
                 }
             
+            var results: MentionList = []
             /// Collect mention list together.
-            for await result in group {
-                if case .success(let list) = result {
-                    mentionsCollector.formUnion(list)
+            for await fetchResult in group {
+                if case .success(let list) = fetchResult {
+                    results.formUnion(list)
                 }
             }
+            
+            return results
         }
-        
-        /// Set constant to dispel error.
-        let mentions = mentionsCollector
         
         /// Dispatch task for missing users. Not necessary to continue.
         Task {
