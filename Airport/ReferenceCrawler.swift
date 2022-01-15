@@ -42,7 +42,7 @@ actor ReferenceCrawler {
         var discussionsDangling: Set<Tweet.ID> = []
         var unlinked: Set<Tweet.ID> = []
         repeat {
-            conversationsDangling = Self.getDiscussionsDangling()
+            conversationsDangling = Self.getConversationsDangling()
             discussionsDangling = Self.getDiscussionsDangling()
             await intermediate(
                 conversationsDangling: conversationsDangling,
@@ -67,7 +67,7 @@ actor ReferenceCrawler {
             var unlinked: Set<Tweet.ID> = []
             repeat {
                 /// Though we *think* conversations are done, feel free to be proven wrong.
-                conversationsDangling = Self.getDiscussionsDangling()
+                conversationsDangling = Self.getConversationsDangling()
                 if conversationsDangling.isNotEmpty {
                     NetLog.warning("Unexpected conversation follow up!")
                 }
