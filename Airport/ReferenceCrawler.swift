@@ -112,11 +112,15 @@ actor ReferenceCrawler {
                     }
                 }
             
-            var results: MentionList = []
             /// Collect mention list together.
+            var results: MentionList = []
             for await fetchResult in group {
-                if case .success(let list) = fetchResult {
+                switch fetchResult {
+                case .success(let list):
                     results.formUnion(list)
+                case .failure(let userError):
+                    NetLog.error("\(userError)")
+                    assert(false)
                 }
             }
             
