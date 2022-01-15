@@ -170,14 +170,15 @@ actor ReferenceCrawler {
         /// Unbundle tuple.
         let (tweets, _, users, _) = rawData
         
-        /// Remove tweets from list.
-        for tweet in tweets {
-            inFlight.remove(tweet.id)
-        }
         do {
             try Self.store(rawData: rawData, followingIDs: followingIDs)
         } catch {
             return .failure(.database)
+        }
+        
+        /// Remove tweets from list *after* they've landed.
+        for tweet in tweets {
+            inFlight.remove(tweet.id)
         }
         
         let missingMentions = findMissingMentions(tweets: tweets, users: users)
