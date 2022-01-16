@@ -427,7 +427,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 await ReferenceCrawler.shared.performFollowUp(token: token)
                 
                 /// Record fetch completion.
-                UserDefaults.groupSuite.firstFetch = true
+                UserDefaults.groupSuite.firstFetch = false
             } catch {
                 NetLog.error("\(error)")
                 assert(false)
