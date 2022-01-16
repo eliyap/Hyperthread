@@ -125,7 +125,7 @@ final class CardTeaserCell: ControlledCell {
          */
         Airport.scheduler.async { [weak self] in
             guard let self = self else {
-                assert(false, "Self is nil!")
+                TableLog.warning("\(Self.self) is nil!")
                 return
             }
             
