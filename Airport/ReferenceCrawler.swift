@@ -162,6 +162,7 @@ actor ReferenceCrawler {
         do {
             try realm.writeWithToken { token in
                 for id in ids {
+                    NetLog.warning("Could not find tweet with id \(id), marking it unavailable!")
                     realm.makeUnavailable(token, id: id)
                 }
             }
