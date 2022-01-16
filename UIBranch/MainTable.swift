@@ -425,6 +425,9 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             do {
                 try await homeTimelineFetch(TimelineNewFetcher.self, token: token)
                 await ReferenceCrawler.shared.performFollowUp(token: token)
+                
+                /// Record fetch completion.
+                UserDefaults.groupSuite.firstFetch = true
             } catch {
                 NetLog.error("\(error)")
                 assert(false)
