@@ -208,8 +208,9 @@ extension NSMutableAttributedString {
             /// Check for overlapping links, which should never happen.
             guard linkedRanges.allSatisfy({NSIntersectionRange($0, intRange).length == .zero}) else {
                 ModelLog.warning("""
-                    Found intsersection of @mention and url!
+                    Found intersection of @mention and existing ranges!
                     - ranges \(linkedRanges)
+                    - intersecting range \(intRange)
                     - handle \(atHandle)
                     - text \(tweet.text)
                     """)
@@ -241,8 +242,9 @@ extension NSMutableAttributedString {
             /// Check for overlapping links, which should never happen.
             guard linkedRanges.allSatisfy({NSIntersectionRange($0, intRange).length == .zero}) else {
                 ModelLog.warning("""
-                    Found intsersection of @mention and url!
+                    Found intersection of #hashtag and existing ranges!
                     - ranges \(linkedRanges)
+                    - intersecting range \(intRange)
                     - hashtag \(hashtag)
                     - text \(tweet.text)
                     """)
