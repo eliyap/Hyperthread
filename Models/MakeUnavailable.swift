@@ -13,11 +13,11 @@ extension Realm {
     /// Typically this is due to the `Tweet` being deleted or the account being private.
     func makeUnavailable(_ token: TransactionToken, id: Tweet.ID) -> Void {
         let replies = objects(Tweet.self)
-            .filter(NSPredicate(format: "\(Tweet.replyingPropertyName) == \(id)"))
+            .where { $0.replying_to == id }
         let quotes = objects(Tweet.self)
-            .filter(NSPredicate(format: "\(Tweet.quotingPropertyName) == \(id)"))
+            .where { $0.quoting == id }
         let retweets = objects(Tweet.self)
-            .filter(NSPredicate(format: "\(Tweet.retweetingPropertyName) == \(id)"))
+            .where { $0.retweeting == id }
         
         replies.forEach {
             $0.replying_to = nil
