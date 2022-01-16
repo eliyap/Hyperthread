@@ -111,14 +111,6 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         }
     }
     
-    /**
-     
-     - Note: there is a limitation on history depth.
-       > Up to 800 Tweets are obtainable on the home timeline
-     - Docs: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/api-reference/get-statuses-home_timeline
-     
-     Therefore, if the v1 `home_timeline` API returns 0 results, do not allow further *backwards* fetches (this session).
-     */
     @objc
     public func fetchOldTweets() async {
         /// Prevent hammering fetch operations.
