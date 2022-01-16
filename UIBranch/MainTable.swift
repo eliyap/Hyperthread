@@ -411,8 +411,8 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     public func fetchOldTweets() {
         Task {
             do {
-                try await homeTimelineFetch(TimelineOldFetcher.self)
-                await ReferenceCrawler.shared.performFollowUp()
+                try await homeTimelineFetch(TimelineOldFetcher.self, token: nil)
+                await ReferenceCrawler.shared.performFollowUp(token: nil)
             } catch {
                 NetLog.error("\(error)")
                 assert(false)
@@ -424,13 +424,14 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     public static func fetchNewTweets(token: NotificationToken, onFetched completion: @escaping () -> Void) {
         Task {
             do {
-                try await homeTimelineFetch(TimelineNewFetcher.self)
-                await ReferenceCrawler.shared.performFollowUp()
+                try await homeTimelineFetch(TimelineNewFetcher.self, token: token)
+                await ReferenceCrawler.shared.performFollowUp(token: token)
             } catch {
                 NetLog.error("\(error)")
                 assert(false)
 #warning("Perform new refresh animation here.")
             }
+            print("Silent Fetch Completed!")
         }
     }
     

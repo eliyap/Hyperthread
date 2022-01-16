@@ -31,13 +31,13 @@ actor ReferenceCrawler {
     
     /// Dispatch a fetch request for a single tweet.
     public func fetchSingle(id: Tweet.ID) async -> Void {
-        await intermediate(conversationsDangling: [], discussionsDangling: [], unlinked: [id])
+        await intermediate(conversationsDangling: [], discussionsDangling: [], unlinked: [id], token: nil)
     }
     
     /// Follow up `Conversation`s without a `Discussion` and relevant `Discussions` with dangling references.
     /// Returns when all `Conversation`s are followed up, but continues fetching `Discussions` asynchronously.
     /// Rationale: Linking `Conversation`s can result in new `Discussion`s being added, which is more disruptive to the UI.
-    public func performFollowUp() async -> Void {
+    public func performFollowUp(token: NotificationToken?) async -> Void {
         var conversationsDangling: Set<Tweet.ID> = []
         var discussionsDangling: Set<Tweet.ID> = []
         var unlinked: Set<Tweet.ID> = []
@@ -47,7 +47,8 @@ actor ReferenceCrawler {
             await intermediate(
                 conversationsDangling: conversationsDangling,
                 discussionsDangling: discussionsDangling,
-                unlinked: unlinked
+                unlinked: unlinked,
+                token: token
             )
             
             /// Perform linking.
@@ -76,7 +77,8 @@ actor ReferenceCrawler {
                 await intermediate(
                     conversationsDangling: conversationsDangling,
                     discussionsDangling: discussionsDangling,
-                    unlinked: unlinked
+                    unlinked: unlinked,
+                    token: nil
                 )
                 
                 /// Perform linking.
@@ -93,7 +95,8 @@ actor ReferenceCrawler {
     private func intermediate(
         conversationsDangling: Set<Tweet.ID>,
         discussionsDangling: Set<Tweet.ID>,
-        unlinked: Set<Tweet.ID>
+        unlinked: Set<Tweet.ID>,
+        token: NotificationToken?
     ) async {
         /// Join lists.
         let fetchList = conversationsDangling.union(discussionsDangling).union(unlinked)
@@ -106,11 +109,12 @@ actor ReferenceCrawler {
         NetLog.debug("Dispatching request for \(fetchList.count) tweets \(fetchList)", print: true, true)
         
         let mentions: MentionList = await withTaskGroup(of: FetchResult.self) { group -> MentionList in
+            /// Dispatch chunked requests in parallel.
             fetchList
                 .chunks(ofCount: TweetEndpoint.maxResults)
                 .forEach { chunk in
                     group.addTask { [weak self] in
-                        await self?.fetch(ids: Array(chunk)) ?? .failure(.nilSelf)
+                        await self?.fetch(ids: Array(chunk), token: token) ?? .failure(.nilSelf)
                     }
                 }
             
@@ -170,7 +174,7 @@ actor ReferenceCrawler {
     /// List of users mentioned that need to be fetched.
     private typealias MentionList = Set<User.ID>
     private typealias FetchResult = Result<MentionList, UserError>
-    private func fetch(ids: [Tweet.ID]) async -> FetchResult {
+    private func fetch(ids: [Tweet.ID], token: NotificationToken?) async -> FetchResult {
         guard let credentials = Auth.shared.credentials else {
             return .failure(.credentials)
         }
@@ -191,7 +195,7 @@ actor ReferenceCrawler {
         let (tweets, _, users, _) = rawData
         
         do {
-            try Self.store(rawData: rawData, followingIDs: followingIDs)
+            try Self.store(rawData: rawData, followingIDs: followingIDs, token: token)
         } catch {
             return .failure(.database)
         }
@@ -206,12 +210,17 @@ actor ReferenceCrawler {
     }
     
     /// Perform `Realm` work to store the fetched data.
-    private static func store(rawData: RawData, followingIDs: [User.ID]) throws -> Void {
+    private static func store(rawData: RawData, followingIDs: [User.ID], token: NotificationToken?) throws -> Void {
         /// Unbundle tuple.
         let (tweets, included, users, media) = rawData
         
+        var tokens: [NotificationToken] = []
+        if let token = token {
+            tokens.append(token)
+        }
+        
         /// Safe to insert `included`, as we make no assumptions around `Relevance`.
-        try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
+        try ingestRaw(withoutNotifying: tokens, rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
         
         let realm = try! Realm()
         try realm.updateDangling()

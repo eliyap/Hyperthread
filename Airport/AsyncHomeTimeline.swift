@@ -7,9 +7,10 @@
 
 import Foundation
 import Twig
+import RealmSwift
 
 /// - Note: also dispatches User Timeline requests.
-internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type) async throws -> Void {
+internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type, token: NotificationToken?) async throws -> Void {
     let fetcher = Fetcher()
     guard let credentials = Auth.shared.credentials else { throw UserError.credentials }
     let v1Tweets: [RawV1Tweet]
@@ -38,7 +39,7 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type) a
             group.addTask {
                 do {
                     let rawData = try await hydratedTweets(credentials: credentials, ids: Array(chunk))
-                    try store(rawData: rawData)
+                    try store(rawData: rawData, token: token)
                 } catch {
                     NetLog.error("\(error)")
                     assert(false)
@@ -54,10 +55,16 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type) a
 }
 
 /// Perform local storage work after network fetch.
-fileprivate func store(rawData: RawData) throws -> Void {
+fileprivate func store(rawData: RawData, token: NotificationToken?) throws -> Void {
     let (tweets, _, users, media) = rawData
     NetLog.debug("Received \(tweets.count) home timeline tweets.", print: true, true)
-    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
+    
+    var tokens: [NotificationToken] = []
+    if let token = token {
+        tokens.append(token)
+    }
+    
+    try ingestRaw(withoutNotifying: tokens, rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
     
     /// Update home timeline boundaries.
     /// - Note: use v2 tweets *after storage*, not v1 tweets, to be *sure* storage was successful.
