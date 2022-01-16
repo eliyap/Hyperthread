@@ -63,26 +63,32 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     /// If this tweet is a reply, this property represents the ID of the tweet this is a reply to.
     @Persisted
     var replying_to: ID?
+    public static let replyingPropertyName = "replying_to"
     
-    /// If this tweet is a reply, this property represents the ID of the author this tweet is a reply to.
+    /// If this tweet is a reply, this represents the ID of the author this tweet is a reply to.
     @Persisted
     var inReplyToUserID: User.ID?
     
+    /// If this tweet is a retweet, this represents the ID of retweeted tweet.
     @Persisted
     var retweeting: ID?
     public static let retweetingPropertyName = "retweeting"
     
+    /// If this tweet is a quote, this represents the ID of quoted tweet.
     @Persisted
     var quoting: ID?
+    public static let quotingPropertyName = "quoting"
     
     /// - Note: Realm requires embedded objects to be optional.
     @Persisted
     var entities: Entities?
     
     /// Whether the user has read this tweet.
+    /// App internal, not from Twitter.
     @Persisted
     var read: Bool
     
+    /// Attached images, videos, GIFs, etc.
     @Persisted
     var media: List<Media>
     
@@ -160,22 +166,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         super.init()
     }
     
-    // MARK: - Ephemeral Variables
-    
-    /**
-     Memoize the canonical display `NSAttributedString` for teaser & header displays (where there is no `context`).
-     This should never change because it is calculated using
-     - `entities`
-     - `text`
-     
-     These should never change, so we can safely memoize.
-     */
-    /// Memoized display string.
-    lazy var attributedString: NSAttributedString = {
-        fullText(context: nil)
-    }()
-    
-    /// Test method for creating a fake tweet.
+    // MARK: - Fake Test Tweet
     private init(_: Void) {
         super.init()
         
@@ -188,9 +179,22 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         self.read = false
     }
     
+    /// Test method for creating a fake tweet.
     public static func generateFake() -> Tweet {
         .init(Void())
     }
+    
+    // MARK: - Ephemeral Variables
+    
+    /**
+     Memoize the canonical display `NSAttributedString` for teaser & header displays (where there is no `context`).
+     This should never change because it is calculated using
+     - `entities`
+     - `text`
+     
+     These should never change, so we can safely memoize.
+     */
+    lazy var attributedString: NSAttributedString = fullText(context: nil)
 }
 
 extension Tweet {

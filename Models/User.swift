@@ -91,11 +91,13 @@ internal extension Realm {
                     raw.contains(where: {user.id == $0.id}) == false
                 }
                 .forEach { user in
+                    #warning("TODO: perform unfollow actions!")
                     user.following = false
                 }
             
             /// Write out users to account for possible new users.
             raw.forEach {
+                #warning("TODO: perform follow actions!")
                 let user = User(raw: $0, following: true)
                 add(user, update: .all)
             }

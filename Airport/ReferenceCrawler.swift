@@ -42,7 +42,7 @@ actor ReferenceCrawler {
         var discussionsDangling: Set<Tweet.ID> = []
         var unlinked: Set<Tweet.ID> = []
         repeat {
-            conversationsDangling = Self.getDiscussionsDangling()
+            conversationsDangling = Self.getConversationsDangling()
             discussionsDangling = Self.getDiscussionsDangling()
             await intermediate(
                 conversationsDangling: conversationsDangling,
@@ -67,7 +67,7 @@ actor ReferenceCrawler {
             var unlinked: Set<Tweet.ID> = []
             repeat {
                 /// Though we *think* conversations are done, feel free to be proven wrong.
-                conversationsDangling = Self.getDiscussionsDangling()
+                conversationsDangling = Self.getConversationsDangling()
                 if conversationsDangling.isNotEmpty {
                     NetLog.warning("Unexpected conversation follow up!")
                 }
@@ -103,8 +103,9 @@ actor ReferenceCrawler {
         /// Record that these tweets are being fetched.
         inFlight.formUnion(fetchList)
         
-        var mentionsCollector: MentionList = []
-        await withTaskGroup(of: FetchResult.self) { group in
+        NetLog.debug("Dispatching request for \(fetchList.count) tweets \(fetchList)", print: true, true)
+        
+        let mentions: MentionList = await withTaskGroup(of: FetchResult.self) { group -> MentionList in
             fetchList
                 .chunks(ofCount: TweetEndpoint.maxResults)
                 .forEach { chunk in
@@ -114,15 +115,29 @@ actor ReferenceCrawler {
                 }
             
             /// Collect mention list together.
-            for await result in group {
-                if case .success(let list) = result {
-                    mentionsCollector.formUnion(list)
+            var results: MentionList = []
+            for await fetchResult in group {
+                switch fetchResult {
+                case .success(let list):
+                    results.formUnion(list)
+                case .failure(let userError):
+                    NetLog.error("\(userError)")
+                    assert(false)
                 }
             }
+            
+            return results
         }
         
-        /// Set constant to dispel error.
-        let mentions = mentionsCollector
+        /// Check if any tweets failed to land.
+        /// - Note: tweets may fail to land due to being deleted.
+        if inFlight.isNotEmpty {
+            NetLog.log(.info, """
+                \(inFlight.count) tweets failed to land!
+                IDs \(inFlight)
+                """)
+            Self.remove(ids: inFlight)
+        }
         
         /// Dispatch task for missing users. Not necessary to continue.
         Task {
@@ -135,6 +150,20 @@ actor ReferenceCrawler {
                         }
                     }
             }
+        }
+    }
+    
+    private static func remove<TweetIDs: Collection>(ids: TweetIDs) where TweetIDs.Element == Tweet.ID {
+        let realm = try! Realm()
+        do {
+            try realm.writeWithToken { token in
+                for id in ids {
+                    realm.makeUnavailable(token, id: id)
+                }
+            }
+        } catch {
+            NetLog.error("Failed to mark tweet unavailable!")
+            assert(false)
         }
     }
     
@@ -161,14 +190,15 @@ actor ReferenceCrawler {
         /// Unbundle tuple.
         let (tweets, _, users, _) = rawData
         
-        /// Remove tweets from list.
-        for tweet in tweets {
-            inFlight.remove(tweet.id)
-        }
         do {
             try Self.store(rawData: rawData, followingIDs: followingIDs)
         } catch {
             return .failure(.database)
+        }
+        
+        /// Remove tweets from list *after* they've landed.
+        for tweet in tweets {
+            inFlight.remove(tweet.id)
         }
         
         let missingMentions = findMissingMentions(tweets: tweets, users: users)

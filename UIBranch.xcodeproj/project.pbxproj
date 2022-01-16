@@ -72,6 +72,7 @@
 		22760A4B274AE63000F28F0A /* SummaryLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4A274AE63000F28F0A /* SummaryLine.swift */; };
 		22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */; };
 		22760A4F274B136200F28F0A /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4E274B136200F28F0A /* Media.swift */; };
+		2280B84C279395FE00CF22B7 /* MakeUnavailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2280B84B279395FE00CF22B7 /* MakeUnavailable.swift */; };
 		228D71E4277A800B00E306BD /* Conduit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E3277A800B00E306BD /* Conduit.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
@@ -193,6 +194,7 @@
 		22760A4A274AE63000F28F0A /* SummaryLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryLine.swift; sourceTree = "<group>"; };
 		22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacedSeparator.swift; sourceTree = "<group>"; };
 		22760A4E274B136200F28F0A /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		2280B84B279395FE00CF22B7 /* MakeUnavailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeUnavailable.swift; sourceTree = "<group>"; };
 		228D71E3277A800B00E306BD /* Conduit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conduit.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
@@ -398,6 +400,7 @@
 			isa = PBXGroup;
 			children = (
 				223BBF6B27377EC100375530 /* Tweet.swift */,
+				2280B84B279395FE00CF22B7 /* MakeUnavailable.swift */,
 				223BBF6827377EC000375530 /* Conversation.swift */,
 				223BBF6A27377EC000375530 /* Discussion.swift */,
 				223BBF6927377EC000375530 /* User.swift */,
@@ -783,6 +786,7 @@
 				228D71E7277A953500E306BD /* DateWindow.swift in Sources */,
 				22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
+				2280B84C279395FE00CF22B7 /* MakeUnavailable.swift in Sources */,
 				22193DAA2783DD5E005A7708 /* FollowingCache.swift in Sources */,
 				22760A4F274B136200F28F0A /* Media.swift in Sources */,
 				223BBF7C273791A100375530 /* PMViewController.swift in Sources */,
