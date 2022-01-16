@@ -57,7 +57,7 @@ final class MainTable: UITableViewController {
         
         /// Refresh timeline at app startup.
         #if !DEBUG /// Disabled for debugging.
-        Fetcher.fetchNewTweets(token: dds.getToken()) { /* do nothing */ }
+        DDS.fetchNewTweets() { /* do nothing */ }
         #endif
         
         /// Refresh timeline at login.
