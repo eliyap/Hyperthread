@@ -12,9 +12,6 @@ import Combine
 
 final class MainTable: UITableViewController {
     
-    /// Laziness prevents attempting to load nil IDs.
-    private let fetcher = Fetcher()
-
     private let realm = try! Realm()
     
     private var mrd: MarkReadDaemon! = nil
@@ -39,14 +36,13 @@ final class MainTable: UITableViewController {
         /// Immediately defuse unwrapped nil `dds`.
         dds = DDS(
             realm: realm,
-            fetcher: fetcher,
             tableView: tableView,
             cellProvider: cellProvider,
             restoreScroll: restoreScroll
         )
         
         /// Immediately defuse unwrapped nil `mrd`.
-        mrd = MarkReadDaemon(token: dds.getToken())
+        mrd = MarkReadDaemon(token: dds.token)
         
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
         
@@ -57,7 +53,7 @@ final class MainTable: UITableViewController {
         tableView.estimatedRowHeight = 100
         
         /// Enable pre-fetching.
-        tableView.prefetchDataSource = fetcher
+        tableView.prefetchDataSource = dds
         
         /// Refresh timeline at app startup.
         #if !DEBUG /// Disabled for debugging.
@@ -71,7 +67,7 @@ final class MainTable: UITableViewController {
                 switch state {
                 case .loggedIn:
                     #warning("TODO: mark all tweets read here.")
-                    Fetcher.fetchNewTweets(token: self!.dds.getToken()) { /* do nothing */ }
+                    DDS.fetchNewTweets() { /* do nothing */ }
                     break
                 default:
                     break
@@ -99,12 +95,12 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod() {
-        fetcher.fetchFakeTweet()
+        dds.fetchFakeTweet()
     }
     
     @objc
     func debugMethod2() {
-        Fetcher.fetchNewTweets(token: dds.getToken()) { /* do nothing */ }
+        DDS.fetchNewTweets { /* do nothing */ }
     }
     
     @objc
@@ -126,7 +122,7 @@ final class MainTable: UITableViewController {
             self?.tableView.setContentOffset(CGPoint(x: .zero, y: bumped), animated: true)
         }
         
-        Fetcher.fetchNewTweets(token: dds.getToken()) {
+        DDS.fetchNewTweets {
             DispatchQueue.main.async { /// Ensure call on main thread.
                 UIView.animate(withDuration: 0.25) { [weak self] in
                     self?.arrowView?.endRefreshing()
@@ -184,84 +180,7 @@ enum DiscussionSection: Int {
     case Main = 0
 }
 
-final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion> {
-    private let realm: Realm
-    private var token: NotificationToken! = nil
 
-    private let fetcher: Fetcher
-    
-    private let restoreScroll: () -> ()
-    
-    /// For our convenience.
-    typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
-
-    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider, restoreScroll: @escaping () -> ()) {
-        self.realm = realm
-        
-        let results = realm.objects(Discussion.self)
-            .filter(Discussion.minRelevancePredicate)
-            .sorted(by: \Discussion.updatedAt, ascending: false)
-        self.fetcher = fetcher
-        self.restoreScroll = restoreScroll
-        super.init(tableView: tableView, cellProvider: cellProvider)
-        /// Immediately register token.
-        token = results.observe { [weak self] (changes: RealmCollectionChange) in
-            guard let self = self else { 
-                assert(false, "No self!")
-                return 
-            }
-            
-            /** - Note: `animated` is `false` so that when new tweet's are added via
-                        "pull to refresh", the "inserted above" Twitterific-style effect is as
-                        seamless as possible.
-             */
-            
-            switch changes {
-            case .initial(let results):
-                /// Populate table without animation.
-                self.setContents(to: results, animated: false)
-                
-                /// Restore scroll position from `UserDefaults`.
-                self.restoreScroll()
-                
-            case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                #if DEBUG
-                var report = ["MainTable: \(results.count) discussions"]
-                if deletions.isNotEmpty { report.append("(-)\(deletions.count)")}
-                if insertions.isNotEmpty { report.append("(+)\(insertions.count)")}
-                if modifications.isNotEmpty { report.append("(~)\(modifications.count)")}
-                TableLog.debug(report.joined(separator: ", "), print: true, true)
-                
-                TableLog.debug("Insertion indices: \(insertions)", print: true, false)
-                #endif
-                
-                self.setContents(to: results, animated: true)
-                if let unreadIndex = results.lastIndex(where: {$0.read != .read}) {
-                    tableView.scrollToRow(at: IndexPath(row: unreadIndex, section: DiscussionSection.Main.rawValue), at: .top, animated: true)
-                    print("Unread Index \(unreadIndex)")
-                }
-                
-            case .error(let error):
-                fatalError("\(error)")
-            } 
-        }
-    }
-
-    fileprivate func setContents(to results: Results<Discussion>, animated: Bool) -> Void {
-        var snapshot = Snapshot()
-        snapshot.appendSections([.Main])
-        snapshot.appendItems(Array(results), toSection: .Main)
-        TableLog.debug("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.", print: false)
-        apply(snapshot, animatingDifferences: animated)
-        
-        fetcher.numDiscussions = results.count
-    }
-    
-    /// Accessor.
-    func getToken() -> NotificationToken {
-        return self.token
-    }
-}
 
 // MARK: - `UITableViewDelegate` Conformance
 extension MainTable {
@@ -280,7 +199,11 @@ extension MainTable {
         splitDelegate.present(discussion)
         
         do {
-            try realm.writeWithToken(withoutNotifying: [dds.getToken()]) { token in
+            /// Do not update the Table DDS, because it causes a weird animation.
+            var tokens: [NotificationToken] = []
+            if let token = dds.token { tokens.append(token) }
+            
+            try realm.writeWithToken(withoutNotifying: tokens) { token in
                 /// Mark discussion as read.
                 discussion.markRead(token)
                 
@@ -378,85 +301,4 @@ extension MainTable {
     fileprivate func offset(at path: IndexPath) -> CGFloat {
         tableView.rectForRow(at: path).origin.y - tableView.contentOffset.y - getNavBarHeight() - getStatusBarHeight()
     }
-}
-
-final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
-    
-    public var numDiscussions: Int? = nil
-    private(set) var isFetching = false
-    private let threshhold = 25
-    
-    /// Laziness prevents attempting to load nil IDs.
-    public lazy var airport = { Airport() }()
-    
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
-        if
-            isFetching == false,
-            let numDiscussions = numDiscussions,
-            (numDiscussions - indexPaths.max()!.row) < threshhold
-        {
-            isFetching = true
-            TableLog.debug("Row \(indexPaths.max()!.row) requested, prefetching items...", print: true, true)
-            Task {
-                await fetchOldTweets()
-                isFetching = false
-            }
-        }
-    }
-    
-    /**
-     
-     - Note: there is a limitation on history depth.
-       > Up to 800 Tweets are obtainable on the home timeline
-     - Docs: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/api-reference/get-statuses-home_timeline
-     
-     Therefore, if the v1 `home_timeline` API returns 0 results, do not allow further *backwards* fetches (this session).
-     */
-    @objc
-    public func fetchOldTweets() async {
-        do {
-            try await homeTimelineFetch(TimelineOldFetcher.self, token: nil)
-            await ReferenceCrawler.shared.performFollowUp()
-        } catch {
-            NetLog.error("\(error)")
-            assert(false)
-        }
-    }
-    
-    @objc
-    public static func fetchNewTweets(token: NotificationToken, onFetched completion: @escaping () -> Void) {
-        Task {
-            do {
-                try await homeTimelineFetch(TimelineNewFetcher.self, token: token)
-                await ReferenceCrawler.shared.performFollowUp()
-                
-                /// Record fetch completion.
-                UserDefaults.groupSuite.firstFetch = false
-            } catch {
-                NetLog.error("\(error)")
-                assert(false)
-#warning("Perform new refresh animation here.")
-            }
-            print("Silent Fetch Completed!")
-            completion()
-        }
-    }
-    
-    #if DEBUG
-    public func fetchFakeTweet() {
-        let realm = try! Realm()
-        try! realm.write {
-            let t = Tweet.generateFake()
-            realm.add(t)
-            let c = Conversation(id: t.conversation_id)
-            c.insert(t)
-            realm.add(c)
-            let d = Discussion(root: c)
-            realm.add(d)
-            
-            /// Note a new discussion above the fold.
-            UserDefaults.groupSuite.incrementScrollPositionRow()
-        }
-    }
-    #endif
 }

@@ -13,10 +13,13 @@ import RealmSwift
 final class MarkReadDaemon {
     
     /// Do not notify the `DiffableDataSource`, as it causes a `modification` bump, which causes an animation glitch (observed 21.11.23).
-    let excludeTokens: [NotificationToken]
+    var excludeTokens: [NotificationToken]
     
-    public init(token: NotificationToken) {
-        self.excludeTokens = [token]
+    public init(token: NotificationToken?) {
+        self.excludeTokens = []
+        if let token = token {
+            excludeTokens.append(token)
+        }
     }
     
     private let realm = try! Realm()
