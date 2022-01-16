@@ -97,8 +97,9 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
 extension DiscussionDDS: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) -> Void {
-        /// Number of rows left before we
+        /// Number of rows left before we pull from Twitter.
         let threshhold = 25
+        
         if
             let numDiscussions = numDiscussions,
             (numDiscussions - indexPaths.max()!.row) < threshhold
