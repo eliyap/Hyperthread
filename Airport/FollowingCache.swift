@@ -87,15 +87,18 @@ actor FollowingCache {
         
         NetLog.debug("Fetched \(rawUsers.count) following users", print: true, true)
         
-        /// Store fetched results.
-        do {
-            let realm = try! await Realm()
-            try realm.storeFollowing(raw: Array(rawUsers))
-            return rawUsers.map(\.id)
-        } catch {
-            NetLog.error("Failed to store following list!")
-            assert(false, "Failed to store following list!")
-            return []
-        }
+        /// Synchronous context.
+        return {
+            /// Store fetched results.
+            do {
+                let realm = try! Realm()
+                try realm.storeFollowing(raw: Array(rawUsers))
+                return rawUsers.map(\.id)
+            } catch {
+                NetLog.error("Failed to store following list!")
+                assert(false, "Failed to store following list!")
+                return []
+            }
+        }()
     }
 }
