@@ -127,14 +127,14 @@ actor ReferenceCrawler {
             return results
         }
         
-        /// Check if any tweets failed to land. There should be none.
+        /// Check if any tweets failed to land.
         /// - Note: tweets may fail to land due to being deleted.
         if inFlight.isNotEmpty {
-            NetLog.error("""
-                \(inFlight.count) tweets still in flight!
+            NetLog.log(.info, """
+                \(inFlight.count) tweets failed to land!
                 IDs \(inFlight)
                 """)
-            assert(false)
+            Self.remove(ids: inFlight)
         }
         
         /// Dispatch task for missing users. Not necessary to continue.
@@ -148,6 +148,20 @@ actor ReferenceCrawler {
                         }
                     }
             }
+        }
+    }
+    
+    private static func remove<TweetIDs: Collection>(ids: TweetIDs) where TweetIDs.Element == Tweet.ID {
+        let realm = try! Realm()
+        do {
+            try realm.writeWithToken { token in
+                for id in ids {
+                    realm.makeUnavailable(token, id: id)
+                }
+            }
+        } catch {
+            NetLog.error("Failed to mark tweet unavailable!")
+            assert(false)
         }
     }
     
