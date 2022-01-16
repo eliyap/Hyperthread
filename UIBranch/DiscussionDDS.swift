@@ -22,6 +22,9 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     public var numDiscussions: Int? = nil /// Number of discussions in the table.
     private(set) var isFetching = false   /// Whether a fetch is currently occurring. Used to prevent duplicated fetches.
     
+    #warning("Rework this hack!")
+    /// Most recent date of an old timeline fetch. Goal is to prevent hammering the API. This is a hack workaround, and should be replaced.
+    private var lastOldFetch: Date = .distantPast
     
     init(realm: Realm, tableView: UITableView, cellProvider: @escaping CellProvider, restoreScroll: @escaping () -> ()) {
         self.realm = realm
@@ -52,6 +55,10 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 self.restoreScroll()
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                guard self.isFetching == false else {
+                    Swift.debugPrint("Updated while fetching, ignoring update...")
+                    return
+                }
                 #if DEBUG
                 var report = ["MainTable: \(results.count) discussions"]
                 if deletions.isNotEmpty { report.append("(-)\(deletions.count)")}
@@ -100,14 +107,18 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         /// Number of rows left before we pull from Twitter.
         let threshhold = 25
         
+        guard Date().timeIntervalSince(lastOldFetch) > TimeInterval.minute else {
+            TableLog.debug("Too soon, denying prefetch.", print: true, true)
+            return
+        }
         if
             let numDiscussions = numDiscussions,
             (numDiscussions - indexPaths.max()!.row) < threshhold
         {
-            TableLog.debug("Row \(indexPaths.max()!.row) requested, prefetching items...", print: true, true)
             Task {
                 await fetchOldTweets()
             }
+            lastOldFetch = Date()
         }
     }
     
@@ -117,6 +128,8 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         guard isFetching == false else { return }
         isFetching = true
         defer { isFetching = false }
+        
+        TableLog.debug("Prefetching items...", print: true, true)
         
         do {
             try await homeTimelineFetch(TimelineOldFetcher.self)
