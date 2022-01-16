@@ -100,15 +100,12 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         /// Number of rows left before we
         let threshhold = 25
         if
-            isFetching == false,
             let numDiscussions = numDiscussions,
             (numDiscussions - indexPaths.max()!.row) < threshhold
         {
+            TableLog.debug("Row \(indexPaths.max()!.row) requested, prefetching items...", print: true, true)
             Task {
-                isFetching = true
-                TableLog.debug("Row \(indexPaths.max()!.row) requested, prefetching items...", print: true, true)
                 await fetchOldTweets()
-                isFetching = false
             }
         }
     }
