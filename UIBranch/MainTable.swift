@@ -70,9 +70,7 @@ final class MainTable: UITableViewController {
             .sink { [weak self] state in
                 switch state {
                 case .loggedIn:
-                    #if !DEBUG /// Disabled for debugging.
                     Fetcher.fetchNewTweets(token: self!.dds.getToken()) { /* do nothing */ }
-                    #endif
                     break
                 default:
                     break
