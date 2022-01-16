@@ -10,7 +10,7 @@ import Twig
 import RealmSwift
 
 /// - Note: also dispatches User Timeline requests.
-internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type, token: NotificationToken?) async throws -> Void {
+internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type, token: NotificationToken?) async throws -> Void {
     let fetcher = Fetcher()
     guard let credentials = Auth.shared.credentials else { throw UserError.credentials }
     let v1Tweets: [RawV1Tweet]
