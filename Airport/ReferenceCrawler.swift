@@ -141,6 +141,7 @@ actor ReferenceCrawler {
                 IDs \(inFlight)
                 """)
             Self.remove(ids: inFlight)
+            inFlight = []
         }
         
         /// Dispatch task for missing users. Not necessary to continue.
