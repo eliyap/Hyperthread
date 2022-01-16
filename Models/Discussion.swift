@@ -30,13 +30,10 @@ final class Discussion: Object, Identifiable {
         didSet {
             /// Wipe memoized storage.
             _tweets = nil
+            _read = nil
         }
     }
     public static let conversationsPropertyName = "conversations"
-    
-    @Persisted
-    var readStatus: ReadStatus.RawValue
-    public static let readStatusPropertyName = "readStatus"
     
     /** "Bell value" for observing changes to Discussion's tweets.
         Problem:
@@ -56,6 +53,7 @@ final class Discussion: Object, Identifiable {
         
         /// Wipe memoized storage.
         _tweets = nil
+        _read = nil
     }
     
     override required init() {
@@ -68,7 +66,6 @@ final class Discussion: Object, Identifiable {
         self.root = root
         self.conversations = List<Conversation>()
         self.conversations.append(root)
-        self.readStatus = ReadStatus.new.rawValue
         
         /// Safe to force unwrap, `root` must have ≥1 `tweets`.
         self.updatedAt = root.tweets.map(\.createdAt).max()!
@@ -80,10 +77,36 @@ final class Discussion: Object, Identifiable {
     var _tweets: [Tweet]?
     var tweets: [Tweet] {
         get {
-            if let tweets = _tweets { return tweets }
-            else {
+            if let tweets = _tweets {
+                return tweets
+            } else {
                 let result: [Tweet] = conversations.flatMap(\.tweets)
                 _tweets = result
+                return result
+            }
+        }
+    }
+
+    /// Memoized read status.
+    /// A discussion is 
+    /// - `read` if all of its tweets are read.
+    /// - `new` if all of its tweets are unread.
+    /// - `updated` if some of its tweets are unread.
+    var _read: ReadStatus? = nil
+    var read: ReadStatus {
+        get {
+            if let read = _read {
+                return read
+            } else {
+                var result: ReadStatus
+                if tweets.allSatisfy(\.read) {
+                    result = .read
+                } else if tweets.allSatisfy({ $0.read == false }) {
+                    result = .new
+                } else {
+                    result = .updated
+                }
+                _read = result
                 return result
             }
         }
@@ -91,10 +114,11 @@ final class Discussion: Object, Identifiable {
 }
 
 extension Discussion {
-    /// Should never have an invalid value.
-    var read: ReadStatus! {
-        get { .init(rawValue: readStatus) }
-        set { readStatus = newValue.rawValue }
+    /// Mark a discussion as read by marking all tweets as read.
+    func markRead(_ token: Realm.TransactionToken) -> Void {
+        for tweet in conversations.flatMap(\.tweets) {
+            tweet.read = true
+        }
     }
 }
 

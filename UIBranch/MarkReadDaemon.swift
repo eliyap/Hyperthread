@@ -36,15 +36,13 @@ final class MarkReadDaemon {
                 TableLog.error("Realm already in write transaction!")
                 return
             }
-            try realm.write(withoutNotifying: excludeTokens) {
+            try realm.writeWithToken(withoutNotifying: excludeTokens) { token in
                 for path in paths {
                     guard let discussion: Discussion = indices[path] else {
                         TableLog.debug("Mark Daemon missing key \(path)")
                         continue
                     }
-                    if discussion.tweetCount == 1 {
-                        discussion.read = .read
-                    }
+                    discussion.markRead(token)
                 }
             }
         } catch {
