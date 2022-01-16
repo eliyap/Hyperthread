@@ -119,6 +119,12 @@ extension Discussion {
         for tweet in conversations.flatMap(\.tweets) {
             tweet.read = true
         }
+        
+        /// Force re-calculation.
+        _read = nil
+        
+        /// Notify observers of change.
+        tweetsBellValue.toggle()
     }
 }
 
