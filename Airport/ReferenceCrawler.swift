@@ -46,10 +46,15 @@ actor ReferenceCrawler {
         var discussionsDangling: Set<Tweet.ID> = []
         var unlinked: Set<Tweet.ID> = []
         repeat {
+            /// Pre-filter so that `repeat-while` loop condition is accurate.
             conversationsDangling = Self.getConversationsDangling()
-            discussionsDangling = Self.getDiscussionsDangling()
-            let fetchList = conversationsDangling.union(discussionsDangling).union(unlinked)
                 .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+            discussionsDangling = Self.getDiscussionsDangling()
+                .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+            let unlinkedFiltered = unlinked
+                .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+            
+            let fetchList = conversationsDangling.union(discussionsDangling).union(unlinkedFiltered)
             
             /// If all tweets are block-listed, we can get stuck in a loop.
             guard fetchList.isNotEmpty else { break }
@@ -72,15 +77,20 @@ actor ReferenceCrawler {
             var discussionsDangling: Set<Tweet.ID> = []
             var unlinked: Set<Tweet.ID> = []
             repeat {
+                /// Pre-filter so that `repeat-while` loop condition is accurate.
                 /// Though we *think* conversations are done, feel free to be proven wrong.
                 conversationsDangling = Self.getConversationsDangling()
+                    .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
                 if conversationsDangling.isNotEmpty {
                     NetLog.warning("Unexpected conversation follow up!")
                 }
                 
                 discussionsDangling = Self.getDiscussionsDangling()
-                let fetchList = conversationsDangling.union(discussionsDangling).union(unlinked)
                     .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+                let unlinkedFiltered = unlinked
+                    .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+                
+                let fetchList = conversationsDangling.union(discussionsDangling).union(unlinkedFiltered)
                 
                 /// If all tweets are block-listed, we can get stuck in a loop.
                 guard fetchList.isNotEmpty else { break }
