@@ -11,6 +11,7 @@ import Twig
 
 internal struct HomeTimelineFetcher<Helper: HomeTimelineHelper> {
     
+    /// Realm observation tokens to ignore.
     private let tokens: [NotificationToken]
     
     init(doNotNotify tokens: [NotificationToken]) {

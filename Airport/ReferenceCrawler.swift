@@ -23,9 +23,14 @@ public enum UserError: Error {
  */
 actor ReferenceCrawler {
     
+    /// Realm observation tokens to ignore.
+    private let tokens: [NotificationToken]
+    
     /// Singleton Object.
-    public static let shared: ReferenceCrawler = .init()
-    private init() {}
+    public static let shared: ReferenceCrawler = .init(doNotNotify: [])
+    public init(doNotNotify tokens: [NotificationToken]) {
+        self.tokens = tokens
+    }
     
     /// Set of tweets for which we received no response from Twitter.
     private var unavailable: Set<Tweet.ID> = []
