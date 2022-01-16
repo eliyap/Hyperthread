@@ -61,7 +61,7 @@ final class MainTable: UITableViewController {
         
         /// Refresh timeline at app startup.
         #if !DEBUG /// Disabled for debugging.
-        fetcher.fetchNewTweets { /* do nothing */ }
+        Fetcher.fetchNewTweets { /* do nothing */ }
         #endif
         
         /// Refresh timeline at login.
@@ -71,7 +71,7 @@ final class MainTable: UITableViewController {
                 switch state {
                 case .loggedIn:
                     #if !DEBUG /// Disabled for debugging.
-                    self?.fetcher.fetchNewTweets { /* do nothing */ }
+                    Fetcher.fetchNewTweets { /* do nothing */ }
                     #endif
                     break
                 default:
@@ -105,7 +105,7 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod2() {
-        fetcher.fetchNewTweets { /* do nothing */ }
+        Fetcher.fetchNewTweets { /* do nothing */ }
     }
     
     @objc
@@ -127,7 +127,7 @@ final class MainTable: UITableViewController {
             self?.tableView.setContentOffset(CGPoint(x: .zero, y: bumped), animated: true)
         }
         
-        fetcher.fetchNewTweets {
+        Fetcher.fetchNewTweets {
             DispatchQueue.main.async { /// Ensure call on main thread.
                 UIView.animate(withDuration: 0.25) { [weak self] in
                     self?.arrowView?.endRefreshing()
@@ -417,12 +417,11 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
                 NetLog.error("\(error)")
                 assert(false)
             }
-            #warning("Perform new refresh animation here.")
         }
     }
     
     @objc
-    public func fetchNewTweets(onFetched completion: @escaping () -> Void) {
+    public static func fetchNewTweets(onFetched completion: @escaping () -> Void) {
         Task {
             do {
                 try await homeTimelineFetch(TimelineNewFetcher.self)
@@ -430,6 +429,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             } catch {
                 NetLog.error("\(error)")
                 assert(false)
+#warning("Perform new refresh animation here.")
             }
         }
     }
