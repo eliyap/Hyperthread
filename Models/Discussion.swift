@@ -51,7 +51,12 @@ final class Discussion: Object, Identifiable {
     @Persisted
     private var tweetsBellValue: Bool = false
     public static let tweetsDidChangeKey = "tweetsBellValue"
-    public func notifyTweetsDidChange() -> Void { tweetsBellValue.toggle() }
+    public func notifyTweetsDidChange() -> Void {
+        tweetsBellValue.toggle()
+        
+        /// Wipe memoized storage.
+        _tweets = nil
+    }
     
     override required init() {
         super.init()
