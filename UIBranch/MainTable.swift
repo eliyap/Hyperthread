@@ -42,7 +42,7 @@ final class MainTable: UITableViewController {
             fetcher: fetcher,
             tableView: tableView,
             cellProvider: cellProvider,
-            action: setScroll
+            action: restoreScroll
         )
         
         /// Immediately defuse unwrapped nil `mrd`.
@@ -162,7 +162,7 @@ final class MainTable: UITableViewController {
     }
     
     /// Restores the saved scroll position.
-    private func setScroll() -> Void {
+    private func restoreScroll() -> Void {
         guard let tablePos = UserDefaults.groupSuite.scrollPosition else {
             TableLog.debug("Could not obtain saved scroll position!", print: true, true)
             return
