@@ -35,7 +35,7 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type, t
     /// Dispatch chunk requests in parallel.
     await withTaskGroup(of: Void.self) { group in
         let ids = v1Tweets.map {"\($0.id)"}
-        ids.chunks(ofCount: TweetEndpoint.maxResults).forEach{ chunk in
+        ids.chunks(ofCount: TweetEndpoint.maxResults).forEach { chunk in
             group.addTask {
                 do {
                     let rawData = try await hydratedTweets(credentials: credentials, ids: Array(chunk))
