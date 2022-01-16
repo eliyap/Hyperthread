@@ -23,14 +23,9 @@ public enum UserError: Error {
  */
 actor ReferenceCrawler {
     
-    /// Realm observation tokens to ignore.
-    public let tokens: [NotificationToken]
-    
     /// Singleton Object.
-    public static let shared: ReferenceCrawler = .init(doNotNotify: [])
-    public init(doNotNotify tokens: [NotificationToken]) {
-        self.tokens = tokens
-    }
+    public static let shared: ReferenceCrawler = .init()
+    private init() {}
     
     /// Set of tweets for which we received no response from Twitter.
     private var unavailable: Set<Tweet.ID> = []
@@ -221,7 +216,7 @@ actor ReferenceCrawler {
         let (tweets, included, users, media) = rawData
         
         /// Safe to insert `included`, as we make no assumptions around `Relevance`.
-        try ingestRaw(withoutNotifying: tokens, rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
+        try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
         
         let realm = try! Realm()
         try realm.updateDangling()

@@ -64,7 +64,7 @@ fileprivate func store(rawData: RawData, token: NotificationToken?) throws -> Vo
         tokens.append(token)
     }
     
-    try ingestRaw(withoutNotifying: tokens, rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
+    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
     
     /// Update home timeline boundaries.
     /// - Note: use v2 tweets *after storage*, not v1 tweets, to be *sure* storage was successful.

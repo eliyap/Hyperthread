@@ -428,7 +428,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
         Task {
             do {
                 try await homeTimelineFetch(TimelineNewFetcher.self, token: token)
-                await ReferenceCrawler(doNotNotify: [token]).performFollowUp()
+                await ReferenceCrawler.shared.performFollowUp()
                 
                 /// Record fetch completion.
                 UserDefaults.groupSuite.firstFetch = false

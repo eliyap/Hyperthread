@@ -11,12 +11,7 @@ import Twig
 
 internal struct HomeTimelineFetcher<Helper: HomeTimelineHelper> {
     
-    /// Realm observation tokens to ignore.
-    private let tokens: [NotificationToken]
-    
-    init(doNotNotify tokens: [NotificationToken]) {
-        self.tokens = tokens
-    }
+    init() {}
     
     /// - Note: also dispatches User Timeline requests.
     internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type) async throws -> Void {
@@ -68,7 +63,7 @@ internal struct HomeTimelineFetcher<Helper: HomeTimelineHelper> {
         let (tweets, _, users, media) = rawData
         NetLog.debug("Received \(tweets.count) home timeline tweets.", print: true, true)
         
-        try ingestRaw(withoutNotifying: self.tokens, rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
+        try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
         
         /// Update home timeline boundaries.
         /// - Note: use v2 tweets *after storage*, not v1 tweets, to be *sure* storage was successful.

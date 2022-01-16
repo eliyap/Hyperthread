@@ -13,7 +13,6 @@ import Twig
  Accepts raw data from the Twitter v2 API, including `included` tweets,
  */
 func ingestRaw(
-    withoutNotifying tokens: [NotificationToken] = [],
     rawTweets: [RawHydratedTweet],
     rawUsers: [RawUser],
     rawMedia: [RawIncludeMedia],
@@ -22,7 +21,7 @@ func ingestRaw(
     let realm = try! Realm()
     
     /// Insert all users.
-    try realm.write(withoutNotifying: tokens) {
+    try realm.write {
         for rawUser in rawUsers {
             let following = following.contains(where: {$0 == rawUser.id})
             let user = User(raw: rawUser, following: following)
@@ -39,7 +38,7 @@ func ingestRaw(
     }
     
     /// Insert Tweets into local database.
-    try realm.writeWithToken(withoutNotifying: tokens) { token in
+    try realm.writeWithToken { token in
         for rawTweet in rawTweets {
             let prior = realm.tweet(id: rawTweet.id)
             
@@ -70,7 +69,6 @@ func ingestRaw(
             These may be missing media keys, or be of a different `Relevance` than the main payload!
  */
 func ingestRaw(
-    withoutNotifying tokens: [NotificationToken] = [],
     rawTweets: [RawHydratedTweet],
     rawUsers: [RawUser],
     rawMedia: [RawIncludeMedia],
@@ -79,7 +77,7 @@ func ingestRaw(
     let realm = try! Realm()
     
     /// Insert all users.
-    try realm.write(withoutNotifying: tokens) {
+    try realm.write {
         for rawUser in rawUsers {
             /// Check `following` status in Realm, to avoid ovewriting an existing value (if any).
             let following = realm.user(id: rawUser.id)?.following ?? false
@@ -90,7 +88,7 @@ func ingestRaw(
     }
     
     /// Insert Tweets into local database.
-    try realm.writeWithToken(withoutNotifying: tokens) { token in
+    try realm.writeWithToken { token in
         for rawTweet in rawTweets {
             /// Check for existing`read`. If none, mark read if this is the first run.
             let checkedRead = realm.tweet(id: rawTweet.id)?.read ?? UserDefaults.groupSuite.firstFetch
