@@ -40,7 +40,7 @@ actor ReferenceCrawler {
     
     /// Dispatch a fetch request for a single tweet.
     public func fetchSingle(id: Tweet.ID) async -> Void {
-        await intermediate(conversationsDangling: [], discussionsDangling: [], unlinked: [id])
+        await intermediate(fetchList: [id])
     }
     
     /// Follow up `Conversation`s without a `Discussion` and relevant `Discussions` with dangling references.
@@ -53,11 +53,13 @@ actor ReferenceCrawler {
         repeat {
             conversationsDangling = Self.getConversationsDangling()
             discussionsDangling = Self.getDiscussionsDangling()
-            await intermediate(
-                conversationsDangling: conversationsDangling,
-                discussionsDangling: discussionsDangling,
-                unlinked: unlinked
-            )
+            let fetchList = conversationsDangling.union(discussionsDangling).union(unlinked)
+                .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+            
+            /// If all tweets are block-listed, we can get stuck in a loop.
+            guard fetchList.isNotEmpty else { break }
+            
+            await intermediate(fetchList: fetchList)
             
             /// Perform linking.
             do {
@@ -82,11 +84,13 @@ actor ReferenceCrawler {
                 }
                 
                 discussionsDangling = Self.getDiscussionsDangling()
-                await intermediate(
-                    conversationsDangling: conversationsDangling,
-                    discussionsDangling: discussionsDangling,
-                    unlinked: unlinked
-                )
+                let fetchList = conversationsDangling.union(discussionsDangling).union(unlinked)
+                    .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+                
+                /// If all tweets are block-listed, we can get stuck in a loop.
+                guard fetchList.isNotEmpty else { break }
+                
+                await intermediate(fetchList: fetchList)
                 
                 /// Perform linking.
                 do {
@@ -99,16 +103,7 @@ actor ReferenceCrawler {
         }
     }
     
-    private func intermediate(
-        conversationsDangling: Set<Tweet.ID>,
-        discussionsDangling: Set<Tweet.ID>,
-        unlinked: Set<Tweet.ID>
-    ) async {
-        /// Join lists.
-        let fetchList = conversationsDangling.union(discussionsDangling).union(unlinked)
-            /// Check that we're not already fetching these.
-            .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
-        
+    private func intermediate(fetchList: Set<Tweet.ID>) async {
         /// Record that these tweets are being fetched.
         inFlight.formUnion(fetchList)
         
