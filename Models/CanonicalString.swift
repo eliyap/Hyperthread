@@ -194,7 +194,7 @@ extension NSMutableAttributedString {
         var cursor = string.startIndex
         
         for mention in sortedMentions {
-            let atHandle = "@" + mention.handle + " "
+            let atHandle = "@" + mention.handle
             
             /// Perform case insensitive search, just as Twitter does.
             /// Search starting from `cursor`.
