@@ -61,7 +61,7 @@ final class MainTable: UITableViewController {
         
         /// Refresh timeline at app startup.
         #if !DEBUG /// Disabled for debugging.
-        Fetcher.fetchNewTweets { /* do nothing */ }
+        Fetcher.fetchNewTweets(token: dds.getToken()) { /* do nothing */ }
         #endif
         
         /// Refresh timeline at login.
@@ -71,7 +71,7 @@ final class MainTable: UITableViewController {
                 switch state {
                 case .loggedIn:
                     #if !DEBUG /// Disabled for debugging.
-                    Fetcher.fetchNewTweets { /* do nothing */ }
+                    Fetcher.fetchNewTweets(token: self!.dds.getToken()) { /* do nothing */ }
                     #endif
                     break
                 default:
@@ -105,7 +105,7 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod2() {
-        Fetcher.fetchNewTweets { /* do nothing */ }
+        Fetcher.fetchNewTweets(token: dds.getToken()) { /* do nothing */ }
     }
     
     @objc
@@ -127,7 +127,7 @@ final class MainTable: UITableViewController {
             self?.tableView.setContentOffset(CGPoint(x: .zero, y: bumped), animated: true)
         }
         
-        Fetcher.fetchNewTweets {
+        Fetcher.fetchNewTweets(token: dds.getToken()) {
             DispatchQueue.main.async { /// Ensure call on main thread.
                 UIView.animate(withDuration: 0.25) { [weak self] in
                     self?.arrowView?.endRefreshing()
@@ -421,7 +421,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     }
     
     @objc
-    public static func fetchNewTweets(onFetched completion: @escaping () -> Void) {
+    public static func fetchNewTweets(token: NotificationToken, onFetched completion: @escaping () -> Void) {
         Task {
             do {
                 try await homeTimelineFetch(TimelineNewFetcher.self)
