@@ -181,7 +181,7 @@ final class MainTable: UITableViewController {
 
 enum DiscussionSection: Int {
     /// The only section, for now.
-    case Main
+    case Main = 0
 }
 
 final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion> {
@@ -218,7 +218,10 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
             
             switch changes {
             case .initial(let results):
+                /// Populate table without animation.
                 self.setContents(to: results, animated: false)
+                
+                /// Restore scroll position from `UserDefaults`.
                 self.scrollAction()
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
@@ -232,11 +235,10 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 TableLog.debug("Insertion indices: \(insertions)", print: true, false)
                 #endif
                 
-                self.setContents(to: results, animated: false)
-                
-                /// Only restore scroll position if items were added to the top of the queue.
-                if insertions.contains(0) {
-                    self.scrollAction()
+                self.setContents(to: results, animated: true)
+                if let unreadIndex = results.lastIndex(where: {$0.read != .read}) {
+                    tableView.scrollToRow(at: IndexPath(row: unreadIndex, section: DiscussionSection.Main.rawValue), at: .top, animated: true)
+                    print("Unread Index \(unreadIndex)")
                 }
                 
             case .error(let error):
@@ -280,7 +282,7 @@ extension MainTable {
         do {
             try realm.writeWithToken(withoutNotifying: [dds.getToken()]) { token in
                 /// Mark discussion as read.
-                discussion.read = .read
+                discussion.markRead(token)
                 
                 /// Patch updated date, as it can be flaky.
                 discussion.patchUpdatedAt(token)
@@ -434,6 +436,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
 #warning("Perform new refresh animation here.")
             }
             print("Silent Fetch Completed!")
+            completion()
         }
     }
     
