@@ -186,18 +186,26 @@ extension NSMutableAttributedString {
     /// - Parameters:
     ///   - removedHandles: the @handles that were already removed from the string, which we may skip over.
     func linkAtMentions(tweet: Tweet, linkedRanges: inout [NSRange], removedHandles: Set<String>) -> Void {
+        
+        /// Iterate over string in order of appearance.
+        /// This helps distinguish `@Script` from `@ScriptoriumGirl` in "I follow @Script and @ScriptoriumGirl".
+        /// Don't use trailing space, because of accepted case "@Script's tweets are the best!"
         let sortedMentions: [Mention] = tweet.entities?.mentions.sorted(by: {$0.start < $1.start}) ?? []
+        var cursor = string.startIndex
+        
         for mention in sortedMentions {
-            let atHandle = "@" + mention.handle
+            let atHandle = "@" + mention.handle + " "
             
             /// Perform case insensitive search, just as Twitter does.
-            guard let target = string.range(of: atHandle, options: .caseInsensitive) else {
+            /// Search starting from `cursor`.
+            guard let target = string.range(of: atHandle, options: .caseInsensitive, range: cursor..<string.endIndex) else {
                 /// It's normal to fail to find @mentions if they were removed from the string.
                 if removedHandles.contains(atHandle) == false {
                     ModelLog.warning("Could not find \(atHandle) in \(string)")
                 }
                 continue
             }
+            cursor = target.upperBound
             
             /// Transform substring range to `NSRange` boundaries.
             guard let intRange = nsRange(target) else {
@@ -223,15 +231,21 @@ extension NSMutableAttributedString {
     }
     
     func linkTags(tweet: Tweet, linkedRanges: inout [NSRange]) -> Void {
+        /// Iterate over string in order of appearance.
+        /// This helps distinguish `#swift` from `#swiftLang` in "I love #Swift #swiftLang".
+        /// Don't use trailing spaces.
         let sortedTags: [Tag] = tweet.entities?.hashtags.sorted(by: {$0.start < $1.start}) ?? []
+        var cursor = string.startIndex
+        
         for tag in sortedTags {
             let hashtag = "#" + tag.tag
             
             /// Perform case insensitive search, just as Twitter does.
-            guard let target = string.range(of: hashtag, options: .caseInsensitive) else {
+            guard let target = string.range(of: hashtag, options: .caseInsensitive, range: cursor..<string.endIndex) else {
                 ModelLog.warning("Could not find \(hashtag) in \(string)")
                 continue
             }
+            cursor = target.upperBound
             
             /// Transform substring range to `NSRange` boundaries.
             guard let intRange = nsRange(target) else {
@@ -247,6 +261,7 @@ extension NSMutableAttributedString {
                     - intersecting range \(intRange)
                     - hashtag \(hashtag)
                     - text \(tweet.text)
+                    - hashtag objects \(sortedTags)
                     """)
                 continue
             }
