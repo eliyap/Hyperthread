@@ -70,6 +70,7 @@ final class MainTable: UITableViewController {
             .sink { [weak self] state in
                 switch state {
                 case .loggedIn:
+                    #warning("TODO: mark all tweets read here.")
                     Fetcher.fetchNewTweets(token: self!.dds.getToken()) { /* do nothing */ }
                     break
                 default:
