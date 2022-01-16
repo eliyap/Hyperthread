@@ -7,11 +7,37 @@
 
 import Foundation
 import RealmSwift
+import Twig
+
+enum OptionalTweet {
+    case unavailable(Tweet.ID)
+    case available(Tweet)
+    
+    var id: Tweet.ID {
+        switch self {
+        case .unavailable(let id):
+            return id
+        case .available(let tweet):
+            return tweet.id
+        }
+    }
+    
+    var primaryReferenceType: RawReferenceType? {
+        switch self {
+        case .unavailable:
+            return .none
+        case .available(let tweet):
+            return tweet.primaryReferenceType
+        }
+    }
+}
+extension OptionalTweet: Equatable { }
+extension OptionalTweet: Hashable { }
 
 final class Node: Identifiable {
     public var id: Tweet.ID { tweet.id }
     
-    public let tweet: Tweet
+    public let tweet: OptionalTweet
     
     /// How many references away `tweet` is from the discussion root.
     public let depth: Int
@@ -21,14 +47,23 @@ final class Node: Identifiable {
     /// - Note: nodes must be chronologically sorted by `createdAt`.
     public private(set) var children: [Node]
     
-    public let author: User
+    public let author: User?
     
     init(_ tweet: Tweet, depth: Int, parent: Node?, user: User) {
-        self.tweet = tweet
+        self.tweet = .available(tweet)
         self.depth = depth
         self.children = []
         self.parent = parent
         self.author = user
+        parent?.append(self)
+    }
+    
+    init(_ id: Tweet.ID, depth: Int, parent: Node?) {
+        self.tweet = .unavailable(id)
+        self.depth = depth
+        self.children = []
+        self.parent = parent
+        self.author = nil
         parent?.append(self)
     }
     
@@ -112,9 +147,15 @@ extension Discussion {
                     ModelLog.error("Primary Reference was present but not attached! id \(PRID)")
                 }
 
+                /// Try to fetch by ID, just in case it's possible.
                 Task { await ReferenceCrawler.shared.fetchSingle(id: PRID) }
-                assert(false)
                 
+                /// Insert stub.
+                let missingNode = Node(PRID, depth: 1, parent: root)
+                nodes.append(missingNode)
+                let newNode = Node(t, depth: 2, parent: missingNode, user: realm.user(id: t.authorID)!)
+                nodes.append(newNode)
+
                 continue
             }
             let newNode = Node(t, depth: PRNode.depth + 1, parent: PRNode, user: realm.user(id: t.authorID)!)
@@ -136,13 +177,17 @@ extension Node {
         /// - Note: exclude the current tweet, otherwise all leading @mentions would be omitted.
         while
             let c = curr,
-            c.tweet.isReply,
+            case .available(let cTweet) = c.tweet,
+            cTweet.isReply,
             let p = c.parent,
-            c.tweet.replying_to == p.id
+            case .available(let pTweet) = p.tweet,
+            cTweet.replying_to == pTweet.id
         {
             /// Include the author and any accounts they @mention.
-            result.insert(p.author.handle)
-            if let handles = p.tweet.entities?.mentions.map(\.handle) {
+            if let handle = p.author?.handle {
+                result.insert(handle)
+            }
+            if let handles = pTweet.entities?.mentions.map(\.handle) {
                 for handle in handles {
                     result.insert(handle)
                 }

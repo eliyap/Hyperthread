@@ -143,12 +143,14 @@ final class TweetCell: ControlledCell {
     /// Arbitrary number. Test Later.
     private let maxDepth = 14
     private let indentSize: CGFloat = 10
-    public func configure(node: Node, author: User, realm: Realm) {
-        userView.configure(user: author)
-        tweetTextView.attributedText = node.tweet.fullText(context: node)
-        retweetView.configure(tweet: node.tweet, realm: realm)
-        metricsView.configure(node.tweet)
-        albumVC.configure(tweet: node.tweet)
+    public func configure(node: Node, realm: Realm) {
+        if case .available(let tweet) = node.tweet {
+            userView.configure(user: node.author)
+            tweetTextView.attributedText = tweet.fullText(context: node)
+            retweetView.configure(tweet: tweet, realm: realm)
+            metricsView.configure(tweet)
+            albumVC.configure(tweet: tweet)
+        }
         
         /// Set indentation depth, decrementing to account for 1 indexing.
         let depth = min(maxDepth, node.depth - 1)
