@@ -27,6 +27,10 @@ actor ReferenceCrawler {
     public static let shared: ReferenceCrawler = .init()
     private init() {}
     
+    /// Set of tweets for which we received no response from Twitter.
+    private var unavailable: Set<Tweet.ID> = []
+    
+    /// Tweets where we are waiting for a response, and which should not yet be re-requested.
     private var inFlight: Set<Tweet.ID> = []
     
     /// Dispatch a fetch request for a single tweet.
@@ -101,12 +105,12 @@ actor ReferenceCrawler {
         /// Join lists.
         let fetchList = conversationsDangling.union(discussionsDangling).union(unlinked)
             /// Check that we're not already fetching these.
-            .filter { inFlight.contains($0) == false }
+            .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
         
         /// Record that these tweets are being fetched.
         inFlight.formUnion(fetchList)
         
-        NetLog.debug("Dispatching request for \(fetchList.count) tweets \(fetchList)", print: true, true)
+        NetLog.debug("Dispatching request for \(fetchList.count) tweets \(Array(fetchList).truncated(5))", print: true, true)
         
         let mentions: MentionList = await withTaskGroup(of: FetchResult.self) { group -> MentionList in
             /// Dispatch chunked requests in parallel.
@@ -141,6 +145,9 @@ actor ReferenceCrawler {
                 IDs \(inFlight)
                 """)
             Self.remove(ids: inFlight)
+            
+            /// Empty out the inflight list.
+            unavailable.formUnion(inFlight)
             inFlight = []
         }
         

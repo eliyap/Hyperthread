@@ -105,6 +105,7 @@
 		22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F24640274DC20200AE17AD /* CanonicalString.swift */; };
 		22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26992794846F00DD8EE4 /* FirstFetch.swift */; };
 		22FA269C2794AB5400DD8EE4 /* HomeTimelineFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA269B2794AB5400DD8EE4 /* HomeTimelineFetcher.swift */; };
+		22FA269E2794B88400DD8EE4 /* Truncated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA269D2794B88400DD8EE4 /* Truncated.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -228,6 +229,7 @@
 		22F24640274DC20200AE17AD /* CanonicalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CanonicalString.swift; path = /Users/SAM/Documents/UIBranch/Models/CanonicalString.swift; sourceTree = "<absolute>"; };
 		22FA26992794846F00DD8EE4 /* FirstFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstFetch.swift; sourceTree = "<group>"; };
 		22FA269B2794AB5400DD8EE4 /* HomeTimelineFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTimelineFetcher.swift; sourceTree = "<group>"; };
+		22FA269D2794B88400DD8EE4 /* Truncated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Truncated.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -457,6 +459,7 @@
 				22BFD7A82775883F00E46DF1 /* Collection.isNotEmpty.swift */,
 				228D71E8277AC06100E306BD /* TimeInterval.swift */,
 				22193DA1278280CD005A7708 /* URLError.swift */,
+				22FA269D2794B88400DD8EE4 /* Truncated.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -786,6 +789,7 @@
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
 				22BFD7A72775882000E46DF1 /* Collection<Enum>.max.swift in Sources */,
 				220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */,
+				22FA269E2794B88400DD8EE4 /* Truncated.swift in Sources */,
 				22680A92276B41B1008827F8 /* Relevance.swift in Sources */,
 				222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */,
 				22D2573127883F75005FC3D8 /* ReferenceCrawler.swift in Sources */,
