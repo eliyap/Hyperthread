@@ -41,11 +41,15 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
-            /// Check `relevance` value in Realm, to avoid ovewriting an existing value (if any).
-            let checkedRelevance = realm.tweet(id: rawTweet.id)?.relevance
-                ?? Relevance(tweet: rawTweet, following: following)
+            let prior = realm.tweet(id: rawTweet.id)
             
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: checkedRelevance)
+            /// Check `relevance` value in Realm, to avoid ovewriting an existing value (if any).
+            let checkedRelevance = prior?.relevance ?? Relevance(tweet: rawTweet, following: following)
+            
+            /// Check for existing`read`. If none, mark read if this is the first run.
+            let checkedRead = prior?.read ?? UserDefaults.groupSuite.firstFetch
+            
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: checkedRelevance, read: checkedRead)
             
             realm.add(tweet, update: .modified)
             
@@ -88,9 +92,12 @@ func ingestRaw(
     /// Insert Tweets into local database.
     try realm.writeWithToken { token in
         for rawTweet in rawTweets {
+            /// Check for existing`read`. If none, mark read if this is the first run.
+            let checkedRead = realm.tweet(id: rawTweet.id)?.read ?? UserDefaults.groupSuite.firstFetch
+            
             /// - Note: **intentionally** overwrite existing `relevance`, which may have resulted
             ///         from user timeline fetch.
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: relevance)
+            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: relevance, read: checkedRead)
             realm.add(tweet, update: .modified)
             
             /// Safety check: we count on the user never being missing!
@@ -155,9 +162,6 @@ fileprivate func link(_ token: Realm.TransactionToken, conversation: Conversatio
         /// Recognize the conversation as its own discussion.
         conversation.upstream = root.id
         realm.add(Discussion(root: conversation))
-        
-        /// Note a new discussion above the fold.
-        UserDefaults.groupSuite.incrementScrollPositionRow()
         
         return
     }

@@ -111,7 +111,12 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         set { _dangling = newValue.rawValue}
     }
     
-    init(raw: RawHydratedTweet, rawMedia: [RawIncludeMedia], relevance: Relevance) {
+    init(
+        raw: RawHydratedTweet,
+        rawMedia: [RawIncludeMedia],
+        relevance: Relevance,
+        read: Bool
+    ) {
         super.init()
         self.id = raw.id
         self.createdAt = raw.created_at
@@ -120,14 +125,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         self.metrics = PublicMetrics(raw: raw.public_metrics)
         self.authorID = raw.author_id
         self.inReplyToUserID = raw.in_reply_to_user_id
-        
-        /// On first run, mark all tweets as already read.
-        if UserDefaults.groupSuite.firstFetch {
-            self.read = true
-        } else {
-            self.read = false
-        }
-        
+        self.read = read
         
         var referenceSet: ReferenceSet = .empty
         if let references = raw.referenced_tweets {
