@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setOpaqueNavbar()
         
         #if DEBUG
-//        loadAppData()
+        loadAppData()
         #endif
         
         return true
