@@ -103,6 +103,7 @@
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
 		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
 		22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F24640274DC20200AE17AD /* CanonicalString.swift */; };
+		22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26992794846F00DD8EE4 /* FirstFetch.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -224,6 +225,7 @@
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
 		22F24640274DC20200AE17AD /* CanonicalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CanonicalString.swift; path = /Users/SAM/Documents/UIBranch/Models/CanonicalString.swift; sourceTree = "<absolute>"; };
+		22FA26992794846F00DD8EE4 /* FirstFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstFetch.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -332,6 +334,7 @@
 				223BBF2C27377BE500375530 /* SceneDelegate.swift */,
 				223BBF2E27377BE500375530 /* ViewController.swift */,
 				223BBF852738572C00375530 /* MainTable.swift */,
+				22FA26992794846F00DD8EE4 /* FirstFetch.swift */,
 				2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */,
 				222161F52741D7FF00220F0C /* DiscussionTree.swift */,
 				22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */,
@@ -821,6 +824,7 @@
 				22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */,
+				22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */,
 				228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */,
 				22193DA627829CBD005A7708 /* ColorMarkerView.swift in Sources */,
 				223BBF6427377E8900375530 /* AsyncMap.swift in Sources */,
