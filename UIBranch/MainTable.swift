@@ -42,7 +42,7 @@ final class MainTable: UITableViewController {
             fetcher: fetcher,
             tableView: tableView,
             cellProvider: cellProvider,
-            action: restoreScroll
+            restoreScroll: restoreScroll
         )
         
         /// Immediately defuse unwrapped nil `mrd`.
@@ -190,19 +190,19 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
 
     private let fetcher: Fetcher
     
-    private let scrollAction: () -> ()
+    private let restoreScroll: () -> ()
     
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<DiscussionSection, Discussion>
 
-    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider, action: @escaping () -> ()) {
+    init(realm: Realm, fetcher: Fetcher, tableView: UITableView, cellProvider: @escaping CellProvider, restoreScroll: @escaping () -> ()) {
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
             .filter(Discussion.minRelevancePredicate)
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.fetcher = fetcher
-        self.scrollAction = action
+        self.restoreScroll = restoreScroll
         super.init(tableView: tableView, cellProvider: cellProvider)
         /// Immediately register token.
         token = results.observe { [weak self] (changes: RealmCollectionChange) in
@@ -222,7 +222,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 self.setContents(to: results, animated: false)
                 
                 /// Restore scroll position from `UserDefaults`.
-                self.scrollAction()
+                self.restoreScroll()
                 
             case .update(let results, deletions: let deletions, insertions: let insertions, modifications: let modifications):
                 #if DEBUG
