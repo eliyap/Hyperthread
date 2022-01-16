@@ -103,6 +103,8 @@ actor ReferenceCrawler {
         /// Record that these tweets are being fetched.
         inFlight.formUnion(fetchList)
         
+        NetLog.debug("Dispatching request for \(fetchList.count) tweets \(fetchList)", print: true, true)
+        
         let mentions: MentionList = await withTaskGroup(of: FetchResult.self) { group -> MentionList in
             fetchList
                 .chunks(ofCount: TweetEndpoint.maxResults)
