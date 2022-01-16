@@ -395,8 +395,12 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             let numDiscussions = numDiscussions,
             (numDiscussions - indexPaths.max()!.row) < threshhold
         {
+            isFetching = true
             TableLog.debug("Row \(indexPaths.max()!.row) requested, prefetching items...", print: true, true)
-            fetchOldTweets()
+            Task {
+                await fetchOldTweets()
+                isFetching = false
+            }   
         }
     }
     
@@ -409,15 +413,13 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
      Therefore, if the v1 `home_timeline` API returns 0 results, do not allow further *backwards* fetches (this session).
      */
     @objc
-    public func fetchOldTweets() {
-        Task {
-            do {
-                try await homeTimelineFetch(TimelineOldFetcher.self, token: nil)
-                await ReferenceCrawler.shared.performFollowUp(token: nil)
-            } catch {
-                NetLog.error("\(error)")
-                assert(false)
-            }
+    public func fetchOldTweets() async {
+        do {
+            try await homeTimelineFetch(TimelineOldFetcher.self, token: nil)
+            await ReferenceCrawler.shared.performFollowUp(token: nil)
+        } catch {
+            NetLog.error("\(error)")
+            assert(false)
         }
     }
     
