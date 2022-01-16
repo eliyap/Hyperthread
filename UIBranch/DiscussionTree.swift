@@ -85,7 +85,12 @@ extension Discussion {
             
             /// Safety checks.
             guard let PRID = t.primaryReference else {
-                assert(false, "No primary reference.")
+                ModelLog.warning("""
+                    Could not find primary reference ID while building tree.
+                    - text: \(tweet.text)
+                    - id: \(tweet.id)
+                    """)
+                assert(false)
                 continue
             }
             guard let PRNode = nodes.first(where: {$0.tweet.id == PRID}) else {
