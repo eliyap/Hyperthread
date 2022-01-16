@@ -64,8 +64,8 @@ extension Discussion {
         let realm = try! Realm()
         
         /// Initialize the root node.
-        let tweet = realm.tweet(id: self.id)!
-        let root = Node(tweet, depth: 0, parent: nil, user: realm.user(id: tweet.authorID)!)
+        let rootTweet = realm.tweet(id: self.id)!
+        let root = Node(rootTweet, depth: 0, parent: nil, user: realm.user(id: rootTweet.authorID)!)
         
         /// Track nodes in the tree so far.
         var nodes = [root]
@@ -87,8 +87,8 @@ extension Discussion {
             guard let PRID = t.primaryReference else {
                 ModelLog.warning("""
                     Could not find primary reference ID while building tree.
-                    - text: \(tweet.text)
-                    - id: \(tweet.id)
+                    - text: \(t.text)
+                    - id: \(t.id)
                     """)
                 assert(false)
                 continue
