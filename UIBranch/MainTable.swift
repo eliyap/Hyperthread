@@ -400,7 +400,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
             Task {
                 await fetchOldTweets()
                 isFetching = false
-            }   
+            }
         }
     }
     
@@ -416,7 +416,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
     public func fetchOldTweets() async {
         do {
             try await homeTimelineFetch(TimelineOldFetcher.self, token: nil)
-            await ReferenceCrawler.shared.performFollowUp(token: nil)
+            await ReferenceCrawler.shared.performFollowUp()
         } catch {
             NetLog.error("\(error)")
             assert(false)
@@ -428,7 +428,7 @@ final class Fetcher: NSObject, UITableViewDataSourcePrefetching {
         Task {
             do {
                 try await homeTimelineFetch(TimelineNewFetcher.self, token: token)
-                await ReferenceCrawler.shared.performFollowUp(token: token)
+                await ReferenceCrawler(doNotNotify: [token]).performFollowUp()
                 
                 /// Record fetch completion.
                 UserDefaults.groupSuite.firstFetch = false
