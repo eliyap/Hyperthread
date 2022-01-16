@@ -80,6 +80,15 @@ extension Discussion {
          */
         let chron = self.tweets.sorted(by: Tweet.chronologicalSort)
         for t: Tweet in chron[1...] {
+            guard t.id != root.tweet.id else {
+                ModelLog.error("""
+                    Trying to link root tweet, this will fail!
+                    Likely a sorting error. Chron \(chron)
+                    """)
+                assert(false)
+                continue
+            }
+            
             /// Discard retweets.
             guard t.retweeting == nil else { continue }
             
