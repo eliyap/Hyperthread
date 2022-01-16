@@ -40,7 +40,7 @@ final class Discussion: Object, Identifiable {
     
     /** "Bell value" for observing changes to Discussion's tweets.
         Problem:
-        - we cannot use Realm to observe `tweets`, as it is not persisted.
+        - we cannot use Realm to observe `tweets` for change notifications, as it is not persisted.
         - `conversations` is not flagged as changing when tweets are added to an existing conversation.
         - how can we use Realm to observe tweets?
 
