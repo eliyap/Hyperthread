@@ -169,11 +169,11 @@ final class MainTable: UITableViewController {
         }
         
         let path = tablePos.indexPath
-        TableLog.debug("Now scrolling to path \(path).", print: true, true)
-        guard path.row < tableView.numberOfRows(inSection: 0) else {
+        guard path.row < tableView.numberOfRows(inSection: DiscussionSection.Main.rawValue) else {
             TableLog.error("Out of bounds index path! \(path)")
             return
         }
+        TableLog.debug("Now scrolling to \(tablePos).", print: true, true)
         tableView.scrollToRow(at: path, at: .top, animated: false)
         tableView.contentOffset.y -= tablePos.offset
     }
