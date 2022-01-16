@@ -104,9 +104,9 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
             let numDiscussions = numDiscussions,
             (numDiscussions - indexPaths.max()!.row) < threshhold
         {
-            isFetching = true
-            TableLog.debug("Row \(indexPaths.max()!.row) requested, prefetching items...", print: true, true)
             Task {
+                isFetching = true
+                TableLog.debug("Row \(indexPaths.max()!.row) requested, prefetching items...", print: true, true)
                 await fetchOldTweets()
                 isFetching = false
             }
@@ -123,6 +123,11 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
      */
     @objc
     public func fetchOldTweets() async {
+        /// Prevent hammering fetch operations.
+        guard isFetching == false else { return }
+        isFetching = true
+        defer { isFetching = false }
+        
         do {
             try await homeTimelineFetch(TimelineOldFetcher.self)
             await ReferenceCrawler.shared.performFollowUp()
@@ -133,7 +138,11 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
     }
     
     @objc
-    public static func fetchNewTweets(onFetched completion: @escaping () -> Void) {
+    public func fetchNewTweets() async {
+        guard isFetching == false else { return }
+        isFetching = true
+        defer { isFetching = false }
+        
         Task {
             do {
                 try await homeTimelineFetch(TimelineNewFetcher.self)
@@ -147,7 +156,6 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
 #warning("Perform new refresh animation here.")
             }
             print("Silent Fetch Completed!")
-            completion()
         }
     }
     

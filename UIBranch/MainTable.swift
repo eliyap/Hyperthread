@@ -57,7 +57,7 @@ final class MainTable: UITableViewController {
         
         /// Refresh timeline at app startup.
         #if !DEBUG /// Disabled for debugging.
-        DDS.fetchNewTweets() { /* do nothing */ }
+        DDS.fetchNewTweets { /* do nothing */ }
         #endif
         
         /// Refresh timeline at login.
@@ -67,7 +67,10 @@ final class MainTable: UITableViewController {
                 switch state {
                 case .loggedIn:
                     #warning("TODO: mark all tweets read here.")
-                    DDS.fetchNewTweets() { /* do nothing */ }
+                    let dds = self?.dds
+                    Task {
+                        await dds?.fetchNewTweets()
+                    }
                     break
                 default:
                     break
@@ -100,7 +103,9 @@ final class MainTable: UITableViewController {
     
     @objc
     func debugMethod2() {
-        DDS.fetchNewTweets { /* do nothing */ }
+        Task {
+            await dds.fetchNewTweets()
+        }
     }
     
     @objc
@@ -122,7 +127,8 @@ final class MainTable: UITableViewController {
             self?.tableView.setContentOffset(CGPoint(x: .zero, y: bumped), animated: true)
         }
         
-        DDS.fetchNewTweets {
+        Task {
+            await dds.fetchNewTweets()
             DispatchQueue.main.async { /// Ensure call on main thread.
                 UIView.animate(withDuration: 0.25) { [weak self] in
                     self?.arrowView?.endRefreshing()
