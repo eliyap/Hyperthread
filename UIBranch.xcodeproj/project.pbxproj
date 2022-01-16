@@ -104,6 +104,7 @@
 		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
 		22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F24640274DC20200AE17AD /* CanonicalString.swift */; };
 		22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26992794846F00DD8EE4 /* FirstFetch.swift */; };
+		22FA269C2794AB5400DD8EE4 /* HomeTimelineFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA269B2794AB5400DD8EE4 /* HomeTimelineFetcher.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -226,6 +227,7 @@
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
 		22F24640274DC20200AE17AD /* CanonicalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CanonicalString.swift; path = /Users/SAM/Documents/UIBranch/Models/CanonicalString.swift; sourceTree = "<absolute>"; };
 		22FA26992794846F00DD8EE4 /* FirstFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstFetch.swift; sourceTree = "<group>"; };
+		22FA269B2794AB5400DD8EE4 /* HomeTimelineFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTimelineFetcher.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 				22193DB92785C20B005A7708 /* OnUnfollow.swift */,
 				228D71E5277A805900E306BD /* Conduits */,
 				22BFD7A42774620600E46DF1 /* HomeTimelineHelper.swift */,
+				22FA269B2794AB5400DD8EE4 /* HomeTimelineFetcher.swift */,
 				228D71EE2780127400E306BD /* DateWindow */,
 			);
 			path = Airport;
@@ -832,6 +835,7 @@
 				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
 				22680A84276AA651008827F8 /* Sealed.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
+				22FA269C2794AB5400DD8EE4 /* HomeTimelineFetcher.swift in Sources */,
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
 				22193DB527859D2D005A7708 /* RealmError.swift in Sources */,
