@@ -24,6 +24,9 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type) as
     
     /// Dispatch user timeline request in parallel, since we can infer the desired range.
     Task {
+        #warning("todo: decouple user timeline from home timeline")
+        /// consider if new reply tweets come in, but aren't on the home timeline, they should be fetched!
+        
         if v1Tweets.isNotEmpty {
             await fetchTimelines(window: .init(
                 start: v1Tweets.map(\.created_at).min()!,
