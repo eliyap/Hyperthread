@@ -124,13 +124,6 @@ extension Discussion {
 }
 
 extension Discussion {
-    /// - Note: must take place within a `Realm` write transaction.
-    func patchUpdatedAt(_ token: Realm.TransactionToken) -> Void {
-        updatedAt = tweets.map(\.createdAt).max()!
-    }
-}
-
-extension Discussion {
     func insert(_ conversation: Conversation, _ token: Realm.TransactionToken, realm: Realm) -> Void {
         conversations.append(conversation)
         onUpdateTweets(token)
@@ -153,7 +146,8 @@ extension Discussion {
         _tweets = nil
         _read = nil
         
-        patchUpdatedAt(token)
+        /// Re-calculate "latest" update.
+        updatedAt = tweets.map(\.createdAt).max()!
         
         /// Notify `Realm` observers.
         tweetsBellValue.toggle()
