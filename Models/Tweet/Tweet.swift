@@ -191,20 +191,6 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
 }
 
 // MARK: - Convenience Methods.
-
-
-extension Tweet {
-    static let chronologicalSort = { (lhs: Tweet, rhs: Tweet) -> Bool in
-        /// Tie break by ID.
-        /// I have observed tied timestamps. (see https://twitter.com/ChristianSelig/status/1469028219441623049)
-        if lhs.createdAt != rhs.createdAt {
-            return lhs.createdAt < rhs.createdAt
-        } else {
-            return lhs.id < rhs.id
-        }
-    }
-}
-
 extension Realm {
     /// Attach `tweet` to a conversation, creating one if necessary.
     func linkConversation(_: TransactionToken, tweet: Tweet) -> Void {

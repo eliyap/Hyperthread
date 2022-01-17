@@ -107,6 +107,7 @@
 		22FA26A22795B6CD00DD8EE4 /* ReferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A12795B6CD00DD8EE4 /* ReferenceSet.swift */; };
 		22FA26A52795B85400DD8EE4 /* Tweet+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A42795B85400DD8EE4 /* Tweet+Identifiable.swift */; };
 		22FA26A72795B91F00DD8EE4 /* Tweet Shorthand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A62795B91F00DD8EE4 /* Tweet Shorthand.swift */; };
+		22FA26A92795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A82795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -232,6 +233,7 @@
 		22FA26A12795B6CD00DD8EE4 /* ReferenceSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceSet.swift; sourceTree = "<group>"; };
 		22FA26A42795B85400DD8EE4 /* Tweet+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tweet+Identifiable.swift"; sourceTree = "<group>"; };
 		22FA26A62795B91F00DD8EE4 /* Tweet Shorthand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tweet Shorthand.swift"; sourceTree = "<group>"; };
+		22FA26A82795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tweet.chronologicalSort.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -537,6 +539,7 @@
 			children = (
 				223BBF6B27377EC100375530 /* Tweet.swift */,
 				22FA26A62795B91F00DD8EE4 /* Tweet Shorthand.swift */,
+				22FA26A82795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift */,
 				22FA26A42795B85400DD8EE4 /* Tweet+Identifiable.swift */,
 			);
 			path = Tweet;
@@ -767,6 +770,7 @@
 				228D71E4277A800B00E306BD /* Conduit.swift in Sources */,
 				228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */,
 				224F88D7275E5CD300085678 /* ImageAnimate.swift in Sources */,
+				22FA26A92795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift in Sources */,
 				22193DB327840923005A7708 /* UserModalViewController.swift in Sources */,
 				22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */,
 				22760A43274A927A00F28F0A /* CardTeaserCell.swift in Sources */,
