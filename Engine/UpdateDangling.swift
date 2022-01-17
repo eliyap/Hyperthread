@@ -27,35 +27,35 @@ extension Realm {
     /// Update `Tweet`'s reference set based on what is present in the database.
     fileprivate func updateReferenceSet(_ token: TransactionToken, tweet: Tweet) -> Void {
         if tweet.dangling.contains(.reply) {
-            guard let replyID = tweet.replying_to else {
+            if let replyID = tweet.replying_to {
+                if self.tweet(id: replyID) != nil {
+                    tweet.dangling.remove(.reply)
+                }
+            } else {
                 ModelLog.error("Illegal State! Reply ID missing!")
                 assert(false)
-                return
-            }
-            if self.tweet(id: replyID) != nil {
-                tweet.dangling.remove(.reply)
             }
         }
 
         if tweet.dangling.contains(.quote) {
-            guard let quoteID = tweet.quoting else {
+            if let quoteID = tweet.quoting {
+                if self.tweet(id: quoteID) != nil {
+                    tweet.dangling.remove(.quote)
+                }
+            } else {
                 ModelLog.error("Illegal State! Quote ID missing!")
                 assert(false)
-                return
-            }
-            if self.tweet(id: quoteID) != nil {
-                tweet.dangling.remove(.quote)
             }
         }
 
         if tweet.dangling.contains(.retweet) {
-            guard let retweetID = tweet.retweeting else {
+            if let retweetID = tweet.retweeting { 
+                if self.tweet(id: retweetID) != nil {
+                    tweet.dangling.remove(.retweet)
+                }
+            } else {
                 ModelLog.error("Illegal State! Retweet ID missing!")
                 assert(false)
-                return
-            }
-            if self.tweet(id: retweetID) != nil {
-                tweet.dangling.remove(.retweet)
             }
         }
     }
