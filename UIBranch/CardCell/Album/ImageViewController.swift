@@ -239,13 +239,12 @@ final class ImageViewController: UIViewController {
     }
 }
 
-final class SymbolCircleView: UIView {
+final class SymbolCircleView: UIVisualEffectView {
     public let imageView: UIImageView = .init()
     
     init() {
-        super.init(frame: .zero)
-        addSubview(imageView)
-        backgroundColor = .SCBlue
+        super.init(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+        contentView.addSubview(imageView)
     }
     
     func constrain(to view: UIView) -> Void {
