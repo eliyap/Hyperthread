@@ -9,58 +9,58 @@ import Foundation
 import RealmSwift
 import Twig
 
-/**
- Stores tweets *not* from the home timeline, such as in follow up fetches, or from User timelines.
- Uses the set of followed user IDs to guess a "relevance" score.
- Accepts raw data from the Twitter v2 API, including `included` tweets.
- */
-func ingestRaw(
-    rawTweets: [RawHydratedTweet],
-    rawUsers: [RawUser],
-    rawMedia: [RawIncludeMedia],
-    following: [User.ID]
-) throws -> Void {
-    let realm = try! Realm()
-    
-    /// Insert all users.
-    try realm.write {
-        for rawUser in rawUsers {
-            let following = following.contains(where: {$0 == rawUser.id})
-            let user = User(raw: rawUser, following: following)
-            realm.add(user, update: .modified)
-        }
-    }
-    
-    /// Reject tweets with missing media (usually happens because they were "included".
-    let mediaKeys = rawMedia.map(\.media_key)
-    let rawTweets = rawTweets.filter { rawTweet in
-        /// If keys exist, check they are all present.
-        guard let keys = rawTweet.attachments?.media_keys else { return true }
-        return keys.allSatisfy { mediaKeys.contains($0) }
-    }
-    
-    /// Insert Tweets into local database.
-    try realm.writeWithToken { token in
-        for rawTweet in rawTweets {
-            let prior = realm.tweet(id: rawTweet.id)
-            
-            /// Check `relevance` value in Realm, to avoid ovewriting an existing value (if any).
-            let checkedRelevance = prior?.relevance ?? Relevance(tweet: rawTweet, following: following)
-            
-            /// Check for existing`read`. If none, mark read if this is the first run.
-            let checkedRead = prior?.read ?? UserDefaults.groupSuite.firstFetch
-            
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: checkedRelevance, read: checkedRead)
-            
-            realm.add(tweet, update: .modified)
-            
-            /// Safety check: we count on the user never being missing!
-            if realm.user(id: rawTweet.author_id) == nil {
-                fatalError("Could not find user with id \(rawTweet.author_id)")
+extension Realm {
+    /**
+     Stores tweets *not* from the home timeline, such as in follow up fetches, or from User timelines.
+     Uses the set of followed user IDs to guess a "relevance" score.
+     Accepts raw data from the Twitter v2 API, including `included` tweets.
+     */
+    func ingestRaw(
+        rawTweets: [RawHydratedTweet],
+        rawUsers: [RawUser],
+        rawMedia: [RawIncludeMedia],
+        following: [User.ID]
+    ) throws -> Void {
+        /// Insert all users.
+        try write {
+            for rawUser in rawUsers {
+                let following = following.contains(where: {$0 == rawUser.id})
+                let user = User(raw: rawUser, following: following)
+                add(user, update: .modified)
             }
-            
-            /// Attach to conversation (create one if necessary).
-            realm.linkTweet(token, tweet: tweet)
+        }
+        
+        /// Reject tweets with missing media (usually happens because they were "included".
+        let mediaKeys = rawMedia.map(\.media_key)
+        let rawTweets = rawTweets.filter { rawTweet in
+            /// If keys exist, check they are all present.
+            guard let keys = rawTweet.attachments?.media_keys else { return true }
+            return keys.allSatisfy { mediaKeys.contains($0) }
+        }
+        
+        /// Insert Tweets into local database.
+        try writeWithToken { token in
+            for rawTweet in rawTweets {
+                let prior = tweet(id: rawTweet.id)
+                
+                /// Check `relevance` value in Realm, to avoid ovewriting an existing value (if any).
+                let checkedRelevance = prior?.relevance ?? Relevance(tweet: rawTweet, following: following)
+                
+                /// Check for existing`read`. If none, mark read if this is the first run.
+                let checkedRead = prior?.read ?? UserDefaults.groupSuite.firstFetch
+                
+                let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: checkedRelevance, read: checkedRead)
+                
+                add(tweet, update: .modified)
+                
+                /// Safety check: we count on the user never being missing!
+                if user(id: rawTweet.author_id) == nil {
+                    fatalError("Could not find user with id \(rawTweet.author_id)")
+                }
+                
+                /// Attach to conversation (create one if necessary).
+                linkTweet(token, tweet: tweet)
+            }
         }
     }
 }
