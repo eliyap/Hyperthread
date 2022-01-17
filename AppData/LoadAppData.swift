@@ -8,6 +8,8 @@
 
 import Foundation
 
+/** Restore the app to a prior state using `.xcappdata` files.
+ */
 func loadAppData() {
     let fm = Foundation.FileManager.default
     
