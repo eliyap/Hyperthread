@@ -146,7 +146,6 @@ actor ReferenceCrawler {
                 \(inFlight.count) tweets failed to land!
                 IDs \(inFlight)
                 """)
-            Self.remove(ids: inFlight)
             
             /// Empty out the inflight list.
             unavailable.formUnion(inFlight)
@@ -164,22 +163,6 @@ actor ReferenceCrawler {
                         }
                     }
             }
-        }
-    }
-    
-    private static func remove<TweetIDs: Collection>(ids: TweetIDs) where TweetIDs.Element == Tweet.ID {
-        let realm = try! Realm()
-        do {
-            try realm.writeWithToken { token in
-                for id in ids {
-                    NetLog.warning("Could not find tweet with id \(id), marking it unavailable!")
-                    #warning("disabled unavailable")
-                    // realm.makeUnavailable(token, id: id)
-                }
-            }
-        } catch {
-            NetLog.error("Failed to mark tweet unavailable!")
-            assert(false)
         }
     }
     
