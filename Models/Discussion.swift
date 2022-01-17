@@ -27,13 +27,7 @@ final class Discussion: Object, Identifiable {
     public static let updatedAtPropertyName = "updatedAt"
     
     @Persisted
-    var conversations: List<Conversation> {
-        didSet {
-            /// Wipe memoized storage.
-            _tweets = nil
-            _read = nil
-        }
-    }
+    public private(set) var conversations: List<Conversation>
     public static let conversationsPropertyName = "conversations"
     
     /** "Bell value" for observing changes to Discussion's tweets.
