@@ -179,7 +179,6 @@ final class FollowButton: UIButton {
         super.init(frame: .zero)
         layer.cornerCurve = .continuous
         layer.cornerRadius = FollowingLine.inset
-        backgroundColor = .SCBlue
         
         /// Set up `UIStackView`.
         addSubview(stackView)
@@ -197,16 +196,14 @@ final class FollowButton: UIButton {
         
         stackView.addArrangedSubview(loading)
         loading.startAnimating()
-        
-        self.configuration = .filled()
     }
     
     public func configure(following: Bool) -> Void {
         if following {
-            configuration = .filled()
+            backgroundColor = .systemGray
             label.attributedText = .init(string: "Unfollow", attributes: .init([.font: FollowingLine.font]))
         } else {
-            configuration = .gray()
+            backgroundColor = .systemBlue
             label.attributedText = .init(string: "Follow", attributes: .init([.font: FollowingLine.font, .foregroundColor: UIColor.label]))
         }
     }
