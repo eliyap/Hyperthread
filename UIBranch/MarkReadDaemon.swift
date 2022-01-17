@@ -13,10 +13,13 @@ import RealmSwift
 final class MarkReadDaemon {
     
     /// Do not notify the `DiffableDataSource`, as it causes a `modification` bump, which causes an animation glitch (observed 21.11.23).
-    let excludeTokens: [NotificationToken]
+    var excludeTokens: [NotificationToken]
     
-    public init(token: NotificationToken) {
-        self.excludeTokens = [token]
+    public init(token: NotificationToken?) {
+        self.excludeTokens = []
+        if let token = token {
+            excludeTokens.append(token)
+        }
     }
     
     private let realm = try! Realm()
@@ -36,15 +39,13 @@ final class MarkReadDaemon {
                 TableLog.error("Realm already in write transaction!")
                 return
             }
-            try realm.write(withoutNotifying: excludeTokens) {
+            try realm.writeWithToken(withoutNotifying: excludeTokens) { token in
                 for path in paths {
                     guard let discussion: Discussion = indices[path] else {
                         TableLog.debug("Mark Daemon missing key \(path)")
                         continue
                     }
-                    if discussion.tweetCount == 1 {
-                        discussion.read = .read
-                    }
+                    discussion.markRead(token)
                 }
             }
         } catch {

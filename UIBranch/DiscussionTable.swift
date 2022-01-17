@@ -58,7 +58,6 @@ final class DiscussionTable: UITableViewController {
     }
     
     private func cellProvider(tableView: UITableView, indexPath: IndexPath, node: Node) -> UITableViewCell? {
-        let author = realm.user(id: node.tweet.authorID)!
         if indexPath == IndexPath(row: 0, section: 0) {
             /// Safety check.
             assert(node.tweet.id == discussion?.id, "Root tweet ID does not match discussion ID!")
@@ -66,14 +65,17 @@ final class DiscussionTable: UITableViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CardHeaderCell.reuseID) as? CardHeaderCell else {
                 fatalError("Failed to create or cast new cell!")
             }
-            cell.configure(tweet: node.tweet, author: author, realm: realm)
+            guard case let .available(rootTweet) = node.tweet else {
+                fatalError("Missing root tweet!")
+            }
+            cell.configure(tweet: rootTweet, author: node.author, realm: realm)
 
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TweetCell.reuseID) as? TweetCell else {
                 fatalError("Failed to create or cast new cell!")
             }
-            cell.configure(node: node, author: author, realm: realm)
+            cell.configure(node: node, realm: realm)
 
             return cell
         }

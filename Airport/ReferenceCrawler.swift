@@ -27,11 +27,15 @@ actor ReferenceCrawler {
     public static let shared: ReferenceCrawler = .init()
     private init() {}
     
+    /// Set of tweets for which we received no response from Twitter.
+    private var unavailable: Set<Tweet.ID> = []
+    
+    /// Tweets where we are waiting for a response, and which should not yet be re-requested.
     private var inFlight: Set<Tweet.ID> = []
     
     /// Dispatch a fetch request for a single tweet.
     public func fetchSingle(id: Tweet.ID) async -> Void {
-        await intermediate(conversationsDangling: [], discussionsDangling: [], unlinked: [id])
+        await intermediate(fetchList: [id])
     }
     
     /// Follow up `Conversation`s without a `Discussion` and relevant `Discussions` with dangling references.
@@ -42,17 +46,24 @@ actor ReferenceCrawler {
         var discussionsDangling: Set<Tweet.ID> = []
         var unlinked: Set<Tweet.ID> = []
         repeat {
+            /// Pre-filter so that `repeat-while` loop condition is accurate.
             conversationsDangling = Self.getConversationsDangling()
+                .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
             discussionsDangling = Self.getDiscussionsDangling()
-            await intermediate(
-                conversationsDangling: conversationsDangling,
-                discussionsDangling: discussionsDangling,
-                unlinked: unlinked
-            )
+                .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+            let unlinkedFiltered = unlinked
+                .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+            
+            let fetchList = conversationsDangling.union(discussionsDangling).union(unlinkedFiltered)
+            
+            /// If all tweets are block-listed, we can get stuck in a loop.
+            guard fetchList.isNotEmpty else { break }
+            
+            await intermediate(fetchList: fetchList)
             
             /// Perform linking.
             do {
-                unlinked = try linkUnlinked()
+                unlinked = try linkConversations()
             } catch {
                 ModelLog.error("Linking error: \(error)")
                 assert(false)
@@ -66,22 +77,29 @@ actor ReferenceCrawler {
             var discussionsDangling: Set<Tweet.ID> = []
             var unlinked: Set<Tweet.ID> = []
             repeat {
+                /// Pre-filter so that `repeat-while` loop condition is accurate.
                 /// Though we *think* conversations are done, feel free to be proven wrong.
                 conversationsDangling = Self.getConversationsDangling()
+                    .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
                 if conversationsDangling.isNotEmpty {
                     NetLog.warning("Unexpected conversation follow up!")
                 }
                 
                 discussionsDangling = Self.getDiscussionsDangling()
-                await intermediate(
-                    conversationsDangling: conversationsDangling,
-                    discussionsDangling: discussionsDangling,
-                    unlinked: unlinked
-                )
+                    .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+                let unlinkedFiltered = unlinked
+                    .filter { inFlight.contains($0) == false && unavailable.contains($0) == false }
+                
+                let fetchList = conversationsDangling.union(discussionsDangling).union(unlinkedFiltered)
+                
+                /// If all tweets are block-listed, we can get stuck in a loop.
+                guard fetchList.isNotEmpty else { break }
+                
+                await intermediate(fetchList: fetchList)
                 
                 /// Perform linking.
                 do {
-                    unlinked = try linkUnlinked()
+                    unlinked = try linkConversations()
                 } catch {
                     ModelLog.error("Linking error: \(error)")
                     assert(false)
@@ -90,22 +108,14 @@ actor ReferenceCrawler {
         }
     }
     
-    private func intermediate(
-        conversationsDangling: Set<Tweet.ID>,
-        discussionsDangling: Set<Tweet.ID>,
-        unlinked: Set<Tweet.ID>
-    ) async {
-        /// Join lists.
-        let fetchList = conversationsDangling.union(discussionsDangling).union(unlinked)
-            /// Check that we're not already fetching these.
-            .filter { inFlight.contains($0) == false }
-        
+    private func intermediate(fetchList: Set<Tweet.ID>) async {
         /// Record that these tweets are being fetched.
         inFlight.formUnion(fetchList)
         
-        NetLog.debug("Dispatching request for \(fetchList.count) tweets \(fetchList)", print: true, true)
+        NetLog.debug("Dispatching request for \(fetchList.count) tweets \(Array(fetchList).truncated(5))", print: true, true)
         
         let mentions: MentionList = await withTaskGroup(of: FetchResult.self) { group -> MentionList in
+            /// Dispatch chunked requests in parallel.
             fetchList
                 .chunks(ofCount: TweetEndpoint.maxResults)
                 .forEach { chunk in
@@ -136,7 +146,10 @@ actor ReferenceCrawler {
                 \(inFlight.count) tweets failed to land!
                 IDs \(inFlight)
                 """)
-            Self.remove(ids: inFlight)
+            
+            /// Empty out the inflight list.
+            unavailable.formUnion(inFlight)
+            inFlight = []
         }
         
         /// Dispatch task for missing users. Not necessary to continue.
@@ -150,20 +163,6 @@ actor ReferenceCrawler {
                         }
                     }
             }
-        }
-    }
-    
-    private static func remove<TweetIDs: Collection>(ids: TweetIDs) where TweetIDs.Element == Tweet.ID {
-        let realm = try! Realm()
-        do {
-            try realm.writeWithToken { token in
-                for id in ids {
-                    realm.makeUnavailable(token, id: id)
-                }
-            }
-        } catch {
-            NetLog.error("Failed to mark tweet unavailable!")
-            assert(false)
         }
     }
     
@@ -191,7 +190,7 @@ actor ReferenceCrawler {
         let (tweets, _, users, _) = rawData
         
         do {
-            try Self.store(rawData: rawData, followingIDs: followingIDs)
+            try store(rawData: rawData, followingIDs: followingIDs)
         } catch {
             return .failure(.database)
         }
@@ -206,14 +205,14 @@ actor ReferenceCrawler {
     }
     
     /// Perform `Realm` work to store the fetched data.
-    private static func store(rawData: RawData, followingIDs: [User.ID]) throws -> Void {
+    private func store(rawData: RawData, followingIDs: [User.ID]) throws -> Void {
         /// Unbundle tuple.
         let (tweets, included, users, media) = rawData
         
-        /// Safe to insert `included`, as we make no assumptions around `Relevance`.
-        try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
-        
         let realm = try! Realm()
+        
+        /// Safe to insert `included`, as we make no assumptions around `Relevance`.
+        try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
         try realm.updateDangling()
     }
     

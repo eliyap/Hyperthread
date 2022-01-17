@@ -22,6 +22,7 @@ func replace<Object: AnyObject>(
     NSLayoutConstraint.activate([other])
 }
 
+/// Replace named optional constraint with a new value.
 func replace<Object: AnyObject>(
     object: Object,
     on keyPath: ReferenceWritableKeyPath<Object, NSLayoutConstraint?>,

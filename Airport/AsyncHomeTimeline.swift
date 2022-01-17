@@ -7,9 +7,10 @@
 
 import Foundation
 import Twig
+import RealmSwift
 
 /// - Note: also dispatches User Timeline requests.
-internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type) async throws -> Void {
+internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type) async throws -> Void {
     let fetcher = Fetcher()
     guard let credentials = Auth.shared.credentials else { throw UserError.credentials }
     let v1Tweets: [RawV1Tweet]
@@ -23,6 +24,9 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type) a
     
     /// Dispatch user timeline request in parallel, since we can infer the desired range.
     Task {
+        #warning("todo: decouple user timeline from home timeline")
+        /// consider if new reply tweets come in, but aren't on the home timeline, they should be fetched!
+        
         if v1Tweets.isNotEmpty {
             await fetchTimelines(window: .init(
                 start: v1Tweets.map(\.created_at).min()!,
@@ -34,7 +38,7 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type) a
     /// Dispatch chunk requests in parallel.
     await withTaskGroup(of: Void.self) { group in
         let ids = v1Tweets.map {"\($0.id)"}
-        ids.chunks(ofCount: TweetEndpoint.maxResults).forEach{ chunk in
+        ids.chunks(ofCount: TweetEndpoint.maxResults).forEach { chunk in
             group.addTask {
                 do {
                     let rawData = try await hydratedTweets(credentials: credentials, ids: Array(chunk))
@@ -57,7 +61,8 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineFetcher>(_: Fetcher.Type) a
 fileprivate func store(rawData: RawData) throws -> Void {
     let (tweets, _, users, media) = rawData
     NetLog.debug("Received \(tweets.count) home timeline tweets.", print: true, true)
-    try ingestRaw(rawTweets: tweets, rawUsers: users, rawMedia: media, relevance: .discussion)
+    
+    try ingestRawHomeTimelineTweets(rawTweets: tweets, rawUsers: users, rawMedia: media)
     
     /// Update home timeline boundaries.
     /// - Note: use v2 tweets *after storage*, not v1 tweets, to be *sure* storage was successful.

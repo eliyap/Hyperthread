@@ -69,39 +69,10 @@ final class User: Object, Identifiable, UserIdentifiable {
         self.protected = raw.protected
         self.createdAt = raw.created_at
         self.following = following
-        
     }
     
     override required init() {
         super.init()
-    }
-}
-
-public extension Int64 {
-    static let NSNotFound = Int64(Foundation.NSNotFound)
-}
-
-internal extension Realm {
-    func storeFollowing(raw: [RawUser]) throws -> Void {
-        try write {
-            /// Remove users who are no longer being followed.
-            followingUsers()
-                .filter { user in
-                    /// Find users who were marked as followed but are now missing.
-                    raw.contains(where: {user.id == $0.id}) == false
-                }
-                .forEach { user in
-                    #warning("TODO: perform unfollow actions!")
-                    user.following = false
-                }
-            
-            /// Write out users to account for possible new users.
-            raw.forEach {
-                #warning("TODO: perform follow actions!")
-                let user = User(raw: $0, following: true)
-                add(user, update: .all)
-            }
-        }
     }
 }
 

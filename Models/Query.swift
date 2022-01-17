@@ -26,13 +26,6 @@ extension Realm {
     }
 }
 
-extension Realm {
-    func followingUsers() -> Results<User> {
-        objects(User.self)
-            .filter("\(User.followingPropertyName) == YES")
-    }
-}
-
 extension Discussion {
     /// Check if any `Tweet` is above the relevance threshold.
     static let minRelevancePredicate = NSPredicate(format: """
@@ -71,29 +64,4 @@ func findMissingMentions(
     
     return Set(mentionedIDs)
         .filter { fetchedIDs.contains($0) == false }
-}
-
-extension Realm {
-    func updateRelevanceOnFollow(_ token: TransactionToken, userID: User.ID) -> Void {
-        let usersTweets = objects(Tweet.self)
-            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == %@", userID))
-        
-        /// Check that returned set is non-empty.
-        ModelLog.debug("Setting relevance for \(usersTweets.count) tweets.", print: true, true)
-        
-        /// Update all relevance metrics.
-        for tweet in usersTweets {
-            tweet.relevance = .init(tweet: tweet, following: [userID])
-        }
-    }
-    
-    func updateRelevanceOnUnfollow(_ token: TransactionToken, userID: User.ID) -> Void {
-        let usersTweets = objects(Tweet.self)
-            .filter(NSPredicate(format: "\(Tweet.authorIDPropertyName) == %@", userID))
-        
-        /// Update all relevance metrics.
-        for tweet in usersTweets {
-            tweet.relevance = .irrelevant
-        }
-    }
 }

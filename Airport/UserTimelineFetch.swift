@@ -25,7 +25,9 @@ func fetchTimelines(window: DateWindow? = nil) async -> Void {
     await withTaskGroup(of: Void.self) { group in
         for request in requests {
             group.addTask {
-                await execute(request, credentials: credentials, followingIDs: followingIDs)
+                let (tweets, included, users, media) = await fetchRawTimeline(request: request, credentials: credentials)
+                store((tweets, included, users, media), followingIDs: followingIDs)
+                updateUserWindow(request: request, tweets: tweets)
             }
         }
         
@@ -34,17 +36,20 @@ func fetchTimelines(window: DateWindow? = nil) async -> Void {
     }
 }
 
-fileprivate func execute(_ request: TimelineRequest, credentials: OAuthCredentials, followingIDs: [User.ID]) async -> Void {
-    let (tweets, included, users, media) = await fetchRawTimeline(request: request, credentials: credentials)
+/// Synchronous context for `Realm` work.
+fileprivate func store(_ raw: RawData, followingIDs: [User.ID]) -> Void {
+    let (tweets, included, users, media) = raw
     do {
         NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
         
-        /// Safe to insert `included`, as we make no assumptions around `Relevance`.
-        try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
+        let realm = try! Realm()
         
-        updateUserWindow(request: request, tweets: tweets)
+        /// Safe to insert `included`, as we make no assumptions around `Relevance`.
+        try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
+        
     } catch {
         ModelLog.error("\(error)")
+        #warning("silencing errors here is bad practice, and the only purpose of this function!")
         assert(false, "\(error)")
     }
 }

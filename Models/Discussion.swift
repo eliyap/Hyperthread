@@ -17,6 +17,7 @@ final class Discussion: Object, Identifiable {
     var id: ID
     typealias ID = Tweet.ID
     
+    /// The conversation from which all other conversations in this discussion are "downstream".
     @Persisted
     var root: Conversation?
     
@@ -25,33 +26,24 @@ final class Discussion: Object, Identifiable {
     var updatedAt: Date
     public static let updatedAtPropertyName = "updatedAt"
     
+    /// - Note: do not let functions mutate this, as internal values depend on updates when the list of `Tweet`s changes.
     @Persisted
-    var conversations: List<Conversation> {
-        didSet {
-            /// Wipe memoized storage.
-            _tweets = nil
-        }
-    }
+    private var conversations: List<Conversation>
     public static let conversationsPropertyName = "conversations"
-    
-    @Persisted
-    var readStatus: ReadStatus.RawValue
-    public static let readStatusPropertyName = "readStatus"
     
     /** "Bell value" for observing changes to Discussion's tweets.
         Problem:
-        - we cannot use Realm to observe `tweets`, as it is not persisted.
+        - We cannot use Realm to observe `tweets` for change notifications, as it is not persisted.
         - `conversations` is not flagged as changing when tweets are added to an existing conversation.
-        - how can we use Realm to observe tweets?
+        - How can we use Realm to observe tweets?
 
         Workaround:
-        - declare an inaccessible, but KVO-compliant, boolean
-        - toggle the boolean to trigger `observe` when our tweets change
+        - Declare an inaccessible, but KVO-compliant, boolean.
+        - Toggle the boolean to trigger `observe` when our tweets change.
      */
     @Persisted
     private var tweetsBellValue: Bool = false
     public static let tweetsDidChangeKey = "tweetsBellValue"
-    public func notifyTweetsDidChange() -> Void { tweetsBellValue.toggle() }
     
     override required init() {
         super.init()
@@ -63,7 +55,6 @@ final class Discussion: Object, Identifiable {
         self.root = root
         self.conversations = List<Conversation>()
         self.conversations.append(root)
-        self.readStatus = ReadStatus.new.rawValue
         
         /// Safe to force unwrap, `root` must have ≥1 `tweets`.
         self.updatedAt = root.tweets.map(\.createdAt).max()!
@@ -75,21 +66,53 @@ final class Discussion: Object, Identifiable {
     var _tweets: [Tweet]?
     var tweets: [Tweet] {
         get {
-            if let tweets = _tweets { return tweets }
-            else {
+            if let tweets = _tweets {
+                return tweets
+            } else {
                 let result: [Tweet] = conversations.flatMap(\.tweets)
                 _tweets = result
                 return result
             }
         }
     }
+
+    /// Memoized read status.
+    /// A discussion is 
+    /// - `read` if all of its tweets are read.
+    /// - `new` if all of its tweets are unread.
+    /// - `updated` if some of its tweets are unread.
+    var _read: ReadStatus? = nil
+    var read: ReadStatus {
+        get {
+            if let read = _read {
+                return read
+            } else {
+                var result: ReadStatus
+                if tweets.allSatisfy(\.read) {
+                    result = .read
+                } else if tweets.allSatisfy({ $0.read == false }) {
+                    result = .new
+                } else {
+                    result = .updated
+                }
+                _read = result
+                return result
+            }
+        }
+    }
 }
 
+/// - Note: functions kept in file to permit access to `private` var `conversations`.
+
 extension Discussion {
-    /// Should never have an invalid value.
-    var read: ReadStatus! {
-        get { .init(rawValue: readStatus) }
-        set { readStatus = newValue.rawValue }
+    /// Mark a discussion as read by marking all tweets as read.
+    func markRead(_ token: Realm.TransactionToken) -> Void {
+        for tweet in conversations.flatMap(\.tweets) {
+            tweet.read = true
+        }
+        
+        /// Force re-calculation.
+        onUpdateTweets(token)
     }
 }
 
@@ -101,28 +124,9 @@ extension Discussion {
 }
 
 extension Discussion {
-    /// Update the last updated date.
-    /// - Note: must take place within a `Realm` write transaction.
-    func update(with date: Date?) -> Void {
-        if let date = date {
-            updatedAt = max(updatedAt, date)
-        }
-    }
-    
-    /// - Note: must take place within a `Realm` write transaction.
-    func patchUpdatedAt(_ token: Realm.TransactionToken) -> Void {
-        updatedAt = tweets.map(\.createdAt).max()!
-    }
-}
-
-extension Discussion {
-    func insert(_ conversation: Conversation, _: Realm.TransactionToken, realm: Realm) -> Void {
+    func insert(_ conversation: Conversation, _ token: Realm.TransactionToken, realm: Realm) -> Void {
         conversations.append(conversation)
-        
-        /// Update internal representation.
-        _tweets = nil
-        update(with: conversation.tweets.map(\.createdAt).max())
-        notifyTweetsDidChange()
+        onUpdateTweets(token)
     }
 }
 
@@ -132,5 +136,20 @@ extension Discussion {
             .flatMap(\.tweets)
             .map(\.danglingReferences)
             .reduce(Set()) { $0.union($1) }
+    }
+}
+
+extension Discussion {
+    /// Call this function whenever `conversations` or their contents change.
+    func onUpdateTweets(_ token: Realm.TransactionToken) -> Void {
+        /// Invalidate memoized values.
+        _tweets = nil
+        _read = nil
+        
+        /// Re-calculate "latest" update.
+        updatedAt = tweets.map(\.createdAt).max()!
+        
+        /// Notify `Realm` observers.
+        tweetsBellValue.toggle()
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Convenient shorthand.
 extension Collection {
     var isNotEmpty: Bool {
         !isEmpty

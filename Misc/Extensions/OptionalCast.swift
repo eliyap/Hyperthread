@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Allow `Int64?` to be cast to and from `String?`.
 public extension Optional where Wrapped == Int64 {
     init(_ string: String?) {
         if let string = string {

@@ -142,19 +142,6 @@ final class CardTeaserCell: ControlledCell {
     private func updateTeaser(_ change: ObjectChange<Discussion>) -> Void {
         guard case let .change(oldDiscussion, properties) = change else { return }
         
-        /// Update color when `readStatus` changes.
-        if let readChange = properties.first(where: {$0.name == Discussion.readStatusPropertyName}) {
-            guard let newValue = readChange.newValue as? ReadStatus.RawValue else {
-                Swift.debugPrint("Error: unexpected type! \(type(of: readChange.newValue))")
-                return
-            }
-            guard let newRead = ReadStatus(rawValue: newValue) else {
-                assert(false, "Invalid String!")
-                return
-            }
-            cardBackground.configure(status: newRead)
-        }
-        
         /// Update `updatedAt` timestamp.
         if let updatedAtChange = properties.first(where: {$0.name == Discussion.updatedAtPropertyName}) {
             guard let newDate = updatedAtChange.newValue as? Date else {
@@ -173,6 +160,9 @@ final class CardTeaserCell: ControlledCell {
             let realm = try! Realm()
             let updated = realm.discussion(id: oldDiscussion.id)!
             summaryView.configure(updated, realm: realm)
+            
+            /// Update color when `readStatus` changes.
+            cardBackground.configure(status: updated.read)
         }
     }
     

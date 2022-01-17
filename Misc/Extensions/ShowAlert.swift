@@ -11,6 +11,7 @@ func NOT_IMPLEMENTED() -> Void {
     showAlert(title: "Right now, this doesn't do anything", message: nil, action: "😞")
 }
 
+/// Shorthand to show the user an alert.
 func showAlert(title: String? = "⚠️ Error! ⚠️", message: String?, action: String = "OK") -> Void {
     guard let scene = getWindowScene() else { return }
     guard let vc = scene.keyWindow?.rootViewController else { return }

@@ -32,7 +32,7 @@ extension UserDefaults {
                 return
             }
             if let newValue = newValue {
-                TableLog.debug("Saved scroll position \(newValue)", print: true, true)
+                TableLog.debug("Saved scroll position \(newValue)", print: true, false)
             }
             set(encoded, forKey: #function)
         }

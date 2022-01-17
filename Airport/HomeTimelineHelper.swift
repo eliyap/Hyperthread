@@ -1,5 +1,5 @@
 //
-//  HomeTimelineFetcher.swift
+//  HomeTimelineHelper.swift
 //  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 23/12/21.
@@ -11,7 +11,7 @@ import Twig
 /**
  Describes an object which helps fetch the home timeline (Twitter v1 API).
  */
-internal protocol HomeTimelineFetcher {
+internal protocol HomeTimelineHelper {
     init()
     
     /// Fetch tweets using the provided credentials.
@@ -19,7 +19,7 @@ internal protocol HomeTimelineFetcher {
 }
 
 /// Helps us fetch Tweets newer than the ones we have.
-final class TimelineNewFetcher: HomeTimelineFetcher {
+final class TimelineNewFetcher: HomeTimelineHelper {
     
     init() {}
     
@@ -40,7 +40,7 @@ final class TimelineNewFetcher: HomeTimelineFetcher {
 }
 
 /// Helps us fetch Tweets older than the ones we have.
-final class TimelineOldFetcher: HomeTimelineFetcher {
+final class TimelineOldFetcher: HomeTimelineHelper {
     
     init() {}
     

@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Ignore nil value in `max`.
+/// When taking the `max` of two `Optional`s, consider `nil` to be "smaller".
 func max<T: Comparable>(_ lhs: T?, _ rhs: T?) -> T? {
     switch (lhs, rhs) {
     case (.some(let lhs), .some(let rhs)):
@@ -21,7 +21,7 @@ func max<T: Comparable>(_ lhs: T?, _ rhs: T?) -> T? {
     }
 }
 
-/// Ignore nil value in `min`.
+/// When taking the `min` of two `Optional`s, consider `nil` to be "larger".
 func min<T: Comparable>(_ lhs: T?, _ rhs: T?) -> T? {
     switch (lhs, rhs) {
     case (.some(let lhs), .some(let rhs)):
