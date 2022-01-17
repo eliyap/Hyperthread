@@ -92,7 +92,7 @@ actor FollowingCache {
             /// Store fetched results.
             do {
                 let realm = try! Realm()
-                try realm.storeFollowing(raw: Array(rawUsers))
+                try realm.storeFollowing(raw: rawUsers)
                 return rawUsers.map(\.id)
             } catch {
                 NetLog.error("Failed to store following list!")
