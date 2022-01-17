@@ -37,7 +37,7 @@ final class ImageViewController: UIViewController {
     
     fileprivate var mediaModel: MediaModel? = nil
     
-    private let symbolView: UIImageView = .init()
+    private let symbolView: SymbolCircleView = .init()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -69,11 +69,7 @@ final class ImageViewController: UIViewController {
         
         /// Center symbol view. 
         view.addSubview(symbolView)             
-        NSLayoutConstraint.activate([
-            symbolView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            symbolView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ])
-        symbolView.translatesAutoresizingMaskIntoConstraints = false
+        symbolView.constrain(to: view)
         view.bringSubviewToFront(symbolView)
 
         // TEMP
@@ -151,25 +147,25 @@ final class ImageViewController: UIViewController {
             let config = UIImage.SymbolConfiguration(hierarchicalColor: .white)
                 .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
             symbolView.isHidden = false
-            symbolView.image = UIImage(systemName: "gift.circle", withConfiguration: config)
+            symbolView.imageView.image = UIImage(systemName: "gift.circle", withConfiguration: config)
         
         case .video:
             let config = UIImage.SymbolConfiguration(hierarchicalColor: .white)
                 .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
             symbolView.isHidden = false
-            symbolView.image = UIImage(systemName: "play.circle", withConfiguration: config)
+            symbolView.imageView.image = UIImage(systemName: "play.circle", withConfiguration: config)
         
         case .offline:
             let config = UIImage.SymbolConfiguration(hierarchicalColor: .tertiaryLabel)
                 .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
             symbolView.isHidden = false
-            symbolView.image = UIImage(systemName: "wifi.slash", withConfiguration: config)
+            symbolView.imageView.image = UIImage(systemName: "wifi.slash", withConfiguration: config)
         
         case .error:
             let config = UIImage.SymbolConfiguration(hierarchicalColor: .tertiaryLabel)
                 .applying(UIImage.SymbolConfiguration(textStyle: .largeTitle))
             symbolView.isHidden = false
-            symbolView.image = UIImage(systemName: "wifi.exclamationmark", withConfiguration: config)
+            symbolView.imageView.image = UIImage(systemName: "wifi.exclamationmark", withConfiguration: config)
         }
     }
     
@@ -224,6 +220,15 @@ final class ImageViewController: UIViewController {
         }
          */
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        /// Make image view circular in shape.
+        /// Source: https://medium.com/thefloatingpoint/how-to-make-any-uiview-into-a-circle-a3aad48eac4a
+        symbolView.layer.cornerRadius = symbolView.layer.bounds.width / 2
+        symbolView.clipsToBounds = true
+    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -234,14 +239,13 @@ final class ImageViewController: UIViewController {
     }
 }
 
-final class SymbolView: UIView {
-    private let imageView: UIImageView = .init()
+final class SymbolCircleView: UIView {
+    public let imageView: UIImageView = .init()
     
     init() {
         super.init(frame: .zero)
-        imageView.image = .init(systemName: "heart")
-
-        backgroundColor = .red
+        addSubview(imageView)
+        backgroundColor = .SCBlue
     }
     
     func constrain(to view: UIView) -> Void {
@@ -250,6 +254,12 @@ final class SymbolView: UIView {
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            heightAnchor.constraint(equalTo: imageView.heightAnchor),
+            
+            /// Make view have aspect ratio 1.
+            widthAnchor.constraint(equalTo: heightAnchor),
         ])
     }
     
