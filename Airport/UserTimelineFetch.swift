@@ -25,7 +25,9 @@ func fetchTimelines(window: DateWindow? = nil) async -> Void {
     await withTaskGroup(of: Void.self) { group in
         for request in requests {
             group.addTask {
-                await execute(request, credentials: credentials, followingIDs: followingIDs)
+                let (tweets, included, users, media) = await fetchRawTimeline(request: request, credentials: credentials)
+                store((tweets, included, users, media), followingIDs: followingIDs)
+                updateUserWindow(request: request, tweets: tweets)
             }
         }
         
@@ -34,25 +36,21 @@ func fetchTimelines(window: DateWindow? = nil) async -> Void {
     }
 }
 
-fileprivate func execute(_ request: TimelineRequest, credentials: OAuthCredentials, followingIDs: [User.ID]) async -> Void {
-    let (tweets, included, users, media) = await fetchRawTimeline(request: request, credentials: credentials)
-    
-    /// Create synchronous context.
-    _ = {
-        do {
-            NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
-            
-            let realm = try! Realm()
-            
-            /// Safe to insert `included`, as we make no assumptions around `Relevance`.
-            try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
-            
-            updateUserWindow(request: request, tweets: tweets)
-        } catch {
-            ModelLog.error("\(error)")
-            assert(false, "\(error)")
-        }
-    }()
+/// Synchronous context for `Realm` work.
+fileprivate func store(_ raw: RawData, followingIDs: [User.ID]) -> Void {
+    let (tweets, included, users, media) = raw
+    do {
+        NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
+        
+        let realm = try! Realm()
+        
+        /// Safe to insert `included`, as we make no assumptions around `Relevance`.
+        try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
+        
+    } catch {
+        ModelLog.error("\(error)")
+        assert(false, "\(error)")
+    }
 }
 
 /// Update the `User`'s `DateWindow`, which records the time-period over which we fetched all their `Tweet`s.
