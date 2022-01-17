@@ -27,7 +27,7 @@ final class Discussion: Object, Identifiable {
     public static let updatedAtPropertyName = "updatedAt"
     
     @Persisted
-    public private(set) var conversations: List<Conversation>
+    private var conversations: List<Conversation>
     public static let conversationsPropertyName = "conversations"
     
     /** "Bell value" for observing changes to Discussion's tweets.
