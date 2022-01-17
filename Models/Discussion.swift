@@ -102,6 +102,8 @@ final class Discussion: Object, Identifiable {
     }
 }
 
+/// - Note: functions kept in file to permit access to `private` var `conversations`.
+
 extension Discussion {
     /// Mark a discussion as read by marking all tweets as read.
     func markRead(_ token: Realm.TransactionToken) -> Void {
