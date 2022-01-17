@@ -401,9 +401,9 @@
 		223BBF5E27377E6E00375530 /* Airport */ = {
 			isa = PBXGroup;
 			children = (
-				22A9E9032771D76500C4EE99 /* Operators */,
 				223BBF5F27377E8700375530 /* Airport.swift */,
 				22193DA92783DD5E005A7708 /* FollowingCache.swift */,
+				22680A83276AA651008827F8 /* Sealed.swift */,
 				22193DAB2783E158005A7708 /* UserTimelineFetch.swift */,
 				22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */,
 				22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */,
@@ -500,14 +500,6 @@
 				228D71F12780142200E306BD /* UserTimelineWindow.swift */,
 			);
 			path = DateWindow;
-			sourceTree = "<group>";
-		};
-		22A9E9032771D76500C4EE99 /* Operators */ = {
-			isa = PBXGroup;
-			children = (
-				22680A83276AA651008827F8 /* Sealed.swift */,
-			);
-			path = Operators;
 			sourceTree = "<group>";
 		};
 		22D127DF2740653900932614 /* TweetCell */ = {
