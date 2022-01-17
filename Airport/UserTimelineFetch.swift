@@ -49,6 +49,7 @@ fileprivate func store(_ raw: RawData, followingIDs: [User.ID]) -> Void {
         
     } catch {
         ModelLog.error("\(error)")
+        #warning("silencing errors here is bad practice, and the only purpose of this function!")
         assert(false, "\(error)")
     }
 }
