@@ -411,8 +411,6 @@
 				22193DAB2783E158005A7708 /* UserTimelineFetch.swift */,
 				22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */,
 				22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */,
-				22193DB62785A878005A7708 /* OnFollow.swift */,
-				22193DB92785C20B005A7708 /* OnUnfollow.swift */,
 				228D71E5277A805900E306BD /* Conduits */,
 				22BFD7A42774620600E46DF1 /* HomeTimelineHelper.swift */,
 				228D71EE2780127400E306BD /* DateWindow */,
@@ -566,6 +564,8 @@
 				22FA26AE2795BAC500DD8EE4 /* UpdateDangling.swift */,
 				22FA26B02795C61100DD8EE4 /* StoreFollowing.swift */,
 				22FA26B22795C70F00DD8EE4 /* UpdateRelevance.swift */,
+				22193DB62785A878005A7708 /* OnFollow.swift */,
+				22193DB92785C20B005A7708 /* OnUnfollow.swift */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
