@@ -139,7 +139,7 @@ extension Discussion {
 
 extension Discussion {
     /// Call this function whenever `conversations` or their contents change.
-    internal func onUpdateTweets(_ token: Realm.TransactionToken) -> Void {
+    private func onUpdateTweets(_ token: Realm.TransactionToken) -> Void {
         /// Invalidate memoized values.
         _tweets = nil
         _read = nil

@@ -57,7 +57,7 @@ final class Conversation: Object, Identifiable {
 }
 
 extension Conversation {
-    public func insert(_ tweet: Tweet) {
+    public func insert(_ tweet: Tweet, token: Realm.TransactionToken) {
         /// Insert tweet if missing.
         if tweets.contains(where: {$0.id == tweet.id}) == false {
             tweets.append(tweet)
