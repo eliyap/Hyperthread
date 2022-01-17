@@ -109,6 +109,10 @@ func ingestRaw(
     }
 }
 
+/// Links detached `Conversation` to `Discussion`s where possible,
+/// and if not possible finds what `Tweet` needs to be fetched to make the connection.
+///
+/// - Returns: list of `Tweet.ID`s to be fetched.
 internal func linkConversations() throws -> Set<Tweet.ID> {
     var idsToFetch = Set<Tweet.ID>()
     
