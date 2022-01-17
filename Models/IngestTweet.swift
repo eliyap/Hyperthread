@@ -64,22 +64,26 @@ func ingestRaw(
 }
 
 /**
- Accepts raw data from the Twitter v2 API.
+ Store tweets from Twitter's v1.1 home timeline endpoint.
+ - Note: we do not need following user IDs to determine relevance, as we set _all_ home timeline tweets to the highest relevance.
  - Warning: Do not feed `include`d `Tweet`s!
             These may be missing media keys, or be of a different `Relevance` than the main payload!
  */
-func ingestRaw(
+func ingestRawHomeTimelineTweets(
     rawTweets: [RawHydratedTweet],
     rawUsers: [RawUser],
-    rawMedia: [RawIncludeMedia],
-    relevance: Relevance
+    rawMedia: [RawIncludeMedia]
 ) throws -> Void {
+    /// Set all home timeline tweets to the highest relevance.
+    let relevance: Relevance = .discussion
+    
     let realm = try! Realm()
     
     /// Insert all users.
     try realm.write {
         for rawUser in rawUsers {
-            /// Check `following` status in Realm, to avoid ovewriting an existing value (if any).
+            /// Check `following` status in Realm, to avoid overwriting an existing value (if any).
+            /// If none, assume we do not follow the user.
             let following = realm.user(id: rawUser.id)?.following ?? false
             
             let user = User(raw: rawUser, following: following)
