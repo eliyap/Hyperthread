@@ -127,8 +127,11 @@ internal func linkUnlinked() throws -> Set<Tweet.ID> {
 }
 
 /// Tries to link Tweets to Conversations, and Conversations to Discussions.
-/// - Important: MUST take place within a Realm `write` transaction!
-fileprivate func link(_ token: Realm.TransactionToken, conversation: Conversation, idsToFetch: inout Set<Tweet.ID>, realm: Realm) -> Void {
+fileprivate func link(
+    _ token: Realm.TransactionToken,
+    conversation: Conversation,
+    idsToFetch: inout Set<Tweet.ID>, realm: Realm
+) -> Void {
     /// Link to upstream's discussion, if possible.
     if
         let upstreamID = conversation.upstream,
