@@ -89,7 +89,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     }
     
     /** The set of referenced tweets which have yet to be fetched.
-        If empty, we should be able to find the Tweet in our Realm by the stored reference ID.
+        If empty, we should be able to find all referenced Tweets in our Realm by looking up the stored reference ID.
      */
     @Persisted
     private var _dangling: ReferenceSet.RawValue
@@ -242,18 +242,6 @@ extension Tweet {
             result.insert(retweetID)
         }
         return result
-    }
-}
-
-extension Tweet.ID {
-    func missingFrom(_ realm: Realm) -> Bool {
-        realm.tweet(id: self) == nil
-    }
-}
-
-extension Array where Element == Tweet.ID {
-    func missingFrom(_ realm: Realm) -> Self {
-        filter { $0.missingFrom(realm) }
     }
 }
 
