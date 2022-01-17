@@ -107,7 +107,7 @@
 		22FA26A52795B85400DD8EE4 /* Tweet+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A42795B85400DD8EE4 /* Tweet+Identifiable.swift */; };
 		22FA26A72795B91F00DD8EE4 /* Tweet Shorthand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A62795B91F00DD8EE4 /* Tweet Shorthand.swift */; };
 		22FA26A92795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A82795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift */; };
-		22FA26AD2795BA9C00DD8EE4 /* LinkConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26AC2795BA9C00DD8EE4 /* LinkConversation.swift */; };
+		22FA26AD2795BA9C00DD8EE4 /* LinkTweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26AC2795BA9C00DD8EE4 /* LinkTweet.swift */; };
 		22FA26AF2795BAC500DD8EE4 /* UpdateDangling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26AE2795BAC500DD8EE4 /* UpdateDangling.swift */; };
 		22FA26B12795C61100DD8EE4 /* StoreFollowing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26B02795C61100DD8EE4 /* StoreFollowing.swift */; };
 		22FA26B32795C70F00DD8EE4 /* UpdateRelevance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26B22795C70F00DD8EE4 /* UpdateRelevance.swift */; };
@@ -238,7 +238,7 @@
 		22FA26A62795B91F00DD8EE4 /* Tweet Shorthand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tweet Shorthand.swift"; sourceTree = "<group>"; };
 		22FA26A82795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tweet.chronologicalSort.swift; sourceTree = "<group>"; };
 		22FA26AB2795BA4000DD8EE4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		22FA26AC2795BA9C00DD8EE4 /* LinkConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkConversation.swift; sourceTree = "<group>"; };
+		22FA26AC2795BA9C00DD8EE4 /* LinkTweet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkTweet.swift; sourceTree = "<group>"; };
 		22FA26AE2795BAC500DD8EE4 /* UpdateDangling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDangling.swift; sourceTree = "<group>"; };
 		22FA26B02795C61100DD8EE4 /* StoreFollowing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreFollowing.swift; sourceTree = "<group>"; };
 		22FA26B22795C70F00DD8EE4 /* UpdateRelevance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRelevance.swift; sourceTree = "<group>"; };
@@ -559,7 +559,7 @@
 			isa = PBXGroup;
 			children = (
 				22FA26AB2795BA4000DD8EE4 /* README.md */,
-				22FA26AC2795BA9C00DD8EE4 /* LinkConversation.swift */,
+				22FA26AC2795BA9C00DD8EE4 /* LinkTweet.swift */,
 				22FA26AE2795BAC500DD8EE4 /* UpdateDangling.swift */,
 				22FA26B02795C61100DD8EE4 /* StoreFollowing.swift */,
 				22FA26B22795C70F00DD8EE4 /* UpdateRelevance.swift */,
@@ -833,7 +833,7 @@
 				220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */,
 				22FA269E2794B88400DD8EE4 /* Truncated.swift in Sources */,
 				22680A92276B41B1008827F8 /* Relevance.swift in Sources */,
-				22FA26AD2795BA9C00DD8EE4 /* LinkConversation.swift in Sources */,
+				22FA26AD2795BA9C00DD8EE4 /* LinkTweet.swift in Sources */,
 				222161F62741D7FF00220F0C /* DiscussionTree.swift in Sources */,
 				22D2573127883F75005FC3D8 /* ReferenceCrawler.swift in Sources */,
 				228D71E7277A953500E306BD /* DateWindow.swift in Sources */,
