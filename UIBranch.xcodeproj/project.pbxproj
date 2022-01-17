@@ -110,6 +110,7 @@
 		22FA26A92795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A82795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift */; };
 		22FA26AD2795BA9C00DD8EE4 /* LinkConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26AC2795BA9C00DD8EE4 /* LinkConversation.swift */; };
 		22FA26AF2795BAC500DD8EE4 /* UpdateDangling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26AE2795BAC500DD8EE4 /* UpdateDangling.swift */; };
+		22FA26B12795C61100DD8EE4 /* StoreFollowing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26B02795C61100DD8EE4 /* StoreFollowing.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -239,6 +240,7 @@
 		22FA26AB2795BA4000DD8EE4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		22FA26AC2795BA9C00DD8EE4 /* LinkConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkConversation.swift; sourceTree = "<group>"; };
 		22FA26AE2795BAC500DD8EE4 /* UpdateDangling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDangling.swift; sourceTree = "<group>"; };
+		22FA26B02795C61100DD8EE4 /* StoreFollowing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreFollowing.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -557,6 +559,7 @@
 				22FA26AB2795BA4000DD8EE4 /* README.md */,
 				22FA26AC2795BA9C00DD8EE4 /* LinkConversation.swift */,
 				22FA26AE2795BAC500DD8EE4 /* UpdateDangling.swift */,
+				22FA26B02795C61100DD8EE4 /* StoreFollowing.swift */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -803,6 +806,7 @@
 				22BE9C0D27606A280080E475 /* Supertall.swift in Sources */,
 				22D127E12740655900932614 /* IconView.swift in Sources */,
 				22FA26A02794CC4D00DD8EE4 /* DiscussionDDS.swift in Sources */,
+				22FA26B12795C61100DD8EE4 /* StoreFollowing.swift in Sources */,
 				224F88D5275E5C8700085678 /* ImageViewController.swift in Sources */,
 				2266D0CC276197E20099477D /* ShowAlert.swift in Sources */,
 				223BBF862738572C00375530 /* MainTable.swift in Sources */,
