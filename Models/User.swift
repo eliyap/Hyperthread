@@ -77,10 +77,6 @@ final class User: Object, Identifiable, UserIdentifiable {
     }
 }
 
-public extension Int64 {
-    static let NSNotFound = Int64(Foundation.NSNotFound)
-}
-
 internal extension Realm {
     func storeFollowing(raw: [RawUser]) throws -> Void {
         try write {
