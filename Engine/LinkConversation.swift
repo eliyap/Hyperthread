@@ -10,7 +10,7 @@ import RealmSwift
 
 extension Realm {
     /// Attach `tweet` to a conversation, creating one if necessary.
-    func linkConversation(_ token: TransactionToken, tweet: Tweet) -> Void {
+    func linkTweet(_ token: TransactionToken, tweet: Tweet) -> Void {
         /// Attach to conversation (create one if necessary).
         var conversation: Conversation
         if let local = self.conversation(id: tweet.conversation_id) {

@@ -58,7 +58,7 @@ func ingestRaw(
             }
             
             /// Attach to conversation (create one if necessary).
-            realm.linkConversation(token, tweet: tweet)
+            realm.linkTweet(token, tweet: tweet)
         }
     }
 }
@@ -104,7 +104,7 @@ func ingestRaw(
             }
             
             /// Attach to conversation (create one if necessary).
-            realm.linkConversation(token, tweet: tweet)
+            realm.linkTweet(token, tweet: tweet)
         }
     }
 }
