@@ -106,6 +106,7 @@
 		22FA26A02794CC4D00DD8EE4 /* DiscussionDDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA269F2794CC4D00DD8EE4 /* DiscussionDDS.swift */; };
 		22FA26A22795B6CD00DD8EE4 /* ReferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A12795B6CD00DD8EE4 /* ReferenceSet.swift */; };
 		22FA26A52795B85400DD8EE4 /* Tweet+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A42795B85400DD8EE4 /* Tweet+Identifiable.swift */; };
+		22FA26A72795B91F00DD8EE4 /* Tweet Shorthand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26A62795B91F00DD8EE4 /* Tweet Shorthand.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -230,6 +231,7 @@
 		22FA269F2794CC4D00DD8EE4 /* DiscussionDDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionDDS.swift; sourceTree = "<group>"; };
 		22FA26A12795B6CD00DD8EE4 /* ReferenceSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceSet.swift; sourceTree = "<group>"; };
 		22FA26A42795B85400DD8EE4 /* Tweet+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tweet+Identifiable.swift"; sourceTree = "<group>"; };
+		22FA26A62795B91F00DD8EE4 /* Tweet Shorthand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tweet Shorthand.swift"; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -534,6 +536,7 @@
 			isa = PBXGroup;
 			children = (
 				223BBF6B27377EC100375530 /* Tweet.swift */,
+				22FA26A62795B91F00DD8EE4 /* Tweet Shorthand.swift */,
 				22FA26A42795B85400DD8EE4 /* Tweet+Identifiable.swift */,
 			);
 			path = Tweet;
@@ -850,6 +853,7 @@
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
+				22FA26A72795B91F00DD8EE4 /* Tweet Shorthand.swift in Sources */,
 				22193DB527859D2D005A7708 /* RealmError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
