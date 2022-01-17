@@ -1,20 +1,20 @@
 //
-//  Transaction.swift
+//  Realm.TransactionToken.swift
 //  Hyperthread
 //
-//  Created by Secret Asian Man Dev on 22/12/21.
+//  Created by Secret Asian Man Dev on 17/1/22.
 //
 
 import Foundation
 import RealmSwift
 
 public extension Realm {
-    
-    /** A token structure the existence of which guarantees we are in a Realm write transaction.
-        Require this struct on methods which are only safe to perform within a write transaction.
+    /** A token structure, the existence of which guarantees we are in a `Realm` `write` transaction.
+        Require this struct to be passed into methods which are only safe to perform within a `write` transaction.
      */
     struct TransactionToken {
         /// Allow instantiation in the function below and nowhere else.
+        /// This encourages programmers not to simply fabricate a token, which would defeat the purpose of this system.
         fileprivate init() {}
     }
     

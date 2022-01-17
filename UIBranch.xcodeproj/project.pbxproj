@@ -80,7 +80,6 @@
 		228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EF2780128300E306BD /* RealmDateWindow.swift */; };
 		228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71F12780142200E306BD /* UserTimelineWindow.swift */; };
 		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
-		22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9062773059E00C4EE99 /* Transaction.swift */; };
 		22BE9C0D27606A280080E475 /* Supertall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BE9C0C27606A280080E475 /* Supertall.swift */; };
 		22BFD7A52774620600E46DF1 /* HomeTimelineHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A42774620600E46DF1 /* HomeTimelineHelper.swift */; };
 		22BFD7A72775882000E46DF1 /* Collection<Enum>.max.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */; };
@@ -112,6 +111,7 @@
 		22FA26AF2795BAC500DD8EE4 /* UpdateDangling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26AE2795BAC500DD8EE4 /* UpdateDangling.swift */; };
 		22FA26B12795C61100DD8EE4 /* StoreFollowing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26B02795C61100DD8EE4 /* StoreFollowing.swift */; };
 		22FA26B32795C70F00DD8EE4 /* UpdateRelevance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26B22795C70F00DD8EE4 /* UpdateRelevance.swift */; };
+		22FA26B52795C77A00DD8EE4 /* Realm.TransactionToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26B42795C77A00DD8EE4 /* Realm.TransactionToken.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -211,7 +211,6 @@
 		228D71EF2780128300E306BD /* RealmDateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDateWindow.swift; sourceTree = "<group>"; };
 		228D71F12780142200E306BD /* UserTimelineWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTimelineWindow.swift; sourceTree = "<group>"; };
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
-		22A9E9062773059E00C4EE99 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		22BE9C0C27606A280080E475 /* Supertall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supertall.swift; sourceTree = "<group>"; };
 		22BFD7A42774620600E46DF1 /* HomeTimelineHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTimelineHelper.swift; sourceTree = "<group>"; };
 		22BFD7A62775882000E46DF1 /* Collection<Enum>.max.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection<Enum>.max.swift"; sourceTree = "<group>"; };
@@ -243,6 +242,7 @@
 		22FA26AE2795BAC500DD8EE4 /* UpdateDangling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDangling.swift; sourceTree = "<group>"; };
 		22FA26B02795C61100DD8EE4 /* StoreFollowing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreFollowing.swift; sourceTree = "<group>"; };
 		22FA26B22795C70F00DD8EE4 /* UpdateRelevance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRelevance.swift; sourceTree = "<group>"; };
+		22FA26B42795C77A00DD8EE4 /* Realm.TransactionToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realm.TransactionToken.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -428,7 +428,6 @@
 				223BBF6927377EC000375530 /* User.swift */,
 				22760A48274ADFA900F28F0A /* ReadStatus.swift */,
 				223BBF6C27377EC300375530 /* Query.swift */,
-				22A9E9062773059E00C4EE99 /* Transaction.swift */,
 				22680A91276B41B1008827F8 /* Relevance.swift */,
 				22680A8F276B4159008827F8 /* PublicMetrics.swift */,
 				22F24640274DC20200AE17AD /* CanonicalString.swift */,
@@ -474,6 +473,7 @@
 				228D71E8277AC06100E306BD /* TimeInterval.swift */,
 				22193DA1278280CD005A7708 /* URLError.swift */,
 				22FA269D2794B88400DD8EE4 /* Truncated.swift */,
+				22FA26B42795C77A00DD8EE4 /* Realm.TransactionToken.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -828,6 +828,7 @@
 				223BBF6627377E8900375530 /* LatchBuffer.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
+				22FA26B52795C77A00DD8EE4 /* Realm.TransactionToken.swift in Sources */,
 				22BFD7A72775882000E46DF1 /* Collection<Enum>.max.swift in Sources */,
 				220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */,
 				22FA269E2794B88400DD8EE4 /* Truncated.swift in Sources */,
@@ -870,7 +871,6 @@
 				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
 				22193DBA2785C20B005A7708 /* OnUnfollow.swift in Sources */,
 				22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */,
-				22A9E9072773059E00C4EE99 /* Transaction.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */,
 				22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */,
