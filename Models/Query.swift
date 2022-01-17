@@ -26,13 +26,6 @@ extension Realm {
     }
 }
 
-extension Realm {
-    func followingUsers() -> Results<User> {
-        objects(User.self)
-            .filter("\(User.followingPropertyName) == YES")
-    }
-}
-
 extension Discussion {
     /// Check if any `Tweet` is above the relevance threshold.
     static let minRelevancePredicate = NSPredicate(format: """

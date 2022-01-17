@@ -18,7 +18,8 @@ internal extension Realm {
     {
         try write {
             /// Remove users who are no longer being followed.
-            followingUsers()
+            objects(User.self)
+                .where { $0.following == true }
                 .filter { user in
                     /// Find users who were marked as followed but are now missing.
                     raw.contains(where: {user.id == $0.id}) == false
