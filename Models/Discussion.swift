@@ -17,6 +17,7 @@ final class Discussion: Object, Identifiable {
     var id: ID
     typealias ID = Tweet.ID
     
+    /// The conversation from which all other conversations in this discussion are "downstream".
     @Persisted
     var root: Conversation?
     
@@ -37,13 +38,13 @@ final class Discussion: Object, Identifiable {
     
     /** "Bell value" for observing changes to Discussion's tweets.
         Problem:
-        - we cannot use Realm to observe `tweets` for change notifications, as it is not persisted.
+        - We cannot use Realm to observe `tweets` for change notifications, as it is not persisted.
         - `conversations` is not flagged as changing when tweets are added to an existing conversation.
-        - how can we use Realm to observe tweets?
+        - How can we use Realm to observe tweets?
 
         Workaround:
-        - declare an inaccessible, but KVO-compliant, boolean
-        - toggle the boolean to trigger `observe` when our tweets change
+        - Declare an inaccessible, but KVO-compliant, boolean.
+        - Toggle the boolean to trigger `observe` when our tweets change.
      */
     @Persisted
     private var tweetsBellValue: Bool = false
