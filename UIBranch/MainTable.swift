@@ -213,8 +213,8 @@ extension MainTable {
                 /// Mark discussion as read.
                 discussion.markRead(token)
                 
-                /// Patch updated date, as it can be flaky.
-                discussion.patchUpdatedAt(token)
+                /// Notify discussion of content changes.
+                discussion.onUpdateTweets(token)
             }
         } catch {
             TableLog.error("\(error)")
