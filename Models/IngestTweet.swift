@@ -119,7 +119,10 @@ internal func linkUnlinked() throws -> Set<Tweet.ID> {
         .filter(NSPredicate(format: "\(Conversation.discussionPropertyName).@count == 0"))
     try realm.writeWithToken { token in
         for conversation in unlinked {
-            link(token, conversation: conversation, idsToFetch: &idsToFetch, realm: realm)
+            let missing: Tweet.ID? = link(token, conversation: conversation, realm: realm)
+            if let missing = missing {
+                idsToFetch.insert(missing)
+            }
         }
     }
     
@@ -134,7 +137,6 @@ internal func linkUnlinked() throws -> Set<Tweet.ID> {
 fileprivate func link(
     _ token: Realm.TransactionToken,
     conversation: Conversation,
-    idsToFetch: inout Set<Tweet.ID>,
     realm: Realm
 ) -> Tweet.ID? {
     /// If the upstream `Conversation` is known, and it has a `Discussion`,
@@ -174,7 +176,6 @@ fileprivate func link(
     /// Remove conversations with un-fetched upstream tweets.
     guard let rootPrimaryReference: Tweet = realm.tweet(id: rootPRID) else {
         /// Go fetch the upstream reference.
-        idsToFetch.insert(rootPRID)
         return rootPRID
     }
     
