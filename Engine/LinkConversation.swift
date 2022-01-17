@@ -23,6 +23,7 @@ extension Realm {
         /// Add tweet to conversation.
         conversation.insert(tweet, token: token)
         
+        /// Update discussion, if one is present.
         guard conversation.discussion.count <= 1 else {
             ModelLog.error("Illegal state: Conversation part of multiple Discussions!")
             assert(false)
