@@ -91,7 +91,8 @@ final class UserView: UIStackView {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         /// Don't count as a cell touch.
-//        super.touchesEnded(touches, with: event)
+        // super.touchesEnded(touches, with: event)
+        
         guard let userID = userID else {
             NetLog.error("Missing User ID on username tap!")
             assert(false)
@@ -100,6 +101,17 @@ final class UserView: UIStackView {
 
         line?.events.send(.usernameTouch(userID))
     }
+    
+    /// From `touchesEnded`:
+    /// Docs: https://developer.apple.com/documentation/uikit/uiresponder/1621084-touchesended
+    /// > If you override this method without calling `super` (a common use pattern),
+    /// > you must also override the other methods for handling touch events, even if your implementations do nothing.
+    ///
+    /// - Note: failing to include these methods caused `tableView(_:, didSelectRowAt:)` to return wrong values.
+    override func touchesEstimatedPropertiesUpdated(_ touches: Set<UITouch>) { }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) { }
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) { }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
