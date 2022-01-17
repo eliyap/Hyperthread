@@ -10,22 +10,6 @@ import RealmSwift
 import Realm
 import Twig
 
-/**
- Represents the set of references held by a Tweet.
- */
-internal struct ReferenceSet: OptionSet {
-    var rawValue: Int
-    
-    typealias RawValue = Int
-    
-    static let reply = Self(rawValue: 1 << 0)
-    static let quote = Self(rawValue: 1 << 1)
-    static let retweet = Self(rawValue: 1 << 2)
-    
-    static let empty: Self = []
-    static let all: Self = [.reply, .quote, .retweet]
-}
-
 final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     
     /// Twitter API `id`.
@@ -33,6 +17,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     var id: ID
     typealias ID = String
     
+    /// Tweet's creation time.
     @Persisted
     var createdAt: Date
     
@@ -92,6 +77,9 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     @Persisted
     var media: List<Media>
     
+    /** App-internal (non-Twitter) measure of a tweet's "relevance".
+        Less relevant Tweets / Discussions are excluded from the timeline.
+     */
     @Persisted
     private var _relevance: Relevance.RawValue
     public static let relevancePropertyName = "_relevance"

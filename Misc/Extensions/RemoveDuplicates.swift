@@ -8,6 +8,7 @@
 import Foundation
 
 /// Source: https://www.hackingwithswift.com/example-code/language/how-to-remove-duplicate-items-from-an-array
+/// - Note: unlike the `Array(Set(x))` trick, this preserves ordering of elements.
 extension Array where Element: Hashable {
     func removingDuplicates() -> [Element] {
         var addedDict = [Element: Bool]()

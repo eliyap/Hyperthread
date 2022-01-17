@@ -9,7 +9,9 @@
 import Foundation
 
 /** Restore the app to a prior state using `.xcappdata` files.
+    - Warning: this contains my personal data, and should **never** be shipped to customers!
  */
+ #if DEBUG
 func loadAppData() {
     let fm = Foundation.FileManager.default
     
@@ -42,3 +44,4 @@ func loadAppData() {
         }
     }
 }
+#endif

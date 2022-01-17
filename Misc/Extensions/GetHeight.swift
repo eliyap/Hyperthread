@@ -9,6 +9,7 @@
 import UIKit
 import BlackBox
 
+/// Shorthand for obtaining window chrome dimentions in `UINavigationController`.
 extension UIViewController {
     func getNavBarHeight() -> CGFloat {
         let guess: CGFloat = 50 /// An observed value.

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Convenient shorthand values.
 extension TimeInterval {
     public static let minute: Self = 60
     public static let hour: Self = .minute * 60

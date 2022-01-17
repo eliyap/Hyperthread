@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Check if the thrown error corresponds to the device being offline.
 public extension Error {
     var isOfflineError: Bool {
         let error = self as NSError

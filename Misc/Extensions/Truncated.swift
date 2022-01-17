@@ -8,7 +8,8 @@
 import Foundation
 
 extension Collection where Element: CustomDebugStringConvertible, Index: BinaryInteger {
-    /// Truncate long lists after `max` elements.
+    /// Truncate long lists beyond `max` elements.
+    /// Useful for printing the contents of potentially large arrays.
     func truncated(_ max: Index) -> String {
         if count <= max {
             return "\(self)"
