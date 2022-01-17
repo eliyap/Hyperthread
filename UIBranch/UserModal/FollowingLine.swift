@@ -38,6 +38,7 @@ final class FollowingLine: UIStackView {
         axis = .horizontal
         translatesAutoresizingMaskIntoConstraints = false
         spacing = UIStackView.spacingUseSystem
+        backgroundColor = .card
         
         /// Inset subviews from edges.
         /// Source: https://useyourloaf.com/blog/adding-padding-to-a-stack-view/
@@ -73,18 +74,21 @@ final class FollowingLine: UIStackView {
         
         Task {
             followingButton.isEnabled = false
+            followingButton.loading.startAnimating()
             
             if following {
                 let success = await Self.performUnfollow(userID: userID, credentials: credentials)
                 if success {
                     onUnfollow(userIDs: [userID])
                     followingButton.isEnabled = true
+                    followingButton.loading.stopAnimating()
                 }
             } else {
                 let success = await Self.performFollow(userID: userID, credentials: credentials)
                 if success {
                     onFollow(userIDs: [userID])
                     followingButton.isEnabled = true
+                    followingButton.loading.stopAnimating()
                 }
             }
 
@@ -173,7 +177,7 @@ final class FollowButton: UIButton {
     
     private let stackView: UIStackView = .init()
     private let label: UILabel = .init()
-    private let loading = UIActivityIndicatorView()
+    public let loading = UIActivityIndicatorView()
     
     init() {
         super.init(frame: .zero)
@@ -184,6 +188,7 @@ final class FollowButton: UIButton {
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
+        stackView.isUserInteractionEnabled = false /// Stops view from eating touches.
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: FollowingLine.inset),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FollowingLine.inset),
@@ -195,16 +200,16 @@ final class FollowButton: UIButton {
         label.text = "TEST"
         
         stackView.addArrangedSubview(loading)
-        loading.startAnimating()
+        loading.hidesWhenStopped = true
     }
     
     public func configure(following: Bool) -> Void {
         if following {
-            backgroundColor = .systemGray
+            backgroundColor = .systemGray3
             label.attributedText = .init(string: "Unfollow", attributes: .init([.font: FollowingLine.font]))
         } else {
             backgroundColor = .systemBlue
-            label.attributedText = .init(string: "Follow", attributes: .init([.font: FollowingLine.font, .foregroundColor: UIColor.label]))
+            label.attributedText = .init(string: "Follow", attributes: .init([.font: FollowingLine.font, .foregroundColor: UIColor.white]))
         }
     }
     
