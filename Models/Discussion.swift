@@ -26,6 +26,7 @@ final class Discussion: Object, Identifiable {
     var updatedAt: Date
     public static let updatedAtPropertyName = "updatedAt"
     
+    /// - Note: do not let functions mutate this, as internal values depend on updates when the list of `Tweet`s changes.
     @Persisted
     private var conversations: List<Conversation>
     public static let conversationsPropertyName = "conversations"
