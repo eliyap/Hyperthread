@@ -16,6 +16,10 @@ extension Tweet {
      - `entities`
      */
     
+    public static let textAttributes: [NSAttributedString.Key: Any] = [
+        .font: UIFont.preferredFont(forTextStyle: .body),
+        .foregroundColor: UIColor.label,
+    ]
     /// If `node` is provided, we can derive some additional context.
     func fullText(context node: Node? = nil) -> NSMutableAttributedString {
         /// Replace encoded characters.
@@ -39,10 +43,7 @@ extension Tweet {
         text.expandURLs(from: self, removedURLs: &removedURLs)
         
         /// Apply normal text size and color preferences.
-        let string = NSMutableAttributedString(string: text, attributes: [
-            .font: UIFont.preferredFont(forTextStyle: .body),
-            .foregroundColor: UIColor.label,
-        ])
+        let string = NSMutableAttributedString(string: text, attributes: Self.textAttributes)
         
         /// Track link-attributed ranges to avoid overlaps.
         var linkedRanges: [NSRange] = []

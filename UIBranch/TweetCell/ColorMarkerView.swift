@@ -67,6 +67,10 @@ final class ColorMarkerView: UIStackView {
         case .quoted:
             symbolButton.isHidden = false
             symbolButton.setImage(UIImage(systemName: QuoteSymbol.hollowName), for: .normal)
+            
+        case .none:
+            symbolButton.isHidden = false
+            symbolButton.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
         
         default:
             symbolButton.isHidden = true

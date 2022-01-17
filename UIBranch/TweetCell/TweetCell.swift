@@ -150,6 +150,15 @@ final class TweetCell: ControlledCell {
             retweetView.configure(tweet: tweet, realm: realm)
             metricsView.configure(tweet)
             albumVC.configure(tweet: tweet)
+        } else {
+            tweetTextView.attributedText = NSMutableAttributedString(string: """
+                This tweet is unavailable.
+                The author may have hidden or deleted it.
+                """, attributes: Tweet.textAttributes)
+            userView.isHidden = true
+            retweetView.isHidden = true
+            metricsView.isHidden = true
+            albumVC.view.isHidden = true
         }
         
         /// Set indentation depth, decrementing to account for 1 indexing.
