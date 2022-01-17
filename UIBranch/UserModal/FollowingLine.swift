@@ -91,9 +91,6 @@ final class FollowingLine: UIStackView {
                     followingButton.loading.stopAnimating()
                 }
             }
-
-            /// Re-enable button now that work is done.
-            followingButton.isEnabled = true
         }
     }
     
