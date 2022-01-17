@@ -1,5 +1,5 @@
 //
-//  Tweet.Identifiable.swift
+//  Tweet+Identifiable.swift
 //  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 17/1/22.
