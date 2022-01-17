@@ -23,8 +23,13 @@ extension Realm {
         /// Add tweet to conversation.
         conversation.insert(tweet)
         
-        if let discussion = conversation.discussion.first {
-            discussion.notifyTweetsDidChange(token)
+        guard conversation.discussion.count <= 1 else {
+            ModelLog.error("Illegal state: Conversation part of multiple Discussions!")
+            assert(false)
+            return
+        }
+        conversation.discussion.forEach {
+            $0.notifyTweetsDidChange(token)
         }
     }
 }
