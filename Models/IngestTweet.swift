@@ -132,7 +132,8 @@ fileprivate func link(
     conversation: Conversation,
     idsToFetch: inout Set<Tweet.ID>, realm: Realm
 ) -> Void {
-    /// Link to upstream's discussion, if possible.
+    /// If the upstream `Conversation` is known, and it has a `Discussion`,
+    /// simply link this `Conversation` to that `Discussion`.
     if
         let upstreamID = conversation.upstream,
         let upstreamConvo = realm.conversation(id: upstreamID),
@@ -160,10 +161,9 @@ fileprivate func link(
     /// Remove conversations that are standalone discussions.
     guard let rootPRID: Tweet.ID = root.primaryReference else {
         /// Since the `root` has no references, its conversation is the `Discussion.root`.
-        /// Recognize the conversation as its own discussion.
+        /// Recognize the `Conversation` as a `Discussion` root by marking it as its own upstream.
         conversation.upstream = root.id
         realm.add(Discussion(root: conversation))
-        
         return
     }
     
@@ -178,7 +178,7 @@ fileprivate func link(
     let upstreamID: Conversation.ID = rootPrimaryReference.conversation_id
     conversation.upstream = upstreamID
         
-    /// Check if the upstream Conversation is part of a Discussion.
+    /// Check if the upstream `Conversation` is part of a `Discussion`.
     if
         let upstreamConvo = realm.conversation(id: upstreamID),
         let upstream: Discussion = upstreamConvo.discussion.first
