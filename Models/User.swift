@@ -78,7 +78,11 @@ final class User: Object, Identifiable, UserIdentifiable {
 }
 
 internal extension Realm {
-    func storeFollowing<RawUserCollection>(raw: RawUserCollection) throws -> Void where RawUserCollection: Collection, RawUserCollection.Element == RawUser {
+    func storeFollowing<RawUserCollection>(raw: RawUserCollection) throws -> Void
+    where
+        RawUserCollection: Collection,
+        RawUserCollection.Element == RawUser
+    {
         try write {
             /// Remove users who are no longer being followed.
             followingUsers()
