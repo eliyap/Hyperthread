@@ -10,7 +10,7 @@ import RealmSwift
 import Twig
 
 internal extension Realm {
-    /// Write following users to disk.
+    /// Write following users out to disk.
     func storeFollowing<RawUserCollection>(raw: RawUserCollection) throws -> Void
     where
         RawUserCollection: Collection,
