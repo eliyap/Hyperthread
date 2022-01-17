@@ -29,7 +29,7 @@ extension Realm {
             return
         }
         conversation.discussion.forEach {
-            $0.notifyTweetsDidChange(token)
+            $0.onUpdateTweets(token)
         }
     }
 }

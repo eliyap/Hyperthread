@@ -43,13 +43,6 @@ final class Discussion: Object, Identifiable {
     @Persisted
     private var tweetsBellValue: Bool = false
     public static let tweetsDidChangeKey = "tweetsBellValue"
-    public func notifyTweetsDidChange(_ token: Realm.TransactionToken) -> Void {
-        tweetsBellValue.toggle()
-        
-        /// Wipe memoized storage.
-        _tweets = nil
-        _read = nil
-    }
     
     override required init() {
         super.init()
@@ -140,11 +133,7 @@ extension Discussion {
 extension Discussion {
     func insert(_ conversation: Conversation, _ token: Realm.TransactionToken, realm: Realm) -> Void {
         conversations.append(conversation)
-        
-        /// Update internal representation.
-        _tweets = nil
-        patchUpdatedAt(token)
-        notifyTweetsDidChange(token)
+        onUpdateTweets(token)
     }
 }
 
@@ -154,5 +143,19 @@ extension Discussion {
             .flatMap(\.tweets)
             .map(\.danglingReferences)
             .reduce(Set()) { $0.union($1) }
+    }
+}
+
+extension Discussion {
+    /// Call this function whenever `conversations` or their contents change.
+    internal func onUpdateTweets(_ token: Realm.TransactionToken) -> Void {
+        /// Invalidate memoized values.
+        _tweets = nil
+        _read = nil
+        
+        patchUpdatedAt(token)
+        
+        /// Notify `Realm` observers.
+        tweetsBellValue.toggle()
     }
 }
