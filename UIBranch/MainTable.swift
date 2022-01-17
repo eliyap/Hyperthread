@@ -57,7 +57,9 @@ final class MainTable: UITableViewController {
         
         /// Refresh timeline at app startup.
         #if !DEBUG /// Disabled for debugging.
-        DDS.fetchNewTweets { /* do nothing */ }
+        Task {
+            await DDS.fetchNewTweets()
+        }
         #endif
         
         /// Refresh timeline at login.
@@ -96,10 +98,12 @@ final class MainTable: UITableViewController {
         tableView.backgroundColor = .systemRed
     }
     
+    #if DEBUG
     @objc
     func debugMethod() {
         dds.fetchFakeTweet()
     }
+    #endif
     
     @objc
     func debugMethod2() {
