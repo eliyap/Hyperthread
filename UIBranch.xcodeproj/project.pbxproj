@@ -405,7 +405,7 @@
 		223BBF6727377EAD00375530 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				223BBF6B27377EC100375530 /* Tweet.swift */,
+				22FA26A32795B83F00DD8EE4 /* Tweet */,
 				22FA26A12795B6CD00DD8EE4 /* ReferenceSet.swift */,
 				223BBF6827377EC000375530 /* Conversation.swift */,
 				223BBF6A27377EC000375530 /* Discussion.swift */,
@@ -526,6 +526,14 @@
 				22D2572D27883A56005FC3D8 /* ScrollPosition.swift */,
 			);
 			path = UserDefaults;
+			sourceTree = "<group>";
+		};
+		22FA26A32795B83F00DD8EE4 /* Tweet */ = {
+			isa = PBXGroup;
+			children = (
+				223BBF6B27377EC100375530 /* Tweet.swift */,
+			);
+			path = Tweet;
 			sourceTree = "<group>";
 		};
 		B0EEE3B548932ECDAC7403EE /* Frameworks */ = {
