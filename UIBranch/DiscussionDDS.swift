@@ -165,11 +165,11 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
     #if DEBUG
     public func fetchFakeTweet() {
         let realm = try! Realm()
-        try! realm.write {
+        try! realm.writeWithToken { token in
             let t = Tweet.generateFake()
             realm.add(t)
             let c = Conversation(id: t.conversation_id)
-            c.insert(t)
+            c.insert(t, token: token)
             realm.add(c)
             let d = Discussion(root: c)
             realm.add(d)
