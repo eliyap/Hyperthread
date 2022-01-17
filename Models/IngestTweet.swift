@@ -126,13 +126,17 @@ internal func linkUnlinked() throws -> Set<Tweet.ID> {
     return idsToFetch
 }
 
-/// Tries to link Tweets to Conversations, and Conversations to Discussions.
+/// Tries to link `Conversation`s to `Discussion`s by searching the `Realm`
+/// for a referenced (or "upstream") Tweet, Conversation, and its Discussion.
+///
+/// May fail to link a `Conversation` if its "upstream" is missing from the `Realm`.
+/// - Returns: the missing "upstream" tweet to be fetched, if any.
 fileprivate func link(
     _ token: Realm.TransactionToken,
     conversation: Conversation,
     idsToFetch: inout Set<Tweet.ID>,
     realm: Realm
-) -> Void {
+) -> Tweet.ID? {
     /// If the upstream `Conversation` is known, and it has a `Discussion`,
     /// simply link this `Conversation` to that `Discussion`.
     if
@@ -141,7 +145,7 @@ fileprivate func link(
         let upstream: Discussion = upstreamConvo.discussion.first
     {
         upstream.insert(conversation, token, realm: realm)
-        return
+        return nil
     }
     /** Conclusion: upstream is either missing, or itself has no `Discussion`. **/
     
@@ -155,8 +159,7 @@ fileprivate func link(
     
     /// Check if root tweet was still not found.
     guard let root: Tweet = conversation.root else {
-        idsToFetch.insert(conversation.id)
-        return
+        return conversation.id
     }
     
     /// Remove conversations that are standalone discussions.
@@ -165,14 +168,14 @@ fileprivate func link(
         /// Recognize the `Conversation` as a `Discussion` root by marking it as its own upstream.
         conversation.upstream = root.id
         realm.add(Discussion(root: conversation))
-        return
+        return nil
     }
     
     /// Remove conversations with un-fetched upstream tweets.
     guard let rootPrimaryReference: Tweet = realm.tweet(id: rootPRID) else {
         /// Go fetch the upstream reference.
         idsToFetch.insert(rootPRID)
-        return
+        return rootPRID
     }
     
     /// Set upstream conversation.
@@ -185,9 +188,9 @@ fileprivate func link(
         let upstream: Discussion = upstreamConvo.discussion.first
     else {
         /// Otherwise, fetch the upstream Conversation's root Tweet.
-        idsToFetch.insert(upstreamID)
-        return
+        return upstreamID
     }
     
     upstream.insert(conversation, token, realm: realm)
+    return nil
 }
