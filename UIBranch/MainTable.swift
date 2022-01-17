@@ -212,9 +212,6 @@ extension MainTable {
             try realm.writeWithToken(withoutNotifying: tokens) { token in
                 /// Mark discussion as read.
                 discussion.markRead(token)
-                
-                /// Notify discussion of content changes.
-                discussion.onUpdateTweets(token)
             }
         } catch {
             TableLog.error("\(error)")

@@ -110,10 +110,7 @@ extension Discussion {
         }
         
         /// Force re-calculation.
-        _read = nil
-        
-        /// Notify observers of change.
-        tweetsBellValue.toggle()
+        onUpdateTweets(token)
     }
 }
 
