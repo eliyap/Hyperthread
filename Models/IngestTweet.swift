@@ -130,7 +130,8 @@ internal func linkUnlinked() throws -> Set<Tweet.ID> {
 fileprivate func link(
     _ token: Realm.TransactionToken,
     conversation: Conversation,
-    idsToFetch: inout Set<Tweet.ID>, realm: Realm
+    idsToFetch: inout Set<Tweet.ID>,
+    realm: Realm
 ) -> Void {
     /// If the upstream `Conversation` is known, and it has a `Discussion`,
     /// simply link this `Conversation` to that `Discussion`.
@@ -178,14 +179,15 @@ fileprivate func link(
     let upstreamID: Conversation.ID = rootPrimaryReference.conversation_id
     conversation.upstream = upstreamID
         
-    /// Check if the upstream `Conversation` is part of a `Discussion`.
-    if
+    /// Check if the upstream `Conversation` is fetched, and has a `Discussion`.
+    guard
         let upstreamConvo = realm.conversation(id: upstreamID),
         let upstream: Discussion = upstreamConvo.discussion.first
-    {
-        upstream.insert(conversation, token, realm: realm)
-    } else {
+    else {
         /// Otherwise, fetch the upstream Conversation's root Tweet.
         idsToFetch.insert(upstreamID)
+        return
     }
+    
+    upstream.insert(conversation, token, realm: realm)
 }
