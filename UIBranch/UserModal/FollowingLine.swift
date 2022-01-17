@@ -15,7 +15,7 @@ final class FollowingLine: UIStackView {
     public static let inset = CardTeaserCell.borderInset
     
     private let followingLabel: UILabel
-    private let followingButton: UIButton
+    private let followingButton: FollowButton
 
     /// In future, localize these strings.
     private let followingText = "Following"
@@ -25,18 +25,14 @@ final class FollowingLine: UIStackView {
     private var userID: User.ID
     private var following: Bool
     
-    private var followingConfig: UIButton.Configuration
-    private var notFollowingConfig: UIButton.Configuration
-    private static let font: UIFont = .preferredFont(forTextStyle: .body)
+    public static let font: UIFont = .preferredFont(forTextStyle: .body)
     
     init(user: User) {
         self.userID = user.id
         self.following = user.following
         
         self.followingLabel = .init()
-        self.followingConfig = Self.makeFollowingConfig()
-        self.notFollowingConfig = Self.makeNotFollowingConfig()
-        self.followingButton = .init(configuration: followingConfig, primaryAction: nil)
+        self.followingButton = FollowButton()
         
         super.init(frame: .zero)
         axis = .horizontal
@@ -60,9 +56,6 @@ final class FollowingLine: UIStackView {
         addArrangedSubview(followingLabel)
         addArrangedSubview(followingButton)
         
-        let loading = UIActivityIndicatorView()
-        followingButton.addSubview(loading)
-        loading.startAnimating()
     }
     
     private func onButtonTap(_: UIAction) -> Void {
@@ -82,13 +75,13 @@ final class FollowingLine: UIStackView {
             followingButton.isEnabled = false
             
             if following {
-                let success = await performUnfollow(userID: userID, credentials: credentials)
+                let success = await Self.performUnfollow(userID: userID, credentials: credentials)
                 if success {
                     onUnfollow(userIDs: [userID])
                     followingButton.isEnabled = true
                 }
             } else {
-                let success = await performFollow(userID: userID, credentials: credentials)
+                let success = await Self.performFollow(userID: userID, credentials: credentials)
                 if success {
                     onFollow(userIDs: [userID])
                     followingButton.isEnabled = true
@@ -101,8 +94,8 @@ final class FollowingLine: UIStackView {
     }
     
     /// Perform network task, and validate result.
-    /// Return value indicates success
-    private func performFollow(userID: User.ID, credentials: OAuthCredentials) async -> Bool {
+    /// Return value indicates success.
+    private static func performFollow(userID: User.ID, credentials: OAuthCredentials) async -> Bool {
         var result: FollowingRequestResult
         do {
             result = try await follow(userID: userID, credentials: credentials)
@@ -126,7 +119,7 @@ final class FollowingLine: UIStackView {
     }
     
     /// - Returns: whether the request completed successfully.
-    private func performUnfollow(userID: User.ID, credentials: OAuthCredentials) async -> Bool {
+    private static func performUnfollow(userID: User.ID, credentials: OAuthCredentials) async -> Bool {
         var result: Bool
         do {
             result = try await unfollow(userID: userID, credentials: credentials)
@@ -159,10 +152,10 @@ final class FollowingLine: UIStackView {
         
         if following {
             followingLabel.text = followingText
-            followingButton.configuration = followingConfig
+            followingButton.configure(following: true)
         } else {
             followingLabel.text = notFollowingText
-            followingButton.configuration = notFollowingConfig
+            followingButton.configure(following: false)
         }
         
         /// Do not allow the user to interact with themselves, or they might go blind.
@@ -171,24 +164,54 @@ final class FollowingLine: UIStackView {
         }
     }
     
-    private static func makeFollowingConfig() -> UIButton.Configuration {
-        var config: UIButton.Configuration = .filled()
-        config.cornerStyle = .fixed
-        config.background.cornerRadius = Self.inset
-        config.attributedTitle = .init("Unfollow", attributes: .init([.font: Self.font]))
-        return config
-    }
-    
-    private static func makeNotFollowingConfig() -> UIButton.Configuration {
-        var config: UIButton.Configuration = .gray()
-        config.cornerStyle = .fixed
-        config.background.cornerRadius = Self.inset
-        config.attributedTitle = .init("Follow", attributes: .init([.font: Self.font, .foregroundColor: UIColor.label]))
-        return config
-    }
-    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
+final class FollowButton: UIButton {
+    
+    private let stackView: UIStackView = .init()
+    private let label: UILabel = .init()
+    private let loading = UIActivityIndicatorView()
+    
+    init() {
+        super.init(frame: .zero)
+        layer.cornerCurve = .continuous
+        layer.cornerRadius = FollowingLine.inset
+        backgroundColor = .SCBlue
+        
+        /// Set up `UIStackView`.
+        addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: FollowingLine.inset),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FollowingLine.inset),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: FollowingLine.inset),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -FollowingLine.inset),
+        ])
+        
+        stackView.addArrangedSubview(label)
+        label.text = "TEST"
+        
+        stackView.addArrangedSubview(loading)
+        loading.startAnimating()
+        
+        self.configuration = .filled()
+    }
+    
+    public func configure(following: Bool) -> Void {
+        if following {
+            configuration = .filled()
+            label.attributedText = .init(string: "Unfollow", attributes: .init([.font: FollowingLine.font]))
+        } else {
+            configuration = .gray()
+            label.attributedText = .init(string: "Follow", attributes: .init([.font: FollowingLine.font, .foregroundColor: UIColor.label]))
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
