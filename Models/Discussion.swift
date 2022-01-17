@@ -49,7 +49,7 @@ final class Discussion: Object, Identifiable {
     @Persisted
     private var tweetsBellValue: Bool = false
     public static let tweetsDidChangeKey = "tweetsBellValue"
-    public func notifyTweetsDidChange() -> Void {
+    public func notifyTweetsDidChange(_ token: Realm.TransactionToken) -> Void {
         tweetsBellValue.toggle()
         
         /// Wipe memoized storage.
@@ -150,7 +150,7 @@ extension Discussion {
         /// Update internal representation.
         _tweets = nil
         patchUpdatedAt(token)
-        notifyTweetsDidChange()
+        notifyTweetsDidChange(token)
     }
 }
 

@@ -24,7 +24,7 @@ extension Realm {
         conversation.insert(tweet)
         
         if let discussion = conversation.discussion.first {
-            discussion.notifyTweetsDidChange()
+            discussion.notifyTweetsDidChange(token)
         }
     }
 }
