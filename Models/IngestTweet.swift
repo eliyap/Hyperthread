@@ -10,7 +10,9 @@ import RealmSwift
 import Twig
 
 /**
- Accepts raw data from the Twitter v2 API, including `included` tweets,
+ Stores tweets *not* from the home timeline, such as in follow up fetches, or from User timelines.
+ Uses the set of followed user IDs to guess a "relevance" score.
+ Accepts raw data from the Twitter v2 API, including `included` tweets.
  */
 func ingestRaw(
     rawTweets: [RawHydratedTweet],
