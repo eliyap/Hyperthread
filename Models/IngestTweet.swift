@@ -109,7 +109,7 @@ func ingestRaw(
     }
 }
 
-internal func linkUnlinked() throws -> Set<Tweet.ID> {
+internal func linkConversations() throws -> Set<Tweet.ID> {
     var idsToFetch = Set<Tweet.ID>()
     
     let realm = try! Realm()

@@ -63,7 +63,7 @@ actor ReferenceCrawler {
             
             /// Perform linking.
             do {
-                unlinked = try linkUnlinked()
+                unlinked = try linkConversations()
             } catch {
                 ModelLog.error("Linking error: \(error)")
                 assert(false)
@@ -99,7 +99,7 @@ actor ReferenceCrawler {
                 
                 /// Perform linking.
                 do {
-                    unlinked = try linkUnlinked()
+                    unlinked = try linkConversations()
                 } catch {
                     ModelLog.error("Linking error: \(error)")
                     assert(false)
