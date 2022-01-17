@@ -233,3 +233,27 @@ final class ImageViewController: UIViewController {
         TableLog.debug("\(Self.description()) de-initialized", print: true, false)
     }
 }
+
+final class SymbolView: UIView {
+    private let imageView: UIImageView = .init()
+    
+    init() {
+        super.init(frame: .zero)
+        imageView.image = .init(systemName: "heart")
+
+        backgroundColor = .red
+    }
+    
+    func constrain(to view: UIView) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("No.")
+    }
+}
