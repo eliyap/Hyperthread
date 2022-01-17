@@ -191,6 +191,8 @@ enum DiscussionSection: Int {
 // MARK: - `UITableViewDelegate` Conformance
 extension MainTable {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        TableLog.debug("MainTable didSelectRowAt \(indexPath)", print: true, false)
+        
         guard let discussion = dds.itemIdentifier(for: indexPath) else {
             fatalError("Could not find discussion from row!")
         }

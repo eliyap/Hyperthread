@@ -65,52 +65,52 @@ extension Realm {
     }
 }
 
-/**
- Store tweets from Twitter's v1.1 home timeline endpoint.
- - Note: we do not need following user IDs to determine relevance, as we set _all_ home timeline tweets to the highest relevance.
- - Warning: Do not feed `include`d `Tweet`s!
-            These may be missing media keys, or be of a different `Relevance` than the main payload!
- */
-func ingestRawHomeTimelineTweets(
-    rawTweets: [RawHydratedTweet],
-    rawUsers: [RawUser],
-    rawMedia: [RawIncludeMedia]
-) throws -> Void {
-    /// Set all home timeline tweets to the highest relevance.
-    let relevance: Relevance = .discussion
-    
-    let realm = try! Realm()
-    
-    /// Insert all users.
-    try realm.write {
-        for rawUser in rawUsers {
-            /// Check `following` status in Realm, to avoid overwriting an existing value (if any).
-            /// If none, assume we do not follow the user.
-            let following = realm.user(id: rawUser.id)?.following ?? false
-            
-            let user = User(raw: rawUser, following: following)
-            realm.add(user, update: .modified)
-        }
-    }
-    
-    /// Insert Tweets into local database.
-    try realm.writeWithToken { token in
-        for rawTweet in rawTweets {
-            /// Check for existing`read`. If none, mark read if this is the first run.
-            let checkedRead = realm.tweet(id: rawTweet.id)?.read ?? UserDefaults.groupSuite.firstFetch
-            
-            /// - Note: **intentionally** overwrite existing `relevance`, which may have resulted
-            ///         from user timeline fetch.
-            let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: relevance, read: checkedRead)
-            realm.add(tweet, update: .modified)
-            
-            /// Safety check: we count on the user never being missing!
-            if realm.user(id: rawTweet.author_id) == nil {
-                fatalError("Could not find user with id \(rawTweet.author_id)")
+extension Realm {
+    /**
+     Store tweets from Twitter's v1.1 home timeline endpoint.
+     - Note: we do not need following user IDs to determine relevance, as we set _all_ home timeline tweets to the highest relevance.
+     - Warning: Do not feed `include`d `Tweet`s!
+                These may be missing media keys, or be of a different `Relevance` than the main payload!
+     */
+    func ingestRawHomeTimelineTweets(
+        rawTweets: [RawHydratedTweet],
+        rawUsers: [RawUser],
+        rawMedia: [RawIncludeMedia]
+    ) throws -> Void {
+        /// Set all home timeline tweets to the highest relevance.
+        let relevance: Relevance = .discussion
+        
+        /// Insert all users.
+        try write {
+            for rawUser in rawUsers {
+                /// Check `following` status in Realm, to avoid overwriting an existing value (if any).
+                /// If none, assume we do not follow the user.
+                let following = user(id: rawUser.id)?.following ?? false
+                
+                let user = User(raw: rawUser, following: following)
+                add(user, update: .modified)
             }
-            
-            /// Attach to conversation (create one if necessary).
-            realm.linkTweet(token, tweet: tweet)
+        }
+        
+        /// Insert Tweets into local database.
+        try writeWithToken { token in
+            for rawTweet in rawTweets {
+                /// Check for existing`read`. If none, mark read if this is the first run.
+                let checkedRead = tweet(id: rawTweet.id)?.read ?? UserDefaults.groupSuite.firstFetch
+                
+                /// - Note: **intentionally** overwrite existing `relevance`, which may have resulted
+                ///         from user timeline fetch.
+                let tweet: Tweet = Tweet(raw: rawTweet, rawMedia: rawMedia, relevance: relevance, read: checkedRead)
+                add(tweet, update: .modified)
+                
+                /// Safety check: we count on the user never being missing!
+                if user(id: rawTweet.author_id) == nil {
+                    fatalError("Could not find user with id \(rawTweet.author_id)")
+                }
+                
+                /// Attach to conversation (create one if necessary).
+                linkTweet(token, tweet: tweet)
+            }
         }
     }
 }
