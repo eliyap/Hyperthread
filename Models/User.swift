@@ -69,7 +69,6 @@ final class User: Object, Identifiable, UserIdentifiable {
         self.protected = raw.protected
         self.createdAt = raw.created_at
         self.following = following
-        
     }
     
     override required init() {
