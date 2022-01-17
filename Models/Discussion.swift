@@ -137,14 +137,6 @@ extension Discussion {
 }
 
 extension Discussion {
-    /// Update the last updated date.
-    /// - Note: must take place within a `Realm` write transaction.
-    func update(with date: Date?) -> Void {
-        if let date = date {
-            updatedAt = max(updatedAt, date)
-        }
-    }
-    
     /// - Note: must take place within a `Realm` write transaction.
     func patchUpdatedAt(_ token: Realm.TransactionToken) -> Void {
         updatedAt = tweets.map(\.createdAt).max()!
@@ -152,12 +144,12 @@ extension Discussion {
 }
 
 extension Discussion {
-    func insert(_ conversation: Conversation, _: Realm.TransactionToken, realm: Realm) -> Void {
+    func insert(_ conversation: Conversation, _ token: Realm.TransactionToken, realm: Realm) -> Void {
         conversations.append(conversation)
         
         /// Update internal representation.
         _tweets = nil
-        update(with: conversation.tweets.map(\.createdAt).max())
+        patchUpdatedAt(token)
         notifyTweetsDidChange()
     }
 }
