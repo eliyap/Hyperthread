@@ -36,17 +36,23 @@ func fetchTimelines(window: DateWindow? = nil) async -> Void {
 
 fileprivate func execute(_ request: TimelineRequest, credentials: OAuthCredentials, followingIDs: [User.ID]) async -> Void {
     let (tweets, included, users, media) = await fetchRawTimeline(request: request, credentials: credentials)
-    do {
-        NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
-        
-        /// Safe to insert `included`, as we make no assumptions around `Relevance`.
-        try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
-        
-        updateUserWindow(request: request, tweets: tweets)
-    } catch {
-        ModelLog.error("\(error)")
-        assert(false, "\(error)")
-    }
+    
+    /// Create synchronous context.
+    _ = {
+        do {
+            NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
+            
+            let realm = try! Realm()
+            
+            /// Safe to insert `included`, as we make no assumptions around `Relevance`.
+            try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
+            
+            updateUserWindow(request: request, tweets: tweets)
+        } catch {
+            ModelLog.error("\(error)")
+            assert(false, "\(error)")
+        }
+    }()
 }
 
 /// Update the `User`'s `DateWindow`, which records the time-period over which we fetched all their `Tweet`s.

@@ -209,10 +209,10 @@ actor ReferenceCrawler {
         /// Unbundle tuple.
         let (tweets, included, users, media) = rawData
         
-        /// Safe to insert `included`, as we make no assumptions around `Relevance`.
-        try ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
-        
         let realm = try! Realm()
+        
+        /// Safe to insert `included`, as we make no assumptions around `Relevance`.
+        try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
         try realm.updateDangling()
     }
     
