@@ -39,7 +39,6 @@
 		223BBF6327377E8900375530 /* Airport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF5F27377E8700375530 /* Airport.swift */; };
 		223BBF6427377E8900375530 /* AsyncMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6027377E8800375530 /* AsyncMap.swift */; };
 		223BBF6527377E8900375530 /* IngestTweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6127377E8800375530 /* IngestTweet.swift */; };
-		223BBF6627377E8900375530 /* LatchBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6227377E8900375530 /* LatchBuffer.swift */; };
 		223BBF6D27377EC300375530 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6827377EC000375530 /* Conversation.swift */; };
 		223BBF6E27377EC300375530 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6927377EC000375530 /* User.swift */; };
 		223BBF6F27377EC300375530 /* Discussion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6A27377EC000375530 /* Discussion.swift */; };
@@ -171,7 +170,6 @@
 		223BBF5F27377E8700375530 /* Airport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Airport.swift; sourceTree = "<group>"; };
 		223BBF6027377E8800375530 /* AsyncMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncMap.swift; sourceTree = "<group>"; };
 		223BBF6127377E8800375530 /* IngestTweet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngestTweet.swift; sourceTree = "<group>"; };
-		223BBF6227377E8900375530 /* LatchBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LatchBuffer.swift; sourceTree = "<group>"; };
 		223BBF6827377EC000375530 /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		223BBF6927377EC000375530 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		223BBF6A27377EC000375530 /* Discussion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Discussion.swift; sourceTree = "<group>"; };
@@ -509,7 +507,6 @@
 		22A9E9032771D76500C4EE99 /* Operators */ = {
 			isa = PBXGroup;
 			children = (
-				223BBF6227377E8900375530 /* LatchBuffer.swift */,
 				223BBF6027377E8800375530 /* AsyncMap.swift */,
 				22680A83276AA651008827F8 /* Sealed.swift */,
 			);
@@ -828,7 +825,6 @@
 				22D2572E27883A56005FC3D8 /* ScrollPosition.swift in Sources */,
 				228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */,
 				223BBF7127377EC300375530 /* Query.swift in Sources */,
-				223BBF6627377E8900375530 /* LatchBuffer.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
 				22FA26B52795C77A00DD8EE4 /* Realm.TransactionToken.swift in Sources */,
