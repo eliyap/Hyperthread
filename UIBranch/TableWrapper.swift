@@ -21,9 +21,11 @@ final class TableWrapper: UIViewController {
         view.addSubview(topBar)
         topBar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+            /// Safe area guarantees this sits below the navigation bar.
             topBar.safeAreaLayoutGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            topBar.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            topBar.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            /// Non-safe-area lets this extend into the notch / home indicator area.
+            topBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             topBar.heightAnchor.constraint(equalToConstant: 44)
         ])
         topBar.backgroundColor = .red
