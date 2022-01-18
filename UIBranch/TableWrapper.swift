@@ -7,13 +7,16 @@
 
 import Foundation
 import UIKit
+import Combine
 
 final class TableWrapper: UIViewController {
     
     private let wrapped: MainTable
-    private let topBar: TableTopBar = .init()
+    private let topBar: TableTopBar
+    private let loadingConduit: PassthroughSubject<Bool, Never> = .init()
     
     init(splitDelegate: SplitDelegate) {
+        topBar = .init(loadingConduit: loadingConduit)
         wrapped = .init(splitDelegate: splitDelegate)
         super.init(nibName: nil, bundle: nil)
         adopt(wrapped)

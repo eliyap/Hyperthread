@@ -7,34 +7,39 @@
 
 import Foundation
 import UIKit
+import Combine
 
 final class TableTopBar: UIVisualEffectView {
     
-    private let stack: UIStackView = .init()
+    private let stackView: UIStackView = .init()
     private let label: UILabel = .init()
-    private let loading: UIActivityIndicatorView = .init()
-    private let icon: UIImageView = .init()
+    private let loadingView: UIActivityIndicatorView = .init()
+    private let iconView: UIImageView = .init()
     
-    init() {
+    private var observers: Set<AnyCancellable> = []
+    
+    init(loadingConduit: PassthroughSubject<Bool, Never>) {
         super.init(effect: UIBlurEffect(style: .systemUltraThinMaterial))
         
-        contentView.addSubview(stack)
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.distribution = .equalSpacing
+        contentView.addSubview(stackView)
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
         
-        stack.addArrangedSubview(icon)
-        stack.addArrangedSubview(label)
-        stack.addArrangedSubview(loading)
+        stackView.addArrangedSubview(iconView)
+        stackView.addArrangedSubview(label)
+        stackView.addArrangedSubview(loadingView)
 
-        icon.image = UIImage(systemName: "arrow.down.circle.fill")
-        icon.preferredSymbolConfiguration = .init(textStyle: .body)
+        iconView.preferredSymbolConfiguration = .init(textStyle: .body)
             .applying(UIImage.SymbolConfiguration(paletteColors: [.label]))
-        icon.contentMode = .scaleAspectFit
+        iconView.contentMode = .scaleAspectFit
         
-        label.text = "Loading..."
-        loading.hidesWhenStopped = true
-        loading.startAnimating()
+        loadingView.hidesWhenStopped = true
+        loadingView.startAnimating()
+        
+        loadingConduit
+            .sink { [weak self] in self?.setState(isLoading: $0) }
+            .store(in: &observers)
     }
     
     public func constrain(to view: UIView) -> Void {
@@ -47,17 +52,33 @@ final class TableTopBar: UIVisualEffectView {
             self.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
         
-        stack.translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor, constant: CardTeaserCell.borderInset),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -CardTeaserCell.borderInset),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: CardTeaserCell.borderInset),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -CardTeaserCell.borderInset),
             /// Keep stack contents away from notch / home indicator in iPhone X portrait mode.
-            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: CardTeaserCell.borderInset),
-            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -CardTeaserCell.borderInset),
+            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: CardTeaserCell.borderInset),
+            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -CardTeaserCell.borderInset),
         ])
+    }
+    
+    public func setState(isLoading: Bool) -> Void {
+        if isLoading {
+            iconView.image = UIImage(systemName: "arrow.down.circle.fill")
+            label.text = "Loading..."
+            loadingView.startAnimating()
+        } else {
+            iconView.image = UIImage(systemName: "checkmark.circle.fill")
+            label.text = "Done."
+            loadingView.stopAnimating()
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        observers.forEach { $0.cancel() }
     }
 }
