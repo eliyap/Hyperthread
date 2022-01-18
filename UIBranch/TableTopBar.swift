@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class TableTopBar: UIView {
+final class TableTopBar: UIVisualEffectView {
     
     private let stack: UIStackView = .init()
     private let label: UILabel = .init()
@@ -16,17 +16,22 @@ final class TableTopBar: UIView {
     private let icon: UIImageView = .init()
     
     init() {
-        super.init(frame: .zero)
+        super.init(effect: UIBlurEffect(style: .systemUltraThinMaterial))
         
-        addSubview(stack)
+        contentView.addSubview(stack)
         stack.axis = .horizontal
         stack.alignment = .center
+        stack.distribution = .equalSpacing
         
         stack.addArrangedSubview(icon)
         stack.addArrangedSubview(label)
         stack.addArrangedSubview(loading)
 
-        icon.image = UIImage(systemName: "chevron.left")
+        icon.image = UIImage(systemName: "arrow.down.circle.fill")
+        icon.preferredSymbolConfiguration = .init(textStyle: .body)
+            .applying(UIImage.SymbolConfiguration(paletteColors: [.label]))
+        icon.contentMode = .scaleAspectFit
+        
         label.text = "Loading..."
         loading.hidesWhenStopped = true
         loading.startAnimating()
@@ -50,7 +55,6 @@ final class TableTopBar: UIView {
             stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: CardTeaserCell.borderInset),
             stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -CardTeaserCell.borderInset),
         ])
-
     }
     
     required init?(coder: NSCoder) {

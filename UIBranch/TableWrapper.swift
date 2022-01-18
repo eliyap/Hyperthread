@@ -19,7 +19,6 @@ final class TableWrapper: UIViewController {
         adopt(wrapped)
         
         view.addSubview(topBar)
-        topBar.backgroundColor = .red
         topBar.constrain(to: view)
         view.bringSubviewToFront(topBar)
     }
