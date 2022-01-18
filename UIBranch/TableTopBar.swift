@@ -9,6 +9,20 @@ import Foundation
 import UIKit
 import Combine
 
+internal struct UserMessage {
+    
+    enum Category {
+        case loading
+        case loaded
+        case userError(UserError)
+        case otherError(Error)
+    }
+    let category: Category
+    
+    /// Whether this notification should stick around indefinitely until replaced.
+    let persistent: Bool
+}
+
 final class TableTopBar: UIVisualEffectView {
     
     private let stackView: UIStackView = .init()
