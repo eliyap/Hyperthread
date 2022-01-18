@@ -86,6 +86,7 @@ final class MainTable: UITableViewController {
         
         /// DEBUG
         #if DEBUG
+        #warning("broken by wrapper UIViewController!")
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(makeFake)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
