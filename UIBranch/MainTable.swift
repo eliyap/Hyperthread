@@ -90,8 +90,7 @@ final class MainTable: UITableViewController {
         #if DEBUG
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(makeFake)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),        
         ]
         #endif
         
@@ -110,11 +109,6 @@ final class MainTable: UITableViewController {
         Task {
             await dds.fetchNewTweets()
         }
-    }
-    
-    @objc
-    func debugMethod3() {
-        NOT_IMPLEMENTED()
     }
     
     required init?(coder: NSCoder) {
