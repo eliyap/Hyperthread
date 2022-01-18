@@ -27,8 +27,6 @@ final class MainTable: UITableViewController {
     
     private var arrowView: ArrowRefreshView? = nil
     
-    private let airport: Airport = .init()
-    
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
@@ -90,7 +88,7 @@ final class MainTable: UITableViewController {
         #if DEBUG
         navigationItem.leftBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(makeFake)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),        
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
         ]
         #endif
         
