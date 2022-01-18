@@ -105,6 +105,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     fileprivate func setContents(to results: Results<Discussion>, animated: Bool) -> Void {
         var snapshot = Snapshot()
         snapshot.appendSections([.Header, .Main])
+        snapshot.appendItems([.placeholder], toSection: .Header)
         snapshot.appendItems(Array(results), toSection: .Main)
         TableLog.debug("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.", print: false)
         apply(snapshot, animatingDifferences: animated)
@@ -193,4 +194,9 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         }
     }
     #endif
+}
+
+fileprivate extension Discussion {
+    /// - Warning: this exists as a workaround for `UITableViewDiffableDataSource`. Do _not_ use anywhere else!
+    static let placeholder: Discussion = .init()
 }
