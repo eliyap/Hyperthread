@@ -96,6 +96,7 @@
 		22D2573127883F75005FC3D8 /* ReferenceCrawler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */; };
 		22D257342788459D005FC3D8 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 22D257332788459D005FC3D8 /* Algorithms */; };
 		22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */; };
+		22F05E6227977EB000AC4A5D /* MainHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F05E6127977EB000AC4A5D /* MainHeaderCell.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
 		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
 		22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F24640274DC20200AE17AD /* CanonicalString.swift */; };
@@ -226,6 +227,7 @@
 		22D2572D27883A56005FC3D8 /* ScrollPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollPosition.swift; sourceTree = "<group>"; };
 		22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceCrawler.swift; sourceTree = "<group>"; };
 		22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncHomeTimeline.swift; sourceTree = "<group>"; };
+		22F05E6127977EB000AC4A5D /* MainHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHeaderCell.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
 		22F24640274DC20200AE17AD /* CanonicalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CanonicalString.swift; path = /Users/SAM/Documents/UIBranch/Models/CanonicalString.swift; sourceTree = "<absolute>"; };
@@ -307,6 +309,7 @@
 				222161F12741A8EA00220F0C /* CardHeaderCell.swift */,
 				220101D327545B94005C1385 /* ViewControllerDeque.swift */,
 				22760A42274A927A00F28F0A /* CardTeaserCell.swift */,
+				22F05E6127977EB000AC4A5D /* MainHeaderCell.swift */,
 				224F88D1275E5B8600085678 /* Album */,
 				22760A4A274AE63000F28F0A /* SummaryLine.swift */,
 				22760A44274AA6ED00F28F0A /* CardBackground.swift */,
@@ -848,6 +851,7 @@
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
 				22193DAF27840477005A7708 /* URLScheme.swift in Sources */,
 				221A2994275D943E00C283FE /* RemoveDuplicates.swift in Sources */,
+				22F05E6227977EB000AC4A5D /* MainHeaderCell.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				221A2992275D680900C283FE /* AlbumController.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
