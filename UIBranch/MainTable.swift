@@ -184,6 +184,13 @@ final class MainTable: UITableViewController {
             return
         }
         TableLog.debug("Now scrolling to \(tablePos).", print: true, true)
+        
+        /// Source: https://stackoverflow.com/questions/43614653/how-to-check-if-indexpath-is-valid
+        guard path.section < numberOfSections(in: tableView) && path.row < tableView.numberOfRows(inSection: path.section) else {
+            TableLog.error("Attempted to load invalid index path \(path)")
+            return
+        }
+        
         tableView.scrollToRow(at: path, at: .top, animated: false)
         tableView.contentOffset.y -= tablePos.offset
     }
