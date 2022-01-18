@@ -58,7 +58,7 @@ final class MainTable: UITableViewController {
         /// Refresh timeline at app startup.
         #if !DEBUG /// Disabled for debugging.
         Task {
-            await DDS.fetchNewTweets()
+            await dds.fetchNewTweets()
         }
         #endif
         
