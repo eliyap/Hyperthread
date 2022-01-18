@@ -33,6 +33,8 @@ final class CardBackground: UIButton {
         
         /// Hide by default.
         triangleView.isHidden = true
+        
+        styleDefault()
     }
     
     public func constrain(to guide: UILayoutGuide) -> Void {
@@ -56,6 +58,18 @@ final class CardBackground: UIButton {
         case .read:
             triangleView.isHidden = true
         }
+    }
+    
+    public func styleSelected() -> Void {
+        backgroundColor = .cardSelected
+        layer.borderWidth = 0
+        layer.borderColor = UIColor.secondarySystemFill.cgColor
+    }
+    
+    public func styleDefault() -> Void {
+        backgroundColor = .card
+        layer.borderWidth = 1.00
+        layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
     
     override func layoutSubviews() {

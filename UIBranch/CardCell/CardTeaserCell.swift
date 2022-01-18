@@ -47,7 +47,7 @@ final class CardTeaserCell: ControlledCell {
         controller.view.addSubview(cardBackground)
         cardBackground.constrain(to: safeAreaLayoutGuide)
 
-        /// Configure Main Stack View
+        /// Configure Main Stack View.
         controller.view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
@@ -192,9 +192,7 @@ final class CardTeaserCell: ControlledCell {
         cardBackground.layer.shadowRadius = shadowSize
         cardBackground.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
         
-        cardBackground.backgroundColor = .cardSelected
-        cardBackground.layer.borderWidth = 0
-        cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        cardBackground.styleSelected()
     }
     
     public func resetStyle() -> Void {
@@ -205,9 +203,7 @@ final class CardTeaserCell: ControlledCell {
         cardBackground.layer.shadowRadius = 0
         cardBackground.layer.shadowOffset = CGSize.zero
         
-        cardBackground.backgroundColor = .card
-        cardBackground.layer.borderWidth = 1.00
-        cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        cardBackground.styleDefault()
     }
     
     required init?(coder: NSCoder) {
