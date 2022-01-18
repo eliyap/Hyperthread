@@ -27,7 +27,7 @@ final class MainTable: UITableViewController {
     
     private var arrowView: ArrowRefreshView? = nil
     
-    init(splitDelegate: SplitDelegate) {
+    init(splitDelegate: SplitDelegate, loadingConduit: PassthroughSubject<Bool, Never>) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
         
@@ -36,7 +36,8 @@ final class MainTable: UITableViewController {
             realm: realm,
             tableView: tableView,
             cellProvider: cellProvider,
-            restoreScroll: restoreScroll
+            restoreScroll: restoreScroll,
+            loadingConduit: loadingConduit
         )
         
         /// Immediately defuse unwrapped nil `mrd`.

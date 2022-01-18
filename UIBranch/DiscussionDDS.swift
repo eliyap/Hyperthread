@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import Combine
 
 final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion> {
     private let realm: Realm
@@ -26,13 +27,23 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     /// Most recent date of an old timeline fetch. Goal is to prevent hammering the API. This is a hack workaround, and should be replaced.
     private var lastOldFetch: Date = .distantPast
     
-    init(realm: Realm, tableView: UITableView, cellProvider: @escaping CellProvider, restoreScroll: @escaping () -> ()) {
+    let loadingConduit: PassthroughSubject<Bool, Never>
+    
+    init(
+        realm: Realm,
+        tableView: UITableView,
+        cellProvider: @escaping CellProvider,
+        restoreScroll: @escaping () -> (),
+        loadingConduit: PassthroughSubject<Bool, Never>
+    ) {
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
             .filter(Discussion.minRelevancePredicate)
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.restoreScroll = restoreScroll
+        self.loadingConduit = loadingConduit
+        
         super.init(tableView: tableView, cellProvider: cellProvider)
         /// Immediately register token.
         token = results.observe { [weak self] (changes: RealmCollectionChange) in

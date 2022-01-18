@@ -17,7 +17,7 @@ final class TableWrapper: UIViewController {
     
     init(splitDelegate: SplitDelegate) {
         topBar = .init(loadingConduit: loadingConduit)
-        wrapped = .init(splitDelegate: splitDelegate)
+        wrapped = .init(splitDelegate: splitDelegate, loadingConduit: loadingConduit)
         super.init(nibName: nil, bundle: nil)
         adopt(wrapped)
         
