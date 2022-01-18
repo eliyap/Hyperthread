@@ -190,8 +190,6 @@ enum DiscussionSection: Int {
     case Main = 0
 }
 
-
-
 // MARK: - `UITableViewDelegate` Conformance
 extension MainTable {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
