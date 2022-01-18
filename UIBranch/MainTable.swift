@@ -89,7 +89,7 @@ final class MainTable: UITableViewController {
         /// DEBUG
         #if DEBUG
         navigationItem.leftBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(makeFake)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
         ]
@@ -100,7 +100,7 @@ final class MainTable: UITableViewController {
     
     #if DEBUG
     @objc
-    func debugMethod() {
+    func makeFake() {
         dds.fetchFakeTweet()
     }
     #endif
