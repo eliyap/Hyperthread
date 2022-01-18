@@ -22,8 +22,13 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     /** `UITableViewDataSourcePrefetching` support. **/
     public var numDiscussions: Int? = nil /// Number of discussions in the table.
     private(set) var isFetching = false   /// Whether a fetch is currently occurring. Used to prevent duplicated fetches.
+    {
+        didSet {
+            loadingConduit.send(isFetching)
+        }
+    }
     
-    #warning("Rework this hack!")
+#warning("Rework this hack!")
     /// Most recent date of an old timeline fetch. Goal is to prevent hammering the API. This is a hack workaround, and should be replaced.
     private var lastOldFetch: Date = .distantPast
     
@@ -157,20 +162,18 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         isFetching = true
         defer { isFetching = false }
         
-        Task {
-            do {
-                try await homeTimelineFetch(TimelineNewFetcher.self)
-                await ReferenceCrawler.shared.performFollowUp()
-                
-                /// Record fetch completion.
-                UserDefaults.groupSuite.firstFetch = false
-            } catch {
-                NetLog.error("\(error)")
-                assert(false)
+        do {
+            try await homeTimelineFetch(TimelineNewFetcher.self)
+            await ReferenceCrawler.shared.performFollowUp()
+            
+            /// Record fetch completion.
+            UserDefaults.groupSuite.firstFetch = false
+        } catch {
+            NetLog.error("\(error)")
+            assert(false)
 #warning("Perform new refresh animation here.")
-            }
-            print("Silent Fetch Completed!")
         }
+        print("Silent Fetch Completed!")
     }
     
     #if DEBUG

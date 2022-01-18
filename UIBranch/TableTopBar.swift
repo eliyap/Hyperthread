@@ -35,7 +35,6 @@ final class TableTopBar: UIVisualEffectView {
         iconView.contentMode = .scaleAspectFit
         
         loadingView.hidesWhenStopped = true
-        loadingView.startAnimating()
         
         loadingConduit
             .sink { [weak self] in self?.setState(isLoading: $0) }
@@ -63,14 +62,17 @@ final class TableTopBar: UIVisualEffectView {
     }
     
     public func setState(isLoading: Bool) -> Void {
-        if isLoading {
-            iconView.image = UIImage(systemName: "arrow.down.circle.fill")
-            label.text = "Loading..."
-            loadingView.startAnimating()
-        } else {
-            iconView.image = UIImage(systemName: "checkmark.circle.fill")
-            label.text = "Done."
-            loadingView.stopAnimating()
+        /// UI code **must** run on the main thread!
+        DispatchQueue.main.async { [weak self] in
+            if isLoading {
+                self?.iconView.image = UIImage(systemName: "arrow.down.circle.fill")
+                self?.label.text = "Loading..."
+                self?.loadingView.startAnimating()
+            } else {
+                self?.iconView.image = UIImage(systemName: "checkmark.circle.fill")
+                self?.label.text = "Done."
+                self?.loadingView.stopAnimating()
+            }
         }
     }
     
