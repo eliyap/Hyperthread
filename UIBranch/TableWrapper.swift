@@ -24,7 +24,20 @@ final class TableWrapper: UIViewController {
         view.addSubview(topBar)
         topBar.constrain(to: view)
         view.bringSubviewToFront(topBar)
+        
+        #if DEBUG
+        navigationItem.leftBarButtonItems = [
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod)),
+        ]
+        #endif
     }
+    
+    #if DEBUG
+    @objc
+    func debugMethod() {
+        
+    }
+    #endif
     
     required init?(coder: NSCoder) {
         fatalError("No.")
