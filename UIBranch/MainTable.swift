@@ -180,8 +180,10 @@ final class MainTable: UITableViewController {
 }
 
 enum DiscussionSection: Int {
+    case Header = 0
+    
     /// The only section, for now.
-    case Main = 0
+    case Main = 1
 }
 
 // MARK: - `UITableViewDelegate` Conformance

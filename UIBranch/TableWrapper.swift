@@ -35,7 +35,7 @@ final class TableWrapper: UIViewController {
     #if DEBUG
     @objc
     func debugMethod() {
-        
+        loadingConduit.send(true)
     }
     #endif
     
