@@ -48,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 func setOpaqueNavbar() -> Void {
     let appearance = UINavigationBarAppearance()
     appearance.configureWithOpaqueBackground()
+    appearance.backgroundColor = .secondarySystemBackground
     UINavigationBar.appearance().standardAppearance = appearance
     UINavigationBar.appearance().scrollEdgeAppearance = appearance
 }

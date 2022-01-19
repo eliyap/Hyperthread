@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Combine
 
-typealias UserMessageConduit = PassthroughSubject<UserMessage, Never>
+typealias UserMessageConduit = PassthroughSubject<UserMessage?, Never>
 
 internal struct UserMessage {
     
@@ -33,6 +33,7 @@ final class TableTopBar: UIVisualEffectView {
     private let iconView: UIImageView = .init()
     
     private var observers: Set<AnyCancellable> = []
+    private var heightConstraint: NSLayoutConstraint? = nil
     
     init(loadingConduit: UserMessageConduit) {
         super.init(effect: UIBlurEffect(style: .systemMaterial))
@@ -52,6 +53,11 @@ final class TableTopBar: UIVisualEffectView {
         
         loadingView.hidesWhenStopped = true
         
+        heightConstraint = contentView.heightAnchor.constraint(equalToConstant: .zero)
+        heightConstraint?.isActive = true
+        
+        label.setContentHuggingPriority(.required, for: .vertical)
+        
         loadingConduit
             .sink { [weak self] in self?.setState($0) }
             .store(in: &observers)
@@ -68,29 +74,53 @@ final class TableTopBar: UIVisualEffectView {
         ])
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let topMargin = stackView.topAnchor.constraint(lessThanOrEqualTo: topAnchor, constant: CardTeaserCell.borderInset)
+        topMargin.priority = .defaultHigh
+        topMargin.isActive = true
+        let bottomMargin = stackView.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: -CardTeaserCell.borderInset)
+        bottomMargin.priority = .defaultHigh
+        bottomMargin.isActive = true
+        
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: CardTeaserCell.borderInset),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -CardTeaserCell.borderInset),
+            stackView.topAnchor.constraint(lessThanOrEqualTo: topAnchor, constant: CardTeaserCell.borderInset),
+            stackView.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: -CardTeaserCell.borderInset),
             /// Keep stack contents away from notch / home indicator in iPhone X portrait mode.
             stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: CardTeaserCell.borderInset),
             stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -CardTeaserCell.borderInset),
+            /// Pin to label.
+            label.topAnchor.constraint(equalTo: stackView.topAnchor),
+            label.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
         ])
     }
     
-    public func setState(_ message: UserMessage) -> Void {
+    public func setState(_ message: UserMessage?) -> Void {
         /// UI code **must** run on the main thread!
         DispatchQueue.main.async { [weak self] in
+            guard let self = self else {
+                TableLog.error("Nil self in \(Self.description())")
+                assert(false)
+                return
+            }
+            
+            guard let message = message else {
+                replace(object: self, on: \TableTopBar.heightConstraint, with: self.contentView.heightAnchor.constraint(equalToConstant: .zero))
+                return
+            }
+            
+            replace(object: self, on: \TableTopBar.heightConstraint, with: nil)
+            
             switch message.category {
             
             case .loading:
-                self?.iconView.image = UIImage(systemName: "arrow.down.circle.fill")
-                self?.label.text = "Loading..."
-                self?.loadingView.startAnimating()
+                self.iconView.image = UIImage(systemName: "arrow.down.circle.fill")
+                self.label.text = "Loading..."
+                self.loadingView.startAnimating()
             
             case .loaded:
-                self?.iconView.image = UIImage(systemName: "checkmark.circle.fill")
-                self?.label.text = "Done."
-                self?.loadingView.stopAnimating()
+                self.iconView.image = UIImage(systemName: "checkmark.circle.fill")
+                self.label.text = "Done."
+                self.loadingView.stopAnimating()
             
             default:
                 #warning("TODO")
