@@ -13,7 +13,7 @@ final class TableWrapper: UIViewController {
     
     private let wrapped: MainTable
     private let topBar: TableTopBar
-    private let loadingConduit: PassthroughSubject<Bool, Never> = .init()
+    private let loadingConduit: UserMessageConduit = .init()
     
     init(splitDelegate: SplitDelegate) {
         topBar = .init(loadingConduit: loadingConduit)
@@ -35,7 +35,7 @@ final class TableWrapper: UIViewController {
     #if DEBUG
     @objc
     func debugMethod() {
-        loadingConduit.send(true)
+        loadingConduit.send(.init(category: .loading, persistent: true))
     }
     #endif
     

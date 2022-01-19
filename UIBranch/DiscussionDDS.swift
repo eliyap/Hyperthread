@@ -24,7 +24,12 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     private(set) var isFetching = false   /// Whether a fetch is currently occurring. Used to prevent duplicated fetches.
     {
         didSet {
-            loadingConduit.send(isFetching)
+            if isFetching {
+                loadingConduit.send(.init(category: .loading, persistent: true))
+            } else {
+                loadingConduit.send(.init(category: .loaded, persistent: false))
+            }
+            
         }
     }
     
@@ -32,14 +37,14 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     /// Most recent date of an old timeline fetch. Goal is to prevent hammering the API. This is a hack workaround, and should be replaced.
     private var lastOldFetch: Date = .distantPast
     
-    let loadingConduit: PassthroughSubject<Bool, Never>
+    let loadingConduit: UserMessageConduit
     
     init(
         realm: Realm,
         tableView: UITableView,
         cellProvider: @escaping CellProvider,
         restoreScroll: @escaping () -> (),
-        loadingConduit: PassthroughSubject<Bool, Never>
+        loadingConduit: UserMessageConduit
     ) {
         self.realm = realm
         

@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 import Combine
 
+typealias UserMessageConduit = PassthroughSubject<UserMessage, Never>
+
 internal struct UserMessage {
     
     enum Category {
@@ -32,8 +34,8 @@ final class TableTopBar: UIVisualEffectView {
     
     private var observers: Set<AnyCancellable> = []
     
-    init(loadingConduit: PassthroughSubject<Bool, Never>) {
-        super.init(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+    init(loadingConduit: UserMessageConduit) {
+        super.init(effect: UIBlurEffect(style: .systemMaterial))
         
         contentView.addSubview(stackView)
         stackView.axis = .horizontal
@@ -51,7 +53,7 @@ final class TableTopBar: UIVisualEffectView {
         loadingView.hidesWhenStopped = true
         
         loadingConduit
-            .sink { [weak self] in self?.setState(isLoading: $0) }
+            .sink { [weak self] in self?.setState($0) }
             .store(in: &observers)
     }
     
@@ -75,17 +77,21 @@ final class TableTopBar: UIVisualEffectView {
         ])
     }
     
-    public func setState(isLoading: Bool) -> Void {
+    public func setState(_ message: UserMessage) -> Void {
         /// UI code **must** run on the main thread!
         DispatchQueue.main.async { [weak self] in
-            if isLoading {
+            switch message.category {
+            case .loading:
                 self?.iconView.image = UIImage(systemName: "arrow.down.circle.fill")
                 self?.label.text = "Loading..."
                 self?.loadingView.startAnimating()
-            } else {
+            case .loaded:
                 self?.iconView.image = UIImage(systemName: "checkmark.circle.fill")
                 self?.label.text = "Done."
                 self?.loadingView.stopAnimating()
+            default:
+                #warning("TODO")
+                break
             }
         }
     }

@@ -27,7 +27,7 @@ final class MainTable: UITableViewController {
     
     private var arrowView: ArrowRefreshView? = nil
     
-    init(splitDelegate: SplitDelegate, loadingConduit: PassthroughSubject<Bool, Never>) {
+    init(splitDelegate: SplitDelegate, loadingConduit: UserMessageConduit) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
         
