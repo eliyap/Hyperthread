@@ -81,14 +81,17 @@ final class TableTopBar: UIVisualEffectView {
         /// UI code **must** run on the main thread!
         DispatchQueue.main.async { [weak self] in
             switch message.category {
+            
             case .loading:
                 self?.iconView.image = UIImage(systemName: "arrow.down.circle.fill")
                 self?.label.text = "Loading..."
                 self?.loadingView.startAnimating()
+            
             case .loaded:
                 self?.iconView.image = UIImage(systemName: "checkmark.circle.fill")
                 self?.label.text = "Done."
                 self?.loadingView.stopAnimating()
+            
             default:
                 #warning("TODO")
                 break
