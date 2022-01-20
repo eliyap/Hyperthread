@@ -30,7 +30,6 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
             } else {
                 loadingConduit.send(.init(category: .loaded, duration: .interval(1.0)))
             }
-            
         }
     }
     
@@ -158,6 +157,8 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         do {
             try await homeTimelineFetch(TimelineOldFetcher.self)
             await ReferenceCrawler.shared.performFollowUp()
+        } catch UserError.offline {
+            loadingConduit.send(.init(category: .offline))
         } catch {
             NetLog.error("\(error)")
             assert(false)

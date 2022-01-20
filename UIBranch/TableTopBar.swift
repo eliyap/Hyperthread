@@ -16,6 +16,7 @@ internal struct UserMessage {
     enum Category {
         case loading
         case loaded
+        case offline
         case userError(UserError)
         case otherError(Error)
     }
@@ -28,6 +29,33 @@ internal struct UserMessage {
     
     /// Whether this notification should stick around indefinitely until replaced.
     let duration: Duration
+    
+    init(category: Category, duration: Duration) {
+        self.category = category
+        self.duration = duration
+    }
+
+    init(category: Category) {
+        self.init(category: category, duration: category.defaultDuration)
+    }
+}
+
+extension UserMessage.Category {
+    /// Recommended time interval for each type of message.
+    var defaultDuration: UserMessage.Duration{
+        switch self {
+        case .loading:
+            return .indefinite
+        case .loaded:
+            return .interval(1.0)
+        case .offline:
+            return .interval(3.0)
+        case .userError:
+            return .interval(3.0)
+        case .otherError:
+            return .interval(3.0)
+        }
+    }
 }
 
 final class TableTopBar: UIVisualEffectView {
