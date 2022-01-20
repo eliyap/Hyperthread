@@ -22,16 +22,6 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     /** `UITableViewDataSourcePrefetching` support. **/
     public var numDiscussions: Int? = nil /// Number of discussions in the table.
     private(set) var isFetching = false   /// Whether a fetch is currently occurring. Used to prevent duplicated fetches.
-    {
-        /// Relay `isFetching` status to user visible bar display.
-        didSet {
-            if isFetching {
-                loadingConduit.send(.init(category: .loading, duration: .indefinite))
-            } else {
-                loadingConduit.send(.init(category: .loaded, duration: .interval(1.0)))
-            }
-        }
-    }
     
 #warning("Rework this hack!")
     /// Most recent date of an old timeline fetch. Goal is to prevent hammering the API. This is a hack workaround, and should be replaced.
@@ -152,14 +142,17 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         
         TableLog.debug("Prefetching items...", print: true, true)
         
+        loadingConduit.send(.init(category: .loading))
         do {
             try await homeTimelineFetch(TimelineOldFetcher.self)
             await ReferenceCrawler.shared.performFollowUp()
+            loadingConduit.send(.init(category: .loaded))
         } catch UserError.offline {
             loadingConduit.send(.init(category: .offline))
         } catch {
             NetLog.error("\(error)")
             assert(false)
+            loadingConduit.send(.init(category: .otherError(error)))
         }
     }
     
@@ -169,9 +162,12 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         isFetching = true
         defer { isFetching = false }
         
+        loadingConduit.send(.init(category: .loading))
         do {
             try await homeTimelineFetch(TimelineNewFetcher.self)
             await ReferenceCrawler.shared.performFollowUp()
+            
+            loadingConduit.send(.init(category: .loaded))
             
             /// Record fetch completion.
             UserDefaults.groupSuite.firstFetch = false
@@ -180,6 +176,7 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         } catch {
             NetLog.error("\(error)")
             assert(false)
+            loadingConduit.send(.init(category: .otherError(error)))
         }
     }
     
