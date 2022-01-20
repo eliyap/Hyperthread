@@ -9,55 +9,7 @@ import Foundation
 import UIKit
 import Combine
 
-typealias UserMessageConduit = PassthroughSubject<UserMessage?, Never>
-
-internal struct UserMessage {
-    
-    enum Category {
-        case loading
-        case loaded
-        case offline
-        case userError(UserError)
-        case otherError(Error)
-    }
-    let category: Category
-    
-    enum Duration {
-        case indefinite
-        case interval(TimeInterval)
-    }
-    
-    /// Whether this notification should stick around indefinitely until replaced.
-    let duration: Duration
-    
-    init(category: Category, duration: Duration) {
-        self.category = category
-        self.duration = duration
-    }
-
-    init(category: Category) {
-        self.init(category: category, duration: category.defaultDuration)
-    }
-}
-
-extension UserMessage.Category {
-    /// Recommended time interval for each type of message.
-    var defaultDuration: UserMessage.Duration{
-        switch self {
-        case .loading:
-            return .indefinite
-        case .loaded:
-            return .interval(1.0)
-        case .offline:
-            return .interval(3.0)
-        case .userError:
-            return .interval(3.0)
-        case .otherError:
-            return .interval(3.0)
-        }
-    }
-}
-
+/// A drop down bar that displays `UserMessage`s.
 final class TableTopBar: UIVisualEffectView {
 
     private let barContents: BarContents = .init()
@@ -65,6 +17,8 @@ final class TableTopBar: UIVisualEffectView {
     private var observers: Set<AnyCancellable> = []
     private var heightConstraint: NSLayoutConstraint? = nil
     private let loadingConduit: UserMessageConduit
+    
+    private static let AnimationDuration: TimeInterval = 0.2
 
     init(loadingConduit: UserMessageConduit) {
         self.loadingConduit = loadingConduit
@@ -123,7 +77,7 @@ final class TableTopBar: UIVisualEffectView {
                 assert(false)
                 return
             }
-            UIView.transition(with: self.barContents, duration: 0.25, options: .transitionCrossDissolve) {
+            UIView.transition(with: self.barContents, duration: Self.AnimationDuration, options: .transitionCrossDissolve) {
                 self.barContents.display(message)
             }
         }
