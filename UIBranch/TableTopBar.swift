@@ -124,15 +124,7 @@ final class TableTopBar: UIVisualEffectView {
                 return
             }
             UIView.transition(with: self.barContents, duration: 0.25, options: .transitionCrossDissolve) {
-                if let message = message {
-                    self.barContents.isHidden = false
-                    self.barContents.configure(category: message.category)
-                    let inset = CardTeaserCell.borderInset
-                    self.barContents.layoutMargins = .init(top: inset, left: inset, bottom: inset, right: inset)
-                } else {
-                    self.barContents.isHidden = true
-                    self.barContents.layoutMargins = .zero
-                }
+                self.barContents.display(message)
             }
         }
     }
@@ -184,7 +176,22 @@ fileprivate final class BarContents: UIStackView {
         loadingView.hidesWhenStopped = true
     }
     
-    public func configure(category: UserMessage.Category) -> Void {
+    /// Display the user message.
+    public func display(_ message: UserMessage?) -> Void {
+        if let message = message {
+            isHidden = false
+            configure(category: message.category)
+            layoutMargins = .init(top: inset, left: inset, bottom: inset, right: inset)
+        } else {
+            isHidden = true
+            layoutMargins = .zero
+            
+            /// Stop activity indicator in case it's still going.
+            loadingView.stopAnimating()
+        }
+    }
+    
+    private func configure(category: UserMessage.Category) -> Void {
         switch category {
 
         case .loading:
@@ -194,9 +201,14 @@ fileprivate final class BarContents: UIStackView {
 
         case .loaded:
             self.iconView.image = UIImage(systemName: "checkmark.circle.fill")
-            self.label.text = "Done."
+            self.label.text = "Done"
             self.loadingView.stopAnimating()
 
+        case .offline:
+            self.iconView.image = UIImage(systemName: "wifi.slash")
+            self.label.text = "Currently Offline"
+            self.loadingView.stopAnimating()
+            
         default:
             #warning("TODO")
             break
