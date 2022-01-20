@@ -175,10 +175,11 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
             
             /// Record fetch completion.
             UserDefaults.groupSuite.firstFetch = false
+        } catch UserError.offline {
+            loadingConduit.send(.init(category: .offline))
         } catch {
             NetLog.error("\(error)")
             assert(false)
-#warning("Perform new refresh animation here.")
         }
     }
     
