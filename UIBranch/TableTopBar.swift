@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import Combine
 
+/// A drop down bar that displays `UserMessage`s.
 final class TableTopBar: UIVisualEffectView {
 
     private let barContents: BarContents = .init()
@@ -16,6 +17,8 @@ final class TableTopBar: UIVisualEffectView {
     private var observers: Set<AnyCancellable> = []
     private var heightConstraint: NSLayoutConstraint? = nil
     private let loadingConduit: UserMessageConduit
+    
+    private static let AnimationDuration: TimeInterval = 0.2
 
     init(loadingConduit: UserMessageConduit) {
         self.loadingConduit = loadingConduit
@@ -74,7 +77,7 @@ final class TableTopBar: UIVisualEffectView {
                 assert(false)
                 return
             }
-            UIView.transition(with: self.barContents, duration: 0.25, options: .transitionCrossDissolve) {
+            UIView.transition(with: self.barContents, duration: Self.AnimationDuration, options: .transitionCrossDissolve) {
                 self.barContents.display(message)
             }
         }
