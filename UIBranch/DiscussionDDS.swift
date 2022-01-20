@@ -25,9 +25,9 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     {
         didSet {
             if isFetching {
-                loadingConduit.send(.init(category: .loading, persistent: true))
+                loadingConduit.send(.init(category: .loading, duration: .indefinite))
             } else {
-                loadingConduit.send(.init(category: .loaded, persistent: false))
+                loadingConduit.send(.init(category: .loaded, duration: .interval(1.0)))
             }
             
         }

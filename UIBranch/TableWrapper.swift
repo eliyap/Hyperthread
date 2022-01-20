@@ -35,7 +35,7 @@ final class TableWrapper: UIViewController {
     #if DEBUG
     @objc
     func debugMethod() {
-        loadingConduit.send(.init(category: .loading, persistent: true))
+        loadingConduit.send(.init(category: .loading, duration: .interval(1.0)))
     }
     #endif
     

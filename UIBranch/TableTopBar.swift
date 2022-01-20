@@ -21,8 +21,13 @@ internal struct UserMessage {
     }
     let category: Category
     
+    enum Duration {
+        case indefinite
+        case interval(TimeInterval)
+    }
+    
     /// Whether this notification should stick around indefinitely until replaced.
-    let persistent: Bool
+    let duration: Duration
 }
 
 final class TableTopBar: UIVisualEffectView {
