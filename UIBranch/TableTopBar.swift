@@ -58,9 +58,16 @@ final class TableTopBar: UIVisualEffectView {
             barContents.topAnchor.constraint(equalTo: topAnchor),
             barContents.bottomAnchor.constraint(equalTo: bottomAnchor),
             /// Keep stack contents away from notch / home indicator in iPhone X portrait mode.
-            barContents.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            barContents.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            barContents.leadingAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor),
+            barContents.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor),
+            /// Keep stack centered and narrow.
+            barContents.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
         ])
+        
+        /// Keep stack narrow.
+        let narrow = barContents.widthAnchor.constraint(equalToConstant: .zero)
+        narrow.priority = .defaultLow
+        narrow.isActive = true
     }
 
     public func setState(_ message: UserMessage?) -> Void {
@@ -106,6 +113,7 @@ fileprivate final class BarContents: UIStackView {
         axis = .horizontal
         alignment = .center
         distribution = .equalSpacing
+        spacing = inset
         
         isLayoutMarginsRelativeArrangement = true
         // layoutMargins = .init(top: inset, left: inset, bottom: inset, right: inset)
