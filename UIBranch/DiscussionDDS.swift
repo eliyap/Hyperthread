@@ -23,6 +23,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     public var numDiscussions: Int? = nil /// Number of discussions in the table.
     private(set) var isFetching = false   /// Whether a fetch is currently occurring. Used to prevent duplicated fetches.
     {
+        /// Relay `isFetching` status to user visible bar display.
         didSet {
             if isFetching {
                 loadingConduit.send(.init(category: .loading, duration: .indefinite))
@@ -180,7 +181,6 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
             assert(false)
 #warning("Perform new refresh animation here.")
         }
-        print("Silent Fetch Completed!")
     }
     
     #if DEBUG
