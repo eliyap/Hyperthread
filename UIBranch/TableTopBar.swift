@@ -36,8 +36,10 @@ final class TableTopBar: UIVisualEffectView {
     
     private var observers: Set<AnyCancellable> = []
     private var heightConstraint: NSLayoutConstraint? = nil
+    private let loadingConduit: UserMessageConduit
 
     init(loadingConduit: UserMessageConduit) {
+        self.loadingConduit = loadingConduit
         super.init(effect: UIBlurEffect(style: .systemMaterial))
 
         contentView.addSubview(barContents)
@@ -76,6 +78,16 @@ final class TableTopBar: UIVisualEffectView {
     }
 
     public func setState(_ message: UserMessage?) -> Void {
+        /// Set message to expire after the passed duration.
+        if
+            let duration = message?.duration,
+            case .interval(let timeInterval) = duration
+        {
+            DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeInterval) { [weak self] in
+                self?.loadingConduit.send(nil)
+            }
+        }
+        
         /// UI code **must** run on the main thread!
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {
@@ -111,6 +123,16 @@ fileprivate final class BarContents: UIStackView {
     private let label: UILabel = .init()
     private let loadingView: UIActivityIndicatorView = .init()
     private let iconView: UIImageView = .init()
+    
+    /// Relay `isHidden` to component views.
+    /// Helps avoid view margins remaining visible when they really shouldn't be.
+    override var isHidden: Bool {
+        didSet {
+            label.isHidden = isHidden
+            loadingView.isHidden = isHidden
+            iconView.isHidden = isHidden
+        }
+    }
     
     lazy var inset = CardTeaserCell.borderInset
     init() {
