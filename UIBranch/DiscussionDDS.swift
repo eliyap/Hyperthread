@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import Combine
 
 final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion> {
     private let realm: Realm
@@ -22,17 +23,27 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     public var numDiscussions: Int? = nil /// Number of discussions in the table.
     private(set) var isFetching = false   /// Whether a fetch is currently occurring. Used to prevent duplicated fetches.
     
-    #warning("Rework this hack!")
+#warning("Rework this hack!")
     /// Most recent date of an old timeline fetch. Goal is to prevent hammering the API. This is a hack workaround, and should be replaced.
     private var lastOldFetch: Date = .distantPast
     
-    init(realm: Realm, tableView: UITableView, cellProvider: @escaping CellProvider, restoreScroll: @escaping () -> ()) {
+    let loadingConduit: UserMessageConduit
+    
+    init(
+        realm: Realm,
+        tableView: UITableView,
+        cellProvider: @escaping CellProvider,
+        restoreScroll: @escaping () -> (),
+        loadingConduit: UserMessageConduit
+    ) {
         self.realm = realm
         
         let results = realm.objects(Discussion.self)
             .filter(Discussion.minRelevancePredicate)
             .sorted(by: \Discussion.updatedAt, ascending: false)
         self.restoreScroll = restoreScroll
+        self.loadingConduit = loadingConduit
+        
         super.init(tableView: tableView, cellProvider: cellProvider)
         /// Immediately register token.
         token = results.observe { [weak self] (changes: RealmCollectionChange) in
@@ -131,12 +142,17 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         
         TableLog.debug("Prefetching items...", print: true, true)
         
+        loadingConduit.send(.init(category: .loading))
         do {
             try await homeTimelineFetch(TimelineOldFetcher.self)
             await ReferenceCrawler.shared.performFollowUp()
+            loadingConduit.send(.init(category: .loaded))
+        } catch UserError.offline {
+            loadingConduit.send(.init(category: .offline))
         } catch {
             NetLog.error("\(error)")
             assert(false)
+            loadingConduit.send(.init(category: .otherError(error)))
         }
     }
     
@@ -146,19 +162,21 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         isFetching = true
         defer { isFetching = false }
         
-        Task {
-            do {
-                try await homeTimelineFetch(TimelineNewFetcher.self)
-                await ReferenceCrawler.shared.performFollowUp()
-                
-                /// Record fetch completion.
-                UserDefaults.groupSuite.firstFetch = false
-            } catch {
-                NetLog.error("\(error)")
-                assert(false)
-#warning("Perform new refresh animation here.")
-            }
-            print("Silent Fetch Completed!")
+        loadingConduit.send(.init(category: .loading))
+        do {
+            try await homeTimelineFetch(TimelineNewFetcher.self)
+            await ReferenceCrawler.shared.performFollowUp()
+            
+            loadingConduit.send(.init(category: .loaded))
+            
+            /// Record fetch completion.
+            UserDefaults.groupSuite.firstFetch = false
+        } catch UserError.offline {
+            loadingConduit.send(.init(category: .offline))
+        } catch {
+            NetLog.error("\(error)")
+            assert(false)
+            loadingConduit.send(.init(category: .otherError(error)))
         }
     }
     
@@ -179,4 +197,9 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         }
     }
     #endif
+}
+
+fileprivate extension Discussion {
+    /// - Warning: this exists as a workaround for `UITableViewDiffableDataSource`. Do _not_ use anywhere else!
+    static let placeholder: Discussion = .init()
 }

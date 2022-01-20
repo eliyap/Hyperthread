@@ -27,9 +27,7 @@ final class MainTable: UITableViewController {
     
     private var arrowView: ArrowRefreshView? = nil
     
-    private let airport: Airport = .init()
-    
-    init(splitDelegate: SplitDelegate) {
+    init(splitDelegate: SplitDelegate, loadingConduit: UserMessageConduit) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
         
@@ -38,7 +36,8 @@ final class MainTable: UITableViewController {
             realm: realm,
             tableView: tableView,
             cellProvider: cellProvider,
-            restoreScroll: restoreScroll
+            restoreScroll: restoreScroll,
+            loadingConduit: loadingConduit
         )
         
         /// Immediately defuse unwrapped nil `mrd`.
@@ -57,7 +56,9 @@ final class MainTable: UITableViewController {
         
         /// Refresh timeline at app startup.
         #if !DEBUG /// Disabled for debugging.
-        DDS.fetchNewTweets { /* do nothing */ }
+        Task {
+            await dds.fetchNewTweets()
+        }
         #endif
         
         /// Refresh timeline at login.
@@ -86,31 +87,28 @@ final class MainTable: UITableViewController {
         
         /// DEBUG
         #if DEBUG
+        #warning("broken by wrapper UIViewController!")
         navigationItem.leftBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(debugMethod)),
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(makeFake)),
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod3)),
         ]
         #endif
         
         tableView.backgroundColor = .systemRed
     }
     
+    #if DEBUG
     @objc
-    func debugMethod() {
+    func makeFake() {
         dds.fetchFakeTweet()
     }
+    #endif
     
     @objc
     func debugMethod2() {
         Task {
             await dds.fetchNewTweets()
         }
-    }
-    
-    @objc
-    func debugMethod3() {
-        NOT_IMPLEMENTED()
     }
     
     required init?(coder: NSCoder) {
@@ -176,6 +174,13 @@ final class MainTable: UITableViewController {
             return
         }
         TableLog.debug("Now scrolling to \(tablePos).", print: true, true)
+        
+        /// Source: https://stackoverflow.com/questions/43614653/how-to-check-if-indexpath-is-valid
+        guard path.section < numberOfSections(in: tableView) && path.row < tableView.numberOfRows(inSection: path.section) else {
+            TableLog.error("Attempted to load invalid index path \(path)")
+            return
+        }
+        
         tableView.scrollToRow(at: path, at: .top, animated: false)
         tableView.contentOffset.y -= tablePos.offset
     }
@@ -185,8 +190,6 @@ enum DiscussionSection: Int {
     /// The only section, for now.
     case Main = 0
 }
-
-
 
 // MARK: - `UITableViewDelegate` Conformance
 extension MainTable {

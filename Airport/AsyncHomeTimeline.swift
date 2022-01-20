@@ -17,9 +17,12 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type) as
     do {
         v1Tweets = try await fetcher.fetchTimeline(credentials: credentials)
     } catch {
-        NetLog.error("\(error)")
-        assert(false)
-        throw UserError.fetch(error)
+        if error.isOfflineError {
+            throw UserError.offline
+        } else {
+            NetLog.error("\(error)")
+            throw UserError.fetch(error)
+        }
     }
     
     /// Dispatch user timeline request in parallel, since we can infer the desired range.

@@ -17,6 +17,7 @@ public enum UserError: Error {
     case credentials
     case database
     case nilSelf /// Special case for when `weak` resolves to `nil`.
+    case offline
 }
 
 /** Handles the "follow up" logic for `Conversation`s and `Discussion`s.

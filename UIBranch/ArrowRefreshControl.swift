@@ -90,8 +90,6 @@ final class ArrowRefreshView: UIView {
                 assert(false, "self is nil")
                 return
             }
-            /// By changing the radius, offset, and transform at the same time, we can grow / shrink the shadow in place,
-            /// creating a "lifting" illusion.
             if selected {
                 self.styleActivated()
             } else {

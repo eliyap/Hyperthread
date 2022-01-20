@@ -11,8 +11,9 @@ import Foundation
 public extension Error {
     var isOfflineError: Bool {
         let error = self as NSError
+        /// Source: https://stackoverflow.com/questions/2720239/nsurlconnection-error
         return
             error.domain == NSURLErrorDomain &&
-            error.code == NSURLErrorNotConnectedToInternet
+            (error.code == NSURLErrorNotConnectedToInternet || error.code == NSURLErrorDataNotAllowed)
     }
 }

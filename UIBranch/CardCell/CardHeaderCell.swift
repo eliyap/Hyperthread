@@ -76,11 +76,6 @@ final class CardHeaderCell: ControlledCell {
             metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
         
-        /// Apply default styling.
-        cardBackground.backgroundColor = .card
-        cardBackground.layer.borderWidth = 1.00
-        cardBackground.layer.borderColor = UIColor.secondarySystemFill.cgColor
-        
         line.events
             .sink { [weak self] event in
                 switch event {

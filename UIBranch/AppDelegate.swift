@@ -43,10 +43,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 /**
     Though setting global styles is bad practice, it's the only way this worked.
     Source: https://nemecek.be/blog/126/how-to-disable-automatic-transparent-navbar-in-ios-15
+    Source: https://developer.apple.com/forums/thread/682420
  */
 func setOpaqueNavbar() -> Void {
-    let navigationBarAppearance = UINavigationBarAppearance()
-    navigationBarAppearance.configureWithDefaultBackground()
-    UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+    let appearance = UINavigationBarAppearance()
+    appearance.configureWithOpaqueBackground()
+    appearance.backgroundColor = .secondarySystemBackground
+    UINavigationBar.appearance().standardAppearance = appearance
+    UINavigationBar.appearance().scrollEdgeAppearance = appearance
 }
 
