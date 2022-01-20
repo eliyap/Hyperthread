@@ -71,9 +71,6 @@ final class ImageViewController: UIViewController {
         view.addSubview(symbolView)             
         symbolView.constrain(to: view)
         view.bringSubviewToFront(symbolView)
-
-        // TEMP
-        
     }
     
     func configure(media: Media, picUrlString: String?) -> Void {
