@@ -44,7 +44,6 @@ final class MainTable: UITableViewController {
         mrd = MarkReadDaemon(token: dds.token)
         
         tableView.register(Cell.self, forCellReuseIdentifier: Cell.reuseID)
-        tableView.register(MainHeaderCell.self, forCellReuseIdentifier: MainHeaderCell.reuseID)
         
         /// Erase separators.
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
@@ -150,25 +149,16 @@ final class MainTable: UITableViewController {
     
     /// Method that provides Diffable Data Source with cells.
     private func cellProvider(tableView: UITableView, indexPath: IndexPath, discussion: Discussion) -> UITableViewCell? {
-        
-        if indexPath == IndexPath(row: 0, section: DiscussionSection.Header.rawValue) {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: MainHeaderCell.reuseID) as? MainHeaderCell else {
-                fatalError("Failed to create or cast new cell!")
-            }
-            #warning("TODO")
-            return cell
-        } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
-                fatalError("Failed to create or cast new cell!")
-            }
-            let tweet = realm.tweet(id: discussion.id)!
-            let author = realm.user(id: tweet.authorID)
-            cell.configure(discussion: discussion, tweet: tweet, author: author, realm: realm)
-            cell.resetStyle()
-            mrd.associate(indexPath, with: discussion)
-            
-            return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
+            fatalError("Failed to create or cast new cell!")
         }
+        let tweet = realm.tweet(id: discussion.id)!
+        let author = realm.user(id: tweet.authorID)
+        cell.configure(discussion: discussion, tweet: tweet, author: author, realm: realm)
+        cell.resetStyle()
+        mrd.associate(indexPath, with: discussion)
+        
+        return cell
     }
     
     /// Restores the saved scroll position.
@@ -197,10 +187,8 @@ final class MainTable: UITableViewController {
 }
 
 enum DiscussionSection: Int {
-    case Header = 0
-    
     /// The only section, for now.
-    case Main = 1
+    case Main = 0
 }
 
 // MARK: - `UITableViewDelegate` Conformance
