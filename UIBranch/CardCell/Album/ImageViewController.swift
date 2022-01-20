@@ -31,13 +31,12 @@ fileprivate struct MediaModel {
 
 final class ImageViewController: UIViewController {
     
+    /// Component views.
     private let imageView: UIImageView = .init()
-    
     private let loadingIndicator: UIActivityIndicatorView = .init()
-    
-    fileprivate var mediaModel: MediaModel? = nil
-    
     private let symbolView: SymbolCircleView = .init()
+    
+    private var mediaModel: MediaModel? = nil
     
     init() {
         super.init(nibName: nil, bundle: nil)
