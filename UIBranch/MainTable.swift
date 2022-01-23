@@ -79,20 +79,6 @@ final class MainTable: UITableViewController {
         arrow.constrain(to: tableView)
     }
     
-    #if DEBUG
-    @objc
-    func makeFake() {
-        dds.fetchFakeTweet()
-    }
-    #endif
-    
-    @objc
-    func debugMethod2() {
-        Task {
-            await dds.fetchNewTweets()
-        }
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("No.")
     }
