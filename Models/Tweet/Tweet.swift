@@ -159,24 +159,6 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
         super.init()
     }
     
-    // MARK: - Fake Test Tweet
-    private init(_: Void) {
-        super.init()
-        
-        self.id = UUID().uuidString
-        self.createdAt = Date()
-        self.text = "This is a fake tweet."
-        self.conversation_id = id
-        self.metrics = PublicMetrics(like_count: 0, retweet_count: 0, reply_count: 0, quote_count: 0)
-        self.authorID = OwnUserID
-        self.read = false
-    }
-    
-    /// Test method for creating a fake tweet.
-    public static func generateFake() -> Tweet {
-        .init(Void())
-    }
-    
     // MARK: - Ephemeral Variables
     
     /**

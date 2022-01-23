@@ -29,6 +29,10 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     
     let loadingConduit: UserMessageConduit
     
+    lazy var results = realm.objects(Discussion.self)
+        .filter(Discussion.minRelevancePredicate)
+        .sorted(by: \Discussion.updatedAt, ascending: false)
+    
     init(
         realm: Realm,
         tableView: UITableView,
@@ -37,10 +41,6 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         loadingConduit: UserMessageConduit
     ) {
         self.realm = realm
-        
-        let results = realm.objects(Discussion.self)
-            .filter(Discussion.minRelevancePredicate)
-            .sorted(by: \Discussion.updatedAt, ascending: false)
         self.restoreScroll = restoreScroll
         self.loadingConduit = loadingConduit
         
@@ -51,11 +51,6 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 assert(false, "No self!")
                 return
             }
-            
-            /** - Note: `animated` is `false` so that when new tweet's are added via
-                        "pull to refresh", the "inserted above" Twitterific-style effect is as
-                        seamless as possible.
-             */
             
             switch changes {
             case .initial(let results):
@@ -101,7 +96,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         var snapshot = Snapshot()
         snapshot.appendSections([.Main])
         snapshot.appendItems(Array(results), toSection: .Main)
-        TableLog.debug("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.", print: false)
+        TableLog.debug("Snapshot contains \(snapshot.numberOfSections) sections and \(snapshot.numberOfItems) items.", print: true, true)
         apply(snapshot, animatingDifferences: animated)
         
         numDiscussions = results.count
@@ -138,7 +133,13 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         /// Prevent hammering fetch operations.
         guard isFetching == false else { return }
         isFetching = true
-        defer { isFetching = false }
+        defer {
+            isFetching = false
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.setContents(to: self.results, animated: true)
+            }
+        }
         
         TableLog.debug("Prefetching items...", print: true, true)
         
@@ -160,7 +161,13 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
     public func fetchNewTweets() async {
         guard isFetching == false else { return }
         isFetching = true
-        defer { isFetching = false }
+        defer {
+            isFetching = false
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.setContents(to: self.results, animated: true)
+            }
+        }
         
         loadingConduit.send(.init(category: .loading))
         do {
@@ -179,24 +186,6 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
             loadingConduit.send(.init(category: .otherError(error)))
         }
     }
-    
-    #if DEBUG
-    public func fetchFakeTweet() {
-        let realm = try! Realm()
-        try! realm.writeWithToken { token in
-            let t = Tweet.generateFake()
-            realm.add(t)
-            let c = Conversation(id: t.conversation_id)
-            c.insert(t, token: token)
-            realm.add(c)
-            let d = Discussion(root: c)
-            realm.add(d)
-            
-            /// Note a new discussion above the fold.
-            UserDefaults.groupSuite.incrementScrollPositionRow()
-        }
-    }
-    #endif
 }
 
 fileprivate extension Discussion {

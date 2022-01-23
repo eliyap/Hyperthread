@@ -54,13 +54,6 @@ final class MainTable: UITableViewController {
         /// Enable pre-fetching.
         tableView.prefetchDataSource = dds
         
-        /// Refresh timeline at app startup.
-        #if !DEBUG /// Disabled for debugging.
-        Task {
-            await dds.fetchNewTweets()
-        }
-        #endif
-        
         /// Refresh timeline at login.
         Auth.shared.$state
             .dropFirst() /// Ignore publication that occurs on initialization, when loading from `UserDefaults`.
@@ -84,31 +77,6 @@ final class MainTable: UITableViewController {
         self.arrowView = arrow
         tableView.addSubview(arrow)
         arrow.constrain(to: tableView)
-        
-        /// DEBUG
-        #if DEBUG
-        #warning("broken by wrapper UIViewController!")
-        navigationItem.leftBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(makeFake)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
-        ]
-        #endif
-        
-        tableView.backgroundColor = .systemRed
-    }
-    
-    #if DEBUG
-    @objc
-    func makeFake() {
-        dds.fetchFakeTweet()
-    }
-    #endif
-    
-    @objc
-    func debugMethod2() {
-        Task {
-            await dds.fetchNewTweets()
-        }
     }
     
     required init?(coder: NSCoder) {

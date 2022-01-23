@@ -31,13 +31,12 @@ fileprivate struct MediaModel {
 
 final class ImageViewController: UIViewController {
     
+    /// Component views.
     private let imageView: UIImageView = .init()
-    
     private let loadingIndicator: UIActivityIndicatorView = .init()
-    
-    fileprivate var mediaModel: MediaModel? = nil
-    
     private let symbolView: SymbolCircleView = .init()
+    
+    private var mediaModel: MediaModel? = nil
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -71,9 +70,6 @@ final class ImageViewController: UIViewController {
         view.addSubview(symbolView)             
         symbolView.constrain(to: view)
         view.bringSubviewToFront(symbolView)
-
-        // TEMP
-        
     }
     
     func configure(media: Media, picUrlString: String?) -> Void {
@@ -83,21 +79,21 @@ final class ImageViewController: UIViewController {
         case .photo:
             if let urlString = media.url {
                 loadImage(url: URL(string: urlString)) { [weak self] in
-                    self?.setSymbol(.hidden)
+                    self?.set(symbol: .hidden)
                 }
             }
         
         case .animated_gif:
             if let urlString = media.previewImageUrl {
                 loadImage(url: URL(string: urlString)) { [weak self] in
-                    self?.setSymbol(.GIF)
+                    self?.set(symbol: .GIF)
                 }
             }
         
         case .video:
             if let urlString = media.previewImageUrl {
                 loadImage(url: URL(string: urlString)) { [weak self] in
-                    self?.setSymbol(.video)
+                    self?.set(symbol: .video)
                 }
             }
         
@@ -114,9 +110,9 @@ final class ImageViewController: UIViewController {
             
             if let error = error {
                 if error.isOfflineError {
-                    self?.setSymbol(.offline)
+                    self?.set(symbol: .offline)
                 } else {
-                    self?.setSymbol(.error)
+                    self?.set(symbol: .error)
                     NetLog.warning("Image Loading Error \(error)")	
                 }
             }
@@ -137,7 +133,7 @@ final class ImageViewController: UIViewController {
         case offline
         case error
     }
-    private func setSymbol(_ symbol: Symbol) -> Void {
+    private func set(symbol: Symbol) -> Void {
         
         switch symbol {
         case .hidden:
