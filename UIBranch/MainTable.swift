@@ -54,13 +54,6 @@ final class MainTable: UITableViewController {
         /// Enable pre-fetching.
         tableView.prefetchDataSource = dds
         
-        /// Refresh timeline at app startup.
-        #if !DEBUG /// Disabled for debugging.
-        Task {
-            await dds.fetchNewTweets()
-        }
-        #endif
-        
         /// Refresh timeline at login.
         Auth.shared.$state
             .dropFirst() /// Ignore publication that occurs on initialization, when loading from `UserDefaults`.
