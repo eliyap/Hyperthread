@@ -186,24 +186,6 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
             loadingConduit.send(.init(category: .otherError(error)))
         }
     }
-    
-    #if DEBUG
-    public func fetchFakeTweet() {
-        let realm = try! Realm()
-        try! realm.writeWithToken { token in
-            let t = Tweet.generateFake()
-            realm.add(t)
-            let c = Conversation(id: t.conversation_id)
-            c.insert(t, token: token)
-            realm.add(c)
-            let d = Discussion(root: c)
-            realm.add(d)
-            
-            /// Note a new discussion above the fold.
-            UserDefaults.groupSuite.incrementScrollPositionRow()
-        }
-    }
-    #endif
 }
 
 fileprivate extension Discussion {
