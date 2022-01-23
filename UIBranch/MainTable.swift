@@ -77,17 +77,6 @@ final class MainTable: UITableViewController {
         self.arrowView = arrow
         tableView.addSubview(arrow)
         arrow.constrain(to: tableView)
-        
-        /// DEBUG
-        #if DEBUG
-        #warning("broken by wrapper UIViewController!")
-        navigationItem.leftBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(makeFake)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod2)),
-        ]
-        #endif
-        
-        tableView.backgroundColor = .systemRed
     }
     
     #if DEBUG
