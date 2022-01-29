@@ -77,6 +77,7 @@
 		228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EF2780128300E306BD /* RealmDateWindow.swift */; };
 		228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71F12780142200E306BD /* UserTimelineWindow.swift */; };
 		22A760BD27A5EF990006E9BC /* MakeRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760BC27A5EF990006E9BC /* MakeRealm.swift */; };
+		22A760BF27A5F38E0006E9BC /* QuoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760BE27A5F38E0006E9BC /* QuoteView.swift */; };
 		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
 		22BC9E8F27A5C95100721BD2 /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BC9E8E27A5C95100721BD2 /* DiscussionTree.swift */; };
 		22BC9E9127A5C97800721BD2 /* ColorMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */; };
@@ -211,6 +212,7 @@
 		228D71F12780142200E306BD /* UserTimelineWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTimelineWindow.swift; sourceTree = "<group>"; };
 		22A760BA27A5E1680006E9BC /* Changelog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelog.md; sourceTree = "<group>"; };
 		22A760BC27A5EF990006E9BC /* MakeRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeRealm.swift; sourceTree = "<group>"; };
+		22A760BE27A5F38E0006E9BC /* QuoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteView.swift; sourceTree = "<group>"; };
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
 		22BC9E8E27A5C95100721BD2 /* DiscussionTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscussionTree.swift; sourceTree = "<group>"; };
 		22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorMarkerView.swift; sourceTree = "<group>"; };
@@ -518,6 +520,7 @@
 			children = (
 				22D127DD2740651C00932614 /* TweetCell.swift */,
 				22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */,
+				22A760BE27A5F38E0006E9BC /* QuoteView.swift */,
 				22D127EB274070CD00932614 /* MetricButtons.swift */,
 				22A9E9042772A86700C4EE99 /* TimestampButton.swift */,
 				22D127ED2740713500932614 /* TimeDifference.swift */,
@@ -850,6 +853,7 @@
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
+				22A760BF27A5F38E0006E9BC /* QuoteView.swift in Sources */,
 				22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */,
 				22193DB72785A878005A7708 /* OnFollow.swift in Sources */,
 				22FA26B72795D1FB00DD8EE4 /* LinkConversations.swift in Sources */,

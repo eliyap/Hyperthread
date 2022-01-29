@@ -27,10 +27,11 @@ final class TweetCell: ControlledCell {
     /// Tweet component views.
     private let stackView = UIStackView()
     private let userView: UserView
-    private let tweetTextView = TweetTextView()
-    private let albumVC = AlbumController()
-    private let retweetView = RetweetView()
-    private let metricsView = MetricsView()
+    private let tweetTextView: TweetTextView = .init()
+    private let albumVC: AlbumController = .init()
+    private let quoteView: QuoteView = .init()
+    private let retweetView: RetweetView = .init()
+    private let metricsView: MetricsView = .init()
     private let triangleView: TriangleView
     
     /// Variable Constraint.
@@ -88,6 +89,7 @@ final class TweetCell: ControlledCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         
+        /// Configure album view.
         controller.addChild(albumVC)
         stackView.addArrangedSubview(albumVC.view)
         albumVC.didMove(toParent: controller)
@@ -96,6 +98,9 @@ final class TweetCell: ControlledCell {
             albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
+        
+        /// Configure quotation view.
+        stackView.addArrangedSubview(quoteView)
         
         /// Special case: must request album be "as tall as possible".
         let atap = albumVC.view.heightAnchor.constraint(equalToConstant: .superTall)
