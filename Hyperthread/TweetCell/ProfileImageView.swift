@@ -29,6 +29,7 @@ final class ProfileImageView: UIView {
         imageView.layer.cornerRadius = Self.cornerRadius
         imageView.layer.cornerCurve = .continuous
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         
         constrain()
     }
