@@ -1054,7 +1054,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 949D776DFQ;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = UIBranch/Info.plist;
+				INFOPLIST_FILE = Hyperthread/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Hyperthread;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1084,7 +1084,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 949D776DFQ;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = UIBranch/Info.plist;
+				INFOPLIST_FILE = Hyperthread/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Hyperthread;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
