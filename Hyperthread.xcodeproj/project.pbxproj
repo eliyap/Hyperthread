@@ -34,7 +34,7 @@
 		223BBF3227377BE500375530 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 223BBF3027377BE500375530 /* Main.storyboard */; };
 		223BBF3427377BE600375530 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 223BBF3327377BE600375530 /* Assets.xcassets */; };
 		223BBF3727377BE600375530 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 223BBF3527377BE600375530 /* LaunchScreen.storyboard */; };
-		223BBF4227377BE600375530 /* UIBranchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF4127377BE600375530 /* UIBranchTests.swift */; };
+		223BBF4227377BE600375530 /* HyperthreadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF4127377BE600375530 /* HyperthreadTests.swift */; };
 		223BBF4C27377BE600375530 /* UIBranchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF4B27377BE600375530 /* UIBranchUITests.swift */; };
 		223BBF4E27377BE600375530 /* UIBranchUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF4D27377BE600375530 /* UIBranchUITestsLaunchTests.swift */; };
 		223BBF5D27377E4600375530 /* Twig in Frameworks */ = {isa = PBXBuildFile; productRef = 223BBF5C27377E4600375530 /* Twig */; };
@@ -165,7 +165,7 @@
 		223BBF3627377BE600375530 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		223BBF3827377BE600375530 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		223BBF3D27377BE600375530 /* HyperthreadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperthreadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		223BBF4127377BE600375530 /* UIBranchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBranchTests.swift; sourceTree = "<group>"; };
+		223BBF4127377BE600375530 /* HyperthreadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HyperthreadTests.swift; sourceTree = "<group>"; };
 		223BBF4727377BE600375530 /* HyperthreadUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperthreadUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		223BBF4B27377BE600375530 /* UIBranchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBranchUITests.swift; sourceTree = "<group>"; };
 		223BBF4D27377BE600375530 /* UIBranchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBranchUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -382,7 +382,7 @@
 		223BBF4027377BE600375530 /* UIBranchTests */ = {
 			isa = PBXGroup;
 			children = (
-				223BBF4127377BE600375530 /* UIBranchTests.swift */,
+				223BBF4127377BE600375530 /* HyperthreadTests.swift */,
 			);
 			path = UIBranchTests;
 			sourceTree = "<group>";
@@ -880,7 +880,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				223BBF4227377BE600375530 /* UIBranchTests.swift in Sources */,
+				223BBF4227377BE600375530 /* HyperthreadTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
