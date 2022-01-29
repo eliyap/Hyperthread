@@ -35,8 +35,8 @@
 		223BBF3427377BE600375530 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 223BBF3327377BE600375530 /* Assets.xcassets */; };
 		223BBF3727377BE600375530 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 223BBF3527377BE600375530 /* LaunchScreen.storyboard */; };
 		223BBF4227377BE600375530 /* HyperthreadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF4127377BE600375530 /* HyperthreadTests.swift */; };
-		223BBF4C27377BE600375530 /* UIBranchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF4B27377BE600375530 /* UIBranchUITests.swift */; };
-		223BBF4E27377BE600375530 /* UIBranchUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF4D27377BE600375530 /* UIBranchUITestsLaunchTests.swift */; };
+		223BBF4C27377BE600375530 /* HyperthreadUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF4B27377BE600375530 /* HyperthreadUITests.swift */; };
+		223BBF4E27377BE600375530 /* HyperthreadUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF4D27377BE600375530 /* HyperthreadUITestsLaunchTests.swift */; };
 		223BBF5D27377E4600375530 /* Twig in Frameworks */ = {isa = PBXBuildFile; productRef = 223BBF5C27377E4600375530 /* Twig */; };
 		223BBF6327377E8900375530 /* Airport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF5F27377E8700375530 /* Airport.swift */; };
 		223BBF6527377E8900375530 /* IngestTweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF6127377E8800375530 /* IngestTweet.swift */; };
@@ -167,8 +167,8 @@
 		223BBF3D27377BE600375530 /* HyperthreadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperthreadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		223BBF4127377BE600375530 /* HyperthreadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HyperthreadTests.swift; sourceTree = "<group>"; };
 		223BBF4727377BE600375530 /* HyperthreadUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperthreadUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		223BBF4B27377BE600375530 /* UIBranchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBranchUITests.swift; sourceTree = "<group>"; };
-		223BBF4D27377BE600375530 /* UIBranchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBranchUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		223BBF4B27377BE600375530 /* HyperthreadUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HyperthreadUITests.swift; sourceTree = "<group>"; };
+		223BBF4D27377BE600375530 /* HyperthreadUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HyperthreadUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		223BBF5B27377E3E00375530 /* Twig */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Twig; path = ../Twig; sourceTree = "<group>"; };
 		223BBF5F27377E8700375530 /* Airport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Airport.swift; sourceTree = "<group>"; };
 		223BBF6127377E8800375530 /* IngestTweet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IngestTweet.swift; sourceTree = "<group>"; };
@@ -390,8 +390,8 @@
 		223BBF4A27377BE600375530 /* HyperthreadUITests */ = {
 			isa = PBXGroup;
 			children = (
-				223BBF4B27377BE600375530 /* UIBranchUITests.swift */,
-				223BBF4D27377BE600375530 /* UIBranchUITestsLaunchTests.swift */,
+				223BBF4B27377BE600375530 /* HyperthreadUITests.swift */,
+				223BBF4D27377BE600375530 /* HyperthreadUITestsLaunchTests.swift */,
 			);
 			path = HyperthreadUITests;
 			sourceTree = "<group>";
@@ -888,8 +888,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				223BBF4E27377BE600375530 /* UIBranchUITestsLaunchTests.swift in Sources */,
-				223BBF4C27377BE600375530 /* UIBranchUITests.swift in Sources */,
+				223BBF4E27377BE600375530 /* HyperthreadUITestsLaunchTests.swift in Sources */,
+				223BBF4C27377BE600375530 /* HyperthreadUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
