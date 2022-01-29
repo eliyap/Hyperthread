@@ -106,8 +106,6 @@ final class TweetCell: ControlledCell {
             quoteView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             quoteView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
-        quoteView.backgroundColor = .systemGray6
-        
         
         /// Special case: must request album be "as tall as possible".
         let atap = albumVC.view.heightAnchor.constraint(equalToConstant: .superTall)
