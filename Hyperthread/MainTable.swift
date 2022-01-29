@@ -120,8 +120,9 @@ final class MainTable: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
             fatalError("Failed to create or cast new cell!")
         }
+        #warning("todo: remove force unwraps here.")
         let tweet = realm.tweet(id: discussion.id)!
-        let author = realm.user(id: tweet.authorID)
+        let author = realm.user(id: tweet.authorID)!
         cell.configure(discussion: discussion, tweet: tweet, author: author, realm: realm)
         cell.resetStyle()
         mrd.associate(indexPath, with: discussion)
