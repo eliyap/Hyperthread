@@ -65,10 +65,10 @@ final class DiscussionTable: UITableViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CardHeaderCell.reuseID) as? CardHeaderCell else {
                 fatalError("Failed to create or cast new cell!")
             }
-            guard case let .available(rootTweet) = node.tweet else {
+            guard case let .available(rootTweet, rootTweetAuthor) = node.tweet else {
                 fatalError("Missing root tweet!")
             }
-            cell.configure(tweet: rootTweet, author: node.author, realm: realm)
+            cell.configure(tweet: rootTweet, author: rootTweetAuthor, realm: realm)
 
             return cell
         } else {

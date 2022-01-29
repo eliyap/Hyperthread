@@ -9,15 +9,16 @@ import Foundation
 import RealmSwift
 import Twig
 
+/// View model object. Represents a tweet which may or may not exist.
 enum OptionalTweet {
     case unavailable(Tweet.ID)
-    case available(Tweet)
+    case available(tweet: Tweet, author: User)
     
     var id: Tweet.ID {
         switch self {
         case .unavailable(let id):
             return id
-        case .available(let tweet):
+        case .available(let tweet, _):
             return tweet.id
         }
     }
@@ -26,7 +27,7 @@ enum OptionalTweet {
         switch self {
         case .unavailable:
             return .none
-        case .available(let tweet):
+        case .available(let tweet, _):
             return tweet.primaryReferenceType
         }
     }
@@ -47,14 +48,11 @@ final class Node: Identifiable {
     /// - Note: nodes must be chronologically sorted by `createdAt`.
     public private(set) var children: [Node]
     
-    public let author: User?
-    
     init(_ tweet: Tweet, depth: Int, parent: Node?, user: User) {
-        self.tweet = .available(tweet)
+        self.tweet = .available(tweet: tweet, author: user)
         self.depth = depth
         self.children = []
         self.parent = parent
-        self.author = user
         parent?.append(self)
     }
     
@@ -63,7 +61,6 @@ final class Node: Identifiable {
         self.depth = depth
         self.children = []
         self.parent = parent
-        self.author = nil
         parent?.append(self)
     }
     
@@ -177,16 +174,14 @@ extension Node {
         /// - Note: exclude the current tweet, otherwise all leading @mentions would be omitted.
         while
             let c = curr,
-            case .available(let cTweet) = c.tweet,
+            case .available(let cTweet, _) = c.tweet,
             cTweet.isReply,
             let p = c.parent,
-            case .available(let pTweet) = p.tweet,
+            case .available(let pTweet, let pTweetAuthor) = p.tweet,
             cTweet.replying_to == pTweet.id
         {
             /// Include the author and any accounts they @mention.
-            if let handle = p.author?.handle {
-                result.insert(handle)
-            }
+            result.insert(pTweetAuthor.handle)
             if let handles = pTweet.entities?.mentions.map(\.handle) {
                 for handle in handles {
                     result.insert(handle)
