@@ -100,19 +100,23 @@ final class CardTeaserCell: ControlledCell {
     }
 
     public func configure(discussion: Discussion, realm: Realm) {
-        #warning("todo: remove force unwraps here.")
-        let tweet = realm.tweet(id: discussion.id)!
+        guard let tweet = realm.tweet(id: discussion.id) else {
+            /// - Note: expressly passing "no media" fixes issue where `superTall` dimensions cause bad layout.
+            albumVC.configure(media: [], picUrlString: nil)
+            return
+        }
+        
+#warning("todo: remove force unwraps here.")
         let author = realm.user(id: tweet.authorID)!
         
         userView.configure(user: author)
         tweetTextView.attributedText = tweet.attributedString
         retweetView.configure(tweet: tweet, realm: realm)
         summaryView.configure(discussion, realm: realm)
+        albumVC.configure(tweet: tweet)
         
         tweetTextView.delegate = self
         cardBackground.configure(status: discussion.read)
-        
-        albumVC.configure(tweet: tweet)
         
         /// Release old observer.
         if let token = token {

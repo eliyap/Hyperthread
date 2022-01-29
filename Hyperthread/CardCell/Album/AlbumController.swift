@@ -70,6 +70,7 @@ class AlbumController: UIPageViewController {
         configure(media: Array(tweet.media), picUrlString: tweet.picUrlString)
     }
     
+    /// - Note: allowing us to pass "no media" fixes issue where `superTall` dimensions cause bad layout.
     public func configure(media: [Media], picUrlString: String?) -> Void {
         if media.isNotEmpty {
             let maxAR = media.map(\.aspectRatio).max()!
