@@ -48,14 +48,11 @@ final class Node: Identifiable {
     /// - Note: nodes must be chronologically sorted by `createdAt`.
     public private(set) var children: [Node]
     
-    public let author: User?
-    
     init(_ tweet: Tweet, depth: Int, parent: Node?, user: User) {
         self.tweet = .available(tweet: tweet, author: user)
         self.depth = depth
         self.children = []
         self.parent = parent
-        self.author = user
         parent?.append(self)
     }
     
@@ -64,7 +61,6 @@ final class Node: Identifiable {
         self.depth = depth
         self.children = []
         self.parent = parent
-        self.author = nil
         parent?.append(self)
     }
     
@@ -181,13 +177,11 @@ extension Node {
             case .available(let cTweet, _) = c.tweet,
             cTweet.isReply,
             let p = c.parent,
-            case .available(let pTweet, _) = p.tweet,
+            case .available(let pTweet, let pTweetAuthor) = p.tweet,
             cTweet.replying_to == pTweet.id
         {
             /// Include the author and any accounts they @mention.
-            if let handle = p.author?.handle {
-                result.insert(handle)
-            }
+            result.insert(pTweetAuthor.handle)
             if let handles = pTweet.entities?.mentions.map(\.handle) {
                 for handle in handles {
                     result.insert(handle)
