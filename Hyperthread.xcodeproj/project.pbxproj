@@ -326,7 +326,7 @@
 				223BBF7227377EE500375530 /* Logging */,
 				223BBF6727377EAD00375530 /* Models */,
 				22FA26AA2795BA2C00DD8EE4 /* Engine */,
-				223BBF2927377BE500375530 /* UIBranch */,
+				223BBF2927377BE500375530 /* Hyperthread */,
 				223BBF5E27377E6E00375530 /* Airport */,
 				223BBF4027377BE600375530 /* UIBranchTests */,
 				223BBF4A27377BE600375530 /* HyperthreadUITests */,
@@ -347,7 +347,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		223BBF2927377BE500375530 /* UIBranch */ = {
+		223BBF2927377BE500375530 /* Hyperthread */ = {
 			isa = PBXGroup;
 			children = (
 				223BBF2A27377BE500375530 /* AppDelegate.swift */,
@@ -376,7 +376,7 @@
 				223BBF3527377BE600375530 /* LaunchScreen.storyboard */,
 				223BBF3827377BE600375530 /* Info.plist */,
 			);
-			path = UIBranch;
+			path = Hyperthread;
 			sourceTree = "<group>";
 		};
 		223BBF4027377BE600375530 /* UIBranchTests */ = {
