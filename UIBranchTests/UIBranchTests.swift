@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import UIBranch
+@testable import Hyperthread
 
 class UIBranchTests: XCTestCase {
 
