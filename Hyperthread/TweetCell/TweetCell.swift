@@ -101,6 +101,14 @@ final class TweetCell: ControlledCell {
         
         /// Configure quotation view.
         stackView.addArrangedSubview(quoteView)
+        quoteView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            quoteView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            quoteView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+            quoteView.heightAnchor.constraint(equalToConstant: 100),
+        ])
+        quoteView.backgroundColor = .systemGray6
+        
         
         /// Special case: must request album be "as tall as possible".
         let atap = albumVC.view.heightAnchor.constraint(equalToConstant: .superTall)
