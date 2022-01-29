@@ -105,7 +105,6 @@ final class TweetCell: ControlledCell {
         NSLayoutConstraint.activate([
             quoteView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             quoteView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-            quoteView.heightAnchor.constraint(equalToConstant: 100),
         ])
         quoteView.backgroundColor = .systemGray6
         
@@ -168,6 +167,8 @@ final class TweetCell: ControlledCell {
             retweetView.isHidden = false
             metricsView.isHidden = false
             /// Let `albumVC` decide `isHidden`.
+            
+            configureQuoteReply(tweet: tweet, realm: realm)
         } else {
             tweetTextView.attributedText = NSMutableAttributedString(string: """
                 This tweet is unavailable.
@@ -189,6 +190,27 @@ final class TweetCell: ControlledCell {
         
         /// Use non-capped depth to determine color.
         colorMarker.configure(node: node)
+    }
+    
+    private func configureQuoteReply(tweet: Tweet, realm: Realm) -> Void {
+        guard let quoting = tweet.quoting, tweet.isReply else {
+            quoteView.configure(quoted: nil)
+            return
+        }
+        /// This exception is normal if the tweet was deleted or hidden.
+        guard let quotedTweet = realm.tweet(id: quoting) else {
+            TableLog.warning("Missing reference to quoted tweet with ID \(quoting)")
+            quoteView.configure(quoted: .unavailable(quoting))
+            return
+        }
+        guard let quotedUser = realm.user(id: quotedTweet.authorID) else {
+            TableLog.error("Could not find user by ID \(quotedTweet.authorID)")
+            assert(false)
+            quoteView.configure(quoted: nil)
+            return
+        }
+        
+        quoteView.configure(quoted: .available(tweet: quotedTweet, author: quotedUser))
     }
     
     required init?(coder: NSCoder) {
