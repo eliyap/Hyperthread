@@ -150,6 +150,11 @@ final class TweetCell: ControlledCell {
             retweetView.configure(tweet: tweet, realm: realm)
             metricsView.configure(tweet)
             albumVC.configure(tweet: tweet)
+            
+            userView.isHidden = false
+            retweetView.isHidden = false
+            metricsView.isHidden = false
+            /// Let `albumVC` decide `isHidden`.
         } else {
             tweetTextView.attributedText = NSMutableAttributedString(string: """
                 This tweet is unavailable.
