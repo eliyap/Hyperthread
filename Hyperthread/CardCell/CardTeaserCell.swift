@@ -102,15 +102,22 @@ final class CardTeaserCell: ControlledCell {
     public func configure(discussion: Discussion, realm: Realm) {
         let tweet: Tweet? = realm.tweet(id: discussion.id)
         guard let tweet = tweet else {
+            TableLog.error("Could not find tweet with ID \(discussion.id)")
+            assert(false)
+            
+            /// Fix layout in production.
             /// - Note: expressly passing "no media" fixes issue where `superTall` dimensions cause bad layout.
             albumVC.configure(media: [], picUrlString: nil)
             return
         }
         
-#warning("todo: remove force unwraps here.")
-        let author = realm.user(id: tweet.authorID)!
+        if let author = realm.user(id: tweet.authorID) {
+            userView.configure(user: author)
+        } else {
+            TableLog.error("Could not find user with ID \(tweet.authorID)")
+            assert(false)
+        }
         
-        userView.configure(user: author)
         tweetTextView.attributedText = tweet.attributedString
         retweetView.configure(tweet: tweet, realm: realm)
         summaryView.configure(discussion, realm: realm)
