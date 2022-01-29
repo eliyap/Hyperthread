@@ -9,6 +9,7 @@ import Foundation
 import RealmSwift
 import Twig
 
+/// View model object. Represents a tweet which may or may not exist.
 enum OptionalTweet {
     case unavailable(Tweet.ID)
     case available(Tweet)
