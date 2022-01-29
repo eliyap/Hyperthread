@@ -8,7 +8,12 @@
 import Foundation
 import RealmSwift
 
+/// Alias App Sematic Versions to Realm Schema Versions.
+internal enum SchemaVersion: UInt64 {
+    case v1dot0 = 0
+}
+
 internal func makeRealm() -> Realm {
-    let config = Realm.Configuration(schemaVersion: 0)
+    let config = Realm.Configuration(schemaVersion: SchemaVersion.v1dot0.rawValue)
     return try! Realm(configuration: config)
 }
