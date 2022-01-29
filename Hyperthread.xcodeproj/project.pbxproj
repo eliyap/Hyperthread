@@ -164,9 +164,9 @@
 		223BBF3327377BE600375530 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		223BBF3627377BE600375530 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		223BBF3827377BE600375530 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		223BBF3D27377BE600375530 /* UIBranchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIBranchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		223BBF3D27377BE600375530 /* HyperthreadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperthreadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		223BBF4127377BE600375530 /* UIBranchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBranchTests.swift; sourceTree = "<group>"; };
-		223BBF4727377BE600375530 /* UIBranchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIBranchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		223BBF4727377BE600375530 /* HyperthreadUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HyperthreadUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		223BBF4B27377BE600375530 /* UIBranchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBranchUITests.swift; sourceTree = "<group>"; };
 		223BBF4D27377BE600375530 /* UIBranchUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBranchUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		223BBF5B27377E3E00375530 /* Twig */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Twig; path = ../Twig; sourceTree = "<group>"; };
@@ -341,8 +341,8 @@
 			isa = PBXGroup;
 			children = (
 				223BBF2727377BE500375530 /* Hyperthread.app */,
-				223BBF3D27377BE600375530 /* UIBranchTests.xctest */,
-				223BBF4727377BE600375530 /* UIBranchUITests.xctest */,
+				223BBF3D27377BE600375530 /* HyperthreadTests.xctest */,
+				223BBF4727377BE600375530 /* HyperthreadUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -602,9 +602,9 @@
 			productReference = 223BBF2727377BE500375530 /* Hyperthread.app */;
 			productType = "com.apple.product-type.application";
 		};
-		223BBF3C27377BE600375530 /* UIBranchTests */ = {
+		223BBF3C27377BE600375530 /* HyperthreadTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 223BBF5427377BE600375530 /* Build configuration list for PBXNativeTarget "UIBranchTests" */;
+			buildConfigurationList = 223BBF5427377BE600375530 /* Build configuration list for PBXNativeTarget "HyperthreadTests" */;
 			buildPhases = (
 				223BBF3927377BE600375530 /* Sources */,
 				223BBF3A27377BE600375530 /* Frameworks */,
@@ -615,14 +615,14 @@
 			dependencies = (
 				223BBF3F27377BE600375530 /* PBXTargetDependency */,
 			);
-			name = UIBranchTests;
+			name = HyperthreadTests;
 			productName = UIBranchTests;
-			productReference = 223BBF3D27377BE600375530 /* UIBranchTests.xctest */;
+			productReference = 223BBF3D27377BE600375530 /* HyperthreadTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		223BBF4627377BE600375530 /* UIBranchUITests */ = {
+		223BBF4627377BE600375530 /* HyperthreadUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 223BBF5727377BE600375530 /* Build configuration list for PBXNativeTarget "UIBranchUITests" */;
+			buildConfigurationList = 223BBF5727377BE600375530 /* Build configuration list for PBXNativeTarget "HyperthreadUITests" */;
 			buildPhases = (
 				223BBF4327377BE600375530 /* Sources */,
 				223BBF4427377BE600375530 /* Frameworks */,
@@ -633,9 +633,9 @@
 			dependencies = (
 				223BBF4927377BE600375530 /* PBXTargetDependency */,
 			);
-			name = UIBranchUITests;
+			name = HyperthreadUITests;
 			productName = UIBranchUITests;
-			productReference = 223BBF4727377BE600375530 /* UIBranchUITests.xctest */;
+			productReference = 223BBF4727377BE600375530 /* HyperthreadUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -661,7 +661,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 223BBF2227377BE500375530 /* Build configuration list for PBXProject "UIBranch" */;
+			buildConfigurationList = 223BBF2227377BE500375530 /* Build configuration list for PBXProject "Hyperthread" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -679,8 +679,8 @@
 			projectRoot = "";
 			targets = (
 				223BBF2627377BE500375530 /* Hyperthread */,
-				223BBF3C27377BE600375530 /* UIBranchTests */,
-				223BBF4627377BE600375530 /* UIBranchUITests */,
+				223BBF3C27377BE600375530 /* HyperthreadTests */,
+				223BBF4627377BE600375530 /* HyperthreadUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1125,7 +1125,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UIBranch.app/UIBranch";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hyperthread.app/Hyperthread";
 			};
 			name = Debug;
 		};
@@ -1150,7 +1150,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UIBranch.app/UIBranch";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hyperthread.app/Hyperthread";
 			};
 			name = Release;
 		};
@@ -1203,7 +1203,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		223BBF2227377BE500375530 /* Build configuration list for PBXProject "UIBranch" */ = {
+		223BBF2227377BE500375530 /* Build configuration list for PBXProject "Hyperthread" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				223BBF4F27377BE600375530 /* Debug */,
@@ -1221,7 +1221,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		223BBF5427377BE600375530 /* Build configuration list for PBXNativeTarget "UIBranchTests" */ = {
+		223BBF5427377BE600375530 /* Build configuration list for PBXNativeTarget "HyperthreadTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				223BBF5527377BE600375530 /* Debug */,
@@ -1230,7 +1230,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		223BBF5727377BE600375530 /* Build configuration list for PBXNativeTarget "UIBranchUITests" */ = {
+		223BBF5727377BE600375530 /* Build configuration list for PBXNativeTarget "HyperthreadUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				223BBF5827377BE600375530 /* Debug */,
