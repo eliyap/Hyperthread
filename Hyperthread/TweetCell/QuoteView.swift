@@ -26,13 +26,21 @@ final class QuoteView: UIStackView {
         switch quoted {
         case .none:
             isHidden = true
-        
+            userView.isHidden = true
+            tweetTextView.isHidden = true
+            
         case .unavailable(_):
-            #warning("TODO")
-            break
+            isHidden = false
+            userView.isHidden = true
+            tweetTextView.isHidden = false
+            
+            tweetTextView.attributedText = Tweet.notAvailableAttributedString
         
         case .available(let tweet, let author):
             isHidden = false
+            userView.isHidden = false
+            tweetTextView.isHidden = false
+            
             userView.configure(user: author)
             tweetTextView.attributedText = tweet.attributedString
         }

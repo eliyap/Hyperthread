@@ -170,10 +170,7 @@ final class TweetCell: ControlledCell {
             
             configureQuoteReply(tweet: tweet, realm: realm)
         } else {
-            tweetTextView.attributedText = NSMutableAttributedString(string: """
-                This tweet is unavailable.
-                The author may have hidden or deleted it.
-                """, attributes: Tweet.textAttributes)
+            tweetTextView.attributedText = Tweet.notAvailableAttributedString
             userView.isHidden = true
             retweetView.isHidden = true
             metricsView.isHidden = true

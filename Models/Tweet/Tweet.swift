@@ -171,3 +171,12 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
      */
     lazy var attributedString: NSAttributedString = fullText(context: nil)
 }
+
+extension Tweet {
+    public static let notAvailableMessage = """
+        This tweet is unavailable.
+        The author may have hidden or deleted it.
+        """
+    public static let notAvailableAttributedString: NSAttributedString = .init(string: Tweet.notAvailableMessage, attributes: Tweet.textAttributes)
+}
+
