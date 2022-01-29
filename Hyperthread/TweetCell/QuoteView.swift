@@ -7,19 +7,35 @@
 
 import UIKit
 
-final class QuoteView: UIStackView {
+final class QuoteView: UIView {
     
-    /// Component Views.
+    /// Component views.
+    let cardBackground: CardBackground = .init()
+    let stackView: UIStackView = .init()
     let userView: UserView = .init()
     let tweetTextView: TweetTextView = .init()
     
+    private let inset: CGFloat = CardTeaserCell.borderInset
+    
     init() {
         super.init(frame: .zero)
-        axis = .vertical
-        alignment = .leading
         
-        addArrangedSubview(userView)
-        addArrangedSubview(tweetTextView)
+        addSubview(cardBackground)
+        cardBackground.constrain(toView: self)
+        
+        addSubview(stackView)
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: inset * 2),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset * 2),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset * 2),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -inset * 2),
+        ])
+        
+        stackView.addArrangedSubview(userView)
+        stackView.addArrangedSubview(tweetTextView)
     }
     
     public func configure(quoted: OptionalTweet?) -> Void {

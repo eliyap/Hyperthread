@@ -37,6 +37,16 @@ final class CardBackground: UIButton {
         styleDefault()
     }
     
+    public func constrain(toView view: UIView) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor, constant: Self.inset),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Self.inset),
+            leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.inset),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Self.inset),
+        ])
+    }
+    
     public func constrain(to guide: UILayoutGuide) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
