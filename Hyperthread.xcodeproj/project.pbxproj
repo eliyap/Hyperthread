@@ -329,7 +329,7 @@
 				223BBF2927377BE500375530 /* UIBranch */,
 				223BBF5E27377E6E00375530 /* Airport */,
 				223BBF4027377BE600375530 /* UIBranchTests */,
-				223BBF4A27377BE600375530 /* UIBranchUITests */,
+				223BBF4A27377BE600375530 /* HyperthreadUITests */,
 				223BBF2827377BE500375530 /* Products */,
 				E44226554E1314DFD9BA4529 /* Pods */,
 				223BBF5A27377E3E00375530 /* Packages */,
@@ -387,13 +387,13 @@
 			path = UIBranchTests;
 			sourceTree = "<group>";
 		};
-		223BBF4A27377BE600375530 /* UIBranchUITests */ = {
+		223BBF4A27377BE600375530 /* HyperthreadUITests */ = {
 			isa = PBXGroup;
 			children = (
 				223BBF4B27377BE600375530 /* UIBranchUITests.swift */,
 				223BBF4D27377BE600375530 /* UIBranchUITestsLaunchTests.swift */,
 			);
-			path = UIBranchUITests;
+			path = HyperthreadUITests;
 			sourceTree = "<group>";
 		};
 		223BBF5A27377E3E00375530 /* Packages */ = {
