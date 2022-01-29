@@ -99,7 +99,11 @@ final class CardTeaserCell: ControlledCell {
         open(userID: userID)
     }
 
-    public func configure(discussion: Discussion, tweet: Tweet, author: User, realm: Realm) {
+    public func configure(discussion: Discussion, realm: Realm) {
+        #warning("todo: remove force unwraps here.")
+        let tweet = realm.tweet(id: discussion.id)!
+        let author = realm.user(id: tweet.authorID)!
+        
         userView.configure(user: author)
         tweetTextView.attributedText = tweet.attributedString
         retweetView.configure(tweet: tweet, realm: realm)

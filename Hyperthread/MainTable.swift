@@ -120,10 +120,7 @@ final class MainTable: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseID) as? Cell else {
             fatalError("Failed to create or cast new cell!")
         }
-        #warning("todo: remove force unwraps here.")
-        let tweet = realm.tweet(id: discussion.id)!
-        let author = realm.user(id: tweet.authorID)!
-        cell.configure(discussion: discussion, tweet: tweet, author: author, realm: realm)
+        cell.configure(discussion: discussion, realm: realm)
         
         /// If a cell was selected, then scrolled away and recycled by `UITableView`'s `Deque`,
         /// the cell would still be styled as if selected.
