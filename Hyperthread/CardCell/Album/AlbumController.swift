@@ -67,9 +67,14 @@ class AlbumController: UIPageViewController {
     }
     
     public func configure(tweet: Tweet) -> Void {
-        if tweet.media.isNotEmpty {
-            let maxAR = tweet.media.map(\.aspectRatio).max()!
-            let maxHeight = CGFloat(tweet.media.map(\.height).max()!)
+        configure(media: Array(tweet.media), picUrlString: tweet.picUrlString)
+    }
+    
+    /// - Note: allowing us to pass "no media" fixes issue where `superTall` dimensions cause bad layout.
+    public func configure(media: [Media], picUrlString: String?) -> Void {
+        if media.isNotEmpty {
+            let maxAR = media.map(\.aspectRatio).max()!
+            let maxHeight = CGFloat(media.map(\.height).max()!)
             replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(min(threshholdAR, maxAR)))
             replace(object: self, on: \.intrinsicHeightConstraint, with: view.heightAnchor.constraint(lessThanOrEqualToConstant: maxHeight))
             
@@ -77,9 +82,9 @@ class AlbumController: UIPageViewController {
             controllers.forEach { $0.view.removeFromSuperview() }
             
             /// Get new views.
-            controllers = Array(tweet.media).map { media in
+            controllers = media.map { media in
                 let vc = ImageViewController()
-                vc.configure(media: media, picUrlString: tweet.picUrlString)
+                vc.configure(media: media, picUrlString: picUrlString)
                 vc.view.backgroundColor = .flat
                 return vc
             }
@@ -92,10 +97,10 @@ class AlbumController: UIPageViewController {
              *  - Subview diving to set `isScrollEnabled` to `false` is risky and undocumented.
              *  - `isUserInteractionEnabled` would prevent tap gestures.
              */
-            if tweet.media.count > 1 {
+            if media.count > 1 {
                 dataSource = self
                 countButton.isHidden = false
-                countButton.setTitle("1/\(tweet.media.count)", for: .normal)
+                countButton.setTitle("1/\(media.count)", for: .normal)
             } else {
                 dataSource = nil
                 countButton.isHidden = true

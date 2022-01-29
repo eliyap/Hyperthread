@@ -86,7 +86,7 @@ final class CardHeaderCell: ControlledCell {
             .store(in: &cancellable)
     }
 
-    public func configure(tweet: Tweet, author: User?, realm: Realm) {
+    public func configure(tweet: Tweet, author: User, realm: Realm) {
         userView.configure(user: author)
         tweetTextView.attributedText = tweet.attributedString
         retweetView.configure(tweet: tweet, realm: realm)
