@@ -328,7 +328,7 @@
 				22FA26AA2795BA2C00DD8EE4 /* Engine */,
 				223BBF2927377BE500375530 /* Hyperthread */,
 				223BBF5E27377E6E00375530 /* Airport */,
-				223BBF4027377BE600375530 /* UIBranchTests */,
+				223BBF4027377BE600375530 /* HyperthreadTests */,
 				223BBF4A27377BE600375530 /* HyperthreadUITests */,
 				223BBF2827377BE500375530 /* Products */,
 				E44226554E1314DFD9BA4529 /* Pods */,
@@ -379,12 +379,12 @@
 			path = Hyperthread;
 			sourceTree = "<group>";
 		};
-		223BBF4027377BE600375530 /* UIBranchTests */ = {
+		223BBF4027377BE600375530 /* HyperthreadTests */ = {
 			isa = PBXGroup;
 			children = (
 				223BBF4127377BE600375530 /* HyperthreadTests.swift */,
 			);
-			path = UIBranchTests;
+			path = HyperthreadTests;
 			sourceTree = "<group>";
 		};
 		223BBF4A27377BE600375530 /* HyperthreadUITests */ = {
