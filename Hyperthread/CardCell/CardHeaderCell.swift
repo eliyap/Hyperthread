@@ -29,7 +29,7 @@ final class CardHeaderCell: ControlledCell {
     let metricsView = MetricsView()
     // TODO: add profile image
     
-    private let inset: CGFloat = 6
+    private let inset: CGFloat = CardTeaserCell.borderInset
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
