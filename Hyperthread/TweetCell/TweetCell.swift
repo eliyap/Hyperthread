@@ -144,8 +144,8 @@ final class TweetCell: ControlledCell {
     private let maxDepth = 14
     private let indentSize: CGFloat = 10
     public func configure(node: Node, realm: Realm) {
-        if case .available(let tweet) = node.tweet {
-            userView.configure(user: node.author)
+        if case .available(let tweet, let author) = node.tweet {
+            userView.configure(user: author)
             tweetTextView.attributedText = tweet.fullText(context: node)
             retweetView.configure(tweet: tweet, realm: realm)
             metricsView.configure(tweet)
