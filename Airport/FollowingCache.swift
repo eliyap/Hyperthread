@@ -91,7 +91,7 @@ actor FollowingCache {
         return {
             /// Store fetched results.
             do {
-                let realm = try! Realm()
+                let realm = makeRealm()
                 try realm.storeFollowing(raw: rawUsers)
                 return rawUsers.map(\.id)
             } catch {

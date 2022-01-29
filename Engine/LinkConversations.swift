@@ -15,7 +15,7 @@ import RealmSwift
 internal func linkConversations() throws -> Set<Tweet.ID> {
     var idsToFetch = Set<Tweet.ID>()
     
-    let realm = try! Realm()
+    let realm = makeRealm()
     
     /// Check unlinked conversations.
     let unlinked = realm.objects(Conversation.self)

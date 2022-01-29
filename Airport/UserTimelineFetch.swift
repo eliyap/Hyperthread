@@ -42,7 +42,7 @@ fileprivate func store(_ raw: RawData, followingIDs: [User.ID]) -> Void {
     do {
         NetLog.debug("Received \(tweets.count) user timeline tweets.", print: true, true)
         
-        let realm = try! Realm()
+        let realm = makeRealm()
         
         /// Safe to insert `included`, as we make no assumptions around `Relevance`.
         try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
@@ -69,7 +69,7 @@ fileprivate func updateUserWindow(request: TimelineRequest, tweets: [RawHydrated
     }
     
     /// Resolve user.
-    let realm = try! Realm()
+    let realm = makeRealm()
     guard let user = realm.user(id: request.id) else {
         NetLog.error("Could not find user with ID \(request.id)")
         assert(false)
@@ -139,7 +139,7 @@ fileprivate func fetchRawTimeline(
 
 fileprivate func getRequests(followingIDs: [User.ID], window: DateWindow? = nil) -> [TimelineRequest] {
     /// Fetch complete `User` objects from Realm database.
-    let realm = try! Realm()
+    let realm = makeRealm()
     let users = followingIDs.compactMap(realm.user(id:))
     assert(users.count == followingIDs.count, "Users missing from realm database!")
     

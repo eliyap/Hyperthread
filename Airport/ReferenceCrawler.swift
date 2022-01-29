@@ -210,7 +210,7 @@ actor ReferenceCrawler {
         /// Unbundle tuple.
         let (tweets, included, users, media) = rawData
         
-        let realm = try! Realm()
+        let realm = makeRealm()
         
         /// Safe to insert `included`, as we make no assumptions around `Relevance`.
         try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
@@ -218,7 +218,7 @@ actor ReferenceCrawler {
     }
     
     private static func getConversationsDangling() -> Set<Tweet.ID> {
-        let realm = try! Realm()
+        let realm = makeRealm()
         
         /// Find all conversations without a `Discussion`.
         /// - Note: We do **not** apply a `Relevance` filter here.
@@ -239,7 +239,7 @@ actor ReferenceCrawler {
     }
     
     private static func getDiscussionsDangling() -> Set<Tweet.ID> {
-        let realm = try! Realm()
+        let realm = makeRealm()
         
         let d = realm.objects(Discussion.self)
             .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [

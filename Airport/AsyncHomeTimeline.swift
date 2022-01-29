@@ -65,7 +65,7 @@ fileprivate func store(rawData: RawData) throws -> Void {
     let (tweets, _, users, media) = rawData
     NetLog.debug("Received \(tweets.count) home timeline tweets.", print: true, true)
     
-    let realm = try! Realm()
+    let realm = makeRealm()
     try realm.ingestRawHomeTimelineTweets(rawTweets: tweets, rawUsers: users, rawMedia: media)
     
     /// Update home timeline boundaries.

@@ -12,7 +12,7 @@ import Combine
 
 final class MainTable: UITableViewController {
     
-    private let realm = try! Realm()
+    private let realm = makeRealm()
     
     private var mrd: MarkReadDaemon! = nil
     private var dds: DDS! = nil

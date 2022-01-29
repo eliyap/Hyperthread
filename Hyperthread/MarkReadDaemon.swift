@@ -22,7 +22,7 @@ final class MarkReadDaemon {
         }
     }
     
-    private let realm = try! Realm()
+    private let realm = makeRealm()
     
     /// `seen` indicates whether the discussion was fully visible for the user to read.
     var indices: [IndexPath: Discussion] = [:]

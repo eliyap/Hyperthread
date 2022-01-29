@@ -112,7 +112,7 @@ extension DateWindow {
             return nil
         }
         
-        let realm = try! Realm()
+        let realm = makeRealm()
         guard
             let start = realm.tweet(id: maxID)?.createdAt,
             let end = realm.tweet(id: sinceID)?.createdAt

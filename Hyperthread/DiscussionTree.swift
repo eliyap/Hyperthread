@@ -93,7 +93,7 @@ extension Node: Hashable {
 extension Discussion {
     /// Returns the root node of a discussion tree data structure.
     func makeTree(airport: Airport) -> Node {
-        let realm = try! Realm()
+        let realm = makeRealm()
         
         /// Initialize the root node.
         let rootTweet = realm.tweet(id: self.id)!
