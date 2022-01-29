@@ -7,7 +7,7 @@
 
 import XCTest
 
-class UIBranchUITestsLaunchTests: XCTestCase {
+class HyperthreadUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
