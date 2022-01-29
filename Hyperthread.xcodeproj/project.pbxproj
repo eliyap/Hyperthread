@@ -26,6 +26,7 @@
 		222161F42741C2F400220F0C /* AssetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F32741C2F400220F0C /* AssetColors.swift */; };
 		2232DD2C2796F1E900936846 /* TableTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2232DD2B2796F1E900936846 /* TableTopBar.swift */; };
 		2232DD2E2796F75000936846 /* TableWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2232DD2D2796F75000936846 /* TableWrapper.swift */; };
+		22331BB927A5CC97003FDD5F /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22331BB827A5CC97003FDD5F /* CanonicalString.swift */; };
 		223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2A27377BE500375530 /* AppDelegate.swift */; };
 		223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2C27377BE500375530 /* SceneDelegate.swift */; };
 		223BBF2F27377BE500375530 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2E27377BE500375530 /* ViewController.swift */; };
@@ -99,7 +100,6 @@
 		22EE928D2799C5BB003C9056 /* UserMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE928C2799C5BB003C9056 /* UserMessage.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
 		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
-		22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F24640274DC20200AE17AD /* CanonicalString.swift */; };
 		22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26992794846F00DD8EE4 /* FirstFetch.swift */; };
 		22FA269E2794B88400DD8EE4 /* Truncated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA269D2794B88400DD8EE4 /* Truncated.swift */; };
 		22FA26A02794CC4D00DD8EE4 /* DiscussionDDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA269F2794CC4D00DD8EE4 /* DiscussionDDS.swift */; };
@@ -154,6 +154,7 @@
 		222161F32741C2F400220F0C /* AssetColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetColors.swift; sourceTree = "<group>"; };
 		2232DD2B2796F1E900936846 /* TableTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTopBar.swift; sourceTree = "<group>"; };
 		2232DD2D2796F75000936846 /* TableWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableWrapper.swift; sourceTree = "<group>"; };
+		22331BB827A5CC97003FDD5F /* CanonicalString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanonicalString.swift; sourceTree = "<group>"; };
 		223BBF2727377BE500375530 /* Hyperthread.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hyperthread.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		223BBF2A27377BE500375530 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		223BBF2C27377BE500375530 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -230,7 +231,6 @@
 		22EE928C2799C5BB003C9056 /* UserMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessage.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
-		22F24640274DC20200AE17AD /* CanonicalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CanonicalString.swift; path = /Users/SAM/Documents/UIBranch/Models/CanonicalString.swift; sourceTree = "<absolute>"; };
 		22FA26992794846F00DD8EE4 /* FirstFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstFetch.swift; sourceTree = "<group>"; };
 		22FA269D2794B88400DD8EE4 /* Truncated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Truncated.swift; sourceTree = "<group>"; };
 		22FA269F2794CC4D00DD8EE4 /* DiscussionDDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionDDS.swift; sourceTree = "<group>"; };
@@ -328,7 +328,7 @@
 				22FA26AA2795BA2C00DD8EE4 /* Engine */,
 				223BBF2927377BE500375530 /* Hyperthread */,
 				223BBF5E27377E6E00375530 /* Airport */,
-				223BBF4027377BE600375530 /* UIBranchTests */,
+				223BBF4027377BE600375530 /* HyperthreadTests */,
 				223BBF4A27377BE600375530 /* HyperthreadUITests */,
 				223BBF2827377BE500375530 /* Products */,
 				E44226554E1314DFD9BA4529 /* Pods */,
@@ -379,12 +379,12 @@
 			path = Hyperthread;
 			sourceTree = "<group>";
 		};
-		223BBF4027377BE600375530 /* UIBranchTests */ = {
+		223BBF4027377BE600375530 /* HyperthreadTests */ = {
 			isa = PBXGroup;
 			children = (
 				223BBF4127377BE600375530 /* HyperthreadTests.swift */,
 			);
-			path = UIBranchTests;
+			path = HyperthreadTests;
 			sourceTree = "<group>";
 		};
 		223BBF4A27377BE600375530 /* HyperthreadUITests */ = {
@@ -432,7 +432,7 @@
 				223BBF6C27377EC300375530 /* Query.swift */,
 				22680A91276B41B1008827F8 /* Relevance.swift */,
 				22680A8F276B4159008827F8 /* PublicMetrics.swift */,
-				22F24640274DC20200AE17AD /* CanonicalString.swift */,
+				22331BB827A5CC97003FDD5F /* CanonicalString.swift */,
 				22760A4E274B136200F28F0A /* Media.swift */,
 				2248FF4F2745BEA100C6DEF9 /* Entities.swift */,
 				223BBF6127377E8800375530 /* IngestTweet.swift */,
@@ -846,7 +846,6 @@
 				223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */,
 				223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */,
 				22FA26A52795B85400DD8EE4 /* Tweet+Identifiable.swift in Sources */,
-				22F24641274DC20200AE17AD /* CanonicalString.swift in Sources */,
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
 				22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */,
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
@@ -859,6 +858,7 @@
 				22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */,
 				22193DBA2785C20B005A7708 /* OnUnfollow.swift in Sources */,
 				22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */,
+				22331BB927A5CC97003FDD5F /* CanonicalString.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */,
 				22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */,
