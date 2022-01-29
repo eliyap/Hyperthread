@@ -100,7 +100,8 @@ final class CardTeaserCell: ControlledCell {
     }
 
     public func configure(discussion: Discussion, realm: Realm) {
-        guard let tweet = realm.tweet(id: discussion.id) else {
+        let tweet: Tweet? = realm.tweet(id: discussion.id)
+        guard let tweet = tweet else {
             /// - Note: expressly passing "no media" fixes issue where `superTall` dimensions cause bad layout.
             albumVC.configure(media: [], picUrlString: nil)
             return
