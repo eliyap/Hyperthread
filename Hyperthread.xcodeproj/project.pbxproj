@@ -208,6 +208,7 @@
 		228D71EC277C1D2300E306BD /* CellEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellEvent.swift; sourceTree = "<group>"; };
 		228D71EF2780128300E306BD /* RealmDateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDateWindow.swift; sourceTree = "<group>"; };
 		228D71F12780142200E306BD /* UserTimelineWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTimelineWindow.swift; sourceTree = "<group>"; };
+		22A760BA27A5E1680006E9BC /* Changelog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelog.md; sourceTree = "<group>"; };
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
 		22BC9E8E27A5C95100721BD2 /* DiscussionTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscussionTree.swift; sourceTree = "<group>"; };
 		22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorMarkerView.swift; sourceTree = "<group>"; };
@@ -321,6 +322,7 @@
 		223BBF1E27377BE500375530 = {
 			isa = PBXGroup;
 			children = (
+				22A760BA27A5E1680006E9BC /* Changelog.md */,
 				220C57F92787E14500BDB381 /* AppData */,
 				223BBF7F2738476B00375530 /* Misc */,
 				223BBF7227377EE500375530 /* Logging */,
