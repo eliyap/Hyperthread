@@ -126,7 +126,7 @@ final class MainTable: UITableViewController {
         cell.configure(discussion: discussion, tweet: tweet, author: author, realm: realm)
         
         /// If a cell was selected, then scrolled away and recycled by `UITableView`'s `Deque`,
-        /// the would still be styled as if selected.
+        /// the cell would still be styled as if selected.
         /// Resetting the style fixes this visual issue.
         cell.resetStyle()
         
