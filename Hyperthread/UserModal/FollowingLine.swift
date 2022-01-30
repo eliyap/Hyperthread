@@ -72,18 +72,20 @@ final class FollowingLine: UIStackView {
             return
         }
         
-        Task {
-            followingButton.isEnabled = false
-            followingButton.loading.startAnimating()
-            
-            if following {
+        followingButton.isEnabled = false
+        followingButton.loading.startAnimating()
+        
+        if following {
+            Task {
                 let success = await Self.performUnfollow(userID: userID, credentials: credentials)
                 if success {
                     onUnfollow(userIDs: [userID])
                     followingButton.isEnabled = true
                     followingButton.loading.stopAnimating()
                 }
-            } else {
+            }
+        } else {
+            Task {
                 let success = await Self.performFollow(userID: userID, credentials: credentials)
                 if success {
                     onFollow(userIDs: [userID])
