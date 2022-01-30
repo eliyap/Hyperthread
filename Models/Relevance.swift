@@ -22,6 +22,10 @@ internal enum Relevance: Int {
     /// but does not itself cause the discussion to surface.
     case reply = 500
     
+    /// Indicates an external tweet (not from any timeline)
+    /// which the user would like to look up.
+    case lookup = 950
+    
     /// Indicates content that "surfaces" a `Discussion`,
     /// i.e. this Tweet is why you see this `Discussion`.
     case discussion = 999
@@ -47,5 +51,5 @@ internal enum Relevance: Int {
     }
     
     /// Minimum relevance to be considered worth showing the user.
-    public static let threshold = discussion.rawValue
+    public static let threshold = lookup.rawValue
 }
