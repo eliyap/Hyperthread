@@ -53,16 +53,8 @@ final class TableWrapper: UIViewController {
     
     static func request(string: String) throws -> Void {
         let tweetID: String
-        if string.contains("/") {
-            guard let trailing = string.split(separator: "/").last else {
-                Logger.general.error("Could not get last component in '\(string)'")
-                assert(false)
-                
-                throw TweetLookupError.badString
-            }
-            tweetID = String(trailing)
-        } else {
-            tweetID = string
+        guard let tweetID = URL(string: string)?.lastPathComponent else {
+            throw TweetLookupError.badString
         }
         
         let isDecimcalDigits = CharacterSet(charactersIn: tweetID).isSubset(of: CharacterSet.decimalDigits)
