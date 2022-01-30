@@ -12,6 +12,7 @@ import UIKit
  by deactivating the original, overwriting it, then activating the new constraint.
  This specific ordering avoids an "Unable to simultaneously satisfy constraints." warning.
  */
+@MainActor /// UI code.
 func replace<Object: AnyObject>(
     object: Object,
     on keyPath: ReferenceWritableKeyPath<Object, NSLayoutConstraint>,
@@ -23,6 +24,7 @@ func replace<Object: AnyObject>(
 }
 
 /// Replace named optional constraint with a new value.
+@MainActor /// UI code.
 func replace<Object: AnyObject>(
     object: Object,
     on keyPath: ReferenceWritableKeyPath<Object, NSLayoutConstraint?>,
