@@ -13,6 +13,7 @@ final class RetweetView: UIStackView {
     
     var retweetLabels: [IconView] = []
 
+    @MainActor
     init() {
         super.init(frame: .zero)
         axis = .vertical

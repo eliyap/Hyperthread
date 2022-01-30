@@ -8,6 +8,7 @@
 import UIKit
 
 final class TweetTextView: UITextView {
+    @MainActor
     init() {
         super.init(frame: .zero, textContainer: nil)
         

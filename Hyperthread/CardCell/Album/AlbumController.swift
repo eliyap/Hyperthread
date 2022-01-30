@@ -42,6 +42,7 @@ class AlbumController: UIPageViewController {
         return config
     }()
     
+    @MainActor
     init() {
         self.countButton = UIButton(configuration: Self.countButtonConfig, primaryAction: nil)
         
