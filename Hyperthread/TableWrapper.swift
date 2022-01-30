@@ -51,9 +51,6 @@ final class TableWrapper: UIViewController {
     }
     #endif
     
-    enum TweetLookupError: Error {
-        case badString
-    }
     static func request(string: String) throws -> Void {
         let tweetID: String
         if string.contains("/") {
@@ -79,4 +76,9 @@ final class TableWrapper: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("No.")
     }
+}
+
+enum TweetLookupError: Error {
+    case badString
+    case couldNotFindTweet
 }
