@@ -38,6 +38,7 @@ final class ImageViewController: UIViewController {
     
     private var mediaModel: MediaModel? = nil
     
+    @MainActor
     init() {
         super.init(nibName: nil, bundle: nil)
         view.addSubview(imageView)

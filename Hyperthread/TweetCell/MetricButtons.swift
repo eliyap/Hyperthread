@@ -20,6 +20,7 @@ final class MetricsView: UIStackView {
     public static var font: UIFont { UIFont.preferredFont(forTextStyle: Self.fontStyle) }
     public static let fontStyle = UIFont.TextStyle.caption2
     
+    @MainActor
     init() {
         super.init(frame: .zero)
         axis = .horizontal

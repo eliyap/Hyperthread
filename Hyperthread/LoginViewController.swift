@@ -14,6 +14,7 @@ final class LoginViewController: PMViewController {
     public let loadingView = UIActivityIndicatorView(style: .large)
     public let errorLabel = UILabel()
 
+    @MainActor
     init() {
         button = UIButton(configuration: .filled(), primaryAction: nil)
         super.init(nibName: nil, bundle: nil)

@@ -17,6 +17,7 @@ final class QuoteView: UIView {
     
     private let inset: CGFloat = CardTeaserCell.borderInset
     
+    @MainActor
     init() {
         super.init(frame: .zero)
         

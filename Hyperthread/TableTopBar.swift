@@ -109,6 +109,8 @@ fileprivate final class BarContents: UIStackView {
     }
     
     lazy var inset = CardTeaserCell.borderInset
+    
+    @MainActor
     init() {
         super.init(frame: .zero)
         axis = .horizontal
