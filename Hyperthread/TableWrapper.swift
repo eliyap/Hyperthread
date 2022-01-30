@@ -79,6 +79,7 @@ final class TableWrapper: UIViewController {
                     assert(false)
                     return
                 }
+                self?.splitViewController?.show(.secondary)
                 self?.splitDelegate.present(discussion)
             }
             
