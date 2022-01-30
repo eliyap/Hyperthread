@@ -70,7 +70,14 @@ final class TableWrapper: UIViewController {
             throw TweetLookupError.badString
         }
         
-        #warning("lookup tweet here")
+        Task {
+            guard let discussion = try? await fetchDiscussion(tweetID: tweetID) else {
+                print("failed")
+                return
+            }
+            
+            print("success!")
+        }
     }
     
     required init?(coder: NSCoder) {

@@ -8,19 +8,33 @@
 import Foundation
 import Twig
 import RealmSwift
+import BlackBox
 
 /// Load a discussion around a specific tweet ID.
 internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion {
-    await ReferenceCrawler.shared.fetchSingle(id: tweetID)
-    let realm: Realm = makeRealm()
-    guard let tweet = makeRealm().tweet(id: tweetID) else {
-        throw TweetLookupError.couldNotFindTweet
+    let tweet = try await getTweet(id: tweetID)
+    
+    /// Check if discussion already exists.
+    if
+        let conversation = tweet.conversation.first,
+        let discussion = conversation.discussion.first
+    {
+        return discussion
     }
     
     /// Temporarily elevate relevance.
     let originalRelevance = tweet.relevance
-    try realm.writeWithToken { token in
+    try makeRealm().writeWithToken { token in
         tweet.relevance = .discussion
+    }
+    defer {
+        do {
+            try makeRealm().writeWithToken { token in
+                tweet.relevance = originalRelevance
+            }
+        } catch {
+            Logger.general.error("Failed to reset relevance")
+        }
     }
     
     await ReferenceCrawler.shared.performFollowUp()
@@ -32,4 +46,17 @@ internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion {
     }
     
     return discussion
+}
+
+fileprivate func getTweet(id: Tweet.ID) async throws -> Tweet {
+    /// Check local storage first.
+    if let local = makeRealm().tweet(id: id) {
+        return local
+    } else {
+        await ReferenceCrawler.shared.fetchSingle(id: id)
+        guard let tweet = makeRealm().tweet(id: id) else {
+            throw TweetLookupError.couldNotFindTweet
+        }
+        return tweet
+    }
 }
