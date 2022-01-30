@@ -112,8 +112,8 @@ fileprivate extension TableWrapper {
             throw TweetLookupError.badString
         }
         
-        let isDecimcalDigits = CharacterSet(charactersIn: tweetID).isSubset(of: CharacterSet.decimalDigits)
-        guard isDecimcalDigits else {
+        let isDecimalDigits = CharacterSet(charactersIn: tweetID).isSubset(of: CharacterSet.decimalDigits)
+        guard isDecimalDigits else {
             throw TweetLookupError.badString
         }
         
