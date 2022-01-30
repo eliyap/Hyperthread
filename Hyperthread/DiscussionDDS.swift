@@ -187,8 +187,3 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         }
     }
 }
-
-fileprivate extension Discussion {
-    /// - Warning: this exists as a workaround for `UITableViewDiffableDataSource`. Do _not_ use anywhere else!
-    static let placeholder: Discussion = .init()
-}
