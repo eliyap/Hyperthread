@@ -14,15 +14,15 @@ final class TableWrapper: UIViewController, Sendable {
     
     private let wrapped: MainTable
     private let topBar: TableTopBar
-    private let loadingConduit: UserMessageConduit = .init()
+    private let loadingCarrier: UserMessageCarrier = .init()
     
     /// Object to notify when something elsewhere in the `UISplitViewController` should change.
     private weak var splitDelegate: SplitDelegate!
     
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
-        topBar = .init(loadingConduit: loadingConduit)
-        wrapped = .init(splitDelegate: splitDelegate, loadingConduit: loadingConduit)
+        topBar = .init(loadingCarrier: loadingCarrier)
+        wrapped = .init(splitDelegate: splitDelegate, loadingCarrier: loadingCarrier)
         super.init(nibName: nil, bundle: nil)
         adopt(wrapped)
         
