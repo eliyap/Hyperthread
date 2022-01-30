@@ -10,6 +10,7 @@ import RealmSwift
 import Combine
 
 /// - Warning: 22.01.30 not sure if this is *really* `Sendable`...
+/// it contains a `var Date`, which seems disqualifying?
 final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion>, Sendable {
     private let realm: Realm
     public private(set) var token: NotificationToken? = nil
