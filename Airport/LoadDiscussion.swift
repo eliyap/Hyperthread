@@ -15,22 +15,20 @@ internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion.ID {
     let tweet = try await getTweet(id: tweetID)
     
     /// Check if discussion already exists.
-    if
-        let conversation = tweet.conversation.first,
-        let discussion = conversation.discussion.first
-    {
-        return discussion.id
+    if let discussionID = tweet.discussionID {
+        return discussionID
     }
     
     /// Temporarily elevate relevance.
     let originalRelevance = tweet.relevance
-    try makeRealm().writeWithToken { token in
-        tweet.relevance = .discussion
+    let realm = makeRealm()
+    try realm.writeWithToken { token in
+        realm.tweet(id: tweet.id)?.relevance = .discussion
     }
     defer {
         do {
             try makeRealm().writeWithToken { token in
-                tweet.relevance = originalRelevance
+                realm.tweet(id: tweet.id)?.relevance = originalRelevance
             }
         } catch {
             Logger.general.error("Failed to reset relevance")
@@ -38,25 +36,42 @@ internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion.ID {
     }
     
     await ReferenceCrawler.shared.performFollowUp()
-    guard
-        let conversation = tweet.conversation.first,
-        let discussion = conversation.discussion.first
-    else {
-        throw TweetLookupError.couldNotFindTweet
-    }
     
-    return discussion.id
+    return try { /// Synchronous context.
+        let r = makeRealm()
+        guard
+            let t = r.tweet(id: tweet.id),
+            let c = t.conversation.first,
+            let d = c.discussion.first
+        else { throw TweetLookupError.couldNotFindTweet }
+        
+        return d.id
+    }()
 }
 
-fileprivate func getTweet(id: Tweet.ID) async throws -> Tweet {
+fileprivate func getTweet(id: Tweet.ID) async throws -> TweetModel {
     /// Check local storage first.
     if let local = makeRealm().tweet(id: id) {
-        return local
+        return .init(tweet: local)
     } else {
         await ReferenceCrawler.shared.fetchSingle(id: id)
         guard let tweet = makeRealm().tweet(id: id) else {
             throw TweetLookupError.couldNotFindTweet
         }
-        return tweet
+        return .init(tweet: tweet)
+    }
+}
+
+fileprivate struct TweetModel {
+    let id: Tweet.ID
+    let relevance: Relevance
+    let conversationID: Conversation.ID?
+    let discussionID: Discussion.ID?
+    
+    init(tweet: Tweet) {
+        self.id = tweet.id
+        self.relevance = tweet.relevance
+        self.conversationID = tweet.conversation.first?.id
+        self.discussionID = tweet.conversation.first?.discussion.first?.id
     }
 }
