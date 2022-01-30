@@ -30,8 +30,22 @@ final class TableWrapper: UIViewController, Sendable {
         topBar.constrain(to: view)
         view.bringSubviewToFront(topBar)
         
-        #if DEBUG
+        let addLinkButton = UIBarButtonItem(
+            title: "Add from Link",
+            image: UIImage(systemName: "link.badge.plus"),
+            primaryAction: UIAction(handler: { _ in
+                self.promptForLink()
+            }),
+            menu: nil
+        )
         navigationItem.leftBarButtonItems = [
+            addLinkButton,
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod)),
+        ]
+
+        #if DEBUG
+        navigationItem.leftBarButtonItems = navigationItem.leftBarButtonItems ?? []
+        + [
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod)),
         ]
         #endif
@@ -49,14 +63,51 @@ final class TableWrapper: UIViewController, Sendable {
                 return
             }
             #warning("handle errors")
-            try! self?.request(string: string)
+            try! self?.tryLinkRequest(string: string)
         })
         self.present(alertController, animated: true, completion: nil)
     }
     #endif
     
-    func request(string: String) throws -> Void {
-        let tweetID: String
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("No.")
+    }
+}
+
+enum TweetLookupError: Error {
+    case badString
+    case couldNotFindTweet
+}
+
+fileprivate extension TableWrapper {
+    func promptForLink() -> Void {
+        let alertController = requestURL(completion: { [weak self] (string: String?) in
+            guard let string = string else {
+                return
+            }
+            self?.handleLinkRequest(string: string)
+        })
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func handleLinkRequest(string: String) -> Void {
+        do {
+            try tryLinkRequest(string: string)
+        } catch TweetLookupError.badString {
+            showAlert(title: "Could Not Read Link", message: "Please check the URL")
+        } catch TweetLookupError.couldNotFindTweet {
+            showAlert(title: "Could Not Load Tweet", message: """
+                Couldn't fetch tweet.
+                It might be hidden or deleted.
+                """)
+        } catch {
+            showAlert(title: "Error", message: "Error while loading tweet.")
+        }
+    }
+    
+    func tryLinkRequest(string: String) throws -> Void {
         guard let tweetID = URL(string: string)?.lastPathComponent else {
             throw TweetLookupError.badString
         }
@@ -67,31 +118,16 @@ final class TableWrapper: UIViewController, Sendable {
         }
         
         Task {
-            guard let discussionID = try? await fetchDiscussion(tweetID: tweetID) else {
-                print("failed")
-                return
-            }
-            
-            print("success!")
-            DispatchQueue.main.async { [weak self] in
+            let discussionID = try await fetchDiscussion(tweetID: tweetID)
+            try await MainActor.run {
                 guard let discussion = makeRealm().discussion(id: discussionID) else {
                     Logger.general.error("Could not locate discussion with ID \(discussionID)")
                     assert(false)
-                    return
+                    throw TweetLookupError.couldNotFindTweet
                 }
-                self?.splitViewController?.show(.secondary)
-                self?.splitDelegate.present(discussion)
+                splitViewController?.show(.secondary)
+                splitDelegate.present(discussion)
             }
-            
         }
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("No.")
-    }
-}
-
-enum TweetLookupError: Error {
-    case badString
-    case couldNotFindTweet
 }
