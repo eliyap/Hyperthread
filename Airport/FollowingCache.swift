@@ -78,7 +78,7 @@ actor FollowingCache {
             assert(false)
             
             /// If the fetch fails, fall back on local Realm storage.
-            let realm = try! await Realm()
+            let realm = makeRealm()
             let ids: [User.ID] = realm.objects(User.self)
                 .filter("\(User.followingPropertyName) == YES")
                 .map(\.id)
