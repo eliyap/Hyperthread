@@ -10,7 +10,7 @@ import Twig
 import RealmSwift
 import Combine
 
-final class MainTable: UITableViewController {
+final class MainTable: UITableViewController, Sendable {
     
     private let realm = makeRealm()
     

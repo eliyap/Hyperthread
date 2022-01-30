@@ -10,7 +10,7 @@ import UIKit
 import Combine
 
 /// A drop down bar that displays `UserMessage`s.
-final class TableTopBar: UIVisualEffectView {
+final class TableTopBar: UIVisualEffectView, Sendable {
 
     private let barContents: BarContents = .init()
     
