@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Combine
+import BlackBox
 
 final class TableWrapper: UIViewController {
     
@@ -35,9 +36,45 @@ final class TableWrapper: UIViewController {
     #if DEBUG
     @objc
     func debugMethod() {
-        loadingConduit.send(.init(category: .loading, duration: .interval(1.0)))
+        // loading method
+//        loadingConduit.send(.init(category: .loading, duration: .interval(1.0)))
+        
+        // present alert controller
+        let alertController = requestURL(completion: { (string: String?) in
+            guard let string = string else {
+                return
+            }
+            #warning("handle errors")
+            try! TableWrapper.request(string: string)
+        })
+        self.present(alertController, animated: true, completion: nil)
     }
     #endif
+    
+    enum TweetLookupError: Error {
+        case badString
+    }
+    static func request(string: String) throws -> Void {
+        let tweetID: String
+        if string.contains("/") {
+            guard let trailing = string.split(separator: "/").last else {
+                Logger.general.error("Could not get last component in '\(string)'")
+                assert(false)
+                
+                throw TweetLookupError.badString
+            }
+            tweetID = String(trailing)
+        } else {
+            tweetID = string
+        }
+        
+        let isDecimcalDigits = CharacterSet(charactersIn: tweetID).isSubset(of: CharacterSet.decimalDigits)
+        guard isDecimcalDigits else {
+            throw TweetLookupError.badString
+        }
+        
+        #warning("lookup tweet here")
+    }
     
     required init?(coder: NSCoder) {
         fatalError("No.")
