@@ -11,7 +11,7 @@ import RealmSwift
 import BlackBox
 
 /// Load a discussion around a specific tweet ID.
-internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion {
+internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion.ID {
     let tweet = try await getTweet(id: tweetID)
     
     /// Check if discussion already exists.
@@ -19,7 +19,7 @@ internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion {
         let conversation = tweet.conversation.first,
         let discussion = conversation.discussion.first
     {
-        return discussion
+        return discussion.id
     }
     
     /// Temporarily elevate relevance.
@@ -45,7 +45,7 @@ internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion {
         throw TweetLookupError.couldNotFindTweet
     }
     
-    return discussion
+    return discussion.id
 }
 
 fileprivate func getTweet(id: Tweet.ID) async throws -> Tweet {

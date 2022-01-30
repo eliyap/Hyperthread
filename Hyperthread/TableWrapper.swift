@@ -16,7 +16,11 @@ final class TableWrapper: UIViewController {
     private let topBar: TableTopBar
     private let loadingConduit: UserMessageConduit = .init()
     
+    /// Object to notify when something elsewhere in the `UISplitViewController` should change.
+    private weak var splitDelegate: SplitDelegate!
+    
     init(splitDelegate: SplitDelegate) {
+        self.splitDelegate = splitDelegate
         topBar = .init(loadingConduit: loadingConduit)
         wrapped = .init(splitDelegate: splitDelegate, loadingConduit: loadingConduit)
         super.init(nibName: nil, bundle: nil)
@@ -40,18 +44,18 @@ final class TableWrapper: UIViewController {
 //        loadingConduit.send(.init(category: .loading, duration: .interval(1.0)))
         
         // present alert controller
-        let alertController = requestURL(completion: { (string: String?) in
+        let alertController = requestURL(completion: { [weak self] (string: String?) in
             guard let string = string else {
                 return
             }
             #warning("handle errors")
-            try! TableWrapper.request(string: string)
+            try! self?.request(string: string)
         })
         self.present(alertController, animated: true, completion: nil)
     }
     #endif
     
-    static func request(string: String) throws -> Void {
+    func request(string: String) throws -> Void {
         let tweetID: String
         guard let tweetID = URL(string: string)?.lastPathComponent else {
             throw TweetLookupError.badString
@@ -63,12 +67,21 @@ final class TableWrapper: UIViewController {
         }
         
         Task {
-            guard let discussion = try? await fetchDiscussion(tweetID: tweetID) else {
+            guard let discussionID = try? await fetchDiscussion(tweetID: tweetID) else {
                 print("failed")
                 return
             }
             
             print("success!")
+            DispatchQueue.main.async { [weak self] in
+                guard let discussion = makeRealm().discussion(id: discussionID) else {
+                    Logger.general.error("Could not locate discussion with ID \(discussionID)")
+                    assert(false)
+                    return
+                }
+                self?.splitDelegate.present(discussion)
+            }
+            
         }
     }
     
