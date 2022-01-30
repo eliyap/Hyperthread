@@ -15,6 +15,7 @@ final class CardBackground: UIButton {
     public static let inset = CardTeaserCell.borderInset
     public class var cornerRadius: CGFloat { Self.inset * 2 }
     
+    @MainActor
     init() {
         self.triangleView = TriangleView(size: Self.inset * 3)
         super.init(frame: .zero)
@@ -35,6 +36,16 @@ final class CardBackground: UIButton {
         triangleView.isHidden = true
         
         styleDefault()
+    }
+    
+    public func constrain(toView view: UIView) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor, constant: Self.inset),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Self.inset),
+            leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.inset),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Self.inset),
+        ])
     }
     
     public func constrain(to guide: UILayoutGuide) -> Void {

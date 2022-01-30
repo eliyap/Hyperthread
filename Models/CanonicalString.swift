@@ -109,9 +109,8 @@ extension String {
             
             if
                 /// By convention(?), quote tweets have the quoted URL at the end.
-                /// If URL references the quote, we can safely remove it, IF it is not also a reply.
+                /// If URL references the quote, we can safely remove it.
                 tweet.quoting != nil,
-                tweet.quoting == tweet.primaryReference,
                 target.upperBound == endIndex,
                 url.display_url.starts(with: "twitter.com/")
             {

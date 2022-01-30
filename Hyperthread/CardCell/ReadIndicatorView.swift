@@ -11,6 +11,8 @@ import UIKit
 /// Specifically, clips `TriangleCorner` so that the card can have an out-of-bounds shadow,
 /// which requires `masksToBounds = false`.
 final class CornerClipView: UIView {
+    
+    @MainActor
     init() {
         super.init(frame: .zero)
         layer.masksToBounds = true

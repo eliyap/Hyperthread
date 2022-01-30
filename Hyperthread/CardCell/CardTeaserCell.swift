@@ -173,7 +173,7 @@ final class CardTeaserCell: ControlledCell {
             || $0.name == Discussion.tweetsDidChangeKey
         }) {
             /// Fetch discussion anew to get updated tweet count.
-            let realm = try! Realm()
+            let realm = makeRealm()
             let updated = realm.discussion(id: oldDiscussion.id)!
             summaryView.configure(updated, realm: realm)
             

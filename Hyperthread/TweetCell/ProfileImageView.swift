@@ -21,6 +21,7 @@ final class ProfileImageView: UIView {
         withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .quaternaryLabel)
     )
     
+    @MainActor
     init() {
         self.imageView = .init(image: placeholder)
         super.init(frame: .zero)
@@ -29,6 +30,7 @@ final class ProfileImageView: UIView {
         imageView.layer.cornerRadius = Self.cornerRadius
         imageView.layer.cornerCurve = .continuous
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         
         constrain()
     }

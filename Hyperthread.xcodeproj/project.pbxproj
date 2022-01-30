@@ -76,6 +76,10 @@
 		228D71ED277C1D2300E306BD /* CellEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EC277C1D2300E306BD /* CellEvent.swift */; };
 		228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EF2780128300E306BD /* RealmDateWindow.swift */; };
 		228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71F12780142200E306BD /* UserTimelineWindow.swift */; };
+		22A760BD27A5EF990006E9BC /* MakeRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760BC27A5EF990006E9BC /* MakeRealm.swift */; };
+		22A760BF27A5F38E0006E9BC /* QuoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760BE27A5F38E0006E9BC /* QuoteView.swift */; };
+		22A760C127A61B1E0006E9BC /* RequestURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C027A61B1E0006E9BC /* RequestURL.swift */; };
+		22A760C327A626640006E9BC /* LoadDiscussion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C227A626640006E9BC /* LoadDiscussion.swift */; };
 		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
 		22BC9E8F27A5C95100721BD2 /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BC9E8E27A5C95100721BD2 /* DiscussionTree.swift */; };
 		22BC9E9127A5C97800721BD2 /* ColorMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */; };
@@ -209,6 +213,10 @@
 		228D71EF2780128300E306BD /* RealmDateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDateWindow.swift; sourceTree = "<group>"; };
 		228D71F12780142200E306BD /* UserTimelineWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTimelineWindow.swift; sourceTree = "<group>"; };
 		22A760BA27A5E1680006E9BC /* Changelog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelog.md; sourceTree = "<group>"; };
+		22A760BC27A5EF990006E9BC /* MakeRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeRealm.swift; sourceTree = "<group>"; };
+		22A760BE27A5F38E0006E9BC /* QuoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteView.swift; sourceTree = "<group>"; };
+		22A760C027A61B1E0006E9BC /* RequestURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestURL.swift; sourceTree = "<group>"; };
+		22A760C227A626640006E9BC /* LoadDiscussion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDiscussion.swift; sourceTree = "<group>"; };
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
 		22BC9E8E27A5C95100721BD2 /* DiscussionTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscussionTree.swift; sourceTree = "<group>"; };
 		22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorMarkerView.swift; sourceTree = "<group>"; };
@@ -326,6 +334,7 @@
 				220C57F92787E14500BDB381 /* AppData */,
 				223BBF7F2738476B00375530 /* Misc */,
 				223BBF7227377EE500375530 /* Logging */,
+				22A760BB27A5EF8B0006E9BC /* Migrations */,
 				223BBF6727377EAD00375530 /* Models */,
 				22FA26AA2795BA2C00DD8EE4 /* Engine */,
 				223BBF2927377BE500375530 /* Hyperthread */,
@@ -356,6 +365,7 @@
 				223BBF2C27377BE500375530 /* SceneDelegate.swift */,
 				223BBF2E27377BE500375530 /* ViewController.swift */,
 				223BBF852738572C00375530 /* MainTable.swift */,
+				22A760C027A61B1E0006E9BC /* RequestURL.swift */,
 				2232DD2B2796F1E900936846 /* TableTopBar.swift */,
 				22EE928C2799C5BB003C9056 /* UserMessage.swift */,
 				2232DD2D2796F75000936846 /* TableWrapper.swift */,
@@ -413,6 +423,7 @@
 				223BBF5F27377E8700375530 /* Airport.swift */,
 				22193DA92783DD5E005A7708 /* FollowingCache.swift */,
 				22680A83276AA651008827F8 /* Sealed.swift */,
+				22A760C227A626640006E9BC /* LoadDiscussion.swift */,
 				22193DAB2783E158005A7708 /* UserTimelineFetch.swift */,
 				22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */,
 				22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */,
@@ -502,11 +513,20 @@
 			path = DateWindow;
 			sourceTree = "<group>";
 		};
+		22A760BB27A5EF8B0006E9BC /* Migrations */ = {
+			isa = PBXGroup;
+			children = (
+				22A760BC27A5EF990006E9BC /* MakeRealm.swift */,
+			);
+			path = Migrations;
+			sourceTree = "<group>";
+		};
 		22D127DF2740653900932614 /* TweetCell */ = {
 			isa = PBXGroup;
 			children = (
 				22D127DD2740651C00932614 /* TweetCell.swift */,
 				22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */,
+				22A760BE27A5F38E0006E9BC /* QuoteView.swift */,
 				22D127EB274070CD00932614 /* MetricButtons.swift */,
 				22A9E9042772A86700C4EE99 /* TimestampButton.swift */,
 				22D127ED2740713500932614 /* TimeDifference.swift */,
@@ -809,6 +829,7 @@
 				22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */,
 				223BBF6527377E8900375530 /* IngestTweet.swift in Sources */,
 				22FA26A22795B6CD00DD8EE4 /* ReferenceSet.swift in Sources */,
+				22A760C127A61B1E0006E9BC /* RequestURL.swift in Sources */,
 				2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */,
 				22D2572E27883A56005FC3D8 /* ScrollPosition.swift in Sources */,
 				228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */,
@@ -839,6 +860,7 @@
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
+				22A760BF27A5F38E0006E9BC /* QuoteView.swift in Sources */,
 				22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */,
 				22193DB72785A878005A7708 /* OnFollow.swift in Sources */,
 				22FA26B72795D1FB00DD8EE4 /* LinkConversations.swift in Sources */,
@@ -861,6 +883,7 @@
 				22193DBA2785C20B005A7708 /* OnUnfollow.swift in Sources */,
 				22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */,
 				22331BB927A5CC97003FDD5F /* CanonicalString.swift in Sources */,
+				22A760BD27A5EF990006E9BC /* MakeRealm.swift in Sources */,
 				22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */,
 				228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */,
 				22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */,
@@ -869,6 +892,7 @@
 				22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */,
 				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
 				22680A84276AA651008827F8 /* Sealed.swift in Sources */,
+				22A760C327A626640006E9BC /* LoadDiscussion.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				22BC9E9327A5C9A000721BD2 /* ImageViewController.swift in Sources */,

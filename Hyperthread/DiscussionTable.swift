@@ -20,7 +20,7 @@ enum TweetSection: Int {
 
 final class DiscussionTable: UITableViewController {
     
-    private let realm = try! Realm()
+    private let realm = makeRealm()
     
     private var dds: DDS! = nil
     

@@ -27,10 +27,11 @@ final class TweetCell: ControlledCell {
     /// Tweet component views.
     private let stackView = UIStackView()
     private let userView: UserView
-    private let tweetTextView = TweetTextView()
-    private let albumVC = AlbumController()
-    private let retweetView = RetweetView()
-    private let metricsView = MetricsView()
+    private let tweetTextView: TweetTextView = .init()
+    private let albumVC: AlbumController = .init()
+    private let quoteView: QuoteView = .init()
+    private let retweetView: RetweetView = .init()
+    private let metricsView: MetricsView = .init()
     private let triangleView: TriangleView
     
     /// Variable Constraint.
@@ -88,6 +89,7 @@ final class TweetCell: ControlledCell {
         stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         
+        /// Configure album view.
         controller.addChild(albumVC)
         stackView.addArrangedSubview(albumVC.view)
         albumVC.didMove(toParent: controller)
@@ -95,6 +97,14 @@ final class TweetCell: ControlledCell {
         NSLayoutConstraint.activate([
             albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+        ])
+        
+        /// Configure quotation view.
+        stackView.addArrangedSubview(quoteView)
+        quoteView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            quoteView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            quoteView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
         
         /// Special case: must request album be "as tall as possible".
@@ -155,11 +165,10 @@ final class TweetCell: ControlledCell {
             retweetView.isHidden = false
             metricsView.isHidden = false
             /// Let `albumVC` decide `isHidden`.
+            
+            configureQuoteReply(tweet: tweet, realm: realm)
         } else {
-            tweetTextView.attributedText = NSMutableAttributedString(string: """
-                This tweet is unavailable.
-                The author may have hidden or deleted it.
-                """, attributes: Tweet.textAttributes)
+            tweetTextView.attributedText = Tweet.notAvailableAttributedString
             userView.isHidden = true
             retweetView.isHidden = true
             metricsView.isHidden = true
@@ -176,6 +185,27 @@ final class TweetCell: ControlledCell {
         
         /// Use non-capped depth to determine color.
         colorMarker.configure(node: node)
+    }
+    
+    private func configureQuoteReply(tweet: Tweet, realm: Realm) -> Void {
+        guard let quoting = tweet.quoting, tweet.isReply else {
+            quoteView.configure(quoted: nil)
+            return
+        }
+        /// This exception is normal if the tweet was deleted or hidden.
+        guard let quotedTweet = realm.tweet(id: quoting) else {
+            TableLog.warning("Missing reference to quoted tweet with ID \(quoting)")
+            quoteView.configure(quoted: .unavailable(quoting))
+            return
+        }
+        guard let quotedUser = realm.user(id: quotedTweet.authorID) else {
+            TableLog.error("Could not find user by ID \(quotedTweet.authorID)")
+            assert(false)
+            quoteView.configure(quoted: nil)
+            return
+        }
+        
+        quoteView.configure(quoted: .available(tweet: quotedTweet, author: quotedUser))
     }
     
     required init?(coder: NSCoder) {

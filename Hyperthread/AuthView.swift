@@ -64,10 +64,12 @@ extension AuthViewController: ASWebAuthenticationPresentationContextProviding {
 }
 
 /// Source: https://stackoverflow.com/a/68989580/12395667
+@MainActor /// UI code.
 func getKeyWindow() -> UIWindow? {
     getWindowScene()?.keyWindow
 }
 
+@MainActor /// UI code.
 func getWindowScene() -> UIWindowScene? {
     UIApplication.shared.connectedScenes
         /// Keep only active scenes, onscreen and visible to the user

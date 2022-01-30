@@ -72,18 +72,20 @@ final class FollowingLine: UIStackView {
             return
         }
         
-        Task {
-            followingButton.isEnabled = false
-            followingButton.loading.startAnimating()
-            
-            if following {
+        followingButton.isEnabled = false
+        followingButton.loading.startAnimating()
+        
+        if following {
+            Task {
                 let success = await Self.performUnfollow(userID: userID, credentials: credentials)
                 if success {
                     onUnfollow(userIDs: [userID])
                     followingButton.isEnabled = true
                     followingButton.loading.stopAnimating()
                 }
-            } else {
+            }
+        } else {
+            Task {
                 let success = await Self.performFollow(userID: userID, credentials: credentials)
                 if success {
                     onFollow(userIDs: [userID])
@@ -144,7 +146,7 @@ final class FollowingLine: UIStackView {
         self.following = user.following
         
         /// Look up full user object.
-        let realm = try! Realm()
+        let realm = makeRealm()
         guard let user = realm.user(id: userID) else {
             TableLog.error("Could not find user with id \(userID)")
             showAlert(message: "Could not find user")
@@ -176,6 +178,7 @@ final class FollowButton: UIButton {
     private let label: UILabel = .init()
     public let loading = UIActivityIndicatorView()
     
+    @MainActor
     init() {
         super.init(frame: .zero)
         layer.cornerCurve = .continuous

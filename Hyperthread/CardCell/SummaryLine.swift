@@ -16,6 +16,7 @@ final class SummaryView: UIStackView {
     private let iconView = IconView(sfSymbol: "heart")
     public let timestampButton = TimestampButton()
 
+    @MainActor
     init() {
         super.init(frame: .zero)
         axis = .horizontal

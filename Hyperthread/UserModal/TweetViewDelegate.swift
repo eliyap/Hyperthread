@@ -15,6 +15,7 @@ protocol TweetViewDelegate {
 }
 
 extension TweetViewDelegate {
+    @MainActor /// Uses `@MainActor` `UIApplication.shared`.
     func open(url: URL) -> Void {
         switch url.scheme {
         case UserURL.scheme:
@@ -39,7 +40,7 @@ extension ControlledCell: TweetViewDelegate {
     func open(userID: User.ID) {
         Task {
             /// Check if user is present.
-            let realm = try! await Realm()
+            let realm = makeRealm()
             if realm.user(id: userID) == nil {
                 ModelLog.error("Could not find user with id \(userID)")
                 

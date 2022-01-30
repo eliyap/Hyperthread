@@ -15,6 +15,7 @@ final class ColorMarkerView: UIStackView {
     
     private let colorMarkerWidth: CGFloat = 1.5
     
+    @MainActor
     init() {
         super.init(frame: .zero)
         axis = .vertical

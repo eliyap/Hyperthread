@@ -9,7 +9,9 @@ import Foundation
 import RealmSwift
 import Combine
 
-final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion> {
+/// - Warning: 22.01.30 not sure if this is *really* `Sendable`...
+/// it contains a `var Date`, which seems disqualifying?
+final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion>, Sendable {
     private let realm: Realm
     public private(set) var token: NotificationToken? = nil
 
@@ -186,9 +188,4 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
             loadingConduit.send(.init(category: .otherError(error)))
         }
     }
-}
-
-fileprivate extension Discussion {
-    /// - Warning: this exists as a workaround for `UITableViewDiffableDataSource`. Do _not_ use anywhere else!
-    static let placeholder: Discussion = .init()
 }

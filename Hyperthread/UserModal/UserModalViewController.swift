@@ -83,10 +83,10 @@ final class UserModalViewController: UIViewController {
         
         token = user.observe { [weak self] change in
             switch change {
-            case .change(_, let properties):
+            case .change(_, _):
                 /// Perform user lookup to update object.
                 /// Look up full user object.
-                let realm = try! Realm()
+                let realm = makeRealm()
                 guard let user = realm.user(id: userID) else {
                     TableLog.error("Could not find user with id \(userID)")
                     showAlert(message: "Could not find user")

@@ -11,7 +11,7 @@ import RealmSwift
 
 internal func onFollow(userIDs: [User.ID]) -> Void {
     func onFollow(userID: User.ID) -> Void {
-        let realm = try! Realm()
+        let realm = makeRealm()
         do {
             try realm.writeWithToken { token in
                 /// Upgrade relevance so that existing tweets are surfaced.
