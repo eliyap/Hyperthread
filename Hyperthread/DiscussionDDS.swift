@@ -9,7 +9,8 @@ import Foundation
 import RealmSwift
 import Combine
 
-final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion> {
+/// - Warning: 22.01.30 not sure if this is *really* `Sendable`...
+final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Discussion>, Sendable {
     private let realm: Realm
     public private(set) var token: NotificationToken? = nil
 
