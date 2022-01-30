@@ -13,7 +13,7 @@ import RealmSwift
 internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type) async throws -> Void {
     let fetcher = Fetcher()
     guard let credentials = Auth.shared.credentials else { throw UserError.credentials }
-    let v1Tweets: [RawV1Tweet]
+    let v1Tweets: [RawV1TweetSendable]
     do {
         v1Tweets = try await fetcher.fetchTimeline(credentials: credentials)
     } catch {

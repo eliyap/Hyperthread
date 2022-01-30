@@ -10,7 +10,7 @@ import UIKit
 import Combine
 import BlackBox
 
-final class TableWrapper: UIViewController {
+final class TableWrapper: UIViewController, Sendable {
     
     private let wrapped: MainTable
     private let topBar: TableTopBar

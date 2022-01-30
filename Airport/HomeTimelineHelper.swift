@@ -15,7 +15,7 @@ internal protocol HomeTimelineHelper {
     init()
     
     /// Fetch tweets using the provided credentials.
-    func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1Tweet]
+    func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1TweetSendable]
 }
 
 /// Helps us fetch Tweets newer than the ones we have.
@@ -23,7 +23,7 @@ final class TimelineNewFetcher: HomeTimelineHelper {
     
     init() {}
     
-    func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1Tweet] {
+    func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1TweetSendable] {
         var sinceID = UserDefaults.groupSuite.sinceID
         
         /// Docs: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/guides/working-with-timelines
@@ -44,7 +44,7 @@ final class TimelineOldFetcher: HomeTimelineHelper {
     
     init() {}
     
-    func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1Tweet] {
+    func fetchTimeline(credentials: OAuthCredentials) async throws -> [RawV1TweetSendable] {
         /// Docs: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/guides/working-with-timelines
         /// > ... since the `max_id` parameter is inclusive, the Tweet with the matching ID will actually be returned again
         ///

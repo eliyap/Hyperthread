@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import Twig
 
-final class FollowingLine: UIStackView { 
+final class FollowingLine: UIStackView {
 
     public static let inset = CardTeaserCell.borderInset
     
@@ -216,4 +216,8 @@ final class FollowButton: UIButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension FollowingLine: Sendable {
+    /// Works because class is `final` and inherits `@MainActor`.
 }

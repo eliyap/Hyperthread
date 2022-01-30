@@ -36,7 +36,7 @@ extension TweetViewDelegate {
     }
 }
 
-extension ControlledCell: TweetViewDelegate {
+extension ControlledCell: TweetViewDelegate, Sendable {
     func open(userID: User.ID) {
         Task {
             /// Check if user is present.
