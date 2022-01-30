@@ -38,6 +38,7 @@ final class LargeImageViewController: UIViewController {
     
     let animator = AlbumAnimator()
     
+    @MainActor
     init() {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen

@@ -14,6 +14,7 @@ final class LoginViewController: PMViewController {
     public let loadingView = UIActivityIndicatorView(style: .large)
     public let errorLabel = UILabel()
 
+    @MainActor
     init() {
         button = UIButton(configuration: .filled(), primaryAction: nil)
         super.init(nibName: nil, bundle: nil)
@@ -53,16 +54,22 @@ final class LoginViewController: PMViewController {
             loadingView.topAnchor.constraint(equalToSystemSpacingBelow: errorLabel.bottomAnchor, multiplier: 3)
         ])
         
-        store(Auth.shared.$state.sink(receiveValue: react))
+        let stateCancellable = Auth.shared.$state
+            .receive(on: DispatchQueue.main) /// UI code should _always_ run on the main thread.
+            .sink(receiveValue: { state in
+                self.react(to: state)
+            })
+        store(stateCancellable)
     }
     
+    @MainActor
     fileprivate func react(to state: LoginState) -> Void {
         /// Start / Stop spinner.
         switch state {
         case .loggingIn, .requestingToken:
             loadingView.startAnimating()
             button.isEnabled = false
-        default: 
+        default:
             loadingView.stopAnimating()
             button.isEnabled = true
         }

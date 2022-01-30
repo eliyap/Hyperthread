@@ -176,6 +176,7 @@ final class FollowButton: UIButton {
     private let label: UILabel = .init()
     public let loading = UIActivityIndicatorView()
     
+    @MainActor
     init() {
         super.init(frame: .zero)
         layer.cornerCurve = .continuous

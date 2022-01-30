@@ -73,6 +73,7 @@ final class Split: UISplitViewController {
     private let mainVC: TableWrapper
     private let detailVC: DiscussionTable
     
+    @MainActor
     init() {
         self.detailVC = DiscussionTable()
         self.mainVC = .init(splitDelegate: detailVC)

@@ -21,6 +21,7 @@ final class ProfileImageView: UIView {
         withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .quaternaryLabel)
     )
     
+    @MainActor
     init() {
         self.imageView = .init(image: placeholder)
         super.init(frame: .zero)

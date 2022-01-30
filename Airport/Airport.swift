@@ -45,7 +45,7 @@ internal func fetchAndStoreUsers(ids: [User.ID]) async -> Void {
     
     NetLog.debug("Received \(rawUsers.count) users")
     
-    let realm = try! await Realm()
+    let realm = makeRealm()
     do {
         try realm.writeWithToken { token in
             for rawUser in rawUsers {

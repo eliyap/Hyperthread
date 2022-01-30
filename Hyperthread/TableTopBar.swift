@@ -28,6 +28,7 @@ final class TableTopBar: UIVisualEffectView {
         barContents.isHidden = true
         
         loadingConduit
+            .receive(on: DispatchQueue.main) /// `setState` affects UI, must run on main thread.
             .sink { [weak self] in self?.setState($0) }
             .store(in: &observers)
     }
@@ -59,6 +60,7 @@ final class TableTopBar: UIVisualEffectView {
         narrow.isActive = true
     }
 
+    @MainActor /// Executes UI code.
     public func setState(_ message: UserMessage?) -> Void {
         /// Set message to expire after the passed duration.
         if
@@ -70,16 +72,8 @@ final class TableTopBar: UIVisualEffectView {
             }
         }
         
-        /// UI code **must** run on the main thread!
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else {
-                TableLog.error("Nil self in \(Self.description())")
-                assert(false)
-                return
-            }
-            UIView.transition(with: self.barContents, duration: Self.AnimationDuration, options: .transitionCrossDissolve) {
-                self.barContents.display(message)
-            }
+        UIView.transition(with: self.barContents, duration: Self.AnimationDuration, options: .transitionCrossDissolve) {
+            self.barContents.display(message)
         }
     }
 
@@ -109,6 +103,8 @@ fileprivate final class BarContents: UIStackView {
     }
     
     lazy var inset = CardTeaserCell.borderInset
+    
+    @MainActor
     init() {
         super.init(frame: .zero)
         axis = .horizontal

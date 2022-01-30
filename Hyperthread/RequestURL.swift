@@ -8,6 +8,7 @@
 import UIKit
 import BlackBox
 
+@MainActor /// UI code.
 func requestURL(completion: @escaping (String?) -> ()) -> UIAlertController {
     let alert = UIAlertController(title: "Lookup Tweet", message: "Twitter URL", preferredStyle: .alert)
     alert.addTextField { (textField) in
