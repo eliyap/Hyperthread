@@ -166,7 +166,7 @@ fileprivate func getRequests(followingIDs: [User.ID], window: DateWindow? = nil)
 }
 
 
-fileprivate struct TimelineRequest {
+fileprivate struct TimelineRequest: Sendable {
     
     var id: User.ID
     
