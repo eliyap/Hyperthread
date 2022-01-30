@@ -45,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     Source: https://nemecek.be/blog/126/how-to-disable-automatic-transparent-navbar-in-ios-15
     Source: https://developer.apple.com/forums/thread/682420
  */
+@MainActor /// UI code.
 func setOpaqueNavbar() -> Void {
     let appearance = UINavigationBarAppearance()
     appearance.configureWithOpaqueBackground()

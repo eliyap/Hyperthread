@@ -239,6 +239,7 @@ final class ImageViewController: UIViewController {
 final class SymbolCircleView: UIVisualEffectView {
     public let imageView: UIImageView = .init()
     
+    @MainActor
     init() {
         super.init(effect: UIBlurEffect(style: .systemUltraThinMaterial))
         contentView.addSubview(imageView)

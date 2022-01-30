@@ -15,6 +15,7 @@ protocol TweetViewDelegate {
 }
 
 extension TweetViewDelegate {
+    @MainActor /// Uses `@MainActor` `UIApplication.shared`.
     func open(url: URL) -> Void {
         switch url.scheme {
         case UserURL.scheme:
