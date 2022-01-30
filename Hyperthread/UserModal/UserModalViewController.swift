@@ -83,7 +83,7 @@ final class UserModalViewController: UIViewController {
         
         token = user.observe { [weak self] change in
             switch change {
-            case .change(_, let properties):
+            case .change(_, _):
                 /// Perform user lookup to update object.
                 /// Look up full user object.
                 let realm = makeRealm()
