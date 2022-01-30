@@ -8,7 +8,26 @@
 import Foundation
 import Combine
 
-typealias UserMessageConduit = PassthroughSubject<UserMessage?, Never>
+final actor UserMessageCarrier {
+    
+    typealias Content = UserMessage?
+    
+    private var callbacks: [@MainActor @Sendable (Content) -> ()] = []
+    
+    func send(_ content: Content) async -> Void {
+        let callbacks = self.callbacks
+        await MainActor.run {
+            for callback in callbacks {
+                callback(content)
+            }
+        }
+        
+    }
+    
+    func register(callback: @MainActor @escaping @Sendable (Content) -> ()) -> Void {
+        callbacks.append(callback)
+    }
+}
 
 /// Represents a message that can be shown to the user, indicating progress, completion, or an error.
 internal struct UserMessage {

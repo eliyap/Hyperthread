@@ -27,7 +27,7 @@ final class MainTable: UITableViewController, Sendable {
     
     private var arrowView: ArrowRefreshView? = nil
     
-    init(splitDelegate: SplitDelegate, loadingConduit: UserMessageConduit) {
+    init(splitDelegate: SplitDelegate, loadingCarrier: UserMessageCarrier) {
         self.splitDelegate = splitDelegate
         super.init(nibName: nil, bundle: nil)
         
@@ -37,7 +37,7 @@ final class MainTable: UITableViewController, Sendable {
             tableView: tableView,
             cellProvider: cellProvider,
             restoreScroll: restoreScroll,
-            loadingConduit: loadingConduit
+            loadingCarrier: loadingCarrier
         )
         
         /// Immediately defuse unwrapped nil `mrd`.

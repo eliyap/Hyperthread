@@ -29,7 +29,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     /// Most recent date of an old timeline fetch. Goal is to prevent hammering the API. This is a hack workaround, and should be replaced.
     private var lastOldFetch: Date = .distantPast
     
-    let loadingConduit: UserMessageConduit
+    let loadingCarrier: UserMessageCarrier
     
     lazy var results = realm.objects(Discussion.self)
         .filter(Discussion.minRelevancePredicate)
@@ -40,11 +40,11 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
         tableView: UITableView,
         cellProvider: @escaping CellProvider,
         restoreScroll: @escaping () -> (),
-        loadingConduit: UserMessageConduit
+        loadingCarrier: UserMessageCarrier
     ) {
         self.realm = realm
         self.restoreScroll = restoreScroll
-        self.loadingConduit = loadingConduit
+        self.loadingCarrier = loadingCarrier
         
         super.init(tableView: tableView, cellProvider: cellProvider)
         /// Immediately register token.
@@ -145,17 +145,17 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         
         TableLog.debug("Prefetching items...", print: true, true)
         
-        loadingConduit.send(.init(category: .loading))
+        await loadingCarrier.send(.init(category: .loading))
         do {
             try await homeTimelineFetch(TimelineOldFetcher.self)
             await ReferenceCrawler.shared.performFollowUp()
-            loadingConduit.send(.init(category: .loaded))
+            await loadingCarrier.send(.init(category: .loaded))
         } catch UserError.offline {
-            loadingConduit.send(.init(category: .offline))
+            await loadingCarrier.send(.init(category: .offline))
         } catch {
             NetLog.error("\(error)")
             assert(false)
-            loadingConduit.send(.init(category: .otherError(error)))
+            await loadingCarrier.send(.init(category: .otherError(error)))
         }
     }
     
@@ -171,21 +171,21 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
             }
         }
         
-        loadingConduit.send(.init(category: .loading))
+        await loadingCarrier.send(.init(category: .loading))
         do {
             try await homeTimelineFetch(TimelineNewFetcher.self)
             await ReferenceCrawler.shared.performFollowUp()
             
-            loadingConduit.send(.init(category: .loaded))
+            await loadingCarrier.send(.init(category: .loaded))
             
             /// Record fetch completion.
             UserDefaults.groupSuite.firstFetch = false
         } catch UserError.offline {
-            loadingConduit.send(.init(category: .offline))
+            await loadingCarrier.send(.init(category: .offline))
         } catch {
             NetLog.error("\(error)")
             assert(false)
-            loadingConduit.send(.init(category: .otherError(error)))
+            await loadingCarrier.send(.init(category: .otherError(error)))
         }
     }
 }

@@ -27,25 +27,10 @@ class AlbumController: UIPageViewController {
     
     /// The upcoming page number.
     private var pendingIndex: Int = 1
-    
-    private static var countButtonConfig: UIButton.Configuration = {
-        var config = UIButton.Configuration.filled()
-        config.baseBackgroundColor = .systemGray6
-        config.cornerStyle = .capsule
-        config.titleTextAttributesTransformer = .init { incoming in
-            var outgoing = incoming
-            outgoing.foregroundColor = .label
-            outgoing.font = .preferredFont(forTextStyle: .footnote)
-            return outgoing
-        }
-        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
-        return config
-    }()
-    
+        
     @MainActor
     init() {
-        self.countButton = UIButton(configuration: Self.countButtonConfig, primaryAction: nil)
-        
+        self.countButton = CountButton()
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
         let superTall = view.heightAnchor.constraint(equalToConstant: .superTall)
@@ -63,8 +48,6 @@ class AlbumController: UIPageViewController {
             countButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -CardTeaserCell.borderInset),
             countButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -CardTeaserCell.borderInset),
         ])
-        
-        countButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
     }
     
     public func configure(tweet: Tweet) -> Void {

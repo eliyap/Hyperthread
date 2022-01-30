@@ -80,6 +80,7 @@
 		22A760BF27A5F38E0006E9BC /* QuoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760BE27A5F38E0006E9BC /* QuoteView.swift */; };
 		22A760C127A61B1E0006E9BC /* RequestURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C027A61B1E0006E9BC /* RequestURL.swift */; };
 		22A760C327A626640006E9BC /* LoadDiscussion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C227A626640006E9BC /* LoadDiscussion.swift */; };
+		22A760C527A750390006E9BC /* CountButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C427A750390006E9BC /* CountButton.swift */; };
 		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
 		22BC9E8F27A5C95100721BD2 /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BC9E8E27A5C95100721BD2 /* DiscussionTree.swift */; };
 		22BC9E9127A5C97800721BD2 /* ColorMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */; };
@@ -217,6 +218,7 @@
 		22A760BE27A5F38E0006E9BC /* QuoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteView.swift; sourceTree = "<group>"; };
 		22A760C027A61B1E0006E9BC /* RequestURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestURL.swift; sourceTree = "<group>"; };
 		22A760C227A626640006E9BC /* LoadDiscussion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDiscussion.swift; sourceTree = "<group>"; };
+		22A760C427A750390006E9BC /* CountButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountButton.swift; sourceTree = "<group>"; };
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
 		22BC9E8E27A5C95100721BD2 /* DiscussionTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscussionTree.swift; sourceTree = "<group>"; };
 		22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorMarkerView.swift; sourceTree = "<group>"; };
@@ -497,6 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				221A2991275D680900C283FE /* AlbumController.swift */,
+				22A760C427A750390006E9BC /* CountButton.swift */,
 				22BC9E9227A5C9A000721BD2 /* ImageViewController.swift */,
 				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
 			);
@@ -837,6 +840,7 @@
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
 				22FA26B52795C77A00DD8EE4 /* Realm.TransactionToken.swift in Sources */,
+				22A760C527A750390006E9BC /* CountButton.swift in Sources */,
 				22BFD7A72775882000E46DF1 /* Collection<Enum>.max.swift in Sources */,
 				220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */,
 				22FA269E2794B88400DD8EE4 /* Truncated.swift in Sources */,

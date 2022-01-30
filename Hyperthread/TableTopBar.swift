@@ -16,21 +16,19 @@ final class TableTopBar: UIVisualEffectView, Sendable {
     
     private var observers: Set<AnyCancellable> = []
     private var heightConstraint: NSLayoutConstraint? = nil
-    private let loadingConduit: UserMessageConduit
+    private let loadingCarrier: UserMessageCarrier
     
     private static let AnimationDuration: TimeInterval = 0.2
 
-    init(loadingConduit: UserMessageConduit) {
-        self.loadingConduit = loadingConduit
+    init(loadingCarrier: UserMessageCarrier) {
+        self.loadingCarrier = loadingCarrier
         super.init(effect: UIBlurEffect(style: .systemMaterial))
 
         contentView.addSubview(barContents)
         barContents.isHidden = true
-        
-        loadingConduit
-            .receive(on: DispatchQueue.main) /// `setState` affects UI, must run on main thread.
-            .sink { [weak self] in self?.setState($0) }
-            .store(in: &observers)
+        Task {
+            await loadingCarrier.register(callback: setState)
+        }
     }
 
     public func constrain(to view: UIView) -> Void {
@@ -61,14 +59,16 @@ final class TableTopBar: UIVisualEffectView, Sendable {
     }
 
     @MainActor /// Executes UI code.
+    @Sendable
     public func setState(_ message: UserMessage?) -> Void {
         /// Set message to expire after the passed duration.
         if
             let duration = message?.duration,
             case .interval(let timeInterval) = duration
         {
-            DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeInterval) { [weak self] in
-                self?.loadingConduit.send(nil)
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: UInt64(1_000_000_000 * timeInterval))
+                await loadingCarrier.send(nil)
             }
         }
         
