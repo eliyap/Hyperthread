@@ -39,8 +39,16 @@ import RealmSwift
  *  if it is, expand the target by a day. 
  */
 
-public struct DateWindow {
-    public var start: Date
+public struct DateWindow: Sendable {
+    private var startTimeIntervalSince1970: TimeInterval
+    public var start: Date {
+        get {
+            Date(timeIntervalSince1970: startTimeIntervalSince1970)
+        }
+        set {
+            startTimeIntervalSince1970 = newValue.timeIntervalSince1970
+        }
+    }
     public var duration: TimeInterval
     public var end: Date {
         get {
@@ -55,7 +63,7 @@ public struct DateWindow {
     
     init(start: Date, duration: TimeInterval) {
         precondition(duration >= 0, "Duration must be non-negative!")
-        self.start = start
+        self.startTimeIntervalSince1970 = start.timeIntervalSince1970
         self.duration = duration
     }
     
