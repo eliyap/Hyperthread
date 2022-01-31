@@ -57,3 +57,10 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
         fatalError("No.")
     }
 }
+
+extension DiscussionTableWrapper: SplitDelegate {
+    func present(_ discussion: Discussion) -> Void {
+        /// Forward arguments.
+        wrapped.present(discussion)
+    }
+}

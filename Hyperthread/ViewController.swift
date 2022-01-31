@@ -76,7 +76,7 @@ final class Split: UISplitViewController {
     @MainActor
     init() {
         self.detailVC = DiscussionTableWrapper()
-        self.mainVC = .init(splitDelegate: detailVC.wrapped)
+        self.mainVC = .init(splitDelegate: detailVC)
         
         /// Set up preferred style.
         super.init(style: .doubleColumn)
