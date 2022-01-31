@@ -93,13 +93,26 @@ extension DiscussionTableWrapper: SplitDelegate {
 
 /// - Note: for goodness sakes, name this better.
 protocol DiscusssionRequestable: AnyObject {
+    @MainActor
     func requestDiscussionFromTweetID(_ tweetID: Tweet.ID)
 }
 
 extension DiscussionTableWrapper: DiscusssionRequestable {
+    @MainActor
     func requestDiscussionFromTweetID(_ tweetID: Tweet.ID) {
         /// Implement simple error handling for the request.
         do {
+            let realm = makeRealm()
+            if
+                let local = realm.tweet(id: tweetID),
+                let c = local.conversation.first,
+                let d = c.discussion.first,
+                discussion?.id == d.id
+            {
+                /// If discussion is open already, scroll to the quoted tweet (if we can).
+                let success = wrapped.scrollToTweetWithID(tweetID)
+                if success { return }
+            }
             try presentFetchedDiscussion(tweetID: tweetID)
         } catch TweetLookupError.badString {
             showAlert(title: "Could Not Read Link", message: "Please check the URL")

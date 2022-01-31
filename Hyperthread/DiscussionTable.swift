@@ -22,7 +22,7 @@ final class DiscussionTable: UITableViewController {
     
     private let realm = makeRealm()
     
-    private var dds: DDS! = nil
+    public private(set) var dds: DDS! = nil
     
     public private(set) var discussion: Discussion? = nil
     
@@ -112,6 +112,8 @@ final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<TweetSection, Node>
     
+    private var nodes: [Node] = []
+    
     init(
         discussion: Discussion?,
         airport: Airport,
@@ -123,15 +125,43 @@ final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
         
         var snapshot = Snapshot()
         if let discussion = discussion {
-            var flatTree = [Node]()
-            discussion.makeTree(airport: airport).assemble(&flatTree)
+            discussion.makeTree(airport: airport).assemble(&nodes)
             
             snapshot.appendSections([.root, .discussion])
-            snapshot.appendItems([flatTree[0]], toSection: .root)
-            snapshot.appendItems(Array(flatTree[1...]), toSection: .discussion)
+            snapshot.appendItems([nodes[0]], toSection: .root)
+            snapshot.appendItems(Array(nodes[1...]), toSection: .discussion)
         }
         self.apply(snapshot, animatingDifferences: false)
     }
     
+    func firstIndexPath(where predicate: (Node) -> Bool) -> IndexPath? {
+        guard let index = nodes.firstIndex(where: predicate) else {
+            return nil
+        }
+        
+        /// Account for split sections.
+        if index == 0 {
+            return IndexPath(row: 0, section: TweetSection.root.rawValue)
+        } else {
+            return IndexPath(row: index - 1, section: TweetSection.discussion.rawValue)
+        }
+    }
+    
     deinit { }
+}
+
+extension DiscussionTable {
+    @discardableResult
+    func scrollToTweetWithID(_ tweetID: Tweet.ID) -> Bool {
+        let path = dds.firstIndexPath(where: {$0.id == tweetID})
+        guard let path = path else {
+            TableLog.error("Could not locate path for id \(tweetID)")
+            return false
+        }
+
+        tableView.scrollToRow(at: path, at: .none, animated: true)
+        tableView.selectRow(at: path, animated: false, scrollPosition: .none)
+        
+        return true
+    }
 }
