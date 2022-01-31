@@ -71,12 +71,12 @@ class ViewController: PMViewController {
 final class Split: UISplitViewController {
     
     private let mainVC: MainTableWrapper
-    private let detailVC: DiscussionTable
+    private let detailVC: DiscussionTableWrapper
     
     @MainActor
     init() {
-        self.detailVC = DiscussionTable()
-        self.mainVC = .init(splitDelegate: detailVC)
+        self.detailVC = DiscussionTableWrapper()
+        self.mainVC = .init(splitDelegate: detailVC.wrapped)
         
         /// Set up preferred style.
         super.init(style: .doubleColumn)
@@ -112,7 +112,7 @@ extension Split: UISplitViewControllerDelegate {
     /// Docs: https://developer.apple.com/documentation/uikit/uisplitviewcontrollerdelegate/3580925-splitviewcontroller
     func splitViewController(_ svc: UISplitViewController, topColumnForCollapsingToProposedTopColumn proposedTopColumn: UISplitViewController.Column) -> UISplitViewController.Column {
         /// Collapse to document if one is open, otherwise collapse to the document picker.
-        if detailVC.discussion == nil {
+        if detailVC.wrapped.discussion == nil {
             return .primary
         } else {
             return .secondary

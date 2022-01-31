@@ -32,7 +32,7 @@ final class DiscussionTable: UITableViewController {
     
     private let airport: Airport = .init()
     
-    init() {
+    init(loadingCarrier: UserMessageCarrier) {
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
         spawnDDS(discussion: nil)
