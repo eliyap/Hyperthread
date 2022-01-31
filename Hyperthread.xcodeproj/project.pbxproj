@@ -25,7 +25,7 @@
 		222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F12741A8EA00220F0C /* CardHeaderCell.swift */; };
 		222161F42741C2F400220F0C /* AssetColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222161F32741C2F400220F0C /* AssetColors.swift */; };
 		2232DD2C2796F1E900936846 /* TableTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2232DD2B2796F1E900936846 /* TableTopBar.swift */; };
-		2232DD2E2796F75000936846 /* TableWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2232DD2D2796F75000936846 /* TableWrapper.swift */; };
+		2232DD2E2796F75000936846 /* MainTableWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2232DD2D2796F75000936846 /* MainTableWrapper.swift */; };
 		22331BB927A5CC97003FDD5F /* CanonicalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22331BB827A5CC97003FDD5F /* CanonicalString.swift */; };
 		223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2A27377BE500375530 /* AppDelegate.swift */; };
 		223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF2C27377BE500375530 /* SceneDelegate.swift */; };
@@ -157,7 +157,7 @@
 		222161F12741A8EA00220F0C /* CardHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeaderCell.swift; sourceTree = "<group>"; };
 		222161F32741C2F400220F0C /* AssetColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetColors.swift; sourceTree = "<group>"; };
 		2232DD2B2796F1E900936846 /* TableTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTopBar.swift; sourceTree = "<group>"; };
-		2232DD2D2796F75000936846 /* TableWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableWrapper.swift; sourceTree = "<group>"; };
+		2232DD2D2796F75000936846 /* MainTableWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableWrapper.swift; sourceTree = "<group>"; };
 		22331BB827A5CC97003FDD5F /* CanonicalString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanonicalString.swift; sourceTree = "<group>"; };
 		223BBF2727377BE500375530 /* Hyperthread.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hyperthread.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		223BBF2A27377BE500375530 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -367,7 +367,7 @@
 				223BBF852738572C00375530 /* MainTable.swift */,
 				2232DD2B2796F1E900936846 /* TableTopBar.swift */,
 				22EE928C2799C5BB003C9056 /* UserMessage.swift */,
-				2232DD2D2796F75000936846 /* TableWrapper.swift */,
+				2232DD2D2796F75000936846 /* MainTableWrapper.swift */,
 				22FA269F2794CC4D00DD8EE4 /* DiscussionDDS.swift */,
 				22FA26992794846F00DD8EE4 /* FirstFetch.swift */,
 				2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */,
@@ -888,7 +888,7 @@
 				228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */,
 				22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */,
 				228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */,
-				2232DD2E2796F75000936846 /* TableWrapper.swift in Sources */,
+				2232DD2E2796F75000936846 /* MainTableWrapper.swift in Sources */,
 				22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */,
 				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
 				22680A84276AA651008827F8 /* Sealed.swift in Sources */,
