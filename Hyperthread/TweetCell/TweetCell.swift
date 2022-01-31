@@ -153,7 +153,7 @@ final class TweetCell: ControlledCell {
     /// Arbitrary number. Test Later.
     private let maxDepth = 14
     private let indentSize: CGFloat = 10
-    public func configure(node: Node, realm: Realm) {
+    public func configure(node: Node, realm: Realm, requester: DiscusssionRequestable?) {
         if case .available(let tweet, let author) = node.tweet {
             userView.configure(user: author)
             tweetTextView.attributedText = tweet.fullText(context: node)
@@ -166,7 +166,7 @@ final class TweetCell: ControlledCell {
             metricsView.isHidden = false
             /// Let `albumVC` decide `isHidden`.
             
-            configureQuoteReply(tweet: tweet, realm: realm)
+            configureQuoteReply(tweet: tweet, realm: realm, requester: requester)
         } else {
             tweetTextView.attributedText = Tweet.notAvailableAttributedString
             userView.isHidden = true
@@ -187,25 +187,25 @@ final class TweetCell: ControlledCell {
         colorMarker.configure(node: node)
     }
     
-    private func configureQuoteReply(tweet: Tweet, realm: Realm) -> Void {
+    private func configureQuoteReply(tweet: Tweet, realm: Realm, requester: DiscusssionRequestable?) -> Void {
         guard let quoting = tweet.quoting, tweet.isReply else {
-            quoteView.configure(quoted: nil)
+            quoteView.configure(quoted: nil, requester: requester)
             return
         }
         /// This exception is normal if the tweet was deleted or hidden.
         guard let quotedTweet = realm.tweet(id: quoting) else {
             TableLog.warning("Missing reference to quoted tweet with ID \(quoting)")
-            quoteView.configure(quoted: .unavailable(quoting))
+            quoteView.configure(quoted: .unavailable(quoting), requester: requester)
             return
         }
         guard let quotedUser = realm.user(id: quotedTweet.authorID) else {
             TableLog.error("Could not find user by ID \(quotedTweet.authorID)")
             assert(false)
-            quoteView.configure(quoted: nil)
+            quoteView.configure(quoted: nil, requester: requester)
             return
         }
         
-        quoteView.configure(quoted: .available(tweet: quotedTweet, author: quotedUser))
+        quoteView.configure(quoted: .available(tweet: quotedTweet, author: quotedUser), requester: requester)
     }
     
     required init?(coder: NSCoder) {

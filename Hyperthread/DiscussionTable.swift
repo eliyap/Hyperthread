@@ -32,6 +32,8 @@ final class DiscussionTable: UITableViewController {
     
     private let airport: Airport = .init()
     
+    public weak var requester: DiscusssionRequestable?
+    
     init(loadingCarrier: UserMessageCarrier) {
         super.init(nibName: nil, bundle: nil)
         /// Immediately defuse unwrapped nil `dds`.
@@ -75,7 +77,12 @@ final class DiscussionTable: UITableViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TweetCell.reuseID) as? TweetCell else {
                 fatalError("Failed to create or cast new cell!")
             }
-            cell.configure(node: node, realm: realm)
+            if requester == nil {
+                TableLog.error("Nil requester when constructing cell!")
+                assert(false)
+            }
+
+            cell.configure(node: node, realm: realm, requester: requester)
 
             return cell
         }

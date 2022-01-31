@@ -36,6 +36,8 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod)),
         ]
         #endif
+        
+        wrapped.requester = self
     }
     
     #if DEBUG

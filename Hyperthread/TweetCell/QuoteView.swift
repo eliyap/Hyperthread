@@ -17,6 +17,9 @@ final class QuoteView: UIView {
     
     private let inset: CGFloat = CardTeaserCell.borderInset
     
+    private weak var requester: DiscusssionRequestable?
+    private var tweetID: Tweet.ID? = nil
+    
     @MainActor
     init() {
         super.init(frame: .zero)
@@ -39,7 +42,13 @@ final class QuoteView: UIView {
         stackView.addArrangedSubview(tweetTextView)
     }
     
-    public func configure(quoted: OptionalTweet?) -> Void {
+    public func configure(
+        quoted: OptionalTweet?,
+        requester: DiscusssionRequestable?
+    ) -> Void {
+        self.requester = requester
+        self.tweetID = quoted?.id
+        
         switch quoted {
         case .none:
             isHidden = true
@@ -64,7 +73,13 @@ final class QuoteView: UIView {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Boop!")
+        guard let tweetID = tweetID else {
+            TableLog.error("Tapped on quote with no ID!")
+            assert(false)
+            return
+        }
+
+        requester?.requestDiscussionFromTweetID(tweetID)
     }
     
     /// From `touchesEnded`:
