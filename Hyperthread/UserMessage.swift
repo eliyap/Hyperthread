@@ -20,8 +20,7 @@ final actor UserMessageCarrier {
             for callback in callbacks {
                 callback(content)
             }
-        }
-        
+        }   
     }
     
     func register(callback: @MainActor @escaping @Sendable (Content) -> ()) -> Void {

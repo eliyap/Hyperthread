@@ -17,7 +17,7 @@ import UIKit
 class ControlledCell: UITableViewCell {
 
     /// Internal view controller.
-    public let controller = UIViewController()
+    public let controller = CellController()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -33,6 +33,16 @@ class ControlledCell: UITableViewCell {
         ])
     }
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class CellController: UIViewController {
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

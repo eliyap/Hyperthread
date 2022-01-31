@@ -1,5 +1,5 @@
 //
-//  TableWrapper.swift
+//  MainTableWrapper.swift
 //  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 18/1/22.
@@ -10,14 +10,14 @@ import UIKit
 import Combine
 import BlackBox
 
-final class TableWrapper: UIViewController, Sendable {
+final class MainTableWrapper: UIViewController, Sendable {
     
     private let wrapped: MainTable
     private let topBar: TableTopBar
-    private let loadingCarrier: UserMessageCarrier = .init()
+    public let loadingCarrier: UserMessageCarrier = .init()
     
     /// Object to notify when something elsewhere in the `UISplitViewController` should change.
-    private weak var splitDelegate: SplitDelegate!
+    public private(set) weak var splitDelegate: SplitDelegate!
     
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
@@ -55,9 +55,37 @@ final class TableWrapper: UIViewController, Sendable {
     @objc
     func debugMethod() {
         // loading method
-//        loadingConduit.send(.init(category: .loading, duration: .interval(1.0)))
+        Task { @MainActor in
+            await loadingCarrier.send(.init(category: .loading, duration: .interval(1.0)))
+        }
     }
     #endif
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        /// Solves issue observed 22.01.31 where iPad resizing failed.
+        pinEdges()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        /// Solves issue observed 22.01.31 where iPad resizing failed.
+        pinEdges()
+    }
+    
+    @MainActor 
+    private func pinEdges() -> Void {
+        /// Pin edges.
+        wrapped.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            wrapped.view.topAnchor.constraint(equalTo: view.topAnchor),
+            wrapped.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            wrapped.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            wrapped.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+    }
     
     required init?(coder: NSCoder) {
         fatalError("No.")
@@ -70,7 +98,7 @@ enum TweetLookupError: Error {
     case couldNotFindTweet
 }
 
-fileprivate extension TableWrapper {
+fileprivate extension MainTableWrapper {
     func promptForLink() -> Void {
         let alertController = requestURL(completion: { [weak self] (string: String?) in
             guard let string = string else {
@@ -106,31 +134,7 @@ fileprivate extension TableWrapper {
             throw TweetLookupError.badString
         }
         
-        Task {
-            await loadingCarrier.send(.init(category: .loading))
-            
-            do {
-                let discussionID = try await fetchDiscussion(tweetID: tweetID)
-                
-                /// - Note: Cannot add `@Sendable` into `MainActor.run` block.
-                ///         We may rely on discussion lookup not failing, since indicator is non-critical.
-                await loadingCarrier.send(.init(category: .loaded))
-                
-                try await MainActor.run {
-                    guard let discussion = makeRealm().discussion(id: discussionID) else {
-                        Logger.general.error("Could not locate discussion with ID \(discussionID)")
-                        assert(false)
-                        throw TweetLookupError.couldNotFindTweet
-                    }
-                    
-                    splitViewController?.show(.secondary)
-                    splitDelegate.present(discussion)
-                }
-            } catch {
-                await loadingCarrier.send(.init(category: .otherError(error)))
-                throw error
-            }
-        }
+        try presentFetchedDiscussion(tweetID: tweetID)
     }
 }
 

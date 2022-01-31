@@ -70,12 +70,12 @@ class ViewController: PMViewController {
 
 final class Split: UISplitViewController {
     
-    private let mainVC: TableWrapper
-    private let detailVC: DiscussionTable
+    private let mainVC: MainTableWrapper
+    private let detailVC: DiscussionTableWrapper
     
     @MainActor
     init() {
-        self.detailVC = DiscussionTable()
+        self.detailVC = DiscussionTableWrapper()
         self.mainVC = .init(splitDelegate: detailVC)
         
         /// Set up preferred style.
