@@ -22,3 +22,33 @@ extension MainTableWrapper: DiscussionPresenter {
         splitDelegate.present(discussion)
     }
 }
+
+extension DiscussionPresenter {
+    /// Shared code for presenting load progress to user.
+    func presentFetchedDiscussion(tweetID: Tweet.ID) throws -> Void {
+        Task {
+            await loadingCarrier.send(.init(category: .loading))
+            
+            do {
+                let discussionID = try await fetchDiscussion(tweetID: tweetID)
+                
+                /// - Note: Cannot add `@Sendable` into `MainActor.run` block.
+                ///         We may rely on discussion lookup not failing, since indicator is non-critical.
+                await loadingCarrier.send(.init(category: .loaded))
+                
+                try await MainActor.run {
+                    guard let discussion = makeRealm().discussion(id: discussionID) else {
+                        Logger.general.error("Could not locate discussion with ID \(discussionID)")
+                        assert(false)
+                        throw TweetLookupError.couldNotFindTweet
+                    }
+                    
+                    present(discussion: discussion)
+                }
+            } catch {
+                await loadingCarrier.send(.init(category: .otherError(error)))
+                throw error
+            }
+        }
+    }
+}
