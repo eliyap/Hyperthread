@@ -64,6 +64,7 @@ final class TableWrapper: UIViewController, Sendable {
     }
 }
 
+// MARK: - Tweet Lookup Support
 enum TweetLookupError: Error {
     case badString
     case couldNotFindTweet
