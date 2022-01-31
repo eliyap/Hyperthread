@@ -1,5 +1,5 @@
 //
-//  TableWrapper.swift
+//  MainTableWrapper.swift
 //  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 18/1/22.
@@ -10,7 +10,7 @@ import UIKit
 import Combine
 import BlackBox
 
-final class TableWrapper: UIViewController, Sendable {
+final class MainTableWrapper: UIViewController, Sendable {
     
     private let wrapped: MainTable
     private let topBar: TableTopBar
@@ -70,7 +70,7 @@ enum TweetLookupError: Error {
     case couldNotFindTweet
 }
 
-fileprivate extension TableWrapper {
+fileprivate extension MainTableWrapper {
     func promptForLink() -> Void {
         let alertController = requestURL(completion: { [weak self] (string: String?) in
             guard let string = string else {

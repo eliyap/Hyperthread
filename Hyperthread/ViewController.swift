@@ -70,7 +70,7 @@ class ViewController: PMViewController {
 
 final class Split: UISplitViewController {
     
-    private let mainVC: TableWrapper
+    private let mainVC: MainTableWrapper
     private let detailVC: DiscussionTable
     
     @MainActor
