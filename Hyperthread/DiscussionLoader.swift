@@ -23,6 +23,14 @@ extension MainTableWrapper: DiscussionPresenter {
     }
 }
 
+extension DiscussionTableWrapper: DiscussionPresenter {
+    func present(discussion: Discussion) {
+        let dvc = DiscussionTableWrapper()
+        dvc.present(discussion)
+        self.navigationController?.pushViewController(dvc, animated: true)
+    }
+}
+
 extension DiscussionPresenter {
     /// Shared code for presenting load progress to user.
     func presentFetchedDiscussion(tweetID: Tweet.ID) throws -> Void {
