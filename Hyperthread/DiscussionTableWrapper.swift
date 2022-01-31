@@ -12,7 +12,7 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
     
     private let wrapped: DiscussionTable
     private let topBar: TableTopBar
-    private let loadingCarrier: UserMessageCarrier = .init()
+    public let loadingCarrier: UserMessageCarrier = .init()
     
     /// Expose underlying discussion to allow `SplitViewController` to decide how to collapse.
     public var discussion: Discussion? {
