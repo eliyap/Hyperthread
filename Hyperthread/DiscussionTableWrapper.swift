@@ -21,6 +21,15 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
         super.init(nibName: nil, bundle: nil)
         adopt(wrapped)
         
+        /// Pin edges.
+        wrapped.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            wrapped.view.topAnchor.constraint(equalTo: view.topAnchor),
+            wrapped.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            wrapped.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            wrapped.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        
         view.addSubview(topBar)
         topBar.constrain(to: view)
         view.bringSubviewToFront(topBar)
