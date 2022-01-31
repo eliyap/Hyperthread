@@ -78,7 +78,6 @@
 		228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71F12780142200E306BD /* UserTimelineWindow.swift */; };
 		22A760BD27A5EF990006E9BC /* MakeRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760BC27A5EF990006E9BC /* MakeRealm.swift */; };
 		22A760BF27A5F38E0006E9BC /* QuoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760BE27A5F38E0006E9BC /* QuoteView.swift */; };
-		22A760C127A61B1E0006E9BC /* RequestURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C027A61B1E0006E9BC /* RequestURL.swift */; };
 		22A760C327A626640006E9BC /* LoadDiscussion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C227A626640006E9BC /* LoadDiscussion.swift */; };
 		22A760C527A750390006E9BC /* CountButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C427A750390006E9BC /* CountButton.swift */; };
 		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
@@ -216,7 +215,6 @@
 		22A760BA27A5E1680006E9BC /* Changelog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelog.md; sourceTree = "<group>"; };
 		22A760BC27A5EF990006E9BC /* MakeRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeRealm.swift; sourceTree = "<group>"; };
 		22A760BE27A5F38E0006E9BC /* QuoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteView.swift; sourceTree = "<group>"; };
-		22A760C027A61B1E0006E9BC /* RequestURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestURL.swift; sourceTree = "<group>"; };
 		22A760C227A626640006E9BC /* LoadDiscussion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadDiscussion.swift; sourceTree = "<group>"; };
 		22A760C427A750390006E9BC /* CountButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountButton.swift; sourceTree = "<group>"; };
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
@@ -367,7 +365,6 @@
 				223BBF2C27377BE500375530 /* SceneDelegate.swift */,
 				223BBF2E27377BE500375530 /* ViewController.swift */,
 				223BBF852738572C00375530 /* MainTable.swift */,
-				22A760C027A61B1E0006E9BC /* RequestURL.swift */,
 				2232DD2B2796F1E900936846 /* TableTopBar.swift */,
 				22EE928C2799C5BB003C9056 /* UserMessage.swift */,
 				2232DD2D2796F75000936846 /* TableWrapper.swift */,
@@ -832,7 +829,6 @@
 				22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */,
 				223BBF6527377E8900375530 /* IngestTweet.swift in Sources */,
 				22FA26A22795B6CD00DD8EE4 /* ReferenceSet.swift in Sources */,
-				22A760C127A61B1E0006E9BC /* RequestURL.swift in Sources */,
 				2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */,
 				22D2572E27883A56005FC3D8 /* ScrollPosition.swift in Sources */,
 				228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */,

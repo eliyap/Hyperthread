@@ -27,8 +27,9 @@ internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion.ID {
     }
     defer {
         do {
-            try makeRealm().writeWithToken { token in
-                realm.tweet(id: tweet.id)?.relevance = originalRelevance
+            let resetRealm = makeRealm()
+            try resetRealm.writeWithToken { token in
+                resetRealm.tweet(id: tweet.id)?.relevance = originalRelevance
             }
         } catch {
             Logger.general.error("Failed to reset relevance")
