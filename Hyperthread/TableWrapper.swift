@@ -56,16 +56,6 @@ final class TableWrapper: UIViewController, Sendable {
     func debugMethod() {
         // loading method
 //        loadingConduit.send(.init(category: .loading, duration: .interval(1.0)))
-        
-        // present alert controller
-        let alertController = requestURL(completion: { [weak self] (string: String?) in
-            guard let string = string else {
-                return
-            }
-            #warning("handle errors")
-            try! self?.tryLinkRequest(string: string)
-        })
-        self.present(alertController, animated: true, completion: nil)
     }
     #endif
     
