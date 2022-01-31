@@ -59,6 +59,32 @@ final class MainTableWrapper: UIViewController, Sendable {
     }
     #endif
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        /// Solves issue observed 22.01.31 where iPad resizing failed.
+        pinEdges()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        /// Solves issue observed 22.01.31 where iPad resizing failed.
+        pinEdges()
+    }
+    
+    @MainActor 
+    private func pinEdges() -> Void {
+        /// Pin edges.
+        wrapped.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            wrapped.view.topAnchor.constraint(equalTo: view.topAnchor),
+            wrapped.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            wrapped.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            wrapped.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("No.")
     }
