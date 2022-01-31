@@ -30,7 +30,23 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
         view.addSubview(topBar)
         topBar.constrain(to: view)
         view.bringSubviewToFront(topBar)
+        
+        #if DEBUG
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod)),
+        ]
+        #endif
     }
+    
+    #if DEBUG
+    @objc
+    func debugMethod() {
+        // loading method
+        Task { @MainActor in
+            await loadingCarrier.send(.init(category: .loading, duration: .interval(1.0)))
+        }
+    }
+    #endif
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -67,5 +83,8 @@ extension DiscussionTableWrapper: SplitDelegate {
     func present(_ discussion: Discussion) -> Void {
         /// Forward arguments.
         wrapped.present(discussion)
+        
+        /// Needs to be kept in front of newly made `UITableView`.
+        view.bringSubviewToFront(topBar)
     }
 }

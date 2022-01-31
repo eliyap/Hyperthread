@@ -55,7 +55,9 @@ final class MainTableWrapper: UIViewController, Sendable {
     @objc
     func debugMethod() {
         // loading method
-//        loadingConduit.send(.init(category: .loading, duration: .interval(1.0)))
+        Task { @MainActor in
+            await loadingCarrier.send(.init(category: .loading, duration: .interval(1.0)))
+        }
     }
     #endif
     
