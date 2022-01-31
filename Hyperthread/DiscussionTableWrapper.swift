@@ -20,7 +20,29 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
         wrapped = .init(loadingCarrier: loadingCarrier)
         super.init(nibName: nil, bundle: nil)
         adopt(wrapped)
+        pinEdges()
         
+        view.addSubview(topBar)
+        topBar.constrain(to: view)
+        view.bringSubviewToFront(topBar)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        /// Solves issue observed 22.01.31 where iPad resizing failed.
+        pinEdges()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        /// Solves issue observed 22.01.31 where iPad resizing failed.
+        pinEdges()
+    }
+    
+    @MainActor
+    private func pinEdges() -> Void {
         /// Pin edges.
         wrapped.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -29,10 +51,6 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
             wrapped.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             wrapped.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-        
-        view.addSubview(topBar)
-        topBar.constrain(to: view)
-        view.bringSubviewToFront(topBar)
     }
     
     required init?(coder: NSCoder) {
