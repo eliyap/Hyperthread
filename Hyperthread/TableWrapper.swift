@@ -69,8 +69,6 @@ final class TableWrapper: UIViewController, Sendable {
     }
     #endif
     
-    
-    
     required init?(coder: NSCoder) {
         fatalError("No.")
     }
@@ -118,15 +116,28 @@ fileprivate extension TableWrapper {
         }
         
         Task {
-            let discussionID = try await fetchDiscussion(tweetID: tweetID)
-            try await MainActor.run {
-                guard let discussion = makeRealm().discussion(id: discussionID) else {
-                    Logger.general.error("Could not locate discussion with ID \(discussionID)")
-                    assert(false)
-                    throw TweetLookupError.couldNotFindTweet
+            await loadingCarrier.send(.init(category: .loading))
+            
+            do {
+                let discussionID = try await fetchDiscussion(tweetID: tweetID)
+                
+                /// - Note: Cannot add `@Sendable` into `MainActor.run` block.
+                ///         We may rely on discussion lookup not failing, since indicator is non-critical.
+                await loadingCarrier.send(.init(category: .loaded))
+                
+                try await MainActor.run {
+                    guard let discussion = makeRealm().discussion(id: discussionID) else {
+                        Logger.general.error("Could not locate discussion with ID \(discussionID)")
+                        assert(false)
+                        throw TweetLookupError.couldNotFindTweet
+                    }
+                    
+                    splitViewController?.show(.secondary)
+                    splitDelegate.present(discussion)
                 }
-                splitViewController?.show(.secondary)
-                splitDelegate.present(discussion)
+            } catch {
+                await loadingCarrier.send(.init(category: .otherError(error)))
+                throw error
             }
         }
     }
