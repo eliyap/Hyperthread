@@ -88,3 +88,26 @@ extension DiscussionTableWrapper: SplitDelegate {
         view.bringSubviewToFront(topBar)
     }
 }
+
+/// - Note: for goodness sakes, name this better.
+protocol DiscusssionRequestable: AnyObject {
+    func requestDiscussionFromTweetID(_ tweetID: Tweet.ID)
+}
+
+extension DiscussionTableWrapper: DiscusssionRequestable {
+    func requestDiscussionFromTweetID(_ tweetID: Tweet.ID) {
+        /// Implement simple error handling for the request.
+        do {
+            try presentFetchedDiscussion(tweetID: tweetID)
+        } catch TweetLookupError.badString {
+            showAlert(title: "Could Not Read Link", message: "Please check the URL")
+        } catch TweetLookupError.couldNotFindTweet {
+            showAlert(title: "Could Not Load Tweet", message: """
+                Couldn't fetch tweet.
+                It might be hidden or deleted.
+                """)
+        } catch {
+            showAlert(title: "Error", message: "Error while loading tweet.")
+        }
+    }
+}
