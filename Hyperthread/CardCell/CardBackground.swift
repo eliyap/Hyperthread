@@ -38,13 +38,13 @@ final class CardBackground: UIButton {
         styleDefault()
     }
     
-    public func constrain(toView view: UIView) -> Void {
+    public func constrain(toView view: UIView, insets: UIEdgeInsets) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: view.topAnchor, constant: Self.inset),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Self.inset),
-            leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.inset),
-            trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Self.inset),
+            topAnchor.constraint(equalTo: view.topAnchor, constant: insets.top),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -insets.bottom),
+            leftAnchor.constraint(equalTo: view.leftAnchor, constant: insets.left),
+            rightAnchor.constraint(equalTo: view.rightAnchor, constant: -insets.right),
         ])
     }
     
