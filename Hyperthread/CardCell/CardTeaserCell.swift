@@ -34,6 +34,14 @@ final class CardTeaserCell: ControlledCell {
     
     public static let borderInset: CGFloat = 6
     
+    /// Since cards are stacked vertically in the table, halve the doubled insets to compensate.
+    private let cardInsets = UIEdgeInsets(
+        top: CardBackground.Inset / 2,
+        left: CardBackground.Inset,
+        bottom: CardBackground.Inset / 2,
+        right: CardBackground.Inset
+    )
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,7 +54,7 @@ final class CardTeaserCell: ControlledCell {
         controller.view.addSubview(cardBackground)
         cardBackground.constrain(
             to: safeAreaLayoutGuide,
-            insets: CardBackground.EdgeInsets,
+            insets: cardInsets,
             cornerRadius: ProfileImageView.cornerRadius + CardTeaserCell.borderInset
         )
 
@@ -55,7 +63,7 @@ final class CardTeaserCell: ControlledCell {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        let stackInsets = CardBackground.EdgeInsets + UIEdgeInsets(top: Self.borderInset, left: Self.borderInset, bottom: Self.borderInset, right: Self.borderInset)
+        let stackInsets = cardInsets + UIEdgeInsets(top: Self.borderInset, left: Self.borderInset, bottom: Self.borderInset, right: Self.borderInset)
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: stackInsets.top),
             stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: stackInsets.left),
