@@ -41,7 +41,7 @@ final class CardHeaderCell: ControlledCell {
         
         /// Configure background.
         controller.view.addSubview(cardBackground)
-        cardBackground.constrain(to: safeAreaLayoutGuide)
+        cardBackground.constrain(to: safeAreaLayoutGuide, insets: CardBackground.EdgeInsets)
         
         /// Configure Main Stack View.
         controller.view.addSubview(stackView)
