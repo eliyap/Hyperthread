@@ -25,7 +25,7 @@ final class QuoteView: UIView {
         super.init(frame: .zero)
         
         addSubview(cardBackground)
-        cardBackground.constrain(toView: self)
+        cardBackground.constrain(toView: self, insets: CardBackground.EdgeInsets)
         
         addSubview(stackView)
         stackView.axis = .vertical
