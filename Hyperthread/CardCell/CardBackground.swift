@@ -12,15 +12,15 @@ final class CardBackground: UIButton {
     public let triangleView: TriangleView
     
     /// How far the view will be inset from its superview.
-    public static let inset = CardTeaserCell.borderInset
-    public class var cornerRadius: CGFloat { Self.inset * 2 }
+    public class var cornerRadius: CGFloat { Self.Inset * 2 }
     
     public static let Inset: CGFloat = 6
     public static let EdgeInsets: UIEdgeInsets = .init(top: CardBackground.Inset, left: CardBackground.Inset, bottom: CardBackground.Inset, right: CardBackground.Inset)
+    private let triangleSize: CGFloat = 18
     
     @MainActor
     init() {
-        self.triangleView = TriangleView(size: Self.inset * 3)
+        self.triangleView = TriangleView(size: triangleSize)
         super.init(frame: .zero)
         
         /// Round corners.

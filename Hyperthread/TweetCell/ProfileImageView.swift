@@ -14,7 +14,7 @@ final class ProfileImageView: UIView {
     private let imageView: UIImageView
     
     /// Make sure corner radii compose nicely.
-    public class var cornerRadius: CGFloat { CardBackground.cornerRadius - CardBackground.inset }
+    public class var cornerRadius: CGFloat { CardBackground.cornerRadius - CardBackground.Inset }
     
     private let placeholder: UIImage? = .init(
         systemName: "person.crop.circle",
