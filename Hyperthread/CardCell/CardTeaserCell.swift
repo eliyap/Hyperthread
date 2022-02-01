@@ -52,11 +52,12 @@ final class CardTeaserCell: ControlledCell {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        let stackInsets = CardBackground.EdgeInsets + UIEdgeInsets(top: Self.borderInset, left: Self.borderInset, bottom: Self.borderInset, right: Self.borderInset)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset * 2),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset * 2),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset * 2),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset * 2),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: stackInsets.top),
+            stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: stackInsets.left),
+            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -stackInsets.right),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -stackInsets.bottom),
         ])
 
         stackView.addArrangedSubview(userView)

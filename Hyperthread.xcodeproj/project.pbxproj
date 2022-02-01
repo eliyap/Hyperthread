@@ -82,6 +82,7 @@
 		22A760C527A750390006E9BC /* CountButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C427A750390006E9BC /* CountButton.swift */; };
 		22A760C927A866610006E9BC /* DiscussionTableWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760C827A866610006E9BC /* DiscussionTableWrapper.swift */; };
 		22A760CD27A883100006E9BC /* DiscussionLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760CC27A883100006E9BC /* DiscussionLoader.swift */; };
+		22A760CF27A8C8970006E9BC /* UIEdgeInsets.+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A760CE27A8C8970006E9BC /* UIEdgeInsets.+.swift */; };
 		22A9E9052772A86700C4EE99 /* TimestampButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A9E9042772A86700C4EE99 /* TimestampButton.swift */; };
 		22BC9E8F27A5C95100721BD2 /* DiscussionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BC9E8E27A5C95100721BD2 /* DiscussionTree.swift */; };
 		22BC9E9127A5C97800721BD2 /* ColorMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */; };
@@ -221,6 +222,7 @@
 		22A760C427A750390006E9BC /* CountButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountButton.swift; sourceTree = "<group>"; };
 		22A760C827A866610006E9BC /* DiscussionTableWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTableWrapper.swift; sourceTree = "<group>"; };
 		22A760CC27A883100006E9BC /* DiscussionLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionLoader.swift; sourceTree = "<group>"; };
+		22A760CE27A8C8970006E9BC /* UIEdgeInsets.+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIEdgeInsets.+.swift"; path = "Models/UIEdgeInsets.+.swift"; sourceTree = SOURCE_ROOT; };
 		22A9E9042772A86700C4EE99 /* TimestampButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampButton.swift; sourceTree = "<group>"; };
 		22BC9E8E27A5C95100721BD2 /* DiscussionTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscussionTree.swift; sourceTree = "<group>"; };
 		22BC9E9027A5C97800721BD2 /* ColorMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorMarkerView.swift; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 		223BBF802738477000375530 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				22A760CE27A8C8970006E9BC /* UIEdgeInsets.+.swift */,
 				223BBF81273847C300375530 /* Adopt.swift */,
 				221A296F275D533D00C283FE /* ControlledCell.swift */,
 				221A2993275D943E00C283FE /* RemoveDuplicates.swift */,
@@ -837,6 +840,7 @@
 				22FA26A22795B6CD00DD8EE4 /* ReferenceSet.swift in Sources */,
 				2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */,
 				22D2572E27883A56005FC3D8 /* ScrollPosition.swift in Sources */,
+				22A760CF27A8C8970006E9BC /* UIEdgeInsets.+.swift in Sources */,
 				228D71F02780128300E306BD /* RealmDateWindow.swift in Sources */,
 				223BBF7127377EC300375530 /* Query.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
