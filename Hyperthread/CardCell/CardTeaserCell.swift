@@ -32,7 +32,7 @@ final class CardTeaserCell: ControlledCell {
     
     var token: NotificationToken? = nil
     
-    public static let borderInset: CGFloat = 6
+    public static let borderInset: CGFloat = 9
     
     /// Since cards are stacked vertically in the table, halve the doubled insets to compensate.
     private let cardInsets = UIEdgeInsets(

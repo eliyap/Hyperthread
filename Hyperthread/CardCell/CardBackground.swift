@@ -13,7 +13,7 @@ final class CardBackground: UIButton {
     private let triangleView: TriangleView
     
     /// How far the view will be inset from its superview.
-    public static let Inset: CGFloat = 10
+    public static let Inset: CGFloat = 12
     public static let EdgeInsets: UIEdgeInsets = .init(top: CardBackground.Inset, left: CardBackground.Inset, bottom: CardBackground.Inset, right: CardBackground.Inset)
     private let triangleSize: CGFloat = 18
     
