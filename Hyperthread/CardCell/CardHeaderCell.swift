@@ -27,9 +27,9 @@ final class CardHeaderCell: ControlledCell {
     let albumVC = AlbumController()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
-    // TODO: add profile image
     
-    private let inset: CGFloat = CardTeaserCell.borderInset
+    private static let ContentInset: CGFloat = 6
+    private let contentInsets = UIEdgeInsets(top: CardHeaderCell.ContentInset, left: CardHeaderCell.ContentInset, bottom: CardHeaderCell.ContentInset, right: CardHeaderCell.ContentInset)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
@@ -48,11 +48,12 @@ final class CardHeaderCell: ControlledCell {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        let stackInsets = CardBackground.EdgeInsets + contentInsets
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: inset * 2),
-            stackView.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: inset * 2),
-            stackView.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -inset * 2),
-            stackView.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -inset * 2),
+            stackView.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: stackInsets.top),
+            stackView.leftAnchor.constraint(equalTo: controller.view.leftAnchor, constant: stackInsets.left),
+            stackView.rightAnchor.constraint(equalTo: controller.view.rightAnchor, constant: -stackInsets.right),
+            stackView.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -stackInsets.bottom),
         ])
 
         stackView.addArrangedSubview(userView)
