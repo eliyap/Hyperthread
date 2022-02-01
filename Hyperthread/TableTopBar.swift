@@ -102,7 +102,7 @@ fileprivate final class BarContents: UIStackView {
         }
     }
     
-    lazy var inset = CardTeaserCell.borderInset
+    private let inset: CGFloat = 6
     
     @MainActor
     init() {
