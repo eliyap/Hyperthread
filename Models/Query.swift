@@ -28,10 +28,19 @@ extension Realm {
 
 extension Discussion {
     /// Check if any `Tweet` is above the relevance threshold.
-    static let minRelevancePredicate = NSPredicate(format: """
+    static let minFetchRelevancePredicate = NSPredicate(format: """
         SUBQUERY(\(Discussion.conversationsPropertyName), $c,
             SUBQUERY(\(Conversation.tweetsPropertyName), $t,
-                $t.\(Tweet.relevancePropertyName) >= \(Relevance.threshold)
+                $t.\(Tweet.relevancePropertyName) >= \(Relevance.fetchThreshold)
+            ).@count > 0
+        ).@count > 0
+        """)
+    
+    /// Check if any `Tweet` is above the relevance threshold.
+    static let minDisplayRelevancePredicate = NSPredicate(format: """
+        SUBQUERY(\(Discussion.conversationsPropertyName), $c,
+            SUBQUERY(\(Conversation.tweetsPropertyName), $t,
+                $t.\(Tweet.relevancePropertyName) >= \(Relevance.displayThreshold)
             ).@count > 0
         ).@count > 0
         """)

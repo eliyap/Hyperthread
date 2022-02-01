@@ -32,7 +32,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     let loadingCarrier: UserMessageCarrier
     
     lazy var results = realm.objects(Discussion.self)
-        .filter(Discussion.minRelevancePredicate)
+        .filter(Discussion.minDisplayRelevancePredicate)
         .sorted(by: \Discussion.updatedAt, ascending: false)
     
     init(
