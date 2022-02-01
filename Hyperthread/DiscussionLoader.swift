@@ -33,11 +33,11 @@ extension DiscussionTableWrapper: DiscussionPresenter {
 
 extension DiscussionPresenter {
     /// Shared code for presenting load progress to user.
-    func presentFetchedDiscussion(tweetID: Tweet.ID) throws -> Void {
-        Task {
-            await loadingCarrier.send(.init(category: .loading))
-            
+    func presentFetchedDiscussion(tweetID: Tweet.ID) -> Void {
+        Task<Void, Never> {
             do {
+                await loadingCarrier.send(.init(category: .loading))
+                
                 let discussionID = try await fetchDiscussion(tweetID: tweetID)
                 
                 /// - Note: Cannot add `@Sendable` into `MainActor.run` block.
@@ -53,9 +53,13 @@ extension DiscussionPresenter {
                     
                     present(discussion: discussion)
                 }
+            } catch TweetLookupError.couldNotFindTweet {
+                await showAlert( title: "Could Not Load Tweet", message: """
+                    Couldn't fetch tweet.
+                    It might be hidden or deleted.
+                    """)
             } catch {
                 await loadingCarrier.send(.init(category: .otherError(error)))
-                throw error
             }
         }
     }
