@@ -23,7 +23,7 @@ internal func fetchDiscussion(tweetID: Tweet.ID) async throws -> Discussion.ID {
     let originalRelevance = tweet.relevance
     let realm = makeRealm()
     try realm.writeWithToken { token in
-        realm.tweet(id: tweet.id)?.relevance = .discussion
+        realm.tweet(id: tweet.id)?.relevance = .lookup
     }
     defer {
         do {
