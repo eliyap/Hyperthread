@@ -33,7 +33,6 @@ final class CardTeaserCell: ControlledCell {
     var token: NotificationToken? = nil
     
     public static let borderInset: CGFloat = 6
-    private lazy var inset: CGFloat = CardTeaserCell.borderInset
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
@@ -199,9 +198,8 @@ final class CardTeaserCell: ControlledCell {
         }
     }
     
+    let shadowSize = CardTeaserCell.borderInset * 0.75
     public func styleSelected() -> Void {
-        let shadowSize = self.inset * 0.75
-        
         stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
         cardBackground.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
         cardBackground.layer.shadowColor = UIColor.black.cgColor
