@@ -28,6 +28,8 @@ class AlbumController: UIPageViewController {
     /// The upcoming page number.
     private var pendingIndex: Int = 1
         
+    private static let CountButtonInset: CGFloat = 6
+    
     @MainActor
     init() {
         self.countButton = CountButton()
@@ -45,8 +47,8 @@ class AlbumController: UIPageViewController {
         view.bringSubviewToFront(countButton)
         countButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            countButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -CardTeaserCell.borderInset),
-            countButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -CardTeaserCell.borderInset),
+            countButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -AlbumController.CountButtonInset),
+            countButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -AlbumController.CountButtonInset),
         ])
     }
     
