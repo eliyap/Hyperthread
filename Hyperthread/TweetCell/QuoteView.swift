@@ -15,7 +15,10 @@ final class QuoteView: UIView {
     let userView: UserView = .init()
     let tweetTextView: TweetTextView = .init()
     
-    private let inset: CGFloat = CardTeaserCell.borderInset
+    private static let contentInset: CGFloat = 6
+    
+    /// Omit additional horizontal whitespace.
+    private let bgInsets = UIEdgeInsets(top: CardBackground.Inset, left: .zero, bottom: .zero, right: CardBackground.Inset)
     
     private weak var requester: DiscusssionRequestable?
     private var tweetID: Tweet.ID? = nil
@@ -25,17 +28,18 @@ final class QuoteView: UIView {
         super.init(frame: .zero)
         
         addSubview(cardBackground)
-        cardBackground.constrain(toView: self, insets: CardBackground.EdgeInsets)
+        cardBackground.constrain(toView: self, insets: bgInsets)
         
         addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        let stackInsets = bgInsets + UIEdgeInsets(top: QuoteView.contentInset, left: QuoteView.contentInset, bottom: QuoteView.contentInset, right: QuoteView.contentInset)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: inset * 2),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset * 2),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset * 2),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -inset * 2),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: stackInsets.top),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -stackInsets.bottom),
+            stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: stackInsets.left),
+            stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -stackInsets.right),
         ])
         
         stackView.addArrangedSubview(userView)
