@@ -15,6 +15,9 @@ final class CardBackground: UIButton {
     public static let inset = CardTeaserCell.borderInset
     public class var cornerRadius: CGFloat { Self.inset * 2 }
     
+    public static let Inset: CGFloat = 6
+    public static let EdgeInsets: UIEdgeInsets = .init(top: CardBackground.Inset, left: CardBackground.Inset, bottom: CardBackground.Inset, right: CardBackground.Inset)
+    
     @MainActor
     init() {
         self.triangleView = TriangleView(size: Self.inset * 3)
