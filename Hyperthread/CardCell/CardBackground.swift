@@ -9,12 +9,11 @@ import UIKit
 
 final class CardBackground: UIButton {
     
-    public let triangleView: TriangleView
+    private let clipper = CornerClipView()
+    private let triangleView: TriangleView
     
     /// How far the view will be inset from its superview.
-    public class var cornerRadius: CGFloat { Self.Inset * 2 }
-    
-    public static let Inset: CGFloat = 6
+    public static let Inset: CGFloat = 10
     public static let EdgeInsets: UIEdgeInsets = .init(top: CardBackground.Inset, left: CardBackground.Inset, bottom: CardBackground.Inset, right: CardBackground.Inset)
     private let triangleSize: CGFloat = 18
     
@@ -24,12 +23,9 @@ final class CardBackground: UIButton {
         super.init(frame: .zero)
         
         /// Round corners.
-        layer.cornerRadius = Self.cornerRadius
         layer.cornerCurve = .continuous
         
-        let clipper = CornerClipView()
         addSubview(clipper)
-        clipper.constrain(to: self, cornerRadius: Self.cornerRadius)
         
         /// Align view to top right, with fixed size.
         clipper.addSubview(triangleView)
@@ -41,7 +37,7 @@ final class CardBackground: UIButton {
         styleDefault()
     }
     
-    public func constrain(toView view: UIView, insets: UIEdgeInsets) -> Void {
+    public func constrain(toView view: UIView, insets: UIEdgeInsets, cornerRadius: CGFloat) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             topAnchor.constraint(equalTo: view.topAnchor, constant: insets.top),
@@ -49,9 +45,11 @@ final class CardBackground: UIButton {
             leftAnchor.constraint(equalTo: view.leftAnchor, constant: insets.left),
             rightAnchor.constraint(equalTo: view.rightAnchor, constant: -insets.right),
         ])
+        layer.cornerRadius = cornerRadius
+        clipper.constrain(to: self, cornerRadius: cornerRadius)
     }
     
-    public func constrain(to guide: UILayoutGuide, insets: UIEdgeInsets) -> Void {
+    public func constrain(to guide: UILayoutGuide, insets: UIEdgeInsets, cornerRadius: CGFloat) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             topAnchor.constraint(equalTo: guide.topAnchor, constant: insets.top),
@@ -59,6 +57,8 @@ final class CardBackground: UIButton {
             leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: insets.left),
             trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -insets.right),
         ])
+        layer.cornerRadius = cornerRadius
+        clipper.constrain(to: self, cornerRadius: cornerRadius)
     }
     
     public func configure(status: ReadStatus) {
