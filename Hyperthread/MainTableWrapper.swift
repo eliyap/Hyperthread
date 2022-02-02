@@ -40,7 +40,6 @@ final class MainTableWrapper: UIViewController, Sendable {
         )
         navigationItem.leftBarButtonItems = [
             addLinkButton,
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod)),
         ]
 
         #if DEBUG
