@@ -98,7 +98,7 @@ final class MainTable: UITableViewController, Sendable {
         
         Task {
             await dds.fetchNewTweets()
-            DispatchQueue.main.async { /// Ensure call on main thread.
+            await MainActor.run { /// Ensure call on main thread.
                 UIView.animate(withDuration: 0.25) { [weak self] in
                     self?.arrowView?.endRefreshing()
                     self?.tableView.setContentOffset(CGPoint(x: .zero, y: -offset), animated: true)
