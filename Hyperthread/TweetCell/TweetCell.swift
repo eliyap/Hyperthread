@@ -37,12 +37,12 @@ final class TweetCell: ControlledCell {
     /// Variable Constraint.
     var indentConstraint: NSLayoutConstraint
     
-    public static let inset: CGFloat = 8
+    public static let ContentInset: CGFloat = 8
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
         
-        let triangleSize = Self.inset * 1.5
+        let triangleSize = Self.ContentInset * 1.5
         self.triangleView = TriangleView(size: triangleSize)
         self.indentConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: .zero)
 
@@ -62,10 +62,10 @@ final class TweetCell: ControlledCell {
         /// Bind stack to edges, with insets.
         /// Leading edge has no inset due to color marker.
         NSLayoutConstraint.activate([
-            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: Self.inset),
+            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: Self.ContentInset),
             depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: .zero),
-            depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -Self.inset),
-            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -Self.inset),
+            depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -Self.ContentInset),
+            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -Self.ContentInset),
         ])
 
         /// Add spacer, which causes "indentation" in the cell view.
