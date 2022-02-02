@@ -119,7 +119,8 @@ final class TweetCell: ControlledCell {
         /// Manually constrain to full width.
         NSLayoutConstraint.activate([
             metricsView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-            metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+            /// Add card padding so that timestamp labels are vertically aligned with the `CardHeaderCell`.
+            metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -CardBackground.Inset),
         ])
         
         /// Ensure glyph size doesn't bug out.
