@@ -57,6 +57,15 @@ final class DiscussionTable: UITableViewController {
         tableView.register(CardHeaderCell.self, forCellReuseIdentifier: CardHeaderCell.reuseID)
         tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
         dds = .init(discussion: discussion, airport: airport, tableView: tableView, cellProvider: cellProvider)
+        
+        configure(tableView: tableView)
+    }
+    
+    /// Aesthetic setup work.
+    private func configure(tableView: UITableView) -> Void {
+        /// Simple hack to remove top separator line (which typically sits above the `CardHeaderCell`).
+        /// Source: https://stackoverflow.com/questions/32668797/how-to-remove-first-cell-top-separator-and-last-cell-bottom-separator
+        tableView.tableHeaderView = UIView()
     }
     
     private func cellProvider(tableView: UITableView, indexPath: IndexPath, node: Node) -> UITableViewCell? {
