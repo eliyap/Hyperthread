@@ -59,9 +59,6 @@ final class TweetCell: ControlledCell {
         controller.view.addSubview(depthStack)
         depthStack.axis = .horizontal
         depthStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        /// Bind stack to edges, with insets.
-        
         NSLayoutConstraint.activate([
             depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: contentInsets.top),
             depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -contentInsets.bottom),
