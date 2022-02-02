@@ -213,7 +213,8 @@ final class CardTeaserCell: ControlledCell {
         }
     }
     
-    let shadowSize = CardTeaserCell.borderInset * 0.75
+    /// Try to avoid clipping the shadow by keeping `shadow < inset`.
+    let shadowSize = CardTeaserCell.ContentInset * 0.75
     public func styleSelected() -> Void {
         stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
         cardBackground.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
