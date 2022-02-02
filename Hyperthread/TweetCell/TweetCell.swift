@@ -38,7 +38,7 @@ final class TweetCell: ControlledCell {
     var indentConstraint: NSLayoutConstraint
     
     public static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Use same insets for consistency.
-    private let contentInsets = UIEdgeInsets(top: Self.ContentInset, left: Self.ContentInset, bottom: Self.ContentInset, right: Self.ContentInset)
+    private let contentInsets = UIEdgeInsets(top: TweetCell.ContentInset, left: TweetCell.ContentInset, bottom: TweetCell.ContentInset, right: TweetCell.ContentInset)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
