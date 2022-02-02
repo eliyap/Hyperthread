@@ -14,6 +14,9 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
     private let topBar: TableTopBar
     public let loadingCarrier: UserMessageCarrier = .init()
     
+    /// Records whether we pushed views onto the stack.
+    public var hasNavStack = false
+    
     /// Expose underlying discussion to allow `SplitViewController` to decide how to collapse.
     public var discussion: Discussion? {
         wrapped.discussion
@@ -83,6 +86,14 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
 
 extension DiscussionTableWrapper: SplitDelegate {
     func present(_ discussion: Discussion) -> Void {
+        /// Dismiss stacked `UIViewController`s, if any.
+        /// We do not use `present` to push onto the stack, and instead `present` swaps out the `UITableView`.
+        /// - So when we `present`, we must manually clear the stack.
+        /// - Conversely, don't worry about accidentally clearing the stack when entering nested quotes.
+        if hasNavStack {
+            navigationController?.popToRootViewController(animated: false)
+        }
+        
         /// Forward arguments.
         wrapped.present(discussion)
         
@@ -100,29 +111,17 @@ protocol DiscusssionRequestable: AnyObject {
 extension DiscussionTableWrapper: DiscusssionRequestable {
     @MainActor
     func requestDiscussionFromTweetID(_ tweetID: Tweet.ID) {
-        /// Implement simple error handling for the request.
-        do {
-            let realm = makeRealm()
-            if
-                let local = realm.tweet(id: tweetID),
-                let c = local.conversation.first,
-                let d = c.discussion.first,
-                discussion?.id == d.id
-            {
-                /// If discussion is open already, scroll to the quoted tweet (if we can).
-                let success = wrapped.scrollToTweetWithID(tweetID)
-                if success { return }
-            }
-            try presentFetchedDiscussion(tweetID: tweetID)
-        } catch TweetLookupError.badString {
-            showAlert(title: "Could Not Read Link", message: "Please check the URL")
-        } catch TweetLookupError.couldNotFindTweet {
-            showAlert(title: "Could Not Load Tweet", message: """
-                Couldn't fetch tweet.
-                It might be hidden or deleted.
-                """)
-        } catch {
-            showAlert(title: "Error", message: "Error while loading tweet.")
+        let realm = makeRealm()
+        if
+            let local = realm.tweet(id: tweetID),
+            let c = local.conversation.first,
+            let d = c.discussion.first,
+            discussion?.id == d.id
+        {
+            /// If discussion is open already, scroll to the quoted tweet (if we can).
+            let success = wrapped.scrollToTweetWithID(tweetID)
+            if success { return }
         }
+        presentFetchedDiscussion(tweetID: tweetID)
     }
 }

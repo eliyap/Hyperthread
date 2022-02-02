@@ -27,6 +27,7 @@ extension DiscussionTableWrapper: DiscussionPresenter {
     func present(discussion: Discussion) {
         let dvc = DiscussionTableWrapper()
         dvc.present(discussion)
+        hasNavStack = true
         self.navigationController?.pushViewController(dvc, animated: true)
     }
 }
