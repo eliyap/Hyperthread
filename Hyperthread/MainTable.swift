@@ -105,8 +105,7 @@ final class MainTable: UITableViewController, Sendable {
                     UserDefaults.groupSuite.firstFetch == false
                 {
                     tableView.scrollToRow(at: IndexPath(row: firstReadIndex, section: DiscussionSection.Main.rawValue), at: .top, animated: true)
-                }
-                
+                }       
             }
         }
     }
