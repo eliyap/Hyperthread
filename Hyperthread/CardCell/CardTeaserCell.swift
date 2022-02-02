@@ -32,7 +32,7 @@ final class CardTeaserCell: ControlledCell {
     
     var token: NotificationToken? = nil
     
-    public static let ContentSpacing: CGFloat = 6
+    public static let ContentSpacing: CGFloat = 4
     
     public static let ContentInset: CGFloat = 9
     private let contentInsets: UIEdgeInsets = UIEdgeInsets(top: CardTeaserCell.ContentInset, left: CardTeaserCell.ContentInset, bottom: CardTeaserCell.ContentInset, right: CardTeaserCell.ContentInset)
@@ -76,7 +76,7 @@ final class CardTeaserCell: ControlledCell {
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -stackInsets.bottom),
         ])
 
-        stackView.addArrangedSubview(userView)
+        stackView.addArrangedSubview(userView)        
         stackView.addArrangedSubview(tweetTextView)
         
         controller.addChild(albumVC)
