@@ -38,6 +38,7 @@ final class TweetCell: ControlledCell {
     var indentConstraint: NSLayoutConstraint
     
     public static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Use same insets for consistency.
+    private let contentInsets = UIEdgeInsets(top: Self.ContentInset, left: Self.ContentInset, bottom: Self.ContentInset, right: Self.ContentInset)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
@@ -62,10 +63,10 @@ final class TweetCell: ControlledCell {
         /// Bind stack to edges, with insets.
         
         NSLayoutConstraint.activate([
-            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: Self.ContentInset),
-            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: Self.ContentInset),
-            depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -Self.ContentInset),
-            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -Self.ContentInset),
+            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: contentInsets.top),
+            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -contentInsets.bottom),
+            depthStack.leftAnchor.constraint(equalTo: controller.view.leftAnchor, constant: contentInsets.left),
+            depthStack.rightAnchor.constraint(equalTo: controller.view.rightAnchor, constant: -contentInsets.right),
         ])
 
         /// Add spacer, which causes "indentation" in the cell view.
