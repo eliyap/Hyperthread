@@ -92,8 +92,6 @@ final class MainTable: UITableViewController, Sendable {
         
         UIView.animate(withDuration: 0.25) { [weak self] in
             self?.arrowView?.beginRefreshing()
-            let bumped = -offset - 1.5 * ArrowRefreshView.offset
-            self?.tableView.setContentOffset(CGPoint(x: .zero, y: bumped), animated: true)
         }
         
         Task {
@@ -101,7 +99,6 @@ final class MainTable: UITableViewController, Sendable {
             await MainActor.run { /// Ensure call on main thread.
                 UIView.animate(withDuration: 0.25) { [weak self] in
                     self?.arrowView?.endRefreshing()
-                    self?.tableView.setContentOffset(CGPoint(x: .zero, y: -offset), animated: true)
                 }
             }
         }
