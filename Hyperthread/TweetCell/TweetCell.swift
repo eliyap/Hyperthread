@@ -37,7 +37,7 @@ final class TweetCell: ControlledCell {
     /// Variable Constraint.
     var indentConstraint: NSLayoutConstraint
     
-    public static let ContentInset: CGFloat = 8
+    public static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Use same insets for consistency.
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
@@ -60,10 +60,10 @@ final class TweetCell: ControlledCell {
         depthStack.translatesAutoresizingMaskIntoConstraints = false
         
         /// Bind stack to edges, with insets.
-        /// Leading edge has no inset due to color marker.
+        
         NSLayoutConstraint.activate([
             depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: Self.ContentInset),
-            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: .zero),
+            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: Self.ContentInset),
             depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -Self.ContentInset),
             depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -Self.ContentInset),
         ])
