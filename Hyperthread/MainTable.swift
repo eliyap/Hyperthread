@@ -48,6 +48,9 @@ final class MainTable: UITableViewController, Sendable {
         /// Erase separators.
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         
+        /// Correct for half-inset hack (used to keep padding consistent) by adding an extra half inset.
+        tableView.contentInset.top = CardBackground.Inset / 2
+        
         /// Enable self sizing table view cells.
         tableView.estimatedRowHeight = 100
         
