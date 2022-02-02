@@ -98,6 +98,15 @@ final class MainTable: UITableViewController, Sendable {
                 UIView.animate(withDuration: 0.25) { [weak self] in
                     self?.arrowView?.endRefreshing()
                 }
+                /// We want to focus on "brand new" discussions, i.e. not stuff that happens to be old and unread.
+                /// To achieve this, we stop at the first `.read` `Discussion`.
+                if
+                    let firstReadIndex = dds.results.firstIndex(where: {$0.read == .read}),
+                    UserDefaults.groupSuite.firstFetch == false
+                {
+                    tableView.scrollToRow(at: IndexPath(row: firstReadIndex, section: DiscussionSection.Main.rawValue), at: .top, animated: true)
+                }
+                
             }
         }
     }
