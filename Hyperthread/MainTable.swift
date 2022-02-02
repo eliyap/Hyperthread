@@ -88,8 +88,6 @@ final class MainTable: UITableViewController, Sendable {
     
     @objc
     public func refresh() {
-        let offset = self.getNavBarHeight() + self.getStatusBarHeight()
-        
         UIView.animate(withDuration: 0.25) { [weak self] in
             self?.arrowView?.beginRefreshing()
         }
