@@ -76,7 +76,7 @@ final class CardTeaserCell: ControlledCell {
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -stackInsets.bottom),
         ])
 
-        stackView.addArrangedSubview(userView)        
+        stackView.addArrangedSubview(userView)
         stackView.addArrangedSubview(tweetTextView)
         
         controller.addChild(albumVC)
@@ -139,6 +139,18 @@ final class CardTeaserCell: ControlledCell {
         retweetView.configure(tweet: tweet, realm: realm)
         summaryView.configure(discussion, realm: realm)
         albumVC.configure(tweet: tweet)
+        
+        
+        /// Correct for strange spacing issue observed 22.02.02 by removing spacing from text view.
+        /// Docs: https://developer.apple.com/documentation/uikit/uiview/1622648-alignmentrectinsets
+        /// Zero by default.
+        /// - Note: Issue was especially apparent when `tweetTextView` was directly above `retweetView` or `hairlineView`.
+        ///         Hence we deliberately limit this special adjustment.
+        if albumVC.view.isHidden {
+            tweetTextView.bottomInset = 5
+        } else {
+            tweetTextView.bottomInset = .zero
+        }
         
         tweetTextView.delegate = self
         cardBackground.configure(status: discussion.read)

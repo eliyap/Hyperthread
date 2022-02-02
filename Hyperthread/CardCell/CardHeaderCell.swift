@@ -28,6 +28,7 @@ final class CardHeaderCell: ControlledCell {
     let retweetView = RetweetView()
     let metricsView = MetricsView()
     
+    private static let ContentSpacing: CGFloat = CardTeaserCell.ContentSpacing /// Stay consistent.
     private static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Stay consistent.
     private let contentInsets = UIEdgeInsets(top: CardHeaderCell.ContentInset, left: CardHeaderCell.ContentInset, bottom: CardHeaderCell.ContentInset, right: CardHeaderCell.ContentInset)
     
@@ -52,6 +53,7 @@ final class CardHeaderCell: ControlledCell {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = Self.ContentSpacing
         let stackInsets = CardBackground.EdgeInsets + contentInsets
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: stackInsets.top),

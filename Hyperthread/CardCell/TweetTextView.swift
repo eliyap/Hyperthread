@@ -12,9 +12,10 @@ final class TweetTextView: UITextView {
     /// Correct for strange spacing issue observed 22.02.02.
     override var alignmentRectInsets: UIEdgeInsets {
         var insets = super.alignmentRectInsets
-        insets.bottom += 4
+        insets.bottom += bottomInset
         return insets
     }
+    public var bottomInset: CGFloat = .zero
     
     @MainActor
     init() {
