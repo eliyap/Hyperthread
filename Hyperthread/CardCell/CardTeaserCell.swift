@@ -27,12 +27,13 @@ final class CardTeaserCell: ControlledCell {
     let tweetTextView = TweetTextView()
     let albumVC = AlbumController()
     let retweetView = RetweetView()
-    let hairlineView = SpacedSeparator(vertical: CardTeaserCell.borderInset, horizontal: CardTeaserCell.borderInset)
+    let hairlineView = SpacedSeparator(vertical: .zero, horizontal: CardTeaserCell.ContentSpacing)
     let summaryView = SummaryView()
     
     var token: NotificationToken? = nil
     
-    public static let borderInset: CGFloat = 9
+    public static let ContentSpacing: CGFloat = 6
+    
     public static let ContentInset: CGFloat = 9
     private let contentInsets: UIEdgeInsets = UIEdgeInsets(top: CardTeaserCell.ContentInset, left: CardTeaserCell.ContentInset, bottom: CardTeaserCell.ContentInset, right: CardTeaserCell.ContentInset)
     
@@ -66,6 +67,7 @@ final class CardTeaserCell: ControlledCell {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = Self.ContentSpacing
         let stackInsets = cardInsets + contentInsets
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: stackInsets.top),
