@@ -90,3 +90,42 @@ fileprivate final class FetchLog {
         return result
     }
 }
+
+fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) -> Void {
+    let realm = makeRealm()
+    
+    do {
+        try realm.writeWithToken { token in
+            for mediaTweet in mediaTweets {
+                guard let tweet = realm.tweet(id: mediaTweet.id_str) else {
+                    throw HTRealmError.unexpectedNilFromID(mediaTweet.id_str)
+                }
+                guard let media: [RawExtendedMedia] = mediaTweet.extended_entities.map(\.media) else {
+                    throw MediaIngestError.missingEntities
+                }
+                for mediaItem in media {
+                    guard mediaItem.video_info.variants.isNotEmpty else {
+                        throw MediaIngestError.missingEntities
+                    }
+                }
+                
+                print(tweet.media.map(\.mediaKey))
+                print(media.map(\.id_str))
+            }
+        }
+    } catch {
+        ModelLog.error("Error during media ingest \(error)")
+        assert(false)
+    }
+    
+    
+}
+
+enum MediaIngestError: Error {
+    /// Entities was not returned or could not be parsed.
+    case missingEntities
+    
+    case missingMediaID
+    
+    case mismatchedMediaID
+}
