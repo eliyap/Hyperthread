@@ -37,8 +37,16 @@ final class Media: EmbeddedObject {
     /// Docs: https://developer.twitter.com/en/docs/twitter-ads-api/creatives/guides/identifying-media
     /// Derive the ID from the key.
     var id: String? {
-        guard mediaKey.contains("_") else { return nil }
-        guard let trailing = mediaKey.split(separator: "_").last else { return nil }
+        guard mediaKey.contains("_") else {
+            ModelLog.error("Could not derive media ID from \(mediaKey)")
+            assert(false)
+            return nil
+        }
+        guard let trailing = mediaKey.split(separator: "_").last else {
+            ModelLog.error("Could not derive media ID from \(mediaKey)")
+            assert(false)
+            return nil
+        }
         return String(trailing)
     }
     
