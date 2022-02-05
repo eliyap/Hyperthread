@@ -120,6 +120,7 @@
 		22FA26B32795C70F00DD8EE4 /* UpdateRelevance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26B22795C70F00DD8EE4 /* UpdateRelevance.swift */; };
 		22FA26B52795C77A00DD8EE4 /* Realm.TransactionToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26B42795C77A00DD8EE4 /* Realm.TransactionToken.swift */; };
 		22FA26B72795D1FB00DD8EE4 /* LinkConversations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FA26B62795D1FB00DD8EE4 /* LinkConversations.swift */; };
+		22FBAAD027AECF6D00FEEB71 /* MediaFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FBAACF27AECF6D00FEEB71 /* MediaFetcher.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -260,6 +261,7 @@
 		22FA26B22795C70F00DD8EE4 /* UpdateRelevance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRelevance.swift; sourceTree = "<group>"; };
 		22FA26B42795C77A00DD8EE4 /* Realm.TransactionToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realm.TransactionToken.swift; sourceTree = "<group>"; };
 		22FA26B62795D1FB00DD8EE4 /* LinkConversations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkConversations.swift; sourceTree = "<group>"; };
+		22FBAACF27AECF6D00FEEB71 /* MediaFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFetcher.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -435,6 +437,7 @@
 				22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */,
 				22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */,
 				22BFD7A42774620600E46DF1 /* HomeTimelineHelper.swift */,
+				22FBAACF27AECF6D00FEEB71 /* MediaFetcher.swift */,
 				228D71EE2780127400E306BD /* DateWindow */,
 			);
 			path = Airport;
@@ -903,6 +906,7 @@
 				2232DD2E2796F75000936846 /* MainTableWrapper.swift in Sources */,
 				22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */,
 				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
+				22FBAAD027AECF6D00FEEB71 /* MediaFetcher.swift in Sources */,
 				22680A84276AA651008827F8 /* Sealed.swift in Sources */,
 				22A760C327A626640006E9BC /* LoadDiscussion.swift in Sources */,
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
