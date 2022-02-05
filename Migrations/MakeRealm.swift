@@ -10,7 +10,15 @@ import RealmSwift
 
 /// Alias App Sematic Versions to Realm Schema Versions.
 internal enum SchemaVersion: UInt64 {
+    /// Launch Schema.
     case v1dot0 = 0
+    
+    /// No changes from `v1.0`.
+    case v1dot1 = 1
+    
+    /// Changes:
+    /// - Added video media representation
+    case v1dot2 = 2
 }
 
 internal func makeRealm() -> Realm {
