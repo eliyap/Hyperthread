@@ -88,6 +88,20 @@ final class Media: EmbeddedObject {
         self.url = raw.url
         self.video = nil
     }
+    
+    internal func addVideo(from raw: RawExtendedMedia) -> Void {
+        guard self.mediaType == MediaType(raw: raw.type) else {
+            ModelLog.error("Mismatched media types! \(self.mediaType!) != \(MediaType(raw: raw.type))")
+            assert(false)
+        }
+        
+        do {
+            self.video = try .init(raw: raw.video_info)
+        } catch {
+            ModelLog.error("Video init threw error \(error)")
+            assert(false)
+        }
+    }
 }
 
 extension Media {

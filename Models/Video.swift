@@ -22,6 +22,23 @@ final class VideoMedia: EmbeddedObject {
     
     @Persisted
     public var variants: List<VideoVariant>
+    
+    override required init() {}
+    
+    public init(raw: RawVideoInfo) throws {
+        super.init()
+        guard raw.aspect_ratio.count == 2 else {
+            throw HTRealmError.malformedArrayTuple
+        }
+        
+        self.aspectRatioWidth = raw.aspect_ratio[0]
+        self.aspectRatioHeight = raw.aspect_ratio[1]
+        
+        self.variants = .init()
+        for rawVariant in raw.variants {
+            self.variants.append(VideoVariant(raw: rawVariant))
+        }
+    }
 }
 
 final class VideoVariant: EmbeddedObject {
@@ -29,10 +46,23 @@ final class VideoVariant: EmbeddedObject {
     var bitrate: Int?
     
     @Persisted
-    var contentType: VideoContentType.RawValue
+    private var _contentType: VideoContentType.RawValue
+    public var contentType: VideoContentType! {
+        get { .init(rawValue: _contentType) }
+        set { _contentType = newValue.rawValue }
+    }
     
     @Persisted
     var url: String
+    
+    override required init() {}
+    
+    public init(raw: RawMediaVariant) {
+        super.init()
+        self.bitrate = raw.bitrate
+        self._contentType = raw.content_type.rawValue
+        self.url = raw.url
+    }
 }
 
 public enum VideoContentType: String {
