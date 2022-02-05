@@ -16,6 +16,9 @@ let NetLog = BlackBox.Logger(name: "NetLog")
 
 /// Realm Data Model Logging.
 let ModelLog = BlackBox.Logger(name: "ModelLog")
+enum HTRealmError: Error {
+    case unexpectedNilFromID(String)
+}
 
 /// UserDefaults
 let DefaultsLog = BlackBox.Logger(name: "UserDefaults")
