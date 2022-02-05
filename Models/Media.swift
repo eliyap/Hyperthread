@@ -97,7 +97,7 @@ final class Media: EmbeddedObject {
         self.video = nil
     }
     
-    internal func addVideo(from raw: RawExtendedMedia) -> Void {
+    internal func addVideo(token: Realm.TransactionToken, from raw: RawExtendedMedia) -> Void {
         guard self.mediaType == MediaType(raw: raw.type) else {
             ModelLog.error("Mismatched media types! \(self.mediaType!) != \(MediaType(raw: raw.type))")
             assert(false)

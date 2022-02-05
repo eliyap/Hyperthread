@@ -10,7 +10,7 @@ import RealmSwift
 import Twig
 
 extension Tweet {
-    public func addVideo(from raw: RawV1MediaTweet) throws -> Void {
+    public func addVideo(token: Realm.TransactionToken, from raw: RawV1MediaTweet) throws -> Void {
         guard let rawMedia: [RawExtendedMedia] = raw.extended_entities.map(\.media) else {
             throw MediaIngestError.missingEntities
         }
@@ -26,7 +26,7 @@ extension Tweet {
                 continue
             }
             
-            mediaMatch.addVideo(from: rawMediaItem)
+            mediaMatch.addVideo(token: token, from: rawMediaItem)
         }
     }
     
