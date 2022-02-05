@@ -35,8 +35,9 @@ final class MediaFetcher {
             guard batchIDs.isNotEmpty else { return }
             
             Task {
-                let tweets = try! await requestv11Statuses(credentials: credentials, ids: batchIDs)
+                let tweets = try! await requestMedia(credentials: credentials, ids: batchIDs)
                 print("Fetched \(tweets.count)")
+                ingest(mediaTweets: tweets)
             }
         }
         observer.store(in: &observers)
@@ -97,20 +98,17 @@ fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) -> Void {
     do {
         try realm.writeWithToken { token in
             for mediaTweet in mediaTweets {
-                guard let tweet = realm.tweet(id: mediaTweet.id_str) else {
-                    throw HTRealmError.unexpectedNilFromID(mediaTweet.id_str)
-                }
-                guard let media: [RawExtendedMedia] = mediaTweet.extended_entities.map(\.media) else {
-                    throw MediaIngestError.missingEntities
-                }
-                for mediaItem in media {
-                    guard mediaItem.video_info.variants.isNotEmpty else {
-                        throw MediaIngestError.missingEntities
+                do {
+                    guard let tweet = realm.tweet(id: mediaTweet.id_str) else {
+                        throw HTRealmError.unexpectedNilFromID(mediaTweet.id_str)
                     }
+                    try tweet.addVideo(token: token, from: mediaTweet)
+                    print("success!")
+                } catch {
+                    ModelLog.error("Video could not be added due to error \(error)")
+                    assert(false)
+                    continue
                 }
-                
-                print(tweet.media.map(\.mediaKey))
-                print(media.map(\.id_str))
             }
         }
     } catch {
