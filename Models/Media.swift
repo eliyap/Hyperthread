@@ -68,6 +68,13 @@ final class Media: EmbeddedObject {
     @Persisted
     var url: String?
     
+    /// Hyperthread specific representation of video information.
+    /// Handled separately because, as of 22.02.05, the v2 API does not return video URLs directly,
+    /// requiring a separate call to the v1.1 API.
+    @Persisted
+    var video: VideoMedia?
+    public static let videoPropertyName = "video"
+    
     override required init() {}
 
     init(raw: RawIncludeMedia) {
@@ -79,6 +86,7 @@ final class Media: EmbeddedObject {
         self.durationMs = raw.duration_ms
         self.altText = raw.alt_text
         self.url = raw.url
+        self.video = nil
     }
 }
 
