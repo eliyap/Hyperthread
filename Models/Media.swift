@@ -36,6 +36,7 @@ final class Media: EmbeddedObject {
         get { .init(rawValue: type) }
         set { type = newValue.rawValue }
     }
+    public static let typePropertyName = "type"
 
     @Persisted
     var width: Int

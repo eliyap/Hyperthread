@@ -76,6 +76,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     /// Attached images, videos, GIFs, etc.
     @Persisted
     var media: List<Media>
+    public static let mediaPropertyName = "media"
     
     /** App-internal (non-Twitter) measure of a tweet's "relevance".
         Less relevant Tweets / Discussions are excluded from the timeline.
