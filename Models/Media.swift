@@ -29,7 +29,19 @@ enum MediaType: Int {
 final class Media: EmbeddedObject {
     @Persisted
     var mediaKey: String
-
+    
+    /// > The media key is the ID plus a numeric prefix and an underscore.
+    /// e.g.
+    /// - Media ID:   `   1029825579531807971`
+    /// - Media key: `13_1029825579531807971`
+    /// Docs: https://developer.twitter.com/en/docs/twitter-ads-api/creatives/guides/identifying-media
+    /// Derive the ID from the key.
+    var id: String? {
+        guard mediaKey.contains("_") else { return nil }
+        guard let trailing = mediaKey.split(separator: "_").last else { return nil }
+        return String(trailing)
+    }
+    
     @Persisted
     var type: MediaType.RawValue
     public var mediaType: MediaType! {
