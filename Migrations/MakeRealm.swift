@@ -22,6 +22,15 @@ internal enum SchemaVersion: UInt64 {
 }
 
 internal func makeRealm() -> Realm {
-    let config = Realm.Configuration(schemaVersion: SchemaVersion.v1dot0.rawValue)
+    let config = Realm.Configuration(
+        schemaVersion: SchemaVersion.v1dot2.rawValue,
+        migrationBlock: { (migration: Migration, oldSchemaVersion: UInt64) in
+            if oldSchemaVersion < SchemaVersion.v1dot2.rawValue {
+                migration.enumerateObjects(ofType: Media.className()) { oldObject, newObject in
+                    newObject![Media.videoPropertyName] = nil
+                }
+            }
+        }
+    )
     return try! Realm(configuration: config)
 }
