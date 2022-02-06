@@ -29,7 +29,7 @@ final class GIFView: UIView {
         
         playerLayer.videoGravity = .resizeAspect
 
-        /// Add player if missing.
+        /// Add player if missing. By default, the `AVPlayerLayer` is initialized without a player.
         if playerLayer.player == nil {
             playerLayer.player = AVPlayer()
         }
