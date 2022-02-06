@@ -74,3 +74,17 @@ func findMissingMentions(
     return Set(mentionedIDs)
         .filter { fetchedIDs.contains($0) == false }
 }
+
+extension Tweet {
+    public static let missingMediaPredicate: NSPredicate = NSPredicate(format: """
+        SUBQUERY(\(Tweet.mediaPropertyName), $m,
+            (
+                $m.\(Media.typePropertyName) == \(MediaType.animated_gif.rawValue)
+                OR
+                $m.\(Media.typePropertyName) == \(MediaType.video.rawValue)
+            )
+            AND
+            \(Media.videoPropertyName) == nil
+        ).@count > 0
+        """)
+}
