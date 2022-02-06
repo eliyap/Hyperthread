@@ -122,8 +122,7 @@ final class ImageViewController: UIViewController {
                 let vidUrlString = media.video?.variants.first?.url,
                 let vidURL = URL(string: vidUrlString)
             {
-                gifView.player?.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
-                gifView.player?.play()
+                gifView.playLoopingGIF(from: vidURL)
             }
             
         case .videoPlayer:
