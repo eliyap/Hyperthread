@@ -12,7 +12,7 @@ import AVKit
 /// View model for the `Media` Realm Object.
 fileprivate struct MediaModel {
     
-    enum ModelMediaType {
+    enum MediaType {
         case photo
         case videoPreview
         case gifPreview
@@ -32,10 +32,27 @@ fileprivate struct MediaModel {
     var picUrlString: String?
     
     init(media: Media, picUrlString: String?) {
-        self.mediaType = media.mediaType
+        self.mediaType = media.modelMediaType
         self.url = media.url
         self.previewImageUrl = media.previewImageUrl
         self.picUrlString = picUrlString
+    }
+}
+
+fileprivate extension Media {
+    var modelMediaType: MediaModel.MediaType {
+        switch (mediaType!, video) {
+        case (.photo, _):
+            return .photo
+        case (.animated_gif, .none):
+            return .gifPreview
+        case (.animated_gif, .some):
+            return .gifPlayer
+        case (.video, .none):
+            return .videoPreview
+        case (.video, .some):
+            return .videoPlayer
+        }
     }
 }
 
