@@ -84,9 +84,15 @@ final class ImageViewController: UIViewController {
         case .photo, .gifPreview, .videoPreview:
             imageView.isHidden = false
             videoViewController.view.isHidden = true
-        case .gifPlayer, .videoPlayer:
+            gifView.isHidden = true
+        case .gifPlayer:
+            imageView.isHidden = true
+            videoViewController.view.isHidden = true
+            gifView.isHidden = false
+        case .videoPlayer:
             imageView.isHidden = true
             videoViewController.view.isHidden = false
+            gifView.isHidden = true
         }
         
         switch media.modelMediaType {
@@ -116,7 +122,8 @@ final class ImageViewController: UIViewController {
                 let vidUrlString = media.video?.variants.first?.url,
                 let vidURL = URL(string: vidUrlString)
             {
-                videoPlayer.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
+                gifView.player?.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
+                gifView.player?.play()
             }
             
         case .videoPlayer:
