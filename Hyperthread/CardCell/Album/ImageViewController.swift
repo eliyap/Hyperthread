@@ -38,23 +38,21 @@ final class ImageViewController: UIViewController {
         NSLayoutConstraint.activate([
             gifView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gifView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            gifView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            gifView.widthAnchor.constraint(equalTo: view.widthAnchor),
         ])
         
         adopt(videoViewController)
         NSLayoutConstraint.activate([
             videoViewController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             videoViewController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            videoViewController.view.heightAnchor.constraint(equalTo: view.heightAnchor),
+            videoViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
         ])
         videoViewController.videoGravity = .resizeAspect
         videoViewController.view.translatesAutoresizingMaskIntoConstraints = false
         videoViewController.player = videoPlayer
         
-        #warning("temp")
-        NSLayoutConstraint.activate([
-            videoViewController.view.heightAnchor.constraint(equalTo: view.heightAnchor),
-            videoViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
-        ])
-
         /// Request that image be "as tall as possible".
         let superTall = imageView.heightAnchor.constraint(equalToConstant: .superTall)
         superTall.isActive = true
