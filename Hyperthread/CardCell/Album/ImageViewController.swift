@@ -234,32 +234,33 @@ final class ImageViewController: UIViewController {
         switch mediaModel.mediaType {
         case .photo:
             break
-        case .video, .animated_gif:
-            #warning("disabled while testing video")
+        case .videoPlayer, .gifPlayer:
             break
-//            guard let urlString = mediaModel.picUrlString else {
-//                showAlert(message: "Sorry, we couldn't find a video URL.")
-//                return
-//            }
-//            guard var url = URL(string: urlString) else {
-//                showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
-//                return
-//            }
-//
-//            /// Account for `https://` possibly not being prepended.
-//            if UIApplication.shared.canOpenURL(url) == false {
-//                guard let correctedUrl = URL(string: "https://" + urlString) else {
-//                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
-//                    return
-//                }
-//                url = correctedUrl
-//            }
-//
-//            UIApplication.shared.open(url) { success in
-//                if success == false {
-//                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
-//                }
-//            }
+        case .videoPreview, .gifPreview:
+            /// Show video on Twitter website, since we do not have a local copy.
+            guard let urlString = mediaModel.picUrlString else {
+                showAlert(message: "Sorry, we couldn't find a video URL.")
+                return
+            }
+            guard var url = URL(string: urlString) else {
+                showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
+                return
+            }
+
+            /// Account for `https://` possibly not being prepended.
+            if UIApplication.shared.canOpenURL(url) == false {
+                guard let correctedUrl = URL(string: "https://" + urlString) else {
+                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
+                    return
+                }
+                url = correctedUrl
+            }
+
+            UIApplication.shared.open(url) { success in
+                if success == false {
+                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
+                }
+            }
         }
         
         #warning("Code Stub.")
