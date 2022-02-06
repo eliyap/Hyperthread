@@ -106,18 +106,20 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         /// Number of rows left before we pull from Twitter.
         let threshhold = 25
         
+        guard
+            let numDiscussions = numDiscussions,
+            (numDiscussions - indexPaths.max()!.row) < threshhold
+        else { return }
+        
+        
         guard Date().timeIntervalSince(lastOldFetch) > TimeInterval.minute else {
             TableLog.debug("Too soon, denying prefetch.", print: true, true)
             return
         }
-        if
-            let numDiscussions = numDiscussions,
-            (numDiscussions - indexPaths.max()!.row) < threshhold
-        {
-            Task {
-                await fetchOldTweets()
-            }
-            lastOldFetch = Date()
+        
+        lastOldFetch = Date()
+        Task {
+            await fetchOldTweets()
         }
     }
     
