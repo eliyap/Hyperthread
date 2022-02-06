@@ -61,6 +61,7 @@ final class ImageViewController: UIViewController {
     
     /// Component views.
     private let imageView: UIImageView = .init()
+    private let gifView: GIFView = .init()
     private let loadingIndicator: UIActivityIndicatorView = .init()
     private let symbolView: SymbolCircleView = .init()
     
@@ -79,6 +80,12 @@ final class ImageViewController: UIViewController {
         ])
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(gifView)
+        NSLayoutConstraint.activate([
+            gifView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            gifView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
         
         adopt(videoViewController)
         NSLayoutConstraint.activate([

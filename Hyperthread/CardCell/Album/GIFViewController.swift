@@ -20,8 +20,16 @@ final class GIFView: UIView {
     
     private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
     
+    @MainActor
     public init() {
         super.init(frame: .zero)
+        playerLayer.videoGravity = .resizeAspect
+        
+        constrain()
+    }
+    
+    public func constrain() -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     required init?(coder: NSCoder) {
