@@ -16,7 +16,10 @@ extension Tweet {
         }
         
         for rawMediaItem in rawMedia {
-            guard rawMediaItem.video_info.variants.isNotEmpty else {
+            guard
+                let videoInfo = rawMediaItem.video_info,
+                videoInfo.variants.isNotEmpty
+            else {
                 throw MediaIngestError.missingEntities
             }
             
@@ -26,7 +29,12 @@ extension Tweet {
                 continue
             }
             
-            mediaMatch.addVideo(token: token, from: rawMediaItem)
+            guard mediaMatch.mediaType == MediaType(raw: rawMediaItem.type) else {
+                ModelLog.error("Mismatched media types! \(mediaMatch.mediaType!) != \(MediaType(raw: rawMediaItem.type))")
+                assert(false)
+            }
+            
+            mediaMatch.addVideo(token: token, from: videoInfo)
         }
     }
     
