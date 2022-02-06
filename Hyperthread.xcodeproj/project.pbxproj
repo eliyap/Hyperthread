@@ -124,6 +124,7 @@
 		22FBAAD227AEF85700FEEB71 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FBAAD127AEF85700FEEB71 /* Video.swift */; };
 		22FBAAD427AF1EC800FEEB71 /* Tweet.addVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FBAAD327AF1EC800FEEB71 /* Tweet.addVideo.swift */; };
 		22FBAAD627B07C6000FEEB71 /* GIFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */; };
+		22FBAAD827B07E0200FEEB71 /* SymbolCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FBAAD727B07E0200FEEB71 /* SymbolCircleView.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -268,6 +269,7 @@
 		22FBAAD127AEF85700FEEB71 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		22FBAAD327AF1EC800FEEB71 /* Tweet.addVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tweet.addVideo.swift; sourceTree = "<group>"; };
 		22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFViewController.swift; sourceTree = "<group>"; };
+		22FBAAD727B07E0200FEEB71 /* SymbolCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolCircleView.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -517,6 +519,7 @@
 				221A2991275D680900C283FE /* AlbumController.swift */,
 				22A760C427A750390006E9BC /* CountButton.swift */,
 				22BC9E9227A5C9A000721BD2 /* ImageViewController.swift */,
+				22FBAAD727B07E0200FEEB71 /* SymbolCircleView.swift */,
 				22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */,
 				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
 			);
@@ -901,6 +904,7 @@
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
 				22193DAF27840477005A7708 /* URLScheme.swift in Sources */,
 				221A2994275D943E00C283FE /* RemoveDuplicates.swift in Sources */,
+				22FBAAD827B07E0200FEEB71 /* SymbolCircleView.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				221A2992275D680900C283FE /* AlbumController.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
