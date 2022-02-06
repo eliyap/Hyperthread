@@ -122,40 +122,43 @@ final class ImageViewController: UIViewController {
     func configure(media: Media, picUrlString: String?) -> Void {
         mediaModel = .init(media: media, picUrlString: picUrlString)
         
-        switch media.mediaType {
+        switch media.modelMediaType {
         case .photo:
             if let urlString = media.url {
                 loadImage(url: URL(string: urlString)) { [weak self] in
                     self?.set(symbol: .hidden)
                 }
             }
-        
-        case .animated_gif:
-            if
-                let vidUrlString = media.video?.variants.first?.url,
-                let vidURL = URL(string: vidUrlString)
-            {
-                videoPlayer.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
-            } else if let urlString = media.previewImageUrl {
+            
+        case .gifPreview:
+            if let urlString = media.previewImageUrl {
                 loadImage(url: URL(string: urlString)) { [weak self] in
                     self?.set(symbol: .GIF)
                 }
             }
-        
-        case .video:
+            
+        case .videoPreview:
+            if let urlString = media.previewImageUrl {
+                loadImage(url: URL(string: urlString)) { [weak self] in
+                    self?.set(symbol: .video)
+                }
+            }
+            
+        case .gifPlayer:
             if
                 let vidUrlString = media.video?.variants.first?.url,
                 let vidURL = URL(string: vidUrlString)
             {
                 videoPlayer.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
-            } else if let urlString = media.previewImageUrl {
-                loadImage(url: URL(string: urlString)) { [weak self] in
-                    self?.set(symbol: .video)
-                }
             }
-        
-        case .none:
-            TableLog.error("Unrecognized type with value \(media.type)")
+            
+        case .videoPlayer:
+            if
+                let vidUrlString = media.video?.variants.first?.url,
+                let vidURL = URL(string: vidUrlString)
+            {
+                videoPlayer.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
+            }
         }
     }
     
