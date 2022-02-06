@@ -26,7 +26,13 @@ final class GIFView: UIView {
     @MainActor
     public init() {
         super.init(frame: .zero)
+        
         playerLayer.videoGravity = .resizeAspect
+
+        /// Add player if missing.
+        if playerLayer.player == nil {
+            playerLayer.player = AVPlayer()
+        }
         
         constrain()
     }
