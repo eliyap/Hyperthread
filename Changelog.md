@@ -1,4 +1,8 @@
 #  Hyperthread Changelog
+### 1.2
+Changes
+- media can now be taller, reducing letterboxing 
+
 ### 1.1
 New Features
 - open threads by pasting a twitter.com link or Tweet ID
