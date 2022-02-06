@@ -123,6 +123,15 @@ final class ImageViewController: UIViewController {
         mediaModel = .init(media: media, picUrlString: picUrlString)
         
         switch media.modelMediaType {
+        case .photo, .gifPreview, .videoPreview:
+            imageView.isHidden = false
+            videoViewController.view.isHidden = true
+        case .gifPlayer, .videoPlayer:
+            imageView.isHidden = true
+            videoViewController.view.isHidden = false
+        }
+        
+        switch media.modelMediaType {
         case .photo:
             if let urlString = media.url {
                 loadImage(url: URL(string: urlString)) { [weak self] in
