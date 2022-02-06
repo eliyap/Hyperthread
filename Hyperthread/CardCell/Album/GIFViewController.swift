@@ -9,8 +9,11 @@ import UIKit
 import AVFoundation
 
 final class GIFView: UIView {
+    
+    public typealias LayerClass = AVPlayerLayer
+    
     /// Override the property to make AVPlayerLayer the view's backing layer.
-    override static var layerClass: AnyClass { AVPlayerLayer.self }
+    override static var layerClass: AnyClass { LayerClass.self }
     
     /// The associated player object.
     var player: AVPlayer? {
@@ -18,7 +21,7 @@ final class GIFView: UIView {
         set { playerLayer.player = newValue }
     }
     
-    private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
+    private var playerLayer: AVPlayerLayer { layer as! LayerClass }
     
     @MainActor
     public init() {
