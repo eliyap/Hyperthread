@@ -7,9 +7,19 @@
 
 import UIKit
 import SDWebImage
+import AVKit
 
 /// View model for the `Media` Realm Object.
 fileprivate struct MediaModel {
+    
+    enum ModelMediaType {
+        case photo
+        case videoPreview
+        case gifPreview
+        case videoPlayer
+        case gifPlayer
+    }
+    
     var mediaType: MediaType
     
     /// Link to image asset, if `mediaType` is `.photo`.
@@ -29,12 +39,16 @@ fileprivate struct MediaModel {
     }
 }
 
+#warning("rename to MediaVC")
 final class ImageViewController: UIViewController {
     
     /// Component views.
     private let imageView: UIImageView = .init()
     private let loadingIndicator: UIActivityIndicatorView = .init()
     private let symbolView: SymbolCircleView = .init()
+    
+    private let videoViewController: AVPlayerViewController = .init()
+    private let videoPlayer: AVPlayer = .init()
     
     private var mediaModel: MediaModel? = nil
     
@@ -49,6 +63,21 @@ final class ImageViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
+        adopt(videoViewController)
+        NSLayoutConstraint.activate([
+            videoViewController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            videoViewController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+        videoViewController.videoGravity = .resizeAspect
+        videoViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        videoViewController.player = videoPlayer
+        
+        #warning("temp")
+        NSLayoutConstraint.activate([
+            videoViewController.view.heightAnchor.constraint(equalTo: view.heightAnchor),
+            videoViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
+        ])
+
         /// Request that image be "as tall as possible".
         let superTall = imageView.heightAnchor.constraint(equalToConstant: .superTall)
         superTall.isActive = true
@@ -85,14 +114,24 @@ final class ImageViewController: UIViewController {
             }
         
         case .animated_gif:
-            if let urlString = media.previewImageUrl {
+            if
+                let vidUrlString = media.video?.variants.first?.url,
+                let vidURL = URL(string: vidUrlString)
+            {
+                videoPlayer.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
+            } else if let urlString = media.previewImageUrl {
                 loadImage(url: URL(string: urlString)) { [weak self] in
                     self?.set(symbol: .GIF)
                 }
             }
         
         case .video:
-            if let urlString = media.previewImageUrl {
+            if
+                let vidUrlString = media.video?.variants.first?.url,
+                let vidURL = URL(string: vidUrlString)
+            {
+                videoPlayer.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
+            } else if let urlString = media.previewImageUrl {
                 loadImage(url: URL(string: urlString)) { [weak self] in
                     self?.set(symbol: .video)
                 }
@@ -179,29 +218,31 @@ final class ImageViewController: UIViewController {
         case .photo:
             break
         case .video, .animated_gif:
-            guard let urlString = mediaModel.picUrlString else {
-                showAlert(message: "Sorry, we couldn't find a video URL.")
-                return
-            }
-            guard var url = URL(string: urlString) else {
-                showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
-                return
-            }
-            
-            /// Account for `https://` possibly not being prepended.
-            if UIApplication.shared.canOpenURL(url) == false {
-                guard let correctedUrl = URL(string: "https://" + urlString) else {
-                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
-                    return
-                }
-                url = correctedUrl
-            }
-            
-            UIApplication.shared.open(url) { success in
-                if success == false {
-                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
-                }
-            }
+            #warning("disabled while testing video")
+            break
+//            guard let urlString = mediaModel.picUrlString else {
+//                showAlert(message: "Sorry, we couldn't find a video URL.")
+//                return
+//            }
+//            guard var url = URL(string: urlString) else {
+//                showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
+//                return
+//            }
+//
+//            /// Account for `https://` possibly not being prepended.
+//            if UIApplication.shared.canOpenURL(url) == false {
+//                guard let correctedUrl = URL(string: "https://" + urlString) else {
+//                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
+//                    return
+//                }
+//                url = correctedUrl
+//            }
+//
+//            UIApplication.shared.open(url) { success in
+//                if success == false {
+//                    showAlert(message: "Sorry, we couldn't open URL \n\(urlString)")
+//                }
+//            }
         }
         
         #warning("Code Stub.")
