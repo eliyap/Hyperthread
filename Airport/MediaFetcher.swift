@@ -54,12 +54,8 @@ final class MediaFetcher {
 fileprivate final class FetchLog {
     private let unfetched = makeRealm()
         .objects(Tweet.self)
-        .filter(NSPredicate(format: """
-            SUBQUERY(\(Tweet.mediaPropertyName), $m,
-                $m.\(Media.typePropertyName) == \(MediaType.animated_gif.rawValue)
-             OR $m.\(Media.typePropertyName) == \(MediaType.video.rawValue)
-            ).@count > 0
-            """))
+        .filter(Tweet.missingMediaPredicate)
+    
     var provided: Set<Tweet.ID> = []
     
     func next(count: Int = StatusesEndpoint.maxCount) -> [Tweet.ID] {
@@ -103,7 +99,6 @@ fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) -> Void {
                         throw HTRealmError.unexpectedNilFromID(mediaTweet.id_str)
                     }
                     try tweet.addVideo(token: token, from: mediaTweet)
-                    print("success!")
                 } catch {
                     ModelLog.error("Video could not be added due to error \(error)")
                     assert(false)
