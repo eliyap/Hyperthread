@@ -21,7 +21,7 @@ final class GIFView: UIView {
         set { playerLayer.player = newValue }
     }
     
-    private var playerLayer: AVPlayerLayer { layer as! LayerClass }
+    private var playerLayer: LayerClass { layer as! LayerClass }
     
     @MainActor
     public init() {
