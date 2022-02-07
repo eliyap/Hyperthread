@@ -85,7 +85,7 @@ final class ProgressVibrancyView: UIVisualEffectView {
     let label = UILabel()
     
     /// Solid template image subview in which the vibrancy effect is shown.
-    let solid = UIImageView.solidTemplate
+    let solid = UIImageView.makeSolidTemplate()
     
     public var widthConstraint: NSLayoutConstraint? = nil
     
@@ -126,7 +126,7 @@ final class ProgressVibrancyView: UIVisualEffectView {
 ///
 /// Source: https://developer.apple.com/documentation/uikit/uivibrancyeffect
 fileprivate extension UIImageView {
-    static let solidTemplate: UIImageView = {
+    static func makeSolidTemplate() -> UIImageView {
         let view = UIImageView()
         guard let image = UIImage(color: UIColor.black)?.withRenderingMode(.alwaysTemplate) else {
             Logger.general.error("Failed to render template image!")
@@ -136,7 +136,7 @@ fileprivate extension UIImageView {
         view.image = image
         view.contentMode = .scaleToFill
         return view
-    }()
+    }
 }
 
 fileprivate extension UIImage {
