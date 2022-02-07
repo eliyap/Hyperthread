@@ -126,6 +126,7 @@
 		22FBAAD627B07C6000FEEB71 /* GIFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */; };
 		22FBAAD827B07E0200FEEB71 /* SymbolCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FBAAD727B07E0200FEEB71 /* SymbolCircleView.swift */; };
 		22FBAADA27B07EA700FEEB71 /* MediaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FBAAD927B07EA600FEEB71 /* MediaModel.swift */; };
+		22FBAADC27B17A4A00FEEB71 /* GIFProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */; };
 		22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */; };
 		E2EFA0C3A76898F176E93D8E /* Pods_Hyperthread.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D94AC60E07E38E82221BD40E /* Pods_Hyperthread.framework */; };
 /* End PBXBuildFile section */
@@ -272,6 +273,7 @@
 		22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFViewController.swift; sourceTree = "<group>"; };
 		22FBAAD727B07E0200FEEB71 /* SymbolCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolCircleView.swift; sourceTree = "<group>"; };
 		22FBAAD927B07EA600FEEB71 /* MediaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MediaModel.swift; path = /Users/SAM/Documents/Hyperthread/Hyperthread/CardCell/Album/MediaModel.swift; sourceTree = "<absolute>"; };
+		22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFProgressBarView.swift; sourceTree = "<group>"; };
 		22FD36B0274B454700CFB84C /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		338DA1FE21856F63227552BA /* Pods-UIBranch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.debug.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.debug.xcconfig"; sourceTree = "<group>"; };
 		6AA1567DBF1B99964040D14F /* Pods-UIBranch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIBranch.release.xcconfig"; path = "Target Support Files/Pods-UIBranch/Pods-UIBranch.release.xcconfig"; sourceTree = "<group>"; };
@@ -524,6 +526,7 @@
 				22FBAAD927B07EA600FEEB71 /* MediaModel.swift */,
 				22FBAAD727B07E0200FEEB71 /* SymbolCircleView.swift */,
 				22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */,
+				22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */,
 				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
 			);
 			path = Album;
@@ -881,6 +884,7 @@
 				22FBAAD427AF1EC800FEEB71 /* Tweet.addVideo.swift in Sources */,
 				22EE928D2799C5BB003C9056 /* UserMessage.swift in Sources */,
 				223BBF7C273791A100375530 /* PMViewController.swift in Sources */,
+				22FBAADC27B17A4A00FEEB71 /* GIFProgressBarView.swift in Sources */,
 				22BC9E8F27A5C95100721BD2 /* DiscussionTree.swift in Sources */,
 				22D127DE2740651C00932614 /* TweetCell.swift in Sources */,
 				22BFD7A92775883F00E46DF1 /* Collection.isNotEmpty.swift in Sources */,
