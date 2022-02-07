@@ -79,7 +79,7 @@ final class GIFProgressBarView: UIView {
         addSubview(background)
     }
     
-    public static let Height: CGFloat = 50
+    public static let Height: CGFloat = 5
     public func constrain(to view: UIView) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -94,7 +94,7 @@ final class GIFProgressBarView: UIView {
     
     @MainActor
     public func setProportion(to proportion: Double) -> Void {
-        print(proportion)
+        background.setProportion(to: proportion)
     }
     
     required init?(coder: NSCoder) {
@@ -126,6 +126,12 @@ final class ProgressEffectView: UIVisualEffectView {
         bar.constrain(to: self)
     }
     
+    @MainActor
+    public func setProportion(to proportion: Double) -> Void {
+        let replacement = bar.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: proportion)
+        replace(object: bar, on: \ProgressVibrancyView.widthConstraint, with: replacement)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -135,13 +141,15 @@ final class ProgressVibrancyView: UIVisualEffectView {
     
     let label = UILabel()
     
+    /// Solid template image subview in which the vibrancy effect is shown.
     let solid = UIImageView.solidTemplate
+    
+    public var widthConstraint: NSLayoutConstraint? = nil
+    
     @MainActor
     public init() {
         super.init(effect: UIVibrancyEffect(blurEffect: ProgressEffectView.Effect))
-        
-        
-        #warning("temp")
+        self.widthConstraint = widthAnchor.constraint(equalToConstant: .zero)
         contentView.addSubview(solid)
     }
     
@@ -151,9 +159,7 @@ final class ProgressVibrancyView: UIVisualEffectView {
             topAnchor.constraint(equalTo: view.topAnchor),
             bottomAnchor.constraint(equalTo: view.bottomAnchor),
             leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            widthAnchor.constraint(equalToConstant: 100),
         ])
-        #warning("temp width anchor")
         
         solid.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -162,10 +168,6 @@ final class ProgressVibrancyView: UIVisualEffectView {
             leadingAnchor.constraint(equalTo: solid.leadingAnchor),
             trailingAnchor.constraint(equalTo: solid.trailingAnchor),
         ])
-        layer.borderColor = UIColor.red.cgColor
-        layer.borderWidth = 1
-        
-        
     }
     
     required init?(coder: NSCoder) {
