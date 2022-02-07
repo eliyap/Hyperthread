@@ -173,6 +173,13 @@ final class ProgressVibrancyView: UIVisualEffectView {
     }
 }
 
+/// Templated, resizable, solid image intended to fill a `UIVisualEffectView`.
+/// This causes the vibrancy effect to fill the whole view.
+///
+/// > `UIImageView` objects with images that have a rendering mode of `UIImage.RenderingMode.alwaysTemplate`
+/// > as well as `UILabel` objects will update automatically.
+///
+/// Source: https://developer.apple.com/documentation/uikit/uivibrancyeffect
 fileprivate extension UIImageView {
     static let solidTemplate: UIImageView = {
         let view = UIImageView()
@@ -188,6 +195,7 @@ fileprivate extension UIImageView {
 }
 
 fileprivate extension UIImage {
+    /// Creates an image filled with solid color.
     /// Source: https://stackoverflow.com/questions/26542035/create-uiimage-with-solid-color-in-swift
     convenience init?(color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) {
         let rect = CGRect(origin: .zero, size: size)
