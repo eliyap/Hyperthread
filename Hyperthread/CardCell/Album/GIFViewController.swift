@@ -54,6 +54,7 @@ final class GIFView: UIView {
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset)
         self.playerLooper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
+        queuePlayer.isMuted = true
         queuePlayer.play()
     }
     

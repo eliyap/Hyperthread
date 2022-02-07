@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import AVFoundation
+import BlackBox
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        /// Prevent audio interruptions.
+        do{
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: [.mixWithOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+         } catch {
+             Logger.general.error("Failed to set audio category!")
+             assert(false)
+         }
         
         /// Make opaque so that custom refresh controller doesn't show through.
         setOpaqueNavbar()
