@@ -35,7 +35,15 @@ final class MediaFetcher {
             guard batchIDs.isNotEmpty else { return }
             
             Task {
-                let tweets = try! await requestMedia(credentials: credentials, ids: batchIDs)
+                let tweets: [RawV1MediaTweet]
+                do {
+                    tweets = try await requestMedia(credentials: credentials, ids: batchIDs)
+                    assert(tweets.count == batchIDs.count, "Did not receive all requested media tweets!")
+                } catch {
+                    NetLog.error("Media fetch failed due to error \(error)")
+                    assert(false)
+                    return
+                }
                 NetLog.debug("Fetched \(tweets.count) media tweets", print: true, true)
                 ingest(mediaTweets: tweets)
             }
