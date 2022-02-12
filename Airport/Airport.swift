@@ -10,6 +10,7 @@ import Combine
 import Twig
 import RealmSwift
 
+#warning("Consider deprecating in favor of Actor approach.")
 internal func fetchAndStoreUsers(ids: [User.ID]) async -> Void {
     /// Only proceed if credentials are loaded.
     guard let credentials = Auth.shared.credentials else {
