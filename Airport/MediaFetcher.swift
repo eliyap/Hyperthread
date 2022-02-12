@@ -31,24 +31,30 @@ final class MediaFetcher {
                 return
             }
             
-            let batchIDs: [String] = fetchLog.next(count: StatusesEndpoint.maxCount)
-            guard batchIDs.isNotEmpty else {
-                NetLog.debug("Empty batch, \(fetchLog.unfetched.count) total", print: true, true)
-                return
-            }
-            
             Task {
+                let batchIDs: [String] = await fetchLog.next(count: StatusesEndpoint.maxCount)
+                guard batchIDs.isNotEmpty else {
+                    #if DEBUG
+                    let ufc = await fetchLog.unfetchedCount()
+                    NetLog.debug("Empty batch, \(ufc) total", print: true, true)
+                    #endif
+                    return
+                }
+                
                 let tweets: [RawV1MediaTweet]
                 do {
                     tweets = try await requestMedia(credentials: credentials, ids: batchIDs)
                     assert(tweets.count == batchIDs.count, "Did not receive all requested media tweets!")
+                    NetLog.debug("Fetched \(tweets.count) media tweets", print: true, true)
+                    try ingest(mediaTweets: tweets)
                 } catch {
                     NetLog.error("Media fetch failed due to error \(error)")
                     assert(false)
+                    
+                    await fetchLog.blocklist(ids: batchIDs)
+                    
                     return
                 }
-                NetLog.debug("Fetched \(tweets.count) media tweets", print: true, true)
-                ingest(mediaTweets: tweets)
             }
         }
         observer.store(in: &observers)
@@ -62,15 +68,18 @@ final class MediaFetcher {
 }
 
 /// Goal: Provide the most recent N tweets not already provided.
-fileprivate final class FetchLog {
-    public let unfetched = makeRealm()
-        .objects(Tweet.self)
-        .filter(Tweet.missingMediaPredicate)
+fileprivate actor FetchLog {
     
-    var provided: Set<Tweet.ID> = []
+    private var unfetchableIDs: Set<Tweet.ID> = []
+    public func blocklist<TweetCollection: Collection>(ids: TweetCollection) -> Void where TweetCollection.Element == Tweet.ID {
+        unfetchableIDs.formUnion(ids)
+    }
     
-    func next(count: Int = StatusesEndpoint.maxCount) -> [Tweet.ID] {
+    public func next(count: Int = StatusesEndpoint.maxCount) -> [Tweet.ID] {
         var result: [Tweet.ID] = []
+        let unfetched = makeRealm()
+            .objects(Tweet.self)
+            .filter(Tweet.missingMediaPredicate)
         
         /// Tracks requested ranges.
         var cursor = 0
@@ -79,7 +88,7 @@ fileprivate final class FetchLog {
             let nextPageRange = cursor..<min(cursor + count, unfetched.count)
             let pageIDs = unfetched[nextPageRange].map(\.id)
             let newIDs = pageIDs.filter({ id in
-                self.provided.contains(id) == false
+                self.unfetchableIDs.contains(id) == false
             })
             result.append(contentsOf: newIDs)
             
@@ -94,33 +103,35 @@ fileprivate final class FetchLog {
             result = Array(result[0..<count])
         }
         
-        provided.formUnion(result)
         return result
     }
+    
+    #if DEBUG
+    public func unfetchedCount() -> Int {
+        makeRealm()
+            .objects(Tweet.self)
+            .filter(Tweet.missingMediaPredicate)
+            .count
+    }
+    #endif
 }
 
-fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) -> Void {
+fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) throws -> Void {
     let realm = makeRealm()
-    
-    do {
-        try realm.writeWithToken { token in
-            for mediaTweet in mediaTweets {
-                /// Handle errors individually, instead of bringing down the entire set of insertions.
-                do {
-                    guard let tweet = realm.tweet(id: mediaTweet.id_str) else {
-                        throw HTRealmError.unexpectedNilFromID(mediaTweet.id_str)
-                    }
-                    try tweet.addVideo(token: token, from: mediaTweet)
-                } catch {
-                    ModelLog.error("Video could not be added due to error \(error)")
-                    assert(false)
-                    continue
+    try realm.writeWithToken { token in
+        for mediaTweet in mediaTweets {
+            /// Handle errors individually, instead of bringing down the entire set of insertions.
+            do {
+                guard let tweet = realm.tweet(id: mediaTweet.id_str) else {
+                    throw HTRealmError.unexpectedNilFromID(mediaTweet.id_str)
                 }
+                try tweet.addVideo(token: token, from: mediaTweet)
+            } catch {
+                ModelLog.error("Video could not be added due to error \(error)")
+                assert(false)
+                continue
             }
         }
-    } catch {
-        ModelLog.error("Error during media ingest \(error)")
-        assert(false)
     }
 }
 
