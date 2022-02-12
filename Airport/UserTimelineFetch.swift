@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 import Twig
 
-func fetchTimelines(window: DateWindow? = nil) async -> Void {
+func fetchUserTimelines(window: DateWindow? = nil) async -> Void {
     /// Check that credentials are present.
     guard let credentials = Auth.shared.credentials else {
         NetLog.error("Credentials missing.")

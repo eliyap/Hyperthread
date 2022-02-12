@@ -31,7 +31,7 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type) as
         /// consider if new reply tweets come in, but aren't on the home timeline, they should be fetched!
         
         if v1Tweets.isNotEmpty {
-            await fetchTimelines(window: .init(
+            await fetchUserTimelines(window: .init(
                 start: v1Tweets.map(\.created_at).min()!,
                 end: v1Tweets.map(\.created_at).max()!
             ))
