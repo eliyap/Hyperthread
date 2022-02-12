@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		220101D427545B94005C1385 /* ViewControllerDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220101D327545B94005C1385 /* ViewControllerDeque.swift */; };
+		22144E1B27B83B79002AAFB6 /* CardTeaserCell.style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22144E1A27B83B79002AAFB6 /* CardTeaserCell.style.swift */; };
 		22193DA2278280CD005A7708 /* URLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA1278280CD005A7708 /* URLError.swift */; };
 		22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA327829C5E005A7708 /* ProfileImageView.swift */; };
 		22193DAA2783DD5E005A7708 /* FollowingCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22193DA92783DD5E005A7708 /* FollowingCache.swift */; };
@@ -151,6 +152,7 @@
 /* Begin PBXFileReference section */
 		220101D327545B94005C1385 /* ViewControllerDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDeque.swift; sourceTree = "<group>"; };
 		220C57FA2787E16400BDB381 /* ReloadTests.xcappdata */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ReloadTests.xcappdata; sourceTree = "<group>"; };
+		22144E1A27B83B79002AAFB6 /* CardTeaserCell.style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTeaserCell.style.swift; sourceTree = "<group>"; };
 		22193DA1278280CD005A7708 /* URLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLError.swift; sourceTree = "<group>"; };
 		22193DA327829C5E005A7708 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		22193DA92783DD5E005A7708 /* FollowingCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingCache.swift; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 				222161F12741A8EA00220F0C /* CardHeaderCell.swift */,
 				220101D327545B94005C1385 /* ViewControllerDeque.swift */,
 				22760A42274A927A00F28F0A /* CardTeaserCell.swift */,
+				22144E1A27B83B79002AAFB6 /* CardTeaserCell.style.swift */,
 				224F88D1275E5B8600085678 /* Album */,
 				22760A4A274AE63000F28F0A /* SummaryLine.swift */,
 				22760A44274AA6ED00F28F0A /* CardBackground.swift */,
@@ -878,6 +881,7 @@
 				228D71E7277A953500E306BD /* DateWindow.swift in Sources */,
 				22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
+				22144E1B27B83B79002AAFB6 /* CardTeaserCell.style.swift in Sources */,
 				22193DAA2783DD5E005A7708 /* FollowingCache.swift in Sources */,
 				22760A4F274B136200F28F0A /* Media.swift in Sources */,
 				22BC9E9127A5C97800721BD2 /* ColorMarkerView.swift in Sources */,
