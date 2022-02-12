@@ -36,9 +36,7 @@ final class MediaFetcher {
                 guard batchIDs.isNotEmpty else {
                     #if DEBUG
                     let ufc = await fetchLog.unfetchedCount()
-                    if ufc > 0 {
-                        NetLog.debug("Empty batch, but \(ufc) unfetched", print: true, true)
-                    }
+                    NetLog.debug("Empty batch, but \(ufc) unfetched", print: true, ufc > 0)
                     #endif
                     return
                 }
