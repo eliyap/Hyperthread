@@ -57,6 +57,10 @@ final class MainTable: UITableViewController, Sendable {
         /// Enable pre-fetching.
         tableView.prefetchDataSource = dds
         
+        /// Disable scroll indicators, which have weird, buggy animations due to variable cell heights.
+        tableView.showsVerticalScrollIndicator = false
+        tableView.showsHorizontalScrollIndicator = false
+        
         /// Refresh timeline at login.
         Auth.shared.$state
             .dropFirst() /// Ignore publication that occurs on initialization, when loading from `UserDefaults`.
