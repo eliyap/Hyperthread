@@ -153,7 +153,8 @@ final class TweetCell: ControlledCell {
     private let maxDepth = 14
     private let indentSize: CGFloat = 10
     public func configure(node: Node, realm: Realm, requester: DiscusssionRequestable?) {
-        if case .available(let tweet, let author) = node.tweet {
+        switch node.tweet {
+        case .available(let tweet, let author):
             userView.configure(user: author)
             tweetTextView.attributedText = tweet.fullText(context: node)
             retweetView.configure(tweet: tweet, realm: realm)
@@ -166,7 +167,7 @@ final class TweetCell: ControlledCell {
             /// Let `albumVC` decide `isHidden`.
             
             configureQuoteReply(tweet: tweet, realm: realm, requester: requester)
-        } else {
+        case .unavailable(let id):
             tweetTextView.attributedText = Tweet.notAvailableAttributedString
             userView.isHidden = true
             retweetView.isHidden = true
