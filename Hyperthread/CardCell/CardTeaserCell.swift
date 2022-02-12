@@ -30,7 +30,7 @@ final class CardTeaserCell: ControlledCell {
     let hairlineView = SpacedSeparator(vertical: .zero, horizontal: CardTeaserCell.ContentSpacing)
     let summaryView = SummaryView()
     
-    var token: NotificationToken? = nil
+    var realmTokens: [NotificationToken] = []
     
     public static let ContentSpacing: CGFloat = 4
     
@@ -156,8 +156,8 @@ final class CardTeaserCell: ControlledCell {
         cardBackground.configure(status: discussion.read)
         
         /// Release old observer.
-        if let token = token {
-            token.invalidate()
+        for realmToken in realmTokens {
+            realmToken.invalidate()
         }
         
         /**
@@ -180,7 +180,8 @@ final class CardTeaserCell: ControlledCell {
                 return
             }
             
-            self.token = discussion.observe(self.updateTeaser)
+            let discussionToken = discussion.observe(self.updateTeaser)
+            self.realmTokens.append(discussionToken)
         }
     }
     
@@ -256,7 +257,9 @@ final class CardTeaserCell: ControlledCell {
     }
     
     deinit {
-        token?.invalidate()
+        for realmToken in realmTokens {
+            realmToken.invalidate()
+        }
         TableLog.debug("\(Self.description()) de-initialized.", print: true, true)
         cancellable.forEach { $0.cancel() }
     }
