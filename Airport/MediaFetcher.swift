@@ -36,7 +36,7 @@ final class MediaFetcher {
             
             Task {
                 let tweets = try! await requestMedia(credentials: credentials, ids: batchIDs)
-                print("Fetched \(tweets.count)")
+                NetLog.debug("Fetched \(tweets.count) media tweets", print: true, true)
                 ingest(mediaTweets: tweets)
             }
         }
