@@ -10,22 +10,6 @@ import Combine
 import Twig
 import RealmSwift
 
-final class Airport {
-    
-    /** The scheduler on which work is done.
-        
-        `Realm` write transactions are performed in our pipeline, which blocks other `Realm` work.
-        Therefore, we must allow other threads to avoid conflict with `Airport`, by running on the same
-        scheduler.
-     
-        Scheduler chosen based on:
-        https://www.avanderlee.com/combine/runloop-main-vs-dispatchqueue-main/
-     */
-    public static let scheduler = DispatchQueue.main
-    init() {
-    }
-}
-    
 internal func fetchAndStoreUsers(ids: [User.ID]) async -> Void {
     /// Only proceed if credentials are loaded.
     guard let credentials = Auth.shared.credentials else {
