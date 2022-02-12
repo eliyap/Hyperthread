@@ -180,6 +180,11 @@ extension Tweet {
         """
     public static func notAvailableAttributedString(id: Tweet.ID) -> NSAttributedString {
         let str = NSMutableAttributedString(string: Tweet.notAvailableMessage, attributes: Tweet.textAttributes)
+        
+        /// Direct user to status URL. I don't fully trust my system, so this is a slapdash fallback option.
+        /// The `s` is a placeholder, it doesn't matter as Twitter will redirect.
+        /// `0, 10` aims to cover "This tweet".
+        str.addAttribute(.link, value: "https://twitter.com/s/status/\(id)", range: NSMakeRange(0, 10))
         return str
     }
 }
