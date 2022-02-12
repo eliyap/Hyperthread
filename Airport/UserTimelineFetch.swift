@@ -27,6 +27,8 @@ func fetchTimelines(window: DateWindow? = nil) async -> Void {
             group.addTask {
                 let (tweets, included, users, media) = await fetchRawTimeline(request: request, credentials: credentials)
                 store((tweets, included, users, media), followingIDs: followingIDs)
+                
+                /// Update user window **after** tweets are stored, because it prevents this period from being fetched again!
                 updateUserWindow(request: request, tweets: tweets)
             }
         }
