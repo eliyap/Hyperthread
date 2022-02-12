@@ -40,7 +40,7 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type) as
     
     /// Dispatch chunk requests in parallel.
     await withTaskGroup(of: Void.self) { group in
-        let ids = v1Tweets.map {"\($0.id)"}
+        let ids = v1Tweets.map(\.id_str)
         ids.chunks(ofCount: TweetEndpoint.maxResults).forEach { chunk in
             group.addTask {
                 do {
