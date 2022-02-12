@@ -32,7 +32,10 @@ final class MediaFetcher {
             }
             
             let batchIDs: [String] = fetchLog.next(count: StatusesEndpoint.maxCount)
-            guard batchIDs.isNotEmpty else { return }
+            guard batchIDs.isNotEmpty else {
+                NetLog.debug("Empty batch, \(fetchLog.unfetched.count) total", print: true, true)
+                return
+            }
             
             Task {
                 let tweets: [RawV1MediaTweet]
@@ -60,7 +63,7 @@ final class MediaFetcher {
 
 /// Goal: Provide the most recent N tweets not already provided.
 fileprivate final class FetchLog {
-    private let unfetched = makeRealm()
+    public let unfetched = makeRealm()
         .objects(Tweet.self)
         .filter(Tweet.missingMediaPredicate)
     
