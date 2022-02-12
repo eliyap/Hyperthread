@@ -47,6 +47,7 @@ fileprivate func store(_ raw: RawData, followingIDs: [User.ID]) -> Void {
         /// Safe to insert `included`, as we make no assumptions around `Relevance`.
         try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
         
+        try linkConversations()
     } catch {
         ModelLog.error("\(error)")
         #warning("silencing errors here is bad practice, and the only purpose of this function!")

@@ -8,10 +8,11 @@
 import Foundation
 import RealmSwift
 
-/// Links detached `Conversation` to `Discussion`s where possible,
+/// Links detached `Conversation`s to `Discussion`s where possible,
 /// and if not possible finds what `Tweet` needs to be fetched to make the connection.
 ///
 /// - Returns: list of `Tweet.ID`s to be fetched.
+@discardableResult
 internal func linkConversations() throws -> Set<Tweet.ID> {
     var idsToFetch = Set<Tweet.ID>()
     

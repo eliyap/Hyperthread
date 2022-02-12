@@ -67,6 +67,7 @@ fileprivate func store(rawData: RawData) throws -> Void {
     
     let realm = makeRealm()
     try realm.ingestRawHomeTimelineTweets(rawTweets: tweets, rawUsers: users, rawMedia: media)
+    try linkConversations()
     
     /// Update home timeline boundaries.
     /// - Note: use v2 tweets *after storage*, not v1 tweets, to be *sure* storage was successful.
