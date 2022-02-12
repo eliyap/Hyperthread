@@ -5,6 +5,7 @@
 //  Created by Secret Asian Man Dev on 6/11/21.
 //
 
+import Foundation
 import UIKit
 import AVFoundation
 import BlackBox
@@ -31,6 +32,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         #if DEBUG
 //        loadAppData()
+        #endif
+        
+        #if DEBUG
+        let DEBUG_TERMINATION = true
+        Logger.general.debug("""
+            sinceID=\(UserDefaults.groupSuite.sinceID ?? "NONE")
+            maxID=\(UserDefaults.groupSuite.maxID ?? "NONE")
+            """, print: true, DEBUG_TERMINATION)
         #endif
         
         return true
