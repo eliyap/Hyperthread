@@ -94,6 +94,7 @@ fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) -> Void {
     do {
         try realm.writeWithToken { token in
             for mediaTweet in mediaTweets {
+                /// Handle errors individually, instead of bringing down the entire set of insertions.
                 do {
                     guard let tweet = realm.tweet(id: mediaTweet.id_str) else {
                         throw HTRealmError.unexpectedNilFromID(mediaTweet.id_str)
@@ -110,8 +111,6 @@ fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) -> Void {
         ModelLog.error("Error during media ingest \(error)")
         assert(false)
     }
-    
-    
 }
 
 enum MediaIngestError: Error {
