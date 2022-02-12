@@ -27,7 +27,7 @@ final class MediaFetcher {
             }
             
             guard let credentials = Auth.shared.credentials else {
-                NetLog.error("Nil credentials \(#function)")
+                /// Fails when user is not logged in, simply discard error.
                 return
             }
             
