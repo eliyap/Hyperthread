@@ -140,7 +140,6 @@ final class CardTeaserCell: ControlledCell {
         summaryView.configure(discussion, realm: realm)
         albumVC.configure(tweet: tweet)
         
-        
         /// Correct for strange spacing issue observed 22.02.02 by removing spacing from text view.
         /// Docs: https://developer.apple.com/documentation/uikit/uiview/1622648-alignmentrectinsets
         /// Zero by default.
@@ -161,14 +160,10 @@ final class CardTeaserCell: ControlledCell {
         }
         
         /**
-         `observe` cannot be called in a `write` transaction, which primarily occurs when `Airport` adds objects.
-         See discussion https://github.com/realm/realm-cocoa/issues/4818
-         
-         To avoid conflicting with `Airport`, we **use the same scheduler**,
-         so that by the time our work comes up, the write is guaranteed to be complete.
-         Source: https://github.com/realm/realm-cocoa/issues/4818#issuecomment-489889711
+         UI code is run on the main thread, hence `realm` is also on the main thread,
+         so we must use `DispatchQueue.main` to avoid invoking `realm` on the wrong thread.
          */
-        Airport.scheduler.async { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else {
                 TableLog.warning("\(Self.self) is nil!")
                 return
