@@ -63,12 +63,12 @@ final class QuoteView: UIView {
             userView.isHidden = true
             tweetTextView.isHidden = true
             
-        case .unavailable(_):
+        case .unavailable(let id):
             isHidden = false
             userView.isHidden = true
             tweetTextView.isHidden = false
             
-            tweetTextView.attributedText = Tweet.notAvailableAttributedString
+            tweetTextView.attributedText = Tweet.notAvailableAttributedString(id: id)
         
         case .available(let tweet, let author):
             isHidden = false

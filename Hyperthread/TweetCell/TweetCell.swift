@@ -168,7 +168,7 @@ final class TweetCell: ControlledCell {
             
             configureQuoteReply(tweet: tweet, realm: realm, requester: requester)
         case .unavailable(let id):
-            tweetTextView.attributedText = Tweet.notAvailableAttributedString
+            tweetTextView.attributedText = Tweet.notAvailableAttributedString(id: id)
             userView.isHidden = true
             retweetView.isHidden = true
             metricsView.isHidden = true

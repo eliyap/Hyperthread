@@ -178,6 +178,9 @@ extension Tweet {
         This tweet is unavailable.
         The author may have hidden or deleted it.
         """
-    public static let notAvailableAttributedString: NSAttributedString = .init(string: Tweet.notAvailableMessage, attributes: Tweet.textAttributes)
+    public static func notAvailableAttributedString(id: Tweet.ID) -> NSAttributedString {
+        let str = NSMutableAttributedString(string: Tweet.notAvailableMessage, attributes: Tweet.textAttributes)
+        return str
+    }
 }
 
