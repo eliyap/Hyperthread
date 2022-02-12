@@ -154,10 +154,10 @@ final class CardTeaserCell: ControlledCell {
         tweetTextView.delegate = self
         cardBackground.configure(status: discussion.read)
         
-        registerObservers()
+        registerObservers(realm: realm, discussion: discussion)
     }
     
-    private func registerObservers() -> Void {
+    private func registerObservers(realm: Realm, discussion: Discussion) -> Void {
         /// Release old observers, since cell is recycled.
         for realmToken in realmTokens {
             realmToken.invalidate()
