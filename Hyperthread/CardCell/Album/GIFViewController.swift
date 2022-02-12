@@ -47,6 +47,8 @@ final class GIFView: UIView {
             let proportion = time.seconds / item.duration.seconds
             self.progressBar.setProportion(to: proportion)
         })
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(resumePlayback), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
     
     public func playLoopingGIF(from url: URL) -> Void {
@@ -55,6 +57,12 @@ final class GIFView: UIView {
         let playerItem = AVPlayerItem(asset: asset)
         self.playerLooper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
         queuePlayer.isMuted = true
+        queuePlayer.play()
+    }
+    
+    @objc
+    private func resumePlayback(_: NSNotification) -> Void {
+        guard isHidden == false else { return }
         queuePlayer.play()
     }
     
