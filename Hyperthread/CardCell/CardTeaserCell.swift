@@ -154,10 +154,10 @@ final class CardTeaserCell: ControlledCell {
         tweetTextView.delegate = self
         cardBackground.configure(status: discussion.read)
         
-        registerObservers(realm: realm, discussion: discussion)
+        registerObservers(realm: realm, discussion: discussion, root: tweet)
     }
     
-    private func registerObservers(realm: Realm, discussion: Discussion) -> Void {
+    private func registerObservers(realm: Realm, discussion: Discussion, root tweet: Tweet) -> Void {
         /// Release old observers, since cell is recycled.
         for realmToken in realmTokens {
             realmToken.invalidate()
@@ -181,7 +181,18 @@ final class CardTeaserCell: ControlledCell {
             
             let discussionToken = discussion.observe(self.updateTeaser)
             self.realmTokens.append(discussionToken)
+            
+            for mediaItem in tweet.media {
+                let mediaToken = mediaItem.observe { change in
+                    print("media object changed!")
+                }
+                self.realmTokens.append(mediaToken)
+            }
         }
+    }
+    
+    private func updateMedia(root tweet: Tweet) -> Void {
+        albumVC.configure(tweet: tweet)
     }
     
     private func updateTeaser(_ change: ObjectChange<Discussion>) -> Void {
@@ -195,7 +206,6 @@ final class CardTeaserCell: ControlledCell {
             }
             summaryView.timestampButton.configure(newDate)
         }
-        
         
         if properties.contains(where: {
             $0.name == Discussion.conversationsPropertyName
