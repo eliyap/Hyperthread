@@ -183,8 +183,8 @@ final class CardTeaserCell: ControlledCell {
             self.realmTokens.append(discussionToken)
             
             for mediaItem in tweet.media {
-                let mediaToken = mediaItem.observe { change in
-                    print("media object changed!")
+                let mediaToken = mediaItem.observe { [weak self] change in
+                    self?.updateMedia(root: tweet)
                 }
                 self.realmTokens.append(mediaToken)
             }
