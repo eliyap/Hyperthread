@@ -5,7 +5,10 @@
 //  Created by Secret Asian Man Dev on 6/11/21.
 //
 
+import Foundation
 import UIKit
+import AVFoundation
+import BlackBox
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,11 +18,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        /// Prevent audio interruptions.
+        do{
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: [.mixWithOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+         } catch {
+             Logger.general.error("Failed to set audio category!")
+             assert(false)
+         }
+        
         /// Make opaque so that custom refresh controller doesn't show through.
         setOpaqueNavbar()
         
         #if DEBUG
 //        loadAppData()
+        #endif
+        
+        #if DEBUG
+        let DEBUG_TERMINATION = true
+        Logger.general.debug("""
+            sinceID=\(UserDefaults.groupSuite.sinceID ?? "NONE")
+            maxID=\(UserDefaults.groupSuite.maxID ?? "NONE")
+            """, print: true, DEBUG_TERMINATION)
         #endif
         
         return true

@@ -48,11 +48,18 @@ final class MainTable: UITableViewController, Sendable {
         /// Erase separators.
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         
+        /// Correct for half-inset hack (used to keep padding consistent) by adding an extra half inset.
+        tableView.contentInset.top = CardBackground.Inset / 2
+        
         /// Enable self sizing table view cells.
         tableView.estimatedRowHeight = 100
         
         /// Enable pre-fetching.
         tableView.prefetchDataSource = dds
+        
+        /// Disable scroll indicators, which have weird, buggy animations due to variable cell heights.
+        tableView.showsVerticalScrollIndicator = false
+        tableView.showsHorizontalScrollIndicator = false
         
         /// Refresh timeline at login.
         Auth.shared.$state
@@ -85,21 +92,26 @@ final class MainTable: UITableViewController, Sendable {
     
     @objc
     public func refresh() {
-        let offset = self.getNavBarHeight() + self.getStatusBarHeight()
-        
         UIView.animate(withDuration: 0.25) { [weak self] in
             self?.arrowView?.beginRefreshing()
-            let bumped = -offset - 1.5 * ArrowRefreshView.offset
-            self?.tableView.setContentOffset(CGPoint(x: .zero, y: bumped), animated: true)
         }
         
         Task {
             await dds.fetchNewTweets()
-            DispatchQueue.main.async { /// Ensure call on main thread.
+            await MainActor.run { /// Ensure call on main thread.
                 UIView.animate(withDuration: 0.25) { [weak self] in
                     self?.arrowView?.endRefreshing()
-                    self?.tableView.setContentOffset(CGPoint(x: .zero, y: -offset), animated: true)
                 }
+                #warning("TODO: fix scroll to first unread.")
+//                /// We want to focus on "brand new" discussions, i.e. not stuff that happens to be old and unread.
+//                /// To achieve this, we stop at the first `.read` `Discussion`.
+//                if
+//                    let firstReadIndex = dds.results.firstIndex(where: {$0.read == .read}),
+//                    UserDefaults.groupSuite.firstFetch == false
+//                {
+//                    TableLog.debug("FirstReadIndex \(firstReadIndex)", print: true, true)
+//                    tableView.scrollToRow(at: IndexPath(row: firstReadIndex, section: DiscussionSection.Main.rawValue), at: .top, animated: false)
+//                }
             }
         }
     }

@@ -11,8 +11,6 @@ import RealmSwift
 
 final class UserModalViewController: UIViewController {
     
-    public static let inset = CardTeaserCell.borderInset
-    
     /// Component Views.
     private let doneBtn: UIButton
     private let stackView: UIStackView
@@ -21,6 +19,10 @@ final class UserModalViewController: UIViewController {
     private let spacer: UIView
 
     private var token: NotificationToken? = nil
+    
+    private static let stackSpacing: CGFloat = 6
+    private static let stackInset: CGFloat = 6
+    private let stackInsets: UIEdgeInsets = .init(top: UserModalViewController.stackInset, left: UserModalViewController.stackInset, bottom: UserModalViewController.stackInset, right: UserModalViewController.stackInset)
     
     init(user: User) {
         self.doneBtn = .init(configuration: .plain(), primaryAction: nil)
@@ -35,7 +37,7 @@ final class UserModalViewController: UIViewController {
         view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.spacing = Self.inset
+        stackView.spacing = Self.stackSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
         stackView.addArrangedSubview(doneBtn)
@@ -57,10 +59,10 @@ final class UserModalViewController: UIViewController {
     private func constrain() -> Void {
         /// Inset edges.
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Self.inset),
-            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Self.inset),
-            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Self.inset),
-            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Self.inset),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: stackInsets.top),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -stackInsets.bottom),
+            stackView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: stackInsets.left),
+            stackView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -stackInsets.right),
         ])
         
         /// Make user view "as short as possible".

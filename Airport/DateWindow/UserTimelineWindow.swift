@@ -21,7 +21,7 @@ internal extension UserDefaults {
                 return .new()
             }
             guard let loaded = try? JSONDecoder().decode(DateWindow.self, from: data) else {
-                assert(false, "Could not decode \(DateWindow.self)")
+                DefaultsLog.error("Could not decode \(DateWindow.self)")
                 return .new()
             }
             return loaded

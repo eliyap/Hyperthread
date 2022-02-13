@@ -31,7 +31,7 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type) as
         /// consider if new reply tweets come in, but aren't on the home timeline, they should be fetched!
         
         if v1Tweets.isNotEmpty {
-            await fetchTimelines(window: .init(
+            await fetchUserTimelines(window: .init(
                 start: v1Tweets.map(\.created_at).min()!,
                 end: v1Tweets.map(\.created_at).max()!
             ))
@@ -40,7 +40,7 @@ internal func homeTimelineFetch<Fetcher: HomeTimelineHelper>(_: Fetcher.Type) as
     
     /// Dispatch chunk requests in parallel.
     await withTaskGroup(of: Void.self) { group in
-        let ids = v1Tweets.map {"\($0.id)"}
+        let ids = v1Tweets.map(\.id_str)
         ids.chunks(ofCount: TweetEndpoint.maxResults).forEach { chunk in
             group.addTask {
                 do {
@@ -67,6 +67,7 @@ fileprivate func store(rawData: RawData) throws -> Void {
     
     let realm = makeRealm()
     try realm.ingestRawHomeTimelineTweets(rawTweets: tweets, rawUsers: users, rawMedia: media)
+    try linkConversations()
     
     /// Update home timeline boundaries.
     /// - Note: use v2 tweets *after storage*, not v1 tweets, to be *sure* storage was successful.

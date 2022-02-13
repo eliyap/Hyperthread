@@ -30,8 +30,6 @@ final class DiscussionTable: UITableViewController {
     
     typealias DDS = NodeDDS
     
-    private let airport: Airport = .init()
-    
     public weak var requester: DiscusssionRequestable?
     
     init(loadingCarrier: UserMessageCarrier) {
@@ -56,7 +54,16 @@ final class DiscussionTable: UITableViewController {
         self.tableView = UITableView()
         tableView.register(CardHeaderCell.self, forCellReuseIdentifier: CardHeaderCell.reuseID)
         tableView.register(TweetCell.self, forCellReuseIdentifier: TweetCell.reuseID)
-        dds = .init(discussion: discussion, airport: airport, tableView: tableView, cellProvider: cellProvider)
+        dds = .init(discussion: discussion, tableView: tableView, cellProvider: cellProvider)
+        
+        configure(tableView: tableView)
+    }
+    
+    /// Aesthetic setup work.
+    private func configure(tableView: UITableView) -> Void {
+        /// Simple hack to remove top separator line (which typically sits above the `CardHeaderCell`).
+        /// Source: https://stackoverflow.com/questions/32668797/how-to-remove-first-cell-top-separator-and-last-cell-bottom-separator
+        tableView.tableHeaderView = UIView()
     }
     
     private func cellProvider(tableView: UITableView, indexPath: IndexPath, node: Node) -> UITableViewCell? {
@@ -107,8 +114,6 @@ extension DiscussionTable: SplitDelegate {
 
 final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
     
-    weak var airport: Airport!
-    
     /// For our convenience.
     typealias Snapshot = NSDiffableDataSourceSnapshot<TweetSection, Node>
     
@@ -116,16 +121,14 @@ final class NodeDDS: UITableViewDiffableDataSource<TweetSection, Node> {
     
     init(
         discussion: Discussion?,
-        airport: Airport,
-        tableView: UITableView, 
+        tableView: UITableView,
         cellProvider: @escaping CellProvider
     ) {
-        self.airport = airport
         super.init(tableView: tableView, cellProvider: cellProvider)
         
         var snapshot = Snapshot()
         if let discussion = discussion {
-            discussion.makeTree(airport: airport).assemble(&nodes)
+            discussion.makeTree().assemble(&nodes)
             
             snapshot.appendSections([.root, .discussion])
             snapshot.appendItems([nodes[0]], toSection: .root)

@@ -244,7 +244,7 @@ actor ReferenceCrawler {
         let d = realm.objects(Discussion.self)
             .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [
             /// Check if any `Tweet` is above the relevance threshold.
-            Discussion.minRelevancePredicate,
+            Discussion.minFetchRelevancePredicate,
             
             /// Check if any `Tweet` has dangling references.
             Discussion.danglingReferencePredicate,

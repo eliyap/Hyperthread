@@ -102,7 +102,7 @@ fileprivate final class BarContents: UIStackView {
         }
     }
     
-    lazy var inset = CardTeaserCell.borderInset
+    private let inset: CGFloat = 6
     
     @MainActor
     init() {
@@ -159,6 +159,12 @@ fileprivate final class BarContents: UIStackView {
             self.label.text = "Currently Offline"
             self.loadingView.stopAnimating()
             
+        case .otherError(let error):
+            self.iconView.image = UIImage(systemName: "exclamationmark.triangle")
+            self.label.text = "Error"
+            self.loadingView.stopAnimating()
+            TableLog.error("\(error)")
+        
         default:
             #warning("TODO")
             break

@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import Combine
 import BlackBox
+import Twig
 
 final class MainTableWrapper: UIViewController, Sendable {
     
@@ -40,14 +41,13 @@ final class MainTableWrapper: UIViewController, Sendable {
         )
         navigationItem.leftBarButtonItems = [
             addLinkButton,
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod)),
         ]
 
         #if DEBUG
-        navigationItem.leftBarButtonItems = navigationItem.leftBarButtonItems ?? []
-        + [
+        navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod)),
         ]
+        print("Boop \(MediaFetcher.shared)")
         #endif
     }
     
@@ -55,9 +55,16 @@ final class MainTableWrapper: UIViewController, Sendable {
     @objc
     func debugMethod() {
         // loading method
-        Task { @MainActor in
-            await loadingCarrier.send(.init(category: .loading, duration: .interval(1.0)))
-        }
+//        Task { @MainActor in
+//            await loadingCarrier.send(.init(category: .loading, duration: .interval(1.0)))
+//        }
+
+        let test = makeRealm()
+            .objects(Tweet.self)
+            .filter(Tweet.missingMediaPredicate)
+            .count
+        print("\(test) media count")
+        
     }
     #endif
     

@@ -76,6 +76,7 @@ final class Tweet: Object, Identifiable, AuthorIdentifiable, TweetIdentifiable {
     /// Attached images, videos, GIFs, etc.
     @Persisted
     var media: List<Media>
+    public static let mediaPropertyName = "media"
     
     /** App-internal (non-Twitter) measure of a tweet's "relevance".
         Less relevant Tweets / Discussions are excluded from the timeline.
@@ -177,6 +178,14 @@ extension Tweet {
         This tweet is unavailable.
         The author may have hidden or deleted it.
         """
-    public static let notAvailableAttributedString: NSAttributedString = .init(string: Tweet.notAvailableMessage, attributes: Tweet.textAttributes)
+    public static func notAvailableAttributedString(id: Tweet.ID) -> NSAttributedString {
+        let str = NSMutableAttributedString(string: Tweet.notAvailableMessage, attributes: Tweet.textAttributes)
+        
+        /// Direct user to status URL. I don't fully trust my system, so this is a slapdash fallback option.
+        /// The `s` is a placeholder, it doesn't matter as Twitter will redirect.
+        /// `0, 10` aims to cover "This tweet".
+        str.addAttribute(.link, value: "https://twitter.com/s/status/\(id)", range: NSMakeRange(0, 10))
+        return str
+    }
 }
 

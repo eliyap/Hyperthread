@@ -12,7 +12,8 @@ import Twig
 
 final class FollowingLine: UIStackView {
 
-    public static let inset = CardTeaserCell.borderInset
+    public static let contentInset: CGFloat = 6
+    public static let contentRadius: CGFloat = 6
     
     private let followingLabel: UILabel
     private let followingButton: FollowButton
@@ -43,9 +44,9 @@ final class FollowingLine: UIStackView {
         /// Inset subviews from edges.
         /// Source: https://useyourloaf.com/blog/adding-padding-to-a-stack-view/
         isLayoutMarginsRelativeArrangement = true
-        directionalLayoutMargins = NSDirectionalEdgeInsets(top: Self.inset, leading: Self.inset, bottom: Self.inset, trailing: Self.inset)
+        directionalLayoutMargins = NSDirectionalEdgeInsets(top: Self.contentInset, leading: Self.contentInset, bottom: Self.contentInset, trailing: Self.contentInset)
         
-        layer.cornerRadius = Self.inset * 2
+        layer.cornerRadius = Self.contentInset + Self.contentRadius
         layer.borderWidth = 1.00
         layer.borderColor = UIColor.secondarySystemFill.cgColor
         
@@ -182,7 +183,7 @@ final class FollowButton: UIButton {
     init() {
         super.init(frame: .zero)
         layer.cornerCurve = .continuous
-        layer.cornerRadius = FollowingLine.inset
+        layer.cornerRadius = FollowingLine.contentRadius
         
         /// Set up `UIStackView`.
         addSubview(stackView)
@@ -190,14 +191,14 @@ final class FollowButton: UIButton {
         stackView.axis = .horizontal
         stackView.isUserInteractionEnabled = false /// Stops view from eating touches.
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: FollowingLine.inset),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FollowingLine.inset),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: FollowingLine.inset),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -FollowingLine.inset),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: FollowingLine.contentInset),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -FollowingLine.contentInset),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: FollowingLine.contentInset),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -FollowingLine.contentInset),
         ])
         
         stackView.addArrangedSubview(label)
-        label.text = "TEST"
+        label.text = ""
         
         stackView.addArrangedSubview(loading)
         loading.hidesWhenStopped = true

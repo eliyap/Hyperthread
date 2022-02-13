@@ -40,6 +40,6 @@ internal func onFollow(userIDs: [User.ID]) -> Void {
     /// Bring user timeline up to speed (Part 2 – Fin).
     /// Don't block the UI for this background task.
     Task {
-        await fetchTimelines()
+        await fetchUserTimelines()
     }
 }

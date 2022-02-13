@@ -27,13 +27,23 @@ final class CardTeaserCell: ControlledCell {
     let tweetTextView = TweetTextView()
     let albumVC = AlbumController()
     let retweetView = RetweetView()
-    let hairlineView = SpacedSeparator(vertical: CardTeaserCell.borderInset, horizontal: CardTeaserCell.borderInset)
+    let hairlineView = SpacedSeparator(vertical: .zero, horizontal: CardTeaserCell.ContentSpacing)
     let summaryView = SummaryView()
     
-    var token: NotificationToken? = nil
+    var realmTokens: [NotificationToken] = []
     
-    public static let borderInset: CGFloat = 6
-    private lazy var inset: CGFloat = CardTeaserCell.borderInset
+    public static let ContentSpacing: CGFloat = 4
+    
+    public static let ContentInset: CGFloat = 9
+    private let contentInsets: UIEdgeInsets = UIEdgeInsets(top: CardTeaserCell.ContentInset, left: CardTeaserCell.ContentInset, bottom: CardTeaserCell.ContentInset, right: CardTeaserCell.ContentInset)
+    
+    /// Since cards are stacked vertically in the table, halve the doubled insets to compensate.
+    private let cardInsets = UIEdgeInsets(
+        top: CardBackground.Inset / 2,
+        left: CardBackground.Inset,
+        bottom: CardBackground.Inset / 2,
+        right: CardBackground.Inset
+    )
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
@@ -45,18 +55,25 @@ final class CardTeaserCell: ControlledCell {
 
         /// Configure background.
         controller.view.addSubview(cardBackground)
-        cardBackground.constrain(to: safeAreaLayoutGuide)
+        cardBackground.constrain(
+            to: safeAreaLayoutGuide,
+            insets: cardInsets,
+            /// Keep profile pic and card "concentric".
+            cornerRadius: ProfileImageView.cornerRadius + CardTeaserCell.ContentInset
+        )
 
         /// Configure Main Stack View.
         controller.view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = Self.ContentSpacing
+        let stackInsets = cardInsets + contentInsets
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset * 2),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset * 2),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset * 2),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset * 2),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: stackInsets.top),
+            stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: stackInsets.left),
+            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -stackInsets.right),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -stackInsets.bottom),
         ])
 
         stackView.addArrangedSubview(userView)
@@ -123,23 +140,34 @@ final class CardTeaserCell: ControlledCell {
         summaryView.configure(discussion, realm: realm)
         albumVC.configure(tweet: tweet)
         
+        /// Correct for strange spacing issue observed 22.02.02 by removing spacing from text view.
+        /// Docs: https://developer.apple.com/documentation/uikit/uiview/1622648-alignmentrectinsets
+        /// Zero by default.
+        /// - Note: Issue was especially apparent when `tweetTextView` was directly above `retweetView` or `hairlineView`.
+        ///         Hence we deliberately limit this special adjustment.
+        if albumVC.view.isHidden {
+            tweetTextView.bottomInset = 5
+        } else {
+            tweetTextView.bottomInset = .zero
+        }
+        
         tweetTextView.delegate = self
         cardBackground.configure(status: discussion.read)
         
-        /// Release old observer.
-        if let token = token {
-            token.invalidate()
+        registerObservers(realm: realm, discussion: discussion, root: tweet)
+    }
+    
+    private func registerObservers(realm: Realm, discussion: Discussion, root tweet: Tweet) -> Void {
+        /// Release old observers, since cell is recycled.
+        for realmToken in realmTokens {
+            realmToken.invalidate()
         }
         
         /**
-         `observe` cannot be called in a `write` transaction, which primarily occurs when `Airport` adds objects.
-         See discussion https://github.com/realm/realm-cocoa/issues/4818
-         
-         To avoid conflicting with `Airport`, we **use the same scheduler**,
-         so that by the time our work comes up, the write is guaranteed to be complete.
-         Source: https://github.com/realm/realm-cocoa/issues/4818#issuecomment-489889711
+         UI code is run on the main thread, hence `realm` is also on the main thread,
+         so we must use `DispatchQueue.main` to avoid invoking `realm` on the wrong thread.
          */
-        Airport.scheduler.async { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else {
                 TableLog.warning("\(Self.self) is nil!")
                 return
@@ -151,8 +179,20 @@ final class CardTeaserCell: ControlledCell {
                 return
             }
             
-            self.token = discussion.observe(self.updateTeaser)
+            let discussionToken = discussion.observe(self.updateTeaser)
+            self.realmTokens.append(discussionToken)
+            
+            for mediaItem in tweet.media {
+                let mediaToken = mediaItem.observe { [weak self] change in
+                    self?.updateMedia(root: tweet)
+                }
+                self.realmTokens.append(mediaToken)
+            }
         }
+    }
+    
+    private func updateMedia(root tweet: Tweet) -> Void {
+        albumVC.configure(tweet: tweet)
     }
     
     private func updateTeaser(_ change: ObjectChange<Discussion>) -> Void {
@@ -166,7 +206,6 @@ final class CardTeaserCell: ControlledCell {
             }
             summaryView.timestampButton.configure(newDate)
         }
-        
         
         if properties.contains(where: {
             $0.name == Discussion.conversationsPropertyName
@@ -182,52 +221,14 @@ final class CardTeaserCell: ControlledCell {
         }
     }
     
-    func style(selected: Bool) -> Void {
-        UIView.animate(withDuration: 0.25) { [weak self] in
-            guard let self = self else {
-                assert(false, "self is nil")
-                return
-            }
-            /// By changing the radius, offset, and transform at the same time, we can grow / shrink the shadow in place,
-            /// creating a "lifting" illusion.
-            if selected {
-                self.styleSelected()
-            } else {
-                self.resetStyle()
-            }
-        }
-    }
-    
-    public func styleSelected() -> Void {
-        let shadowSize = self.inset * 0.75
-        
-        stackView.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        cardBackground.transform = CGAffineTransform(translationX: 0, y: -shadowSize)
-        cardBackground.layer.shadowColor = UIColor.black.cgColor
-        cardBackground.layer.shadowOpacity = 0.3
-        cardBackground.layer.shadowRadius = shadowSize
-        cardBackground.layer.shadowOffset = CGSize(width: .zero, height: shadowSize)
-        
-        cardBackground.styleSelected()
-    }
-    
-    public func resetStyle() -> Void {
-        stackView.transform = CGAffineTransform(translationX: 0, y: 0)
-        cardBackground.transform = CGAffineTransform(translationX: 0, y: 0)
-        cardBackground.layer.shadowColor = UIColor.black.cgColor
-        cardBackground.layer.shadowOpacity = 0
-        cardBackground.layer.shadowRadius = 0
-        cardBackground.layer.shadowOffset = CGSize.zero
-        
-        cardBackground.styleDefault()
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     deinit {
-        token?.invalidate()
+        for realmToken in realmTokens {
+            realmToken.invalidate()
+        }
         TableLog.debug("\(Self.description()) de-initialized.", print: true, true)
         cancellable.forEach { $0.cancel() }
     }

@@ -27,9 +27,10 @@ final class CardHeaderCell: ControlledCell {
     let albumVC = AlbumController()
     let retweetView = RetweetView()
     let metricsView = MetricsView()
-    // TODO: add profile image
     
-    private let inset: CGFloat = CardTeaserCell.borderInset
+    private static let ContentSpacing: CGFloat = CardTeaserCell.ContentSpacing /// Stay consistent.
+    private static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Stay consistent.
+    private let contentInsets = UIEdgeInsets(top: CardHeaderCell.ContentInset, left: CardHeaderCell.ContentInset, bottom: CardHeaderCell.ContentInset, right: CardHeaderCell.ContentInset)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
@@ -41,18 +42,24 @@ final class CardHeaderCell: ControlledCell {
         
         /// Configure background.
         controller.view.addSubview(cardBackground)
-        cardBackground.constrain(to: safeAreaLayoutGuide)
+        cardBackground.constrain(
+            to: safeAreaLayoutGuide,
+            insets: CardBackground.EdgeInsets,
+            cornerRadius: ProfileImageView.cornerRadius + CardHeaderCell.ContentInset
+        )
         
         /// Configure Main Stack View.
         controller.view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = Self.ContentSpacing
+        let stackInsets = CardBackground.EdgeInsets + contentInsets
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: inset * 2),
-            stackView.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: inset * 2),
-            stackView.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -inset * 2),
-            stackView.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -inset * 2),
+            stackView.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: stackInsets.top),
+            stackView.leftAnchor.constraint(equalTo: controller.view.leftAnchor, constant: stackInsets.left),
+            stackView.rightAnchor.constraint(equalTo: controller.view.rightAnchor, constant: -stackInsets.right),
+            stackView.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -stackInsets.bottom),
         ])
 
         stackView.addArrangedSubview(userView)

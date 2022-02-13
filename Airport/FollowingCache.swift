@@ -73,8 +73,11 @@ actor FollowingCache {
             return []
         }
         
-        guard let rawUsers = try? await requestFollowing(credentials: credentials) else {
-            NetLog.error("Failed to fetch following list!")
+        let rawUsers: Set<RawUser>
+        do {
+            rawUsers = try await requestFollowing(credentials: credentials)
+        } catch {
+            NetLog.error("Failed to fetch following list! Error: \(error)")
             assert(false)
             
             /// If the fetch fails, fall back on local Realm storage.

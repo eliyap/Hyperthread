@@ -32,7 +32,7 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
     let loadingCarrier: UserMessageCarrier
     
     lazy var results = realm.objects(Discussion.self)
-        .filter(Discussion.minRelevancePredicate)
+        .filter(Discussion.minDisplayRelevancePredicate)
         .sorted(by: \Discussion.updatedAt, ascending: false)
     
     init(
@@ -78,15 +78,6 @@ final class DiscussionDDS: UITableViewDiffableDataSource<DiscussionSection, Disc
                 #endif
                 
                 self.setContents(to: results, animated: true)
-                if
-                    /// Only scroll if tweets were added at the top!
-                    insertions.contains(0),
-                    /// We want to focus on "brand new" discussions, i.e. not stuff that happens to be old and unread.
-                    /// To achieve this, we stop at the first `.read` `Discussion`.
-                    let firstReadIndex = results.firstIndex(where: {$0.read == .read})
-                {
-                    tableView.scrollToRow(at: IndexPath(row: firstReadIndex, section: DiscussionSection.Main.rawValue), at: .top, animated: true)
-                }
                 
             case .error(let error):
                 fatalError("\(error)")
@@ -115,18 +106,20 @@ extension DiscussionDDS: UITableViewDataSourcePrefetching {
         /// Number of rows left before we pull from Twitter.
         let threshhold = 25
         
+        guard
+            let numDiscussions = numDiscussions,
+            (numDiscussions - indexPaths.max()!.row) < threshhold
+        else { return }
+        
+        
         guard Date().timeIntervalSince(lastOldFetch) > TimeInterval.minute else {
             TableLog.debug("Too soon, denying prefetch.", print: true, true)
             return
         }
-        if
-            let numDiscussions = numDiscussions,
-            (numDiscussions - indexPaths.max()!.row) < threshhold
-        {
-            Task {
-                await fetchOldTweets()
-            }
-            lastOldFetch = Date()
+        
+        lastOldFetch = Date()
+        Task {
+            await fetchOldTweets()
         }
     }
     

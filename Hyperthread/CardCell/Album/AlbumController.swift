@@ -9,7 +9,7 @@ import UIKit
 
 class AlbumController: UIPageViewController {
     
-    public var controllers: [ImageViewController] = []
+    public var controllers: [MediaViewController] = []
     
     /// Constrains the view's height to below some aspect ratio.
     /// Value is subject to change.
@@ -19,7 +19,7 @@ class AlbumController: UIPageViewController {
     private var intrinsicHeightConstraint: NSLayoutConstraint? = nil
     
     /// Maximum frame aspect ratio, so that tall images don't stretch the cell.
-    private let threshholdAR: CGFloat = 0.667
+    private let threshholdAR: CGFloat = 1.333
     
     /// Displays the total number of images, and the one you're currently on.
     /// e.g. `1/4`.
@@ -28,6 +28,8 @@ class AlbumController: UIPageViewController {
     /// The upcoming page number.
     private var pendingIndex: Int = 1
         
+    private static let CountButtonInset: CGFloat = 6
+    
     @MainActor
     init() {
         self.countButton = CountButton()
@@ -45,8 +47,8 @@ class AlbumController: UIPageViewController {
         view.bringSubviewToFront(countButton)
         countButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            countButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -CardTeaserCell.borderInset),
-            countButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -CardTeaserCell.borderInset),
+            countButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -AlbumController.CountButtonInset),
+            countButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -AlbumController.CountButtonInset),
         ])
     }
     
@@ -67,7 +69,7 @@ class AlbumController: UIPageViewController {
             
             /// Get new views.
             controllers = media.map { media in
-                let vc = ImageViewController()
+                let vc = MediaViewController()
                 vc.configure(media: media, picUrlString: picUrlString)
                 vc.view.backgroundColor = .flat
                 return vc
@@ -115,18 +117,18 @@ class AlbumController: UIPageViewController {
 extension AlbumController: UIPageViewControllerDataSource {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let imageController = viewController as? ImageViewController else {
+        guard let mediaController = viewController as? MediaViewController else {
             fatalError("Unexpected type!")
         }
-        guard let index = controllers.firstIndex(of: imageController), index > 0 else { return nil }
+        guard let index = controllers.firstIndex(of: mediaController), index > 0 else { return nil }
         return controllers[index - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let imageController = viewController as? ImageViewController else {
+        guard let mediaController = viewController as? MediaViewController else {
             fatalError("Unexpected type!")
         }
-        guard let index = controllers.firstIndex(of: imageController), index < controllers.count - 1 else { return nil }
+        guard let index = controllers.firstIndex(of: mediaController), index < controllers.count - 1 else { return nil }
         return controllers[index + 1]
     }
     
@@ -147,11 +149,11 @@ extension AlbumController: UIPageViewControllerDelegate {
             assert(false, "Unexpected controller count!")
             return
         }
-        guard let img = pending as? ImageViewController else {
+        guard let mediaController = pending as? MediaViewController else {
             assert(false, "Unexpected Type!")
             return
         }
-        guard let index = controllers.firstIndex(of: img) else {
+        guard let index = controllers.firstIndex(of: mediaController) else {
             assert(false, "Could not locate pending controller!")
             return
         }

@@ -14,7 +14,7 @@ final class MetricsView: UIStackView {
     let likeButton = LikeButton()
     let timestampButton = TimestampButton()
 
-    fileprivate let _spacing: CGFloat = 5
+    public static let ContentSpacing: CGFloat = 5
     
     /// Central font settings.
     public static var font: UIFont { UIFont.preferredFont(forTextStyle: Self.fontStyle) }
@@ -26,7 +26,7 @@ final class MetricsView: UIStackView {
         axis = .horizontal
         distribution = .fill
         alignment = .center
-        spacing = _spacing
+        spacing = MetricsView.ContentSpacing
         
         translatesAutoresizingMaskIntoConstraints = false
 

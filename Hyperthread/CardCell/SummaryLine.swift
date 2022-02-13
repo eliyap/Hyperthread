@@ -45,6 +45,8 @@ final class SummaryView: UIStackView {
             replyButton.configure(tweet)
             retweetButton.configure(tweet)
             likeButton.configure(tweet)
+            
+            spacing = MetricsView.ContentSpacing
         } else if discussion.tweetCount == 2 {
             replyButton.isHidden = true
             retweetButton.isHidden = true
@@ -79,6 +81,8 @@ final class SummaryView: UIStackView {
             
             /// Name the responder in the summary line.
             iconView.setText(to: realm.user(id: onlyResponse.authorID)!.name)
+            
+            spacing = .zero
         } else {
             replyButton.isHidden = true
             retweetButton.isHidden = true
@@ -89,6 +93,8 @@ final class SummaryView: UIStackView {
             
             /// Exclude the original from the count.
             iconView.setText(to: "\(discussion.tweetCount - 1) tweets")
+            
+            spacing = .zero
         }
         timestampButton.configure(discussion)
     }

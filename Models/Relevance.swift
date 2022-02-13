@@ -50,6 +50,9 @@ internal enum Relevance: Int {
         }
     }
     
-    /// Minimum relevance to be considered worth showing the user.
-    public static let threshold = lookup.rawValue
+    /// Minimum relevance to be considered worth fetching.
+    public static let fetchThreshold = lookup.rawValue
+    
+    /// Minimum relevance to be considered worth fetching.
+    public static let displayThreshold = discussion.rawValue
 }

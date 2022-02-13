@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 import Twig
 
-func fetchTimelines(window: DateWindow? = nil) async -> Void {
+func fetchUserTimelines(window: DateWindow? = nil) async -> Void {
     /// Check that credentials are present.
     guard let credentials = Auth.shared.credentials else {
         NetLog.error("Credentials missing.")
@@ -27,6 +27,8 @@ func fetchTimelines(window: DateWindow? = nil) async -> Void {
             group.addTask {
                 let (tweets, included, users, media) = await fetchRawTimeline(request: request, credentials: credentials)
                 store((tweets, included, users, media), followingIDs: followingIDs)
+                
+                /// Update user window **after** tweets are stored, because it prevents this period from being fetched again!
                 updateUserWindow(request: request, tweets: tweets)
             }
         }
@@ -47,6 +49,7 @@ fileprivate func store(_ raw: RawData, followingIDs: [User.ID]) -> Void {
         /// Safe to insert `included`, as we make no assumptions around `Relevance`.
         try realm.ingestRaw(rawTweets: tweets + included, rawUsers: users, rawMedia: media, following: followingIDs)
         
+        try linkConversations()
     } catch {
         ModelLog.error("\(error)")
         #warning("silencing errors here is bad practice, and the only purpose of this function!")

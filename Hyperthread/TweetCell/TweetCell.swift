@@ -37,12 +37,13 @@ final class TweetCell: ControlledCell {
     /// Variable Constraint.
     var indentConstraint: NSLayoutConstraint
     
-    public static let inset: CGFloat = 8
+    public static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Use same insets for consistency.
+    private let contentInsets = UIEdgeInsets(top: TweetCell.ContentInset, left: TweetCell.ContentInset, bottom: TweetCell.ContentInset, right: TweetCell.ContentInset)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.userView = .init(line: line)
         
-        let triangleSize = Self.inset * 1.5
+        let triangleSize = Self.ContentInset * 1.5
         self.triangleView = TriangleView(size: triangleSize)
         self.indentConstraint = depthSpacer.widthAnchor.constraint(equalToConstant: .zero)
 
@@ -58,14 +59,11 @@ final class TweetCell: ControlledCell {
         controller.view.addSubview(depthStack)
         depthStack.axis = .horizontal
         depthStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        /// Bind stack to edges, with insets.
-        /// Leading edge has no inset due to color marker.
         NSLayoutConstraint.activate([
-            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: Self.inset),
-            depthStack.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor, constant: .zero),
-            depthStack.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor, constant: -Self.inset),
-            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -Self.inset),
+            depthStack.topAnchor.constraint(equalTo: controller.view.topAnchor, constant: contentInsets.top),
+            depthStack.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor, constant: -contentInsets.bottom),
+            depthStack.leftAnchor.constraint(equalTo: controller.view.leftAnchor, constant: contentInsets.left),
+            depthStack.rightAnchor.constraint(equalTo: controller.view.rightAnchor, constant: -contentInsets.right),
         ])
 
         /// Add spacer, which causes "indentation" in the cell view.
@@ -118,7 +116,8 @@ final class TweetCell: ControlledCell {
         /// Manually constrain to full width.
         NSLayoutConstraint.activate([
             metricsView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-            metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+            /// Add card padding so that timestamp labels are vertically aligned with the `CardHeaderCell`.
+            metricsView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -CardBackground.Inset),
         ])
         
         /// Ensure glyph size doesn't bug out.
@@ -154,7 +153,8 @@ final class TweetCell: ControlledCell {
     private let maxDepth = 14
     private let indentSize: CGFloat = 10
     public func configure(node: Node, realm: Realm, requester: DiscusssionRequestable?) {
-        if case .available(let tweet, let author) = node.tweet {
+        switch node.tweet {
+        case .available(let tweet, let author):
             userView.configure(user: author)
             tweetTextView.attributedText = tweet.fullText(context: node)
             retweetView.configure(tweet: tweet, realm: realm)
@@ -167,8 +167,8 @@ final class TweetCell: ControlledCell {
             /// Let `albumVC` decide `isHidden`.
             
             configureQuoteReply(tweet: tweet, realm: realm, requester: requester)
-        } else {
-            tweetTextView.attributedText = Tweet.notAvailableAttributedString
+        case .unavailable(let id):
+            tweetTextView.attributedText = Tweet.notAvailableAttributedString(id: id)
             userView.isHidden = true
             retweetView.isHidden = true
             metricsView.isHidden = true
