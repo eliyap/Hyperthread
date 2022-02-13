@@ -180,11 +180,14 @@ final class TweetCell: ControlledCell {
     }
     
     private func configureQuoteReply(tweet: Tweet, realm: Realm, requester: DiscusssionRequestable?) -> Void {
-        let quoteView = loadQuoteView()
         guard let quoting = tweet.quoting, tweet.isReply else {
-            quoteView.configure(quoted: nil, requester: requester)
+            quoteView?.isHidden = false
             return
         }
+        
+        /// Only load if quote is present!
+        let quoteView = loadQuoteView()
+        
         /// This exception is normal if the tweet was deleted or hidden.
         guard let quotedTweet = realm.tweet(id: quoting) else {
             TableLog.warning("Missing reference to quoted tweet with ID \(quoting)")
