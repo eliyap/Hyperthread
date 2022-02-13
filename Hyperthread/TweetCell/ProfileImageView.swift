@@ -17,8 +17,9 @@ final class ProfileImageView: UIView {
     public static let cornerRadius: CGFloat = 6
     
     private let placeholder: UIImage? = .init(
-        systemName: "person.crop.circle",
-        withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .quaternaryLabel)
+        named: "blank",
+        in: .main,
+        with: UIImage.SymbolConfiguration(hierarchicalColor: .quaternaryLabel)
     )
     
     @MainActor
@@ -88,7 +89,6 @@ final class ProfileImageView: UIView {
                 } else {
                     NetLog.warning("Failed to load image! \(#file)")
                 }
-                
             }
         }
     }
