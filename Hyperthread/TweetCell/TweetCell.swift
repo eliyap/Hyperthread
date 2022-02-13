@@ -29,7 +29,7 @@ final class TweetCell: ControlledCell {
     private let userView: UserView
     private let tweetTextView: TweetTextView = .init()
     private let albumVC: AlbumController = .init()
-    private let quoteView: QuoteView = .init()
+    private var quoteView: QuoteView? = nil
     private let retweetView: RetweetView = .init()
     private let metricsView: MetricsView = .init()
     private let triangleView: TriangleView
@@ -95,14 +95,6 @@ final class TweetCell: ControlledCell {
         NSLayoutConstraint.activate([
             albumVC.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             albumVC.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-        ])
-        
-        /// Configure quotation view.
-        stackView.addArrangedSubview(quoteView)
-        quoteView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            quoteView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-            quoteView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])
         
         /// Special case: must request album be "as tall as possible".
@@ -189,9 +181,13 @@ final class TweetCell: ControlledCell {
     
     private func configureQuoteReply(tweet: Tweet, realm: Realm, requester: DiscusssionRequestable?) -> Void {
         guard let quoting = tweet.quoting, tweet.isReply else {
-            quoteView.configure(quoted: nil, requester: requester)
+            quoteView?.isHidden = false
             return
         }
+        
+        /// Only load if quote is present!
+        let quoteView = loadQuoteView()
+        
         /// This exception is normal if the tweet was deleted or hidden.
         guard let quotedTweet = realm.tweet(id: quoting) else {
             TableLog.warning("Missing reference to quoted tweet with ID \(quoting)")
@@ -224,5 +220,25 @@ extension TweetCell: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         open(url: URL)
         return false
+    }
+}
+
+extension TweetCell {
+    @MainActor
+    func loadQuoteView() -> QuoteView {
+        if let existing = quoteView { return existing }
+        
+        let quoteView: QuoteView = .init()
+        
+        /// Configure quotation view.
+        stackView.addArrangedSubview(quoteView)
+        quoteView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            quoteView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            quoteView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+        ])
+        
+        self.quoteView = quoteView
+        return quoteView
     }
 }

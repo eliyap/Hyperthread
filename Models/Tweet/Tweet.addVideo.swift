@@ -32,6 +32,7 @@ extension Tweet {
             guard mediaMatch.mediaType == MediaType(raw: rawMediaItem.type) else {
                 ModelLog.error("Mismatched media types! \(mediaMatch.mediaType!) != \(MediaType(raw: rawMediaItem.type))")
                 assert(false)
+                continue
             }
             
             mediaMatch.addVideo(token: token, from: videoInfo)

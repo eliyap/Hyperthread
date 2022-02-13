@@ -16,9 +16,17 @@ final class ProfileImageView: UIView {
     /// Make sure corner radii compose nicely.
     public static let cornerRadius: CGFloat = 6
     
+    /// Use a resizable blank SVG as a placeholder.
+    /// Unlike an SF-Symbol, this easily resizes to the full PFP size, instead of the body font size.
+    ///
+    /// This prevents a 1-frame "jump" when loading the view, where the name and username labels
+    /// are displaced when the larger real image loads in.
+    ///
+    /// We could also use an SVG version of the SF Symbol, but a simple blank was less jarring.
     private let placeholder: UIImage? = .init(
-        systemName: "person.crop.circle",
-        withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .quaternaryLabel)
+        named: "blank",
+        in: .main,
+        with: UIImage.SymbolConfiguration(hierarchicalColor: .quaternaryLabel)
     )
     
     @MainActor
@@ -88,7 +96,6 @@ final class ProfileImageView: UIView {
                 } else {
                     NetLog.warning("Failed to load image! \(#file)")
                 }
-                
             }
         }
     }

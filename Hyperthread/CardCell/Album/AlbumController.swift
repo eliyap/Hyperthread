@@ -9,7 +9,11 @@ import UIKit
 
 class AlbumController: UIPageViewController {
     
+    /// Contains **displayed** media controllers.
     public var controllers: [MediaViewController] = []
+    
+    /// Contains recycled view controllers. and spawns new ones.
+    fileprivate let controllerArchive: OwnedArchive<MediaViewController> = .init(makeView: MediaViewController.init)
     
     /// Constrains the view's height to below some aspect ratio.
     /// Value is subject to change.
@@ -64,15 +68,18 @@ class AlbumController: UIPageViewController {
             replace(object: self, on: \.aspectRatioConstraint, with: ARConstraint(min(threshholdAR, maxAR)))
             replace(object: self, on: \.intrinsicHeightConstraint, with: view.heightAnchor.constraint(lessThanOrEqualToConstant: maxHeight))
             
-            /// Discard old views, just in case.
-            controllers.forEach { $0.view.removeFromSuperview() }
+            /// Archive old views.
+            for controller in controllers {
+                controller.view.removeFromSuperview()
+                controllerArchive.archive(controller)
+            }
+            controllers = []
             
-            /// Get new views.
-            controllers = media.map { media in
-                let vc = MediaViewController()
-                vc.configure(media: media, picUrlString: picUrlString)
-                vc.view.backgroundColor = .flat
-                return vc
+            /// Get new views from archive.
+            for mediaItem in media {
+                let mediaController = controllerArchive.unarchive()
+                mediaController.configure(media: mediaItem, picUrlString: picUrlString)
+                controllers.append(mediaController)
             }
             
             view.isHidden = false
@@ -165,5 +172,34 @@ extension AlbumController: UIPageViewControllerDelegate {
         
         /// Update page number.
         countButton.setTitle("\(pendingIndex)/\(controllers.count)", for: .normal)
+    }
+}
+
+/// A structure that stores re-usable elements, to avoid re-initializing them frequently.
+fileprivate final class OwnedArchive<Item: AnyObject> {
+    /// > If your array’s Element type is a class or @objc protocol and
+    /// > you do not need to bridge the array to NSArray or pass the array to Objective-C APIs,
+    /// > using `ContiguousArray` may be more efficient and have more predictable performance than `Array`.
+    /// Docs: https://developer.apple.com/documentation/swift/contiguousarray
+    private var views: ContiguousArray<Item> = []
+    
+    /// Factory method for when the archives run out.
+    private let makeItem: @MainActor () -> Item
+    
+    init(makeView: @escaping @MainActor () -> Item) {
+        self.makeItem = makeView
+    }
+    
+    func archive(_ view: Item) -> Void {
+        views.append(view)
+    }
+    
+    @MainActor
+    func unarchive() -> Item {
+        if views.isNotEmpty {
+            return views.removeLast()
+        } else {
+            return makeItem()
+        }
     }
 }
