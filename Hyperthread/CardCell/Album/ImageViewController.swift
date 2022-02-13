@@ -127,6 +127,7 @@ final class MediaViewController: UIViewController {
                 let vidURL = URL(string: vidUrlString)
             {
                 gifView.playLoopingGIF(from: vidURL)
+                symbolView.set(symbol: .hidden)
             }
             
         case .videoPlayer:
@@ -136,6 +137,7 @@ final class MediaViewController: UIViewController {
                 let vidURL = URL(string: vidUrlString)
             {
                 videoPlayer.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
+                symbolView.set(symbol: .hidden)
             }
         }
     }
