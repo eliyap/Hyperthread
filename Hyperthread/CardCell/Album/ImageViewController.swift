@@ -125,6 +125,7 @@ final class MediaViewController: UIViewController {
             }
             
         case .videoPlayer:
+            #warning("TODO: make a more considred choice about which video to play!")
             if
                 let vidUrlString = media.video?.variants.first?.url,
                 let vidURL = URL(string: vidUrlString)
