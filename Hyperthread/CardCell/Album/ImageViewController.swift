@@ -9,8 +9,7 @@ import UIKit
 import SDWebImage
 import AVKit
 
-#warning("rename to MediaVC")
-final class ImageViewController: UIViewController {
+final class MediaViewController: UIViewController {
     
     /// Component views.
     private let imageView: UIImageView = .init()
