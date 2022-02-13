@@ -10,6 +10,7 @@ import UIKit
 import Combine
 import BlackBox
 import Twig
+import SDWebImage
 
 final class MainTableWrapper: UIViewController, Sendable {
     
@@ -59,12 +60,9 @@ final class MainTableWrapper: UIViewController, Sendable {
 //        Task { @MainActor in
 //            await loadingCarrier.send(.init(category: .loading, duration: .interval(1.0)))
 //        }
-
-        let test = makeRealm()
-            .objects(Tweet.self)
-            .filter(Tweet.missingMediaPredicate)
-            .count
-        print("\(test) media count")
+        let bytes = SDImageCache.shared.totalDiskSize()
+        let max = SDImageCache.shared.config.maxDiskSize
+        print("size = \(bytes), max = \(max)")
         
     }
     #endif
