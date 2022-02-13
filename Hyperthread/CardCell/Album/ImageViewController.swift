@@ -11,14 +11,15 @@ import AVKit
 
 final class MediaViewController: UIViewController {
     
-    /// Component views.
+    /// Lazy Component views.
     private var imageView: UIImageView? = nil
     private var gifView: GIFView? = nil
+    private var videoViewController: AVPlayerViewController? = nil
+    
+    /// Eager Component views.
+    private let videoPlayer: AVPlayer = .init()
     private let loadingIndicator: UIActivityIndicatorView = .init()
     private let symbolView: SymbolCircleView = .init()
-    
-    private var videoViewController: AVPlayerViewController? = nil
-    private let videoPlayer: AVPlayer = .init()
     
     private var mediaModel: MediaModel? = nil
     
@@ -207,6 +208,7 @@ final class MediaViewController: UIViewController {
     }
 }
 
+// MARK: - Lazy Initializers
 extension MediaViewController {
     func addImage() -> UIImageView {
         if let existing = self.imageView { return existing }
