@@ -196,8 +196,8 @@ fileprivate final class OwnedArchive<Item: AnyObject> {
     
     @MainActor
     func unarchive() -> Item {
-        if let last = views.last {
-            return last
+        if views.isNotEmpty {
+            return views.removeLast()
         } else {
             return makeItem()
         }
