@@ -1,7 +1,16 @@
 #  Hyperthread Changelog
 ### 1.2
+New Features
+- videos and GIFs now shown in-app
+
 Changes
-- media can now be taller, reducing letterboxing 
+- media is taller, reducing letterboxing 
+
+I apologize for issues still in the application.
+Hyperthread will continue to improve through future updates.
+
+Thanks & Enjoy,
+Elijah (@_elijahyap)
 
 ### 1.1
 New Features
