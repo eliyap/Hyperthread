@@ -43,8 +43,9 @@ final class MainTableWrapper: UIViewController, Sendable {
             addLinkButton,
         ]
 
+        navigationItem.rightBarButtonItems = []
         #if DEBUG
-        navigationItem.rightBarButtonItems = [
+        navigationItem.rightBarButtonItems? += [
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(debugMethod)),
         ]
         print("Boop \(MediaFetcher.shared)")
