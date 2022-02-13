@@ -6,6 +6,9 @@ New Features
 Changes
 - media is taller, reducing letterboxing 
 
+Bug Fixes
+- profile-image appearance is less abrupt
+
 I apologize for issues still in the application.
 Hyperthread will continue to improve through future updates.
 
