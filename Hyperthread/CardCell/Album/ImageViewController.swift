@@ -12,7 +12,7 @@ import AVKit
 final class MediaViewController: UIViewController {
     
     /// Component views.
-    private let imageView: UIImageView = .init()
+    private var imageView: UIImageView? = nil
     private let gifView: GIFView = .init()
     private let loadingIndicator: UIActivityIndicatorView = .init()
     private let symbolView: SymbolCircleView = .init()
@@ -29,14 +29,6 @@ final class MediaViewController: UIViewController {
         /// Use `flat` instead of `cardBackground` to make it obvious where the image frame is.
         /// This matters because tapping the image frame does not open the discussion.
         view.backgroundColor = .flat
-        
-        view.addSubview(imageView)
-        NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ])
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(gifView)
         NSLayoutConstraint.activate([
@@ -56,15 +48,6 @@ final class MediaViewController: UIViewController {
         videoViewController.videoGravity = .resizeAspect
         videoViewController.view.translatesAutoresizingMaskIntoConstraints = false
         videoViewController.player = videoPlayer
-        
-        /// Request that image be "as tall as possible".
-        let superTall = imageView.heightAnchor.constraint(equalToConstant: .superTall)
-        superTall.isActive = true
-        superTall.priority = .defaultLow
-        
-        /// Constrain image' height and width to be within our own.
-        imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor).isActive = true
-        imageView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor).isActive = true
         
         /// Center indicator view.
         view.addSubview(loadingIndicator)
@@ -86,15 +69,15 @@ final class MediaViewController: UIViewController {
         
         switch media.modelMediaType {
         case .photo, .gifPreview, .videoPreview:
-            imageView.isHidden = false
+            imageView?.isHidden = false
             videoViewController.view.isHidden = true
             gifView.isHidden = true
         case .gifPlayer:
-            imageView.isHidden = true
+            imageView?.isHidden = true
             videoViewController.view.isHidden = true
             gifView.isHidden = false
         case .videoPlayer:
-            imageView.isHidden = true
+            imageView?.isHidden = true
             videoViewController.view.isHidden = false
             gifView.isHidden = true
         }
@@ -142,8 +125,10 @@ final class MediaViewController: UIViewController {
         }
     }
     
+    @MainActor
     private func loadImage(url: URL?, completion: @escaping () -> ()) -> Void {
         loadingIndicator.startAnimating()
+        let imageView = addImage()
         imageView.sd_setImage(with: url) { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
             self?.loadingIndicator.stopAnimating()
             completion()
@@ -236,5 +221,32 @@ final class MediaViewController: UIViewController {
     
     deinit {
         TableLog.debug("\(Self.description()) de-initialized", print: true, false)
+    }
+}
+
+extension MediaViewController {
+    func addImage() -> UIImageView {
+        if let existing = self.imageView { return existing }
+        
+        let imageView: UIImageView = .init()
+        view.addSubview(imageView)
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        /// Request that image be "as tall as possible".
+        let superTall = imageView.heightAnchor.constraint(equalToConstant: .superTall)
+        superTall.isActive = true
+        superTall.priority = .defaultLow
+        
+        /// Constrain image' height and width to be within our own.
+        imageView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor).isActive = true
+        imageView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor).isActive = true
+        
+        self.imageView = imageView
+        return imageView
     }
 }
