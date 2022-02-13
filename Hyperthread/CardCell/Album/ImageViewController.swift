@@ -25,6 +25,11 @@ final class MediaViewController: UIViewController {
     @MainActor
     init() {
         super.init(nibName: nil, bundle: nil)
+        
+        /// Use `flat` instead of `cardBackground` to make it obvious where the image frame is.
+        /// This matters because tapping the image frame does not open the discussion.
+        view.backgroundColor = .flat
+        
         view.addSubview(imageView)
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
