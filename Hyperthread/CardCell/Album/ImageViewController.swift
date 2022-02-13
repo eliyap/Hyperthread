@@ -13,11 +13,11 @@ final class MediaViewController: UIViewController {
     
     /// Component views.
     private var imageView: UIImageView? = nil
-    private let gifView: GIFView = .init()
+    private var gifView: GIFView? = nil
     private let loadingIndicator: UIActivityIndicatorView = .init()
     private let symbolView: SymbolCircleView = .init()
     
-    private let videoViewController: AVPlayerViewController = .init()
+    private var videoViewController: AVPlayerViewController? = nil
     private let videoPlayer: AVPlayer = .init()
     
     private var mediaModel: MediaModel? = nil
@@ -29,25 +29,6 @@ final class MediaViewController: UIViewController {
         /// Use `flat` instead of `cardBackground` to make it obvious where the image frame is.
         /// This matters because tapping the image frame does not open the discussion.
         view.backgroundColor = .flat
-        
-        view.addSubview(gifView)
-        NSLayoutConstraint.activate([
-            gifView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            gifView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            gifView.heightAnchor.constraint(equalTo: view.heightAnchor),
-            gifView.widthAnchor.constraint(equalTo: view.widthAnchor),
-        ])
-        
-        adopt(videoViewController)
-        NSLayoutConstraint.activate([
-            videoViewController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            videoViewController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            videoViewController.view.heightAnchor.constraint(equalTo: view.heightAnchor),
-            videoViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
-        ])
-        videoViewController.videoGravity = .resizeAspect
-        videoViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        videoViewController.player = videoPlayer
         
         /// Center indicator view.
         view.addSubview(loadingIndicator)
@@ -70,16 +51,16 @@ final class MediaViewController: UIViewController {
         switch media.modelMediaType {
         case .photo, .gifPreview, .videoPreview:
             imageView?.isHidden = false
-            videoViewController.view.isHidden = true
-            gifView.isHidden = true
+            videoViewController?.view.isHidden = true
+            gifView?.isHidden = true
         case .gifPlayer:
             imageView?.isHidden = true
-            videoViewController.view.isHidden = true
-            gifView.isHidden = false
+            videoViewController?.view.isHidden = true
+            gifView?.isHidden = false
         case .videoPlayer:
             imageView?.isHidden = true
-            videoViewController.view.isHidden = false
-            gifView.isHidden = true
+            videoViewController?.view.isHidden = false
+            gifView?.isHidden = true
         }
         
         switch media.modelMediaType {
@@ -109,11 +90,13 @@ final class MediaViewController: UIViewController {
                 let vidUrlString = media.video?.variants.first?.url,
                 let vidURL = URL(string: vidUrlString)
             {
+                let gifView = addGIF()
                 gifView.playLoopingGIF(from: vidURL)
                 symbolView.set(symbol: .hidden)
             }
             
         case .videoPlayer:
+            let _ = addVideo()
             #warning("TODO: make a more considred choice about which video to play!")
             if
                 let vidUrlString = media.video?.variants.first?.url,
@@ -248,5 +231,40 @@ extension MediaViewController {
         
         self.imageView = imageView
         return imageView
+    }
+    
+    func addVideo() -> AVPlayerViewController {
+        if let existing = self.videoViewController { return existing }
+        
+        let videoViewController: AVPlayerViewController = .init()
+        adopt(videoViewController)
+        NSLayoutConstraint.activate([
+            videoViewController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            videoViewController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            videoViewController.view.heightAnchor.constraint(equalTo: view.heightAnchor),
+            videoViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
+        ])
+        videoViewController.videoGravity = .resizeAspect
+        videoViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        videoViewController.player = videoPlayer
+        
+        self.videoViewController = videoViewController
+        return videoViewController
+    }
+    
+    func addGIF() -> GIFView {
+        if let existing = self.gifView { return existing }
+        
+        let gifView: GIFView = .init()
+        view.addSubview(gifView)
+        NSLayoutConstraint.activate([
+            gifView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            gifView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            gifView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            gifView.widthAnchor.constraint(equalTo: view.widthAnchor),
+        ])
+        
+        self.gifView = gifView
+        return gifView
     }
 }
