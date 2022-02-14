@@ -181,7 +181,7 @@ final class TweetCell: ControlledCell {
     
     private func configureQuoteReply(tweet: Tweet, realm: Realm, requester: DiscusssionRequestable?) -> Void {
         guard let quoting = tweet.quoting, tweet.isReply else {
-            quoteView?.isHidden = false
+            quoteView?.isHidden = true
             return
         }
         
@@ -230,8 +230,18 @@ extension TweetCell {
         
         let quoteView: QuoteView = .init()
         
+        /// Insert below media.
+        if let index = stackView.arrangedSubviews.firstIndex(where: { subview in
+            subview === albumVC.view
+        }) {
+            stackView.insertArrangedSubview(quoteView, at: index)
+        } else {
+            stackView.addArrangedSubview(quoteView)
+            TableLog.error("Could not find index to insert!")
+            assert(false)
+        }
+        
         /// Configure quotation view.
-        stackView.addArrangedSubview(quoteView)
         quoteView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             quoteView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),

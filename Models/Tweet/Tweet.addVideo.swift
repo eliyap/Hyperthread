@@ -38,6 +38,4 @@ extension Tweet {
             mediaMatch.addVideo(token: token, from: videoInfo)
         }
     }
-    
-    
 }
