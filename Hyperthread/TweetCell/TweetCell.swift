@@ -181,7 +181,7 @@ final class TweetCell: ControlledCell {
     
     private func configureQuoteReply(tweet: Tweet, realm: Realm, requester: DiscusssionRequestable?) -> Void {
         guard let quoting = tweet.quoting, tweet.isReply else {
-            quoteView?.isHidden = false
+            quoteView?.isHidden = true
             return
         }
         
