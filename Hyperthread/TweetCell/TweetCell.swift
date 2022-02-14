@@ -230,8 +230,18 @@ extension TweetCell {
         
         let quoteView: QuoteView = .init()
         
+        /// Insert below media.
+        if let index = stackView.arrangedSubviews.firstIndex(where: { subview in
+            subview === albumVC.view
+        }) {
+            stackView.insertSubview(quoteView, at: index)
+        } else {
+            stackView.addArrangedSubview(quoteView)
+            TableLog.error("Could not find index to insert!")
+            assert(false)
+        }
+        
         /// Configure quotation view.
-        stackView.addArrangedSubview(quoteView)
         quoteView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             quoteView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
