@@ -234,7 +234,7 @@ extension TweetCell {
         if let index = stackView.arrangedSubviews.firstIndex(where: { subview in
             subview === albumVC.view
         }) {
-            stackView.insertSubview(quoteView, at: index)
+            stackView.insertArrangedSubview(quoteView, at: index)
         } else {
             stackView.addArrangedSubview(quoteView)
             TableLog.error("Could not find index to insert!")
