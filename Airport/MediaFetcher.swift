@@ -34,10 +34,6 @@ final class MediaFetcher {
             Task {
                 let batchIDs: [String] = await fetchLog.next(count: StatusesEndpoint.maxCount)
                 guard batchIDs.isNotEmpty else {
-                    #if DEBUG
-                    let ufc = await fetchLog.unfetchedCount()
-                    NetLog.debug("Empty batch, but \(ufc) unfetched", print: true, ufc > 0)
-                    #endif
                     return
                 }
                 
@@ -45,8 +41,8 @@ final class MediaFetcher {
                 do {
                     tweets = try await requestMedia(credentials: credentials, ids: batchIDs)
                     assert(tweets.count == batchIDs.count, "Did not receive all requested media tweets!")
-                    NetLog.debug("Fetched \(tweets.count) media tweets", print: true, true)
-                    try ingest(mediaTweets: tweets)
+                    NetLog.debug("Fetched \(tweets.count) media tweets, ids \(batchIDs.truncated(5))", print: true, true)
+                    try ingest(mediaTweets: tweets, fetchLog: fetchLog)
                 } catch {
                     NetLog.error("Media fetch failed due to error \(error)")
                     assert(false)
@@ -116,7 +112,7 @@ fileprivate actor FetchLog {
     #endif
 }
 
-fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) throws -> Void {
+fileprivate func ingest(mediaTweets: [RawV1MediaTweet], fetchLog: FetchLog) throws -> Void {
     let realm = makeRealm()
     try realm.writeWithToken { token in
         for mediaTweet in mediaTweets {
@@ -126,9 +122,22 @@ fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) throws -> Void {
                     throw HTRealmError.unexpectedNilFromID(mediaTweet.id_str)
                 }
                 try tweet.addVideo(token: token, from: mediaTweet)
+            } catch MediaIngestError.advertiserMedia {
+                Task {
+                    await fetchLog.blocklist(ids: [mediaTweet.id_str])
+                }
+                continue
             } catch {
-                ModelLog.error("Video could not be added due to error \(error)")
+                ModelLog.error("""
+                    Video could not be added due to error \(error)
+                    - id: \(mediaTweet.id_str)
+                    - data: \(mediaTweet)
+                    """)
                 assert(false)
+                
+                Task {
+                    await fetchLog.blocklist(ids: [mediaTweet.id_str])
+                }
                 continue
             }
         }
@@ -142,4 +151,9 @@ enum MediaIngestError: Error {
     case missingMediaID
     
     case mismatchedMediaID
+    
+    /// Advertiser videos are not provided to APIs.
+    /// Example tweet: https://twitter.com/PA/status/1493239875952418820
+    /// Docs: https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/object-model/extended-entities
+    case advertiserMedia
 }

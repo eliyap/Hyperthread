@@ -16,10 +16,15 @@ extension Tweet {
         }
         
         for rawMediaItem in rawMedia {
-            guard
-                let videoInfo = rawMediaItem.video_info,
-                videoInfo.variants.isNotEmpty
-            else {
+            guard let videoInfo = rawMediaItem.video_info else {
+                if rawMediaItem.additional_media_info == nil {
+                    throw MediaIngestError.missingEntities
+                } else {
+                    throw MediaIngestError.advertiserMedia
+                }
+            }
+            
+            guard videoInfo.variants.isNotEmpty else {
                 throw MediaIngestError.missingEntities
             }
             
