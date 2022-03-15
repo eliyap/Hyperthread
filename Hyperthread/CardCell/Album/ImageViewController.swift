@@ -146,9 +146,11 @@ final class MediaViewController: UIViewController {
         
         switch mediaModel.mediaType {
         case .photo:
-            #warning("Code Stub.")
-            /// Code stub for future big-image zoom and pan view.
-            let modal = LargeImageViewController()
+            guard let url = mediaModel.url else {
+                break
+            }
+            
+            let modal = LargeImageViewController(url: url)
             guard let root = view.window?.rootViewController else {
                 assert(false, "Could not obtain root view controller!")
                 return

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     private let duration = 0.25
@@ -63,12 +64,23 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
 
 final class LargeImageViewController: UIViewController {
     
+    private var imageView: UIImageView = .init()
+    
     @MainActor
-    init() {
+    init(url: String) {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
         
         view.backgroundColor = .systemRed
+        view.addSubview(imageView)
+        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+            /// Nothing.
+        })
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        NSLayoutConstraint.activate([
+            imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+        ])
         
         /// Request a custom animation.
         modalPresentationStyle = .custom
