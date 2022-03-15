@@ -15,10 +15,10 @@ public extension UIColor {
 final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     public static let duration = 0.25
     
-    private let startingFrame: CGRect
+    private weak var rootView: UIView?
     
-    init(startingFrame: CGRect) {
-        self.startingFrame = startingFrame
+    init(rootView: UIView?) {
+        self.rootView = rootView
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -45,6 +45,7 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         context.containerView.insertSubview(bgView, at: 0)
         
         /// Set animation start point.
+        let startingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
         toView.frame = startingFrame
         toView.imageView.frame = CGRect(origin: .zero, size: startingFrame.size)
         
@@ -70,12 +71,12 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
 final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     public static let duration = ImagePresentingAnimator.duration
     
-    private let startingFrame: CGRect
+    private weak var rootView: UIView?
     
     let transitioner: LargeImageTransitioner?
     
-    init(startingFrame: CGRect, transitioner: LargeImageTransitioner?) {
-        self.startingFrame = startingFrame
+    init(rootView: UIView?, transitioner: LargeImageTransitioner?) {
+        self.rootView = rootView
         self.transitioner = transitioner
     }
     
@@ -112,7 +113,7 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
         UIView.animate(
             withDuration: Self.duration,
             animations: { [weak self] in
-                let frame = self?.startingFrame ?? .zero
+                let frame = self?.rootView?.absoluteFrame() ?? .zero
                 fromView.frame = frame
                 fromView.imageView.frame = CGRect(origin: .zero, size: frame.size)
                 bgView.backgroundColor = .clear

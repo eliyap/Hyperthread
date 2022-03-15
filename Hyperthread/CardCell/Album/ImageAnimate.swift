@@ -10,18 +10,18 @@ import SDWebImage
 
 final class LargeImageViewController: UIViewController {
     
-    /// The image's frame in it's original view.
+    /// The image's original view.
     /// Knowing this allows us to apply a `matchingGeometry` style effect.
-    private let startingFrame: CGRect
+    private weak var rootView: UIView?
     
     private let largeImageView: LargeImageView
     
     private var transitioner: LargeImageTransitioner? = nil
     
     @MainActor
-    init(url: String, startingFrame: CGRect) {
+    init(url: String, rootView: UIView) {
         self.largeImageView = .init(url: url)
-        self.startingFrame = startingFrame
+        self.rootView = rootView
         super.init(nibName: nil, bundle: nil)
         
         view = largeImageView
@@ -45,11 +45,11 @@ final class LargeImageViewController: UIViewController {
 
 extension LargeImageViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ImagePresentingAnimator(startingFrame: startingFrame)
+        return ImagePresentingAnimator(rootView: rootView)
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ImageDismissingAnimator(startingFrame: startingFrame, transitioner: transitioner)
+        return ImageDismissingAnimator(rootView: rootView, transitioner: transitioner)
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
