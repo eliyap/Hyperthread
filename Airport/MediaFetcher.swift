@@ -16,6 +16,7 @@ final class MediaFetcher {
     
     private var observers: Set<AnyCancellable> = []
     
+    
     private let fetchLog: FetchLog = .init()
     
     public static let shared: MediaFetcher = .init()
@@ -34,22 +35,30 @@ final class MediaFetcher {
             Task {
                 let batchIDs: [String] = await fetchLog.next(count: StatusesEndpoint.maxCount)
                 guard batchIDs.isNotEmpty else {
-                    #if DEBUG
-                    let ufc = await fetchLog.unfetchedCount()
-                    NetLog.debug("Empty batch, but \(ufc) unfetched", print: true, ufc > 0)
-                    #endif
                     return
                 }
                 
                 let tweets: [RawV1MediaTweet]
                 do {
                     tweets = try await requestMedia(credentials: credentials, ids: batchIDs)
-                    assert(tweets.count == batchIDs.count, "Did not receive all requested media tweets!")
-                    NetLog.debug("Fetched \(tweets.count) media tweets", print: true, true)
-                    try ingest(mediaTweets: tweets)
+                    
+                    /// - Note: deleted tweets fail to return (as expected), requiring us to blocklist them.
+                    let receivedIDs = tweets.map(\.id_str)
+                    let missingIDs = batchIDs.filter({receivedIDs.contains($0) == false})
+                    await fetchLog.blocklist(ids: missingIDs)
+                        
+                    #if DEBUG
+                    NetLog.warning("""
+                        Did not receive all requested media tweets, \(missingIDs.count) missing:
+                        \(missingIDs)
+                        """)
+                    #endif
+                    
+                    NetLog.debug("Fetched \(tweets.count) media tweets, ids \(batchIDs.truncated(5))", print: true, true)
+                    try ingest(mediaTweets: tweets, fetchLog: fetchLog)
                 } catch {
                     NetLog.error("Media fetch failed due to error \(error)")
-                    assert(false)
+                    assert(false, "Media fetch failed due to error \(error)")
                     
                     await fetchLog.blocklist(ids: batchIDs)
                     
@@ -67,10 +76,14 @@ final class MediaFetcher {
     }
 }
 
-/// Goal: Provide the most recent N tweets not already provided.
+/// Structure which provides the most recent `N` tweets not already provided.
 fileprivate actor FetchLog {
     
+    /// In-memory store of tweets which we could not fetch.
+    /// We should avoid querying the API for these IDs again (this app session).
     private var unfetchableIDs: Set<Tweet.ID> = []
+    
+    /// Records the passed tweet IDs as unfetchable in the in-memory store.
     public func blocklist<TweetCollection: Collection>(ids: TweetCollection) -> Void where TweetCollection.Element == Tweet.ID {
         unfetchableIDs.formUnion(ids)
     }
@@ -116,7 +129,7 @@ fileprivate actor FetchLog {
     #endif
 }
 
-fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) throws -> Void {
+fileprivate func ingest(mediaTweets: [RawV1MediaTweet], fetchLog: FetchLog) throws -> Void {
     let realm = makeRealm()
     try realm.writeWithToken { token in
         for mediaTweet in mediaTweets {
@@ -126,9 +139,22 @@ fileprivate func ingest(mediaTweets: [RawV1MediaTweet]) throws -> Void {
                     throw HTRealmError.unexpectedNilFromID(mediaTweet.id_str)
                 }
                 try tweet.addVideo(token: token, from: mediaTweet)
+            } catch MediaIngestError.advertiserMedia {
+                Task {
+                    await fetchLog.blocklist(ids: [mediaTweet.id_str])
+                }
+                continue
             } catch {
-                ModelLog.error("Video could not be added due to error \(error)")
+                ModelLog.error("""
+                    Video could not be added due to error \(error)
+                    - id: \(mediaTweet.id_str)
+                    - data: \(mediaTweet)
+                    """)
                 assert(false)
+                
+                Task {
+                    await fetchLog.blocklist(ids: [mediaTweet.id_str])
+                }
                 continue
             }
         }
@@ -142,4 +168,9 @@ enum MediaIngestError: Error {
     case missingMediaID
     
     case mismatchedMediaID
+    
+    /// Advertiser videos are not provided to APIs.
+    /// Example tweet: https://twitter.com/PA/status/1493239875952418820
+    /// Docs: https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/object-model/extended-entities
+    case advertiserMedia
 }

@@ -8,6 +8,7 @@ Changes
 
 Bug Fixes
 - profile-image appearance is less abrupt
+- minor performance improvements
 
 I apologize for issues still in the application.
 Hyperthread will continue to improve through future updates.
