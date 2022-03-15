@@ -7,10 +7,8 @@
 
 import UIKit
 
-final class AlbumAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    public enum Mode { case presenting, dismissing }
+final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     private let duration = 0.25
-    public var mode: Mode = .presenting
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
@@ -31,12 +29,41 @@ final class AlbumAnimator: NSObject, UIViewControllerAnimatedTransitioning {
                 context.completeTransition(true)
             }
         )
+        
     }
 }
 
-final class LargeImageViewController: UIViewController {
+final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    private let duration = 0.25
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return duration
+    }
     
-    let animator = AlbumAnimator()
+    func animateTransition(using context: UIViewControllerContextTransitioning) {
+        guard let fromView = context.view(forKey: .from) else {
+            assert(false, "Could not obtain to view!")
+            return
+        }
+        context.containerView.addSubview(fromView)
+        print("start")
+        fromView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+        UIView.animate(
+            withDuration: duration,
+            animations: {
+                /// Note: using `.leastNonZeroMagnitude` or `.zero` seems to case some optimization and removes the view instantly.
+                /// 0.001 is large enough that the animation can happen correctly.
+                fromView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+            },
+            completion: { _ in
+                print("end")
+                context.completeTransition(true)
+            }
+        )
+    }
+}
+
+
+final class LargeImageViewController: UIViewController {
     
     @MainActor
     init() {
@@ -57,12 +84,10 @@ final class LargeImageViewController: UIViewController {
 
 extension LargeImageViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.mode = .presenting
-        return animator
+        return ImagePresentingAnimator()
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        animator.mode = .dismissing
-        return animator
+        return ImageDismissingAnimator()
     }
 }
