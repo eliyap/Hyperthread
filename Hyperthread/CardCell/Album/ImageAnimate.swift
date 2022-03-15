@@ -10,6 +10,8 @@ import SDWebImage
 
 final class LargeImageViewController: UIViewController {
     
+    /// The image's frame in it's original view.
+    /// Knowing this allows us to apply a `matchingGeometry` style effect.
     private let startingFrame: CGRect
     
     private let largeImageView: LargeImageView
@@ -36,6 +38,27 @@ final class LargeImageViewController: UIViewController {
     }
 }
 
+extension LargeImageViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return ImagePresentingAnimator(startingFrame: startingFrame)
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return ImageDismissingAnimator(startingFrame: startingFrame, transitioner: transitioner)
+    }
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        guard
+            let animator = animator as? ImageDismissingAnimator,
+            let transitioner = animator.transitioner,
+            transitioner.interactionInProgress
+        else {
+          return nil
+        }
+        return transitioner
+    }
+}
+
 final class LargeImageView: UIView {
     
     public let imageView: UIImageView = .init()
@@ -59,27 +82,6 @@ final class LargeImageView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension LargeImageViewController: UIViewControllerTransitioningDelegate {
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ImagePresentingAnimator(startingFrame: startingFrame)
-    }
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ImageDismissingAnimator(startingFrame: startingFrame, transitioner: transitioner)
-    }
-    
-    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        guard
-            let animator = animator as? ImageDismissingAnimator,
-            let transitioner = animator.transitioner,
-            transitioner.interactionInProgress
-        else {
-          return nil
-        }
-        return transitioner
     }
 }
 
