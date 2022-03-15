@@ -120,7 +120,14 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             },
             completion: { _ in
                 bgView.removeFromSuperview()
-                context.completeTransition(true)
+                if context.transitionWasCancelled {
+                    /// Set background back to opaque.
+                    fromView.backgroundColor = .galleryBackground
+                    
+                    context.completeTransition(false)
+                } else {
+                    context.completeTransition(true)
+                }
             }
         )
     }
