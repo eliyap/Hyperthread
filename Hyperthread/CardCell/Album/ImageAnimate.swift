@@ -98,18 +98,15 @@ final class LargeImageTransitioner: UIPercentDrivenInteractiveTransition {
     private weak var viewController: UIViewController!
 
     init(viewController: UIViewController) {
-        super.init()
         self.viewController = viewController
-        prepareGestureRecognizer(in: viewController.view)
-    }
-    
-    private func prepareGestureRecognizer(in view: UIView) {
-        let gesture = UIScreenEdgePanGestureRecognizer(
+        super.init()
+        
+        /// Create gesture recognizer.
+        let gesture = UIPanGestureRecognizer(
             target: self,
             action: #selector(handleGesture(_:))
         )
-        gesture.edges = .left
-        view.addGestureRecognizer(gesture)
+        viewController.view.addGestureRecognizer(gesture)
     }
     
     @objc func handleGesture(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
