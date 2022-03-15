@@ -146,9 +146,20 @@ final class MediaViewController: UIViewController {
         
         switch mediaModel.mediaType {
         case .photo:
-            break
+            #warning("Code Stub.")
+            /// Code stub for future big-image zoom and pan view.
+            let modal = LargeImageViewController()
+            guard let root = view.window?.rootViewController else {
+                assert(false, "Could not obtain root view controller!")
+                return
+            }
+            root.present(modal, animated: true, completion: {
+                /// Nothing.
+            })
+        
         case .videoPlayer, .gifPlayer:
             break
+        
         case .videoPreview, .gifPreview:
             /// Show video on Twitter website, since we do not have a local copy.
             guard let urlString = mediaModel.picUrlString else {
@@ -175,17 +186,6 @@ final class MediaViewController: UIViewController {
                 }
             }
         }
-        
-        #warning("Code Stub.")
-        /// Code stub for future big-image zoom and pan view.
-        let modal = LargeImageViewController()
-        guard let root = view.window?.rootViewController else {
-            assert(false, "Could not obtain root view controller!")
-            return
-        }
-        root.present(modal, animated: true, completion: {
-            /// Nothing.
-        })
     }
     
     override func viewDidLayoutSubviews() {
