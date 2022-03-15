@@ -40,10 +40,6 @@ final class LargeImageView: UIView {
     init(url: String) {
         super.init(frame: .zero)
         
-        // DEBUG
-        layer.borderColor = UIColor.red.cgColor
-        layer.borderWidth = 2
-        
         addSubview(imageView)
         imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
             /// Nothing.
