@@ -150,7 +150,8 @@ final class MediaViewController: UIViewController {
                 break
             }
             
-            let modal = LargeImageViewController(url: url)
+            let frame = view.absoluteFrame()
+            let modal = LargeImageViewController(url: url, startingFrame: frame)
             guard let root = view.window?.rootViewController else {
                 assert(false, "Could not obtain root view controller!")
                 return

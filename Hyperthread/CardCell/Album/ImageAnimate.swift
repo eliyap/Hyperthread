@@ -9,22 +9,31 @@ import UIKit
 import SDWebImage
 
 final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    private let duration = 0.25
+    public static let duration = 2.5
+    
+    private let startingFrame: CGRect
+    
+    init(startingFrame: CGRect) {
+        self.startingFrame = startingFrame
+    }
+    
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return duration
+        return Self.duration
     }
     
     func animateTransition(using context: UIViewControllerContextTransitioning) {
         guard let toView = context.view(forKey: .to) else {
-            assert(false, "Could not obtain to view!")
+            assert(false, "Could not obtain originating views!")
+            context.completeTransition(false)
             return
         }
         context.containerView.addSubview(toView)
-        toView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+        
+        toView.frame = startingFrame
         UIView.animate(
-            withDuration: duration,
+            withDuration: Self.duration,
             animations: {
-                toView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                toView.frame = context.containerView.frame
             },
             completion: { _ in
                 context.completeTransition(true)
@@ -36,6 +45,13 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
 
 final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     private let duration = 0.25
+    
+    private let startingFrame: CGRect
+    
+    init(startingFrame: CGRect) {
+        self.startingFrame = startingFrame
+    }
+    
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
@@ -46,13 +62,12 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             return
         }
         context.containerView.addSubview(fromView)
-        fromView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+        fromView.frame = context.containerView.frame
         UIView.animate(
             withDuration: duration,
-            animations: {
-                /// Note: using `.leastNonZeroMagnitude` or `.zero` seems to case some optimization and removes the view instantly.
-                /// 0.001 is large enough that the animation can happen correctly.
-                fromView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+            animations: { [weak self] in
+                let frame = self?.startingFrame ?? .zero
+                fromView.frame = frame
             },
             completion: { _ in
                 context.completeTransition(true)
@@ -66,21 +81,26 @@ final class LargeImageViewController: UIViewController {
     
     private var imageView: UIImageView = .init()
     
+    private let startingFrame: CGRect
+    
     @MainActor
-    init(url: String) {
+    init(url: String, startingFrame: CGRect) {
+        self.startingFrame = startingFrame
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
         
         view.backgroundColor = .systemRed
-        view.addSubview(imageView)
-        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-            /// Nothing.
-        })
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-        ])
+//        view.addSubview(imageView)
+//        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+//            /// Nothing.
+//        })
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        imageView.contentMode = .scaleAspectFit
+//
+//        #warning("TODO: fix layout constraints here.")
+//        NSLayoutConstraint.activate([
+//            imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+//        ])
         
         /// Request a custom animation.
         modalPresentationStyle = .custom
@@ -94,10 +114,10 @@ final class LargeImageViewController: UIViewController {
 
 extension LargeImageViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ImagePresentingAnimator()
+        return ImagePresentingAnimator(startingFrame: startingFrame)
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ImageDismissingAnimator()
+        return ImageDismissingAnimator(startingFrame: startingFrame)
     }
 }

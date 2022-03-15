@@ -72,6 +72,7 @@
 		22760A4B274AE63000F28F0A /* SummaryLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4A274AE63000F28F0A /* SummaryLine.swift */; };
 		22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */; };
 		22760A4F274B136200F28F0A /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4E274B136200F28F0A /* Media.swift */; };
+		22817B9727E11D6800D34C71 /* AbsoluteFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9627E11D6800D34C71 /* AbsoluteFrame.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -220,6 +221,7 @@
 		22760A4A274AE63000F28F0A /* SummaryLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryLine.swift; sourceTree = "<group>"; };
 		22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacedSeparator.swift; sourceTree = "<group>"; };
 		22760A4E274B136200F28F0A /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		22817B9627E11D6800D34C71 /* AbsoluteFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbsoluteFrame.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -504,6 +506,7 @@
 			children = (
 				22A760CE27A8C8970006E9BC /* UIEdgeInsets.+.swift */,
 				223BBF81273847C300375530 /* Adopt.swift */,
+				22817B9627E11D6800D34C71 /* AbsoluteFrame.swift */,
 				221A296F275D533D00C283FE /* ControlledCell.swift */,
 				221A2993275D943E00C283FE /* RemoveDuplicates.swift */,
 				22BE9C0C27606A280080E475 /* Supertall.swift */,
@@ -918,6 +921,7 @@
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
 				22193DAF27840477005A7708 /* URLScheme.swift in Sources */,
 				221A2994275D943E00C283FE /* RemoveDuplicates.swift in Sources */,
+				22817B9727E11D6800D34C71 /* AbsoluteFrame.swift in Sources */,
 				22FBAAD827B07E0200FEEB71 /* SymbolCircleView.swift in Sources */,
 				22144E1D27B9B21F002AAFB6 /* UIImage.fill.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
