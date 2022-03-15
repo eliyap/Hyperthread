@@ -7,6 +7,11 @@
 
 import UIKit
 
+public extension UIColor {
+    /// Similar to iOS's Photos App, use a "dark room" style black background for image galleries.
+    static let galleryBackground: UIColor = .black
+}
+
 final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     public static let duration = 2.5
     
@@ -33,7 +38,7 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         }
         context.containerView.addSubview(toView)
         
-        /// Add initially transparent view to create "fade to black" effect.
+        /// Add initially transparent view to create "fade down" effect.
         let bgView = UIView()
         bgView.backgroundColor = .clear
         bgView.frame = context.containerView.frame
@@ -49,11 +54,11 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             animations: {
                 toView.frame = context.containerView.frame
                 toView.imageView.frame = CGRect(origin: .zero, size: context.containerView.frame.size)
-                bgView.backgroundColor = .black
+                bgView.backgroundColor = .galleryBackground
             },
             completion: { _ in
                 /// Let view take over the cover.
-                toView.backgroundColor = .black
+                toView.backgroundColor = .galleryBackground
                 
                 bgView.removeFromSuperview()
                 context.completeTransition(true)
@@ -87,9 +92,9 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
         }
         context.containerView.addSubview(fromView)
         
-        /// Add initially opaque view to create "fade from black" effect.
+        /// Add initially opaque view to create "fade up" effect.
         let bgView = UIView()
-        bgView.backgroundColor = .black
+        bgView.backgroundColor = .galleryBackground
         bgView.frame = context.containerView.frame
         context.containerView.insertSubview(bgView, at: 0)
         
