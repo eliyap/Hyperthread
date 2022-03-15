@@ -27,13 +27,20 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             context.completeTransition(false)
             return
         }
+        guard let toView = toView as? LargeImageView else {
+            assert(false, "Unexpected view type!")
+            context.completeTransition(false)
+            return
+        }
         context.containerView.addSubview(toView)
         
         toView.frame = startingFrame
+//        toView.imageView.frame = startingFrame
         UIView.animate(
             withDuration: Self.duration,
             animations: {
                 toView.frame = context.containerView.frame
+//                toView.imageView.frame = context.containerView.frame
             },
             completion: { _ in
                 context.completeTransition(true)
@@ -79,18 +86,38 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
 
 final class LargeImageViewController: UIViewController {
     
-    private var imageView: UIImageView = .init()
-    
     private let startingFrame: CGRect
+    
+    private let largeImageView: LargeImageView
     
     @MainActor
     init(url: String, startingFrame: CGRect) {
+        self.largeImageView = .init(url: url)
         self.startingFrame = startingFrame
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .overFullScreen
         
-        view.backgroundColor = .systemRed
-//        view.addSubview(imageView)
+        view = largeImageView
+        
+        
+        /// Request a custom animation.
+        modalPresentationStyle = .custom
+        transitioningDelegate = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class LargeImageView: UIView {
+    
+    public let imageView: UIImageView = .init()
+    
+    init(url: String) {
+        super.init(frame: .zero)
+        
+        backgroundColor = .systemRed
+//        addSubview(imageView)
 //        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
 //            /// Nothing.
 //        })
@@ -99,12 +126,8 @@ final class LargeImageViewController: UIViewController {
 //
 //        #warning("TODO: fix layout constraints here.")
 //        NSLayoutConstraint.activate([
-//            imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+//            imageView.widthAnchor.constraint(equalTo: widthAnchor),
 //        ])
-        
-        /// Request a custom animation.
-        modalPresentationStyle = .custom
-        transitioningDelegate = self
     }
     
     required init?(coder: NSCoder) {
