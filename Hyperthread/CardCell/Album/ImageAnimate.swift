@@ -33,14 +33,13 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             return
         }
         context.containerView.addSubview(toView)
-        
         toView.frame = startingFrame
-//        toView.imageView.frame = startingFrame
+        toView.imageView.frame = CGRect(origin: .zero, size: startingFrame.size)
         UIView.animate(
             withDuration: Self.duration,
             animations: {
                 toView.frame = context.containerView.frame
-//                toView.imageView.frame = context.containerView.frame
+                toView.imageView.frame = CGRect(origin: .zero, size: context.containerView.frame.size)
             },
             completion: { _ in
                 context.completeTransition(true)
@@ -68,13 +67,20 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             assert(false, "Could not obtain to view!")
             return
         }
+        guard let fromView = fromView as? LargeImageView else {
+            assert(false, "Unexpected view type!")
+            context.completeTransition(false)
+            return
+        }
         context.containerView.addSubview(fromView)
         fromView.frame = context.containerView.frame
+        fromView.imageView.frame = CGRect(origin: .zero, size: context.containerView.frame.size)
         UIView.animate(
             withDuration: duration,
             animations: { [weak self] in
                 let frame = self?.startingFrame ?? .zero
                 fromView.frame = frame
+                fromView.imageView.frame = CGRect(origin: .zero, size: frame.size)
             },
             completion: { _ in
                 context.completeTransition(true)
@@ -117,17 +123,18 @@ final class LargeImageView: UIView {
         super.init(frame: .zero)
         
         backgroundColor = .systemRed
-//        addSubview(imageView)
-//        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-//            /// Nothing.
-//        })
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        imageView.contentMode = .scaleAspectFit
-//
-//        #warning("TODO: fix layout constraints here.")
-//        NSLayoutConstraint.activate([
-//            imageView.widthAnchor.constraint(equalTo: widthAnchor),
-//        ])
+        addSubview(imageView)
+        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+            /// Nothing.
+        })
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+
+        #warning("TODO: fix layout constraints here.")
+        NSLayoutConstraint.activate([
+            imageView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
+            imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
+        ])
     }
     
     required init?(coder: NSCoder) {
