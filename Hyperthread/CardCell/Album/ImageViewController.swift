@@ -178,16 +178,14 @@ final class MediaViewController: UIViewController {
         
         #warning("Code Stub.")
         /// Code stub for future big-image zoom and pan view.
-        /*
         let modal = LargeImageViewController()
         guard let root = view.window?.rootViewController else {
             assert(false, "Could not obtain root view controller!")
             return
         }
-        root.present(modal, animated: true) {
-            print("Done!")
-        }
-         */
+        root.present(modal, animated: true, completion: {
+            /// Nothing.
+        })
     }
     
     override func viewDidLayoutSubviews() {
