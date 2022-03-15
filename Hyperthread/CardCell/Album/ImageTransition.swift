@@ -13,7 +13,7 @@ public extension UIColor {
 }
 
 final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    public static let duration = 2.5
+    public static let duration = 0.25
     
     private let startingFrame: CGRect
     
@@ -68,7 +68,7 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
 }
 
 final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    private let duration = 0.25
+    public static let duration = ImagePresentingAnimator.duration
     
     private let startingFrame: CGRect
     
@@ -77,7 +77,7 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return duration
+        return Self.duration
     }
     
     func animateTransition(using context: UIViewControllerContextTransitioning) {
@@ -107,7 +107,7 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
         
         /// Send to animation end point.
         UIView.animate(
-            withDuration: duration,
+            withDuration: Self.duration,
             animations: { [weak self] in
                 let frame = self?.startingFrame ?? .zero
                 fromView.frame = frame
