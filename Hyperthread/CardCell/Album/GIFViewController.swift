@@ -38,9 +38,9 @@ final class GIFView: UIView {
             /// Normal for `self` to become `nil` when scrolling.
             guard let self = self else { return }
             
+            /// Normal for this to be `nil` when scrolling.
             guard let item = self.queuePlayer.currentItem else {
                 Logger.general.error("Could not obtain player item!")
-                assert(false)
                 return
             }
             
