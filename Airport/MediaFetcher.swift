@@ -16,6 +16,7 @@ final class MediaFetcher {
     
     private var observers: Set<AnyCancellable> = []
     
+    
     private let fetchLog: FetchLog = .init()
     
     public static let shared: MediaFetcher = .init()
@@ -40,22 +41,24 @@ final class MediaFetcher {
                 let tweets: [RawV1MediaTweet]
                 do {
                     tweets = try await requestMedia(credentials: credentials, ids: batchIDs)
+                    
+                    /// - Note: deleted tweets fail to return (as expected), requiring us to blocklist them.
+                    let receivedIDs = tweets.map(\.id_str)
+                    let missingIDs = batchIDs.filter({receivedIDs.contains($0) == false})
+                    await fetchLog.blocklist(ids: missingIDs)
+                        
                     #if DEBUG
-                    /// - Note: deleted tweets fail to return, as expected, this will happen.
-                    if tweets.count != batchIDs.count {
-                        let receivedIDs = tweets.map(\.id_str)
-                        NetLog.warning("""
-                            Did not receive all requested media tweets, \(batchIDs.count - tweets.count) missing:
-                            \(batchIDs.filter({receivedIDs.contains($0) == false}))
-                            """)
-                    }
+                    NetLog.warning("""
+                        Did not receive all requested media tweets, \(missingIDs.count) missing:
+                        \(missingIDs)
+                        """)
                     #endif
                     
                     NetLog.debug("Fetched \(tweets.count) media tweets, ids \(batchIDs.truncated(5))", print: true, true)
                     try ingest(mediaTweets: tweets, fetchLog: fetchLog)
                 } catch {
                     NetLog.error("Media fetch failed due to error \(error)")
-                    assert(false)
+                    assert(false, "Media fetch failed due to error \(error)")
                     
                     await fetchLog.blocklist(ids: batchIDs)
                     
@@ -73,10 +76,14 @@ final class MediaFetcher {
     }
 }
 
-/// Goal: Provide the most recent N tweets not already provided.
+/// Structure which provides the most recent `N` tweets not already provided.
 fileprivate actor FetchLog {
     
+    /// In-memory store of tweets which we could not fetch.
+    /// We should avoid querying the API for these IDs again (this app session).
     private var unfetchableIDs: Set<Tweet.ID> = []
+    
+    /// Records the passed tweet IDs as unfetchable in the in-memory store.
     public func blocklist<TweetCollection: Collection>(ids: TweetCollection) -> Void where TweetCollection.Element == Tweet.ID {
         unfetchableIDs.formUnion(ids)
     }
