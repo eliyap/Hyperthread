@@ -33,19 +33,30 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             return
         }
         context.containerView.addSubview(toView)
+        
+        /// Add initially transparent view to create "fade to black" effect.
+        let bgView = UIView()
+        bgView.backgroundColor = .clear
+        bgView.frame = context.containerView.frame
+        context.containerView.insertSubview(bgView, at: 0)
+        
+        /// Set animation start point.
         toView.frame = startingFrame
         toView.imageView.frame = CGRect(origin: .zero, size: startingFrame.size)
+        
+        /// Send to animation end point.
         UIView.animate(
             withDuration: Self.duration,
             animations: {
                 toView.frame = context.containerView.frame
                 toView.imageView.frame = CGRect(origin: .zero, size: context.containerView.frame.size)
+                bgView.backgroundColor = .black
             },
             completion: { _ in
+                bgView.removeFromSuperview()
                 context.completeTransition(true)
             }
         )
-        
     }
 }
 
@@ -122,7 +133,10 @@ final class LargeImageView: UIView {
     init(url: String) {
         super.init(frame: .zero)
         
-        backgroundColor = .systemRed
+        // DEBUG
+        layer.borderColor = UIColor.red.cgColor
+        layer.borderWidth = 2
+        
         addSubview(imageView)
         imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
             /// Nothing.
