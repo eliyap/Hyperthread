@@ -40,7 +40,17 @@ final class MediaFetcher {
                 let tweets: [RawV1MediaTweet]
                 do {
                     tweets = try await requestMedia(credentials: credentials, ids: batchIDs)
-                    assert(tweets.count == batchIDs.count, "Did not receive all requested media tweets!")
+                    #if DEBUG
+                    /// - Note: deleted tweets fail to return, as expected, this will happen.
+                    if tweets.count != batchIDs.count {
+                        let receivedIDs = tweets.map(\.id_str)
+                        NetLog.warning("""
+                            Did not receive all requested media tweets, \(batchIDs.count - tweets.count) missing:
+                            \(batchIDs.filter({receivedIDs.contains($0) == false}))
+                            """)
+                    }
+                    #endif
+                    
                     NetLog.debug("Fetched \(tweets.count) media tweets, ids \(batchIDs.truncated(5))", print: true, true)
                     try ingest(mediaTweets: tweets, fetchLog: fetchLog)
                 } catch {
