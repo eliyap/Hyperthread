@@ -72,8 +72,11 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
     
     private let startingFrame: CGRect
     
-    init(startingFrame: CGRect) {
+    let transitioner: LargeImageTransitioner?
+    
+    init(startingFrame: CGRect, transitioner: LargeImageTransitioner?) {
         self.startingFrame = startingFrame
+        self.transitioner = transitioner
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
