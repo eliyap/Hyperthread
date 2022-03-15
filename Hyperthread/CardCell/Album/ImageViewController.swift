@@ -214,14 +214,17 @@ extension MediaViewController {
         if let existing = self.imageView { return existing }
         
         let imageView: UIImageView = .init()
-        view.addSubview(imageView)
+        
+        /// Insert at the back, behind `symbolView`.
+        view.insertSubview(imageView, at: 0)
+        
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
+         
         /// Request that image be "as tall as possible".
         let superTall = imageView.heightAnchor.constraint(equalToConstant: .superTall)
         superTall.isActive = true
@@ -239,7 +242,10 @@ extension MediaViewController {
         if let existing = self.videoViewController { return existing }
         
         let videoViewController: AVPlayerViewController = .init()
-        adopt(videoViewController)
+        
+        /// Insert at the back, behind `symbolView`.
+        adopt(videoViewController, subviewIndex: 0)
+        
         NSLayoutConstraint.activate([
             videoViewController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             videoViewController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -258,7 +264,10 @@ extension MediaViewController {
         if let existing = self.gifView { return existing }
         
         let gifView: GIFView = .init()
-        view.addSubview(gifView)
+        
+        /// Insert at the back, behind `symbolView`.
+        view.insertSubview(gifView, at: 0)
+        
         NSLayoutConstraint.activate([
             gifView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gifView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
