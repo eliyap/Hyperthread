@@ -45,7 +45,6 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             return
         }
         context.containerView.addSubview(fromView)
-        print("start")
         fromView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
         UIView.animate(
             withDuration: duration,
@@ -55,7 +54,6 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
                 fromView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
             },
             completion: { _ in
-                print("end")
                 context.completeTransition(true)
             }
         )
