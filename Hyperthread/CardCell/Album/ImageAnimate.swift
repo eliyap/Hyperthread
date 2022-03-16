@@ -68,10 +68,19 @@ final class LargeImageView: UIView {
     
     public let imageView: UIImageView = .init()
     
+    public let matchView: UIView = .init()
+
     init(url: String) {
         super.init(frame: .zero)
-        
-        addSubview(imageView)
+
+        matchView.layer.borderColor = UIColor.green.cgColor
+        matchView.layer.borderWidth = 2
+
+        addSubview(matchView)
+        matchView.translatesAutoresizingMaskIntoConstraints = false
+        matchView.addSubview(imageView)
+
+        // addSubview(imageView)
         imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
             /// Nothing.
         })
@@ -80,9 +89,33 @@ final class LargeImageView: UIView {
 
         #warning("TODO: fix layout constraints here.")
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
-            imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
+            imageView.widthAnchor.constraint(lessThanOrEqualTo: matchView.widthAnchor),
+            imageView.heightAnchor.constraint(lessThanOrEqualTo: matchView.heightAnchor),
         ])
+    }
+    
+    /// Constraints active "at rest", i.e. not animating.
+    var matchWidthConstraint: NSLayoutConstraint? = nil
+    var matchHeightConstraint: NSLayoutConstraint? = nil
+    var matchXConstraint: NSLayoutConstraint? = nil
+    var matchYConstraint: NSLayoutConstraint? = nil
+    public func activateRestingConstraints() -> Void { 
+        matchWidthConstraint = matchView.widthAnchor.constraint(equalTo: widthAnchor)
+        matchHeightConstraint = matchView.heightAnchor.constraint(equalTo: heightAnchor)
+        matchXConstraint = matchView.centerXAnchor.constraint(equalTo: centerXAnchor)
+        matchYConstraint = matchView.centerYAnchor.constraint(equalTo: centerYAnchor)
+        
+        matchWidthConstraint?.isActive = true
+        matchHeightConstraint?.isActive = true
+        matchXConstraint?.isActive = true
+        matchYConstraint?.isActive = true
+    }
+
+    public func deactivateRestingConstraints() -> Void {
+        matchWidthConstraint?.isActive = false
+        matchHeightConstraint?.isActive = false
+        matchXConstraint?.isActive = false
+        matchYConstraint?.isActive = false
     }
     
     required init?(coder: NSCoder) {
