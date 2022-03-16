@@ -38,9 +38,10 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         }
         context.containerView.addSubview(toView)
         
+        toView.frame = context.containerView.frame
+        
         /// Set animation start point.
         let startingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
-        toView.frame = startingFrame
         toView.imageView.frame = CGRect(origin: .zero, size: startingFrame.size)
         toView.backgroundColor = .clear
         
@@ -48,7 +49,6 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         UIView.animate(
             withDuration: Self.duration,
             animations: {
-                toView.frame = context.containerView.frame
                 toView.imageView.frame = CGRect(origin: .zero, size: context.containerView.frame.size)
                 toView.backgroundColor = .galleryBackground
             },
@@ -87,9 +87,10 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
         }
         context.containerView.addSubview(fromView)
                 
+        fromView.frame = context.containerView.frame
+
         /// Set animation start point.
         fromView.backgroundColor = .galleryBackground
-        fromView.frame = context.containerView.frame
         fromView.imageView.frame = CGRect(origin: .zero, size: context.containerView.frame.size)
         
         /// Send to animation end point.
@@ -97,8 +98,7 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             withDuration: Self.duration,
             animations: { [weak self] in
                 let frame = self?.rootView?.absoluteFrame() ?? .zero
-                fromView.frame = frame
-                fromView.imageView.frame = CGRect(origin: .zero, size: frame.size)
+                fromView.imageView.frame = CGRect(origin: CGPoint(x: 1, y: 1), size: context.containerView.frame.size)
                 fromView.backgroundColor = .clear
             },
             completion: { _ in
