@@ -42,6 +42,7 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         let startingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
         toView.frame = startingFrame
         toView.imageView.frame = CGRect(origin: .zero, size: startingFrame.size)
+        toView.backgroundColor = .clear
         
         /// Send to animation end point.
         UIView.animate(
