@@ -73,14 +73,10 @@ final class LargeImageView: UIView {
     init(url: String) {
         super.init(frame: .zero)
 
-        matchView.layer.borderColor = UIColor.green.cgColor
-        matchView.layer.borderWidth = 2
-
         addSubview(matchView)
         matchView.translatesAutoresizingMaskIntoConstraints = false
         matchView.addSubview(imageView)
 
-        // addSubview(imageView)
         imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
             /// Nothing.
         })
