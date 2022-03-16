@@ -94,27 +94,30 @@ final class LargeImageView: UIView {
     }
     
     /// Constraints active "at rest", i.e. not animating.
-    var matchWidthConstraint: NSLayoutConstraint? = nil
-    var matchHeightConstraint: NSLayoutConstraint? = nil
-    var matchXConstraint: NSLayoutConstraint? = nil
-    var matchYConstraint: NSLayoutConstraint? = nil
-    public func activateRestingConstraints() -> Void { 
-        matchWidthConstraint = matchView.widthAnchor.constraint(equalTo: widthAnchor)
-        matchHeightConstraint = matchView.heightAnchor.constraint(equalTo: heightAnchor)
-        matchXConstraint = matchView.centerXAnchor.constraint(equalTo: centerXAnchor)
-        matchYConstraint = matchView.centerYAnchor.constraint(equalTo: centerYAnchor)
+    private var restingConstraints: [NSLayoutConstraint] = []
+    public func activateRestingConstraints() -> Void {
+        let lowPriorityConstraints = [
+            matchView.widthAnchor.constraint(equalToConstant: .superTall),
+            matchView.heightAnchor.constraint(equalToConstant: .superTall),
+        ]
+        lowPriorityConstraints.forEach { $0.priority = .defaultLow }
         
-        matchWidthConstraint?.isActive = true
-        matchHeightConstraint?.isActive = true
-        matchXConstraint?.isActive = true
-        matchYConstraint?.isActive = true
+        restingConstraints = lowPriorityConstraints + [
+            /// `≤` avoids exceeding width, but allows view to be narrower to accomodate notch.
+            matchView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
+            matchView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
+            
+            matchView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            matchView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            matchView.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            matchView.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+        ] 
+        
+        restingConstraints.forEach { $0.isActive = true }
     }
 
     public func deactivateRestingConstraints() -> Void {
-        matchWidthConstraint?.isActive = false
-        matchHeightConstraint?.isActive = false
-        matchXConstraint?.isActive = false
-        matchYConstraint?.isActive = false
+        restingConstraints.forEach { $0.isActive = false }
     }
     
     required init?(coder: NSCoder) {
