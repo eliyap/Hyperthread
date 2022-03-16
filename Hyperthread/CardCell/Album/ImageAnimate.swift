@@ -88,8 +88,10 @@ final class LargeImageView: UIView {
         imageView.contentMode = .scaleAspectFit
 
         NSLayoutConstraint.activate([
+            /// Use `≤`, not `=`, to keep small images at their intrinsic size.
             imageView.widthAnchor.constraint(lessThanOrEqualTo: matchView.widthAnchor),
             imageView.heightAnchor.constraint(lessThanOrEqualTo: matchView.heightAnchor),
+            /// Small images default to top leading corner if not centered.
             imageView.centerXAnchor.constraint(equalTo: matchView.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: matchView.centerYAnchor),
         ])
