@@ -85,17 +85,9 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             return
         }
         context.containerView.addSubview(fromView)
-        
-        /// Add initially opaque view to create "fade up" effect.
-        let bgView = UIView()
-        bgView.backgroundColor = .galleryBackground
-        bgView.frame = context.containerView.frame
-        context.containerView.insertSubview(bgView, at: 0)
-        
-        /// Remove modal background color, which would interfere.
-        fromView.backgroundColor = .clear
-        
+                
         /// Set animation start point.
+        fromView.backgroundColor = .galleryBackground
         fromView.frame = context.containerView.frame
         fromView.imageView.frame = CGRect(origin: .zero, size: context.containerView.frame.size)
         
@@ -106,10 +98,9 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
                 let frame = self?.rootView?.absoluteFrame() ?? .zero
                 fromView.frame = frame
                 fromView.imageView.frame = CGRect(origin: .zero, size: frame.size)
-                bgView.backgroundColor = .clear
+                fromView.backgroundColor = .clear
             },
             completion: { _ in
-                bgView.removeFromSuperview()
                 if context.transitionWasCancelled {
                     /// Set background back to opaque.
                     fromView.backgroundColor = .galleryBackground
