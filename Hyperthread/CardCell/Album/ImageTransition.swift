@@ -38,21 +38,26 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         }
         context.containerView.addSubview(largeImageView)
         
+        /// Deactivate before temporary constraints are activated, or we face a conflict.
         largeImageView.frame = context.containerView.frame
+        largeImageView.deactivateRestingConstraints()
+        
+        /// - Note: do not use `largeImageView` frame as it is periodically incorrect since layout is in flux.
+        let startingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
+        let endingFrame: CGRect = context.containerView.safeAreaLayoutGuide.layoutFrame
         
         /// Set animation start point.
-        let startingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
         largeImageView.backgroundColor = .clear
-        let widthConstraint = largeImageView.matchView.widthAnchor.constraint(equalToConstant: startingFrame.width)
-        let heightConstraint = largeImageView.matchView.heightAnchor.constraint(equalToConstant: startingFrame.height)
-        let xConstraint = largeImageView.matchView.leadingAnchor.constraint(equalTo: largeImageView.leadingAnchor, constant: startingFrame.origin.x)
-        let yConstraint = largeImageView.matchView.topAnchor.constraint(equalTo: largeImageView.topAnchor, constant: startingFrame.origin.y)
+        let widthConstraint = largeImageView.frameView.widthAnchor.constraint(equalToConstant: startingFrame.width)
+        let heightConstraint = largeImageView.frameView.heightAnchor.constraint(equalToConstant: startingFrame.height)
+        let xConstraint = largeImageView.frameView.leadingAnchor.constraint(equalTo: largeImageView.leadingAnchor, constant: startingFrame.origin.x)
+        let yConstraint = largeImageView.frameView.topAnchor.constraint(equalTo: largeImageView.topAnchor, constant: startingFrame.origin.y)
         NSLayoutConstraint.activate([widthConstraint, heightConstraint, xConstraint, yConstraint])
         
         /// - Note: important that we lay out the superview, so that the offset constraints affect layout!
         largeImageView.layoutIfNeeded()
 
-        largeImageView.matchView.setNeedsUpdateConstraints()
+        largeImageView.frameView.setNeedsUpdateConstraints()
 
         /// Send to animation end point.
         /// Constraint animation: https://stackoverflow.com/questions/12926566/are-nslayoutconstraints-animatable
@@ -61,18 +66,14 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             animations: {
                 largeImageView.backgroundColor = .galleryBackground
 
-                widthConstraint.constant = context.containerView.frame.width
-                heightConstraint.constant = context.containerView.frame.height
-                xConstraint.constant = 0
-                yConstraint.constant = 0
+                widthConstraint.constant = endingFrame.width
+                heightConstraint.constant = endingFrame.height
+                xConstraint.constant = endingFrame.origin.x
+                yConstraint.constant = endingFrame.origin.y
                 largeImageView.layoutIfNeeded()
             },
             completion: { _ in
-                widthConstraint.isActive = false
-                heightConstraint.isActive = false
-                xConstraint.isActive = false
-                yConstraint.isActive = false
-
+                NSLayoutConstraint.deactivate([widthConstraint, heightConstraint, xConstraint, yConstraint])
                 largeImageView.activateRestingConstraints()
 
                 context.completeTransition(true)
@@ -107,54 +108,53 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             context.completeTransition(false)
             return
         }
+        
+        let startingFrame: CGRect = context.containerView.safeAreaLayoutGuide.layoutFrame
+        let endingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
+        
+        /// Deactivate before temporary constraints are activated, or we face a conflict.
         context.containerView.addSubview(largeImageView)
-                
-        largeImageView.frame = context.containerView.frame
         largeImageView.deactivateRestingConstraints()
-
+        
+        largeImageView.frame = context.containerView.frame
+        
         /// Set animation start point.
         largeImageView.backgroundColor = .galleryBackground
-        largeImageView.imageView.frame = CGRect(origin: .zero, size: context.containerView.frame.size)
-        let widthConstraint = largeImageView.matchView.widthAnchor.constraint(equalToConstant: context.containerView.frame.width)
-        let heightConstraint = largeImageView.matchView.heightAnchor.constraint(equalToConstant: context.containerView.frame.height)
-        let xConstraint = largeImageView.matchView.leadingAnchor.constraint(equalTo: largeImageView.leadingAnchor, constant: context.containerView.frame.origin.x)
-        let yConstraint = largeImageView.matchView.topAnchor.constraint(equalTo: largeImageView.topAnchor, constant: context.containerView.frame.origin.y)
+        let widthConstraint = largeImageView.frameView.widthAnchor.constraint(equalToConstant: startingFrame.width)
+        let heightConstraint = largeImageView.frameView.heightAnchor.constraint(equalToConstant: startingFrame.height)
+        let xConstraint = largeImageView.frameView.leadingAnchor.constraint(equalTo: largeImageView.leadingAnchor, constant: startingFrame.origin.x)
+        let yConstraint = largeImageView.frameView.topAnchor.constraint(equalTo: largeImageView.topAnchor, constant: startingFrame.origin.y)
         NSLayoutConstraint.activate([widthConstraint, heightConstraint, xConstraint, yConstraint])
         
         /// - Note: important that we lay out the superview, so that the offset constraints affect layout!
         largeImageView.layoutIfNeeded()
 
-        largeImageView.matchView.setNeedsUpdateConstraints()
+        largeImageView.frameView.setNeedsUpdateConstraints()
 
         /// Send to animation end point.
         /// Constraint animation: https://stackoverflow.com/questions/12926566/are-nslayoutconstraints-animatable
         UIView.animate(
             withDuration: Self.duration,
-            animations: { [weak self] in
-                let frame = self?.rootView?.absoluteFrame() ?? .zero
-                largeImageView.imageView.frame = CGRect(origin: CGPoint(x: 1, y: 1), size: context.containerView.frame.size)
+            animations: {
                 largeImageView.backgroundColor = .clear
 
-                widthConstraint.constant = frame.width
-                heightConstraint.constant = frame.height
-                xConstraint.constant = frame.origin.x
-                yConstraint.constant = frame.origin.y
+                widthConstraint.constant = endingFrame.width
+                heightConstraint.constant = endingFrame.height
+                xConstraint.constant = endingFrame.origin.x
+                yConstraint.constant = endingFrame.origin.y
                 largeImageView.layoutIfNeeded()
             },
             completion: { _ in
                 /// Remove animation constraints.
-                widthConstraint.isActive = false
-                heightConstraint.isActive = false
-                xConstraint.isActive = false
-                yConstraint.isActive = false
+                NSLayoutConstraint.deactivate([widthConstraint, heightConstraint, xConstraint, yConstraint])
                 
                 if context.transitionWasCancelled {
                     /// Set background back to opaque.
                     largeImageView.backgroundColor = .galleryBackground
-
-                    /// Reset constraints.
-                    largeImageView.activateRestingConstraints()
                     
+                    /// Reactivate constraints.
+                    largeImageView.activateRestingConstraints()
+
                     context.completeTransition(false)
                 } else {
                     context.completeTransition(true)

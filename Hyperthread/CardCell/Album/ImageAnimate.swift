@@ -68,14 +68,21 @@ final class LargeImageView: UIView {
     
     public let imageView: UIImageView = .init()
     
-    public let matchView: UIView = .init()
+    public let frameView: UIView = .init()
 
+    /// Exists to give us the location of the safeAreaLayoutGuide.
+    private let guideView: UIView = .init()
+    
     init(url: String) {
         super.init(frame: .zero)
 
-        addSubview(matchView)
-        matchView.translatesAutoresizingMaskIntoConstraints = false
-        matchView.addSubview(imageView)
+        // DEBUG
+        frameView.layer.borderColor = UIColor.red.cgColor
+        frameView.layer.borderWidth = 2
+        
+        addSubview(frameView)
+        frameView.translatesAutoresizingMaskIntoConstraints = false
+        frameView.addSubview(imageView)
 
         imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
             /// Nothing.
@@ -85,39 +92,31 @@ final class LargeImageView: UIView {
 
         NSLayoutConstraint.activate([
             /// Use `≤`, not `=`, to keep small images at their intrinsic size.
-            imageView.widthAnchor.constraint(lessThanOrEqualTo: matchView.widthAnchor),
-            imageView.heightAnchor.constraint(lessThanOrEqualTo: matchView.heightAnchor),
+            imageView.widthAnchor.constraint(lessThanOrEqualTo: frameView.widthAnchor),
+            imageView.heightAnchor.constraint(lessThanOrEqualTo: frameView.heightAnchor),
             /// Small images default to top leading corner if not centered.
-            imageView.centerXAnchor.constraint(equalTo: matchView.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: matchView.centerYAnchor),
+            imageView.centerXAnchor.constraint(equalTo: frameView.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: frameView.centerYAnchor),
         ])
     }
     
-    /// Constraints active "at rest", i.e. not animating.
+    /// Constraints active when the view is "at rest", i.e. not animating.
     private var restingConstraints: [NSLayoutConstraint] = []
     public func activateRestingConstraints() -> Void {
-        let lowPriorityConstraints = [
-            matchView.widthAnchor.constraint(equalToConstant: .superTall),
-            matchView.heightAnchor.constraint(equalToConstant: .superTall),
+        restingConstraints = [
+            /// View may exit safe area during animation due to table view offset.
+            /// Hence these constraints are temporarily disabled.
+            frameView.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            frameView.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            frameView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            frameView.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
         ]
-        lowPriorityConstraints.forEach { $0.priority = .defaultLow }
-        
-        restingConstraints = lowPriorityConstraints + [
-            /// `≤` avoids exceeding width, but allows view to be narrower to accomodate notch.
-            matchView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
-            matchView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
-            
-            matchView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            matchView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            matchView.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            matchView.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-        ] 
-        
-        restingConstraints.forEach { $0.isActive = true }
+        NSLayoutConstraint.activate(restingConstraints)
     }
 
     public func deactivateRestingConstraints() -> Void {
-        restingConstraints.forEach { $0.isActive = false }
+        NSLayoutConstraint.deactivate(restingConstraints)
+        restingConstraints.removeAll()
     }
     
     required init?(coder: NSCoder) {
@@ -146,7 +145,8 @@ final class LargeImageTransitioner: UIPercentDrivenInteractiveTransition {
     
     @objc private func handleGesture(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
         let translation = gestureRecognizer.translation(in: gestureRecognizer.view!.superview!)
-        var progress = (translation.x / 200)
+        let distance = sqrt(pow(translation.x, 2) + pow(translation.y, 2))
+        var progress = (distance / 200)
         progress = CGFloat(fminf(fmaxf(Float(progress), 0.0), 1.0))
           
         switch gestureRecognizer.state {
