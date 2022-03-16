@@ -87,10 +87,11 @@ final class LargeImageView: UIView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
 
-        #warning("TODO: fix layout constraints here.")
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(lessThanOrEqualTo: matchView.widthAnchor),
             imageView.heightAnchor.constraint(lessThanOrEqualTo: matchView.heightAnchor),
+            imageView.centerXAnchor.constraint(equalTo: matchView.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: matchView.centerYAnchor),
         ])
     }
     
