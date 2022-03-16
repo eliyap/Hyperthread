@@ -131,6 +131,9 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
 
         largeImageView.frameView.setNeedsUpdateConstraints()
 
+        /// Set another animation start point.
+        largeImageView.frameView.layer.opacity = 1.0
+        
         /// Send to animation end point.
         /// Constraint animation: https://stackoverflow.com/questions/12926566/are-nslayoutconstraints-animatable
         UIView.animate(
@@ -143,12 +146,19 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
                 xConstraint.constant = endingFrame.origin.x
                 yConstraint.constant = endingFrame.origin.y
                 largeImageView.layoutIfNeeded()
+                
+                
+                /// Slowly fade down the image, so that when it overlaps with the navigation bar,
+                /// the "pop" disappearance is less jarring.
+                largeImageView.frameView.layer.opacity = 0.25
             },
             completion: { _ in
                 /// Remove animation constraints.
                 NSLayoutConstraint.deactivate([widthConstraint, heightConstraint, xConstraint, yConstraint])
                 
                 if context.transitionWasCancelled {
+                    largeImageView.frameView.layer.opacity = 1.0
+                    
                     /// Set background back to opaque.
                     largeImageView.backgroundColor = .galleryBackground
                     
