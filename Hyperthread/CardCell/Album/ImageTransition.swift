@@ -38,12 +38,6 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         }
         context.containerView.addSubview(toView)
         
-        /// Add initially transparent view to create "fade down" effect.
-        let bgView = UIView()
-        bgView.backgroundColor = .clear
-        bgView.frame = context.containerView.frame
-        context.containerView.insertSubview(bgView, at: 0)
-        
         /// Set animation start point.
         let startingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
         toView.frame = startingFrame
@@ -55,13 +49,9 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             animations: {
                 toView.frame = context.containerView.frame
                 toView.imageView.frame = CGRect(origin: .zero, size: context.containerView.frame.size)
-                bgView.backgroundColor = .galleryBackground
+                toView.backgroundColor = .galleryBackground
             },
             completion: { _ in
-                /// Let view take over the cover.
-                toView.backgroundColor = .galleryBackground
-                
-                bgView.removeFromSuperview()
                 context.completeTransition(true)
             }
         )
