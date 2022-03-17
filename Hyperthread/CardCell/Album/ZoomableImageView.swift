@@ -34,13 +34,19 @@ final class ZoomableImageView: UIScrollView {
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        
+        let aspectRatio: CGFloat
+        if let image = image {
+            aspectRatio = image.size.width / image.size.height
+        } else {
+            aspectRatio = 1.0
+        }
         NSLayoutConstraint.activate([
             /// Use `≤`, not `=`, to keep small images at their intrinsic size.
             imageView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
             imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
-            /// Small images default to top leading corner if not centered.
-            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            /// Constrain to exact aspect ratio.
+            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: aspectRatio),
         ])
         
         /// Set up double tap to zoom.
