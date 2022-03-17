@@ -55,8 +55,10 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         NSLayoutConstraint.activate([widthConstraint, heightConstraint, xConstraint, yConstraint])
         
         /// - Note: important that we lay out the superview, so that the offset constraints affect layout!
+        /// - Note: `setAnimationStartPoint` must come after layout pass to get accuate dimensions.
         largeImageView.layoutIfNeeded()
-
+        largeImageView.frameView.setAnimationStartPoint(frame: startingFrame)
+        
         largeImageView.frameView.setNeedsUpdateConstraints()
 
         /// Send to animation end point.
@@ -65,12 +67,15 @@ final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             withDuration: Self.duration,
             animations: {
                 largeImageView.backgroundColor = .galleryBackground
-
+                
                 widthConstraint.constant = endingFrame.width
                 heightConstraint.constant = endingFrame.height
                 xConstraint.constant = endingFrame.origin.x
                 yConstraint.constant = endingFrame.origin.y
                 largeImageView.layoutIfNeeded()
+                
+                /// - Note: `setAnimationEndPoint` must come after layout pass to get accuate dimensions.
+                largeImageView.frameView.setAnimationEndPoint(frame: endingFrame)
             },
             completion: { _ in
                 NSLayoutConstraint.deactivate([widthConstraint, heightConstraint, xConstraint, yConstraint])
@@ -126,6 +131,7 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
         let heightConstraint = largeImageView.frameView.heightAnchor.constraint(equalToConstant: startingFrame.height)
         let xConstraint = largeImageView.frameView.leadingAnchor.constraint(equalTo: largeImageView.leadingAnchor, constant: startingFrame.origin.x)
         let yConstraint = largeImageView.frameView.topAnchor.constraint(equalTo: largeImageView.topAnchor, constant: startingFrame.origin.y)
+        largeImageView.frameView.setAnimationStartPoint(frame: startingFrame)
         NSLayoutConstraint.activate([widthConstraint, heightConstraint, xConstraint, yConstraint])
         
         /// - Note: important that we lay out the superview, so that the offset constraints affect layout!
@@ -142,13 +148,13 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             withDuration: Self.duration,
             animations: {
                 largeImageView.backgroundColor = .clear
-
+                largeImageView.frameView.setAnimationEndPoint(frame: endingFrame)
+                
                 widthConstraint.constant = endingFrame.width
                 heightConstraint.constant = endingFrame.height
                 xConstraint.constant = endingFrame.origin.x
                 yConstraint.constant = endingFrame.origin.y
                 largeImageView.layoutIfNeeded()
-                
                 
                 /// Slowly fade down the image, so that when it overlaps with the navigation bar,
                 /// the "pop" disappearance is less jarring.
@@ -166,6 +172,9 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
                     
                     /// Reactivate constraints.
                     largeImageView.activateRestingConstraints()
+                    
+                    /// Reset frame.
+                    largeImageView.frameView.setAnimationStartPoint(frame: startingFrame)
 
                     context.completeTransition(false)
                 } else {
