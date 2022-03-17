@@ -206,6 +206,8 @@ fileprivate final class OwnedArchive<Item: AnyObject> {
     }
 }
 
+typealias ModalAlbumCallback = () -> ()
+
 extension AlbumController {
     func presentModalAlbum() -> Void {
         let modal = LargeImageViewController(image: nil, rootView: view)

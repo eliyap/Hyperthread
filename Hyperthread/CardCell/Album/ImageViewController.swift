@@ -23,7 +23,7 @@ final class MediaViewController: UIViewController {
     private var mediaModel: MediaModel? = nil
     
     /// Callback to show a larger focused media view.
-    public var presentModalAlbum: (() -> ())? = nil
+    public var presentModalAlbum: ModalAlbumCallback? = nil
     
     @MainActor
     init() {
@@ -48,7 +48,7 @@ final class MediaViewController: UIViewController {
         view.bringSubviewToFront(symbolView)
     }
     
-    func configure(media: Media, picUrlString: String?, presentModalAlbum: @escaping () -> ()) -> Void {
+    func configure(media: Media, picUrlString: String?, presentModalAlbum: @escaping ModalAlbumCallback) -> Void {
         self.presentModalAlbum = presentModalAlbum
         mediaModel = .init(media: media, picUrlString: picUrlString)
         
