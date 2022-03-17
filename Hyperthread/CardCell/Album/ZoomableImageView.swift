@@ -101,6 +101,13 @@ final class ZoomableImageView: UIScrollView {
 }
 
 extension ZoomableImageView: FramedImageView {
+    func setAnimationStartPoint(frame: CGRect) {
+        updateFloatCenter(frame: frame)
+    }
+    
+    func setAnimationEndPoint(frame: CGRect) {
+        updateFloatCenter(frame: frame)
+    }
 }
 
 extension ZoomableImageView: UIScrollViewDelegate {
@@ -116,7 +123,10 @@ extension ZoomableImageView: UIScrollViewDelegate {
     
     /// Abuses `contentInset` to cause undersized content to be centered,
     /// both horizontally and vertically.
-    func updateFloatCenter() {
+    func updateFloatCenter(frame: CGRect? = nil) {
+        /// Use own frame if none provided.
+        let frame = frame ?? self.frame
+        
         let excessHeight = frame.height - imageView.frame.height
         let yInset = max(0, excessHeight / 2)
         

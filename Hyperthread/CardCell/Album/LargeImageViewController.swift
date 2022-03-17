@@ -125,4 +125,6 @@ final class LargeImageView: UIView {
 /// See `LargeImageView` and associated classes for implementation.
 protocol FramedImageView: UIView {
     /// Nothing...
+    func setAnimationStartPoint(frame: CGRect) -> Void
+    func setAnimationEndPoint(frame: CGRect) -> Void
 }
