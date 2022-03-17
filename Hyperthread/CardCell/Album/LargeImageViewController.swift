@@ -72,6 +72,10 @@ extension LargeImageViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
+protocol SizeAwareView: UIView {
+    func didTransition(to size: CGSize) -> Void
+}
+
 final class LargeImageView: UIView {
     
     public let frameView: FramedImageView
