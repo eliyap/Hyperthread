@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SDWebImage
 
 final class LargeImageViewController: UIViewController {
     
@@ -90,7 +89,7 @@ final class LargeImageView: UIView {
         
         
         #if DEBUG
-        let __ENABLE_FRAME_BORDER__ = true
+        let __ENABLE_FRAME_BORDER__ = false
         if __ENABLE_FRAME_BORDER__ {
             frameView.layer.borderWidth = 2
             frameView.layer.borderColor = UIColor.red.cgColor
@@ -127,58 +126,4 @@ final class LargeImageView: UIView {
 /// See `LargeImageView` and associated classes for implementation.
 protocol FramedImageView: UIView {
     func load(from url: String) -> Void
-}
-
-final class ZoomableImageView: UIScrollView {
-    
-    private let imageView: UIImageView = .init()
-    
-    @MainActor
-    init() {
-        super.init(frame: .zero)
-
-        /// Configure `self`.
-        alwaysBounceVertical = false
-        alwaysBounceHorizontal = false
-        minimumZoomScale = 1
-        maximumZoomScale = 5
-        clipsToBounds = false
-        self.delegate = self
-        
-        /// Match iOS's Photos app.
-        decelerationRate = .fast
-        showsVerticalScrollIndicator = false
-        showsHorizontalScrollIndicator = false
-        
-        /// Configure `imageView`.
-        addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        NSLayoutConstraint.activate([
-            /// Use `≤`, not `=`, to keep small images at their intrinsic size.
-            imageView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
-            imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
-            /// Small images default to top leading corner if not centered.
-            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-        ])
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension ZoomableImageView: FramedImageView {
-    func load(from url: String) {
-        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-            /// Nothing.
-        })
-    }
-}
-
-extension ZoomableImageView: UIScrollViewDelegate {
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageView
-    }
 }
