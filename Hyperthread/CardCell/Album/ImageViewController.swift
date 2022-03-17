@@ -14,7 +14,7 @@ final class MediaViewController: UIViewController {
     /// Lazy Component views.
     private var imageView: UIImageView? = nil
     private var gifView: GIFView? = nil
-    private var videoViewController: AVPlayerViewController? = nil
+    private var videoController: VideoController? = nil
     
     /// Eager Component views.
     private let videoPlayer: AVPlayer = .init()
@@ -52,15 +52,15 @@ final class MediaViewController: UIViewController {
         switch media.modelMediaType {
         case .photo, .gifPreview, .videoPreview:
             imageView?.isHidden = false
-            videoViewController?.view.isHidden = true
+            videoController?.view.isHidden = true
             gifView?.isHidden = true
         case .gifPlayer:
             imageView?.isHidden = true
-            videoViewController?.view.isHidden = true
+            videoController?.view.isHidden = true
             gifView?.isHidden = false
         case .videoPlayer:
             imageView?.isHidden = true
-            videoViewController?.view.isHidden = false
+            videoController?.view.isHidden = false
             gifView?.isHidden = true
         }
         
@@ -239,25 +239,25 @@ extension MediaViewController {
     }
     
     func addVideo() -> AVPlayerViewController {
-        if let existing = self.videoViewController { return existing }
+        if let existing = self.videoController { return existing }
         
-        let videoViewController: AVPlayerViewController = .init()
+        let videoController: VideoController = .init()
         
         /// Insert at the back, behind `symbolView`.
-        adopt(videoViewController, subviewIndex: 0)
+        adopt(videoController, subviewIndex: 0)
         
         NSLayoutConstraint.activate([
-            videoViewController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            videoViewController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            videoViewController.view.heightAnchor.constraint(equalTo: view.heightAnchor),
-            videoViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
+            videoController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            videoController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            videoController.view.heightAnchor.constraint(equalTo: view.heightAnchor),
+            videoController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
         ])
-        videoViewController.videoGravity = .resizeAspect
-        videoViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        videoViewController.player = videoPlayer
+        videoController.videoGravity = .resizeAspect
+        videoController.view.translatesAutoresizingMaskIntoConstraints = false
+        videoController.player = videoPlayer
         
-        self.videoViewController = videoViewController
-        return videoViewController
+        self.videoController = videoController
+        return videoController
     }
     
     func addGIF() -> GIFView {
