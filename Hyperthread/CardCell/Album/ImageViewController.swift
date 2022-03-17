@@ -145,10 +145,6 @@ final class MediaViewController: UIViewController {
         
         switch mediaModel.mediaType {
         case .photo:
-            guard let url = mediaModel.url else {
-                break
-            }
-            
             let modal = LargeImageViewController(image: imageView?.image, rootView: view)
             guard let root = view.window?.rootViewController else {
                 assert(false, "Could not obtain root view controller!")
