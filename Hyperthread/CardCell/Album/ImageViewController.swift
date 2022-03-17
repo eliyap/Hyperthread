@@ -238,7 +238,7 @@ extension MediaViewController {
         return imageView
     }
     
-    func addVideo() -> AVPlayerViewController {
+    func addVideo() -> VideoController {
         if let existing = self.videoController { return existing }
         
         let videoController: VideoController = .init()
