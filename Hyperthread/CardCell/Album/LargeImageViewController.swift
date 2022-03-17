@@ -18,11 +18,20 @@ final class LargeImageViewController: UIViewController {
     
     private var transitioner: LargeImageTransitioner? = nil
     
+    /// When focusing on media, hide the status bar.
+    /// A good idea because
+    /// - zoomed images will exit the safe area
+    /// - the background is black.
+    override var prefersStatusBarHidden: Bool { true }
+    
     @MainActor
     init(url: String, rootView: UIView) {
         self.largeImageView = .init(url: url)
         self.rootView = rootView
         super.init(nibName: nil, bundle: nil)
+        
+        /// Cause modal's preference to take precedent.
+        modalPresentationCapturesStatusBarAppearance = true
         
         view = largeImageView
         
@@ -66,34 +75,27 @@ extension LargeImageViewController: UIViewControllerTransitioningDelegate {
 
 final class LargeImageView: UIView {
     
-    public let imageView: UIImageView = .init()
-    
-    public let frameView: UIView = .init()
+    public let frameView: FramedImageView
 
     /// Exists to give us the location of the safeAreaLayoutGuide.
     private let guideView: UIView = .init()
     
     init(url: String) {
+        self.frameView = ZoomableImageView()
+        frameView.load(from: url)
         super.init(frame: .zero)
 
         addSubview(frameView)
         frameView.translatesAutoresizingMaskIntoConstraints = false
-        frameView.addSubview(imageView)
-
-        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-            /// Nothing.
-        })
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-
-        NSLayoutConstraint.activate([
-            /// Use `≤`, not `=`, to keep small images at their intrinsic size.
-            imageView.widthAnchor.constraint(lessThanOrEqualTo: frameView.widthAnchor),
-            imageView.heightAnchor.constraint(lessThanOrEqualTo: frameView.heightAnchor),
-            /// Small images default to top leading corner if not centered.
-            imageView.centerXAnchor.constraint(equalTo: frameView.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: frameView.centerYAnchor),
-        ])
+        
+        
+        #if DEBUG
+        let __ENABLE_FRAME_BORDER__ = true
+        if __ENABLE_FRAME_BORDER__ {
+            frameView.layer.borderWidth = 2
+            frameView.layer.borderColor = UIColor.red.cgColor
+        }
+        #endif
     }
     
     /// Constraints active when the view is "at rest", i.e. not animating.
@@ -117,5 +119,66 @@ final class LargeImageView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+/// Some view which fits into our full screen modal layout system.
+/// This means it will be subjected to changing constraints during the animation.
+/// See `LargeImageView` and associated classes for implementation.
+protocol FramedImageView: UIView {
+    func load(from url: String) -> Void
+}
+
+final class ZoomableImageView: UIScrollView {
+    
+    private let imageView: UIImageView = .init()
+    
+    @MainActor
+    init() {
+        super.init(frame: .zero)
+
+        /// Configure `self`.
+        alwaysBounceVertical = false
+        alwaysBounceHorizontal = false
+        minimumZoomScale = 1
+        maximumZoomScale = 5
+        clipsToBounds = false
+        self.delegate = self
+        
+        /// Match iOS's Photos app.
+        decelerationRate = .fast
+        showsVerticalScrollIndicator = false
+        showsHorizontalScrollIndicator = false
+        
+        /// Configure `imageView`.
+        addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        NSLayoutConstraint.activate([
+            /// Use `≤`, not `=`, to keep small images at their intrinsic size.
+            imageView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
+            imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
+            /// Small images default to top leading corner if not centered.
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension ZoomableImageView: FramedImageView {
+    func load(from url: String) {
+        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+            /// Nothing.
+        })
+    }
+}
+
+extension ZoomableImageView: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
     }
 }
