@@ -22,6 +22,9 @@ final class MediaViewController: UIViewController {
     
     private var mediaModel: MediaModel? = nil
     
+    /// Callback to show a larger focused media view.
+    public var presentModalAlbum: (() -> ())? = nil
+    
     @MainActor
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -45,7 +48,8 @@ final class MediaViewController: UIViewController {
         view.bringSubviewToFront(symbolView)
     }
     
-    func configure(media: Media, picUrlString: String?) -> Void {
+    func configure(media: Media, picUrlString: String?, presentModalAlbum: @escaping () -> ()) -> Void {
+        self.presentModalAlbum = presentModalAlbum
         mediaModel = .init(media: media, picUrlString: picUrlString)
         
         switch media.modelMediaType {
@@ -145,14 +149,7 @@ final class MediaViewController: UIViewController {
         
         switch mediaModel.mediaType {
         case .photo:
-            let modal = LargeImageViewController(image: imageView?.image, rootView: view)
-            guard let root = view.window?.rootViewController else {
-                assert(false, "Could not obtain root view controller!")
-                return
-            }
-            root.present(modal, animated: true, completion: {
-                /// Nothing.
-            })
+            presentModalAlbum?()
         
         case .videoPlayer, .gifPlayer:
             break
