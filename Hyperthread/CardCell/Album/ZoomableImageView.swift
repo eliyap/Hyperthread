@@ -49,6 +49,20 @@ final class ZoomableImageView: UIScrollView {
             imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: aspectRatio),
         ])
         
+        #if DEBUG
+        let __FRAME_BORDER__ = true
+        if __FRAME_BORDER__ {
+            layer.borderWidth = 2
+            layer.borderColor = UIColor.blue.cgColor
+        }
+        
+        let __IMAGE_FRAME__ = true
+        if __IMAGE_FRAME__ {
+            imageView.layer.borderWidth = 4
+            imageView.layer.borderColor = UIColor.red.cgColor
+        }
+        #endif
+        
         /// Set up double tap to zoom.
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
         doubleTap.numberOfTapsRequired = 2
