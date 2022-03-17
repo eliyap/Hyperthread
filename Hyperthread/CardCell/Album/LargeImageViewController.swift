@@ -124,7 +124,6 @@ final class LargeImageView: UIView {
 /// This means it will be subjected to changing constraints during the animation.
 /// See `LargeImageView` and associated classes for implementation.
 protocol FramedImageView: UIView {
-    /// Nothing...
     func setAnimationStartPoint(frame: CGRect) -> Void
     func setAnimationEndPoint(frame: CGRect) -> Void
 }
