@@ -12,7 +12,7 @@ class AlbumController: UIPageViewController {
     /// Contains **displayed** media controllers.
     public var controllers: [MediaViewController] = []
     
-    /// Contains recycled view controllers. and spawns new ones.
+    /// Contains recycled view controllers, and spawns new ones.
     fileprivate let controllerArchive: OwnedArchive<MediaViewController> = .init(makeView: MediaViewController.init)
     
     /// Constrains the view's height to below some aspect ratio.
