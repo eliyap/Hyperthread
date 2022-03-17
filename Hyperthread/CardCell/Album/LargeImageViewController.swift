@@ -81,7 +81,6 @@ final class LargeImageView: UIView {
     
     init(url: String) {
         self.frameView = ZoomableImageView()
-        frameView.load(from: url)
         super.init(frame: .zero)
 
         addSubview(frameView)
@@ -125,5 +124,5 @@ final class LargeImageView: UIView {
 /// This means it will be subjected to changing constraints during the animation.
 /// See `LargeImageView` and associated classes for implementation.
 protocol FramedImageView: UIView {
-    func load(from url: String) -> Void
+    /// Nothing...
 }

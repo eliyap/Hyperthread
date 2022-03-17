@@ -80,11 +80,6 @@ final class ZoomableImageView: UIScrollView {
 }
 
 extension ZoomableImageView: FramedImageView {
-    func load(from url: String) {
-        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-            /// Nothing.
-        })
-    }
 }
 
 extension ZoomableImageView: UIScrollViewDelegate {
