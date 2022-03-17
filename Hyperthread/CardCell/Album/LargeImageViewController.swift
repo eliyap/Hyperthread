@@ -68,12 +68,13 @@ final class LargeImageView: UIView {
     
     private let imageView: UIImageView = .init()
     
-    public let frameView: UIView = .init()
+    public let frameView: UIView
 
     /// Exists to give us the location of the safeAreaLayoutGuide.
     private let guideView: UIView = .init()
     
     init(url: String) {
+        self.frameView = .init()
         super.init(frame: .zero)
 
         #if DEBUG
