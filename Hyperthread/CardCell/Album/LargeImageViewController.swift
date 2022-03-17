@@ -78,7 +78,7 @@ protocol SizeAwareView: UIView {
 
 final class LargeImageView: UIView {
     
-    public let frameView: FramedImageView
+    public let frameView: FramedImageView & SizeAwareView
 
     /// Exists to give us the location of the safeAreaLayoutGuide.
     private let guideView: UIView = .init()
