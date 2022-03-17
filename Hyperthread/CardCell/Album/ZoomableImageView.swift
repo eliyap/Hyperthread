@@ -136,3 +136,9 @@ extension ZoomableImageView: UIScrollViewDelegate {
         contentInset = UIEdgeInsets(top: yInset, left: xInset, bottom: yInset, right: xInset)
     }
 }
+
+extension ZoomableImageView: SizeAwareView {
+    func didTransition(to size: CGSize) {
+        updateFloatCenter()
+    }
+}
