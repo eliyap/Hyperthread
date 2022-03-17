@@ -12,12 +12,6 @@ final class ZoomableImageView: UIScrollView {
     
     private let imageView: UIImageView = .init()
     
-    /// Live-tracks user's zoom scale to enable "over-zoom" haptic feedback.
-    private var mostRecentZoomScale: CGFloat? = nil
-    
-    /// Use light feedback, since "overzooming" is not the user's "fault".
-    private let hapticGenerator: UISelectionFeedbackGenerator = .init()
-    
     @MainActor
     init() {
         super.init(frame: .zero)
@@ -98,34 +92,5 @@ extension ZoomableImageView: UIScrollViewDelegate {
     /// Source: https://www.hackingwithswift.com/example-code/uikit/how-to-support-pinch-to-zoom-in-a-uiscrollview
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
-    }
-    
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        guard let mostRecentZoomScale = mostRecentZoomScale else { return }
-        if (mostRecentZoomScale < minimumZoomScale) || (mostRecentZoomScale > maximumZoomScale) {
-//            hapticGenerator.selectionChanged()
-            print("boop")
-        }
-        
-        /// Reset tracking.
-        self.mostRecentZoomScale = nil
-    }
-    
-    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        print("starting zoom...")
-    }
-    
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        /// Zoom is ongoing, and will likely end soon, so prepare to provide feedback.
-        hapticGenerator.prepare()
-        
-        let reportedScale = scrollView.zoomScale
-        
-        /// If the user "over-zooms", the zoom level snaps back to bounds, which is reported to the delegate.
-        /// Since we're interested in detecting this "snap back", we ignore the bounded value.
-        guard (reportedScale != minimumZoomScale) && (reportedScale != maximumZoomScale) else {
-            return
-        }
-        mostRecentZoomScale = reportedScale
     }
 }
