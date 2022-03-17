@@ -113,6 +113,9 @@ final class LargeImageView: UIView {
     }
 }
 
+/// Some view which fits into our full screen modal layout system.
+/// This means it will be subjected to changing constraints during the animation.
+/// See `LargeImageView` and associated classes for implementation.
 protocol FramedImageView: UIView {
     func load(from url: String) -> Void
 }
