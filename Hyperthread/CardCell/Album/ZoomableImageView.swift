@@ -61,4 +61,3 @@ extension ZoomableImageView: UIScrollViewDelegate {
         return imageView
     }
 }
-
