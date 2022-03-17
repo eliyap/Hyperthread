@@ -6,168 +6,170 @@
 //
 
 import UIKit
-import SDWebImage
 
-final class LargeImageViewController: UIViewController {
+public extension UIColor {
+    /// Similar to iOS's Photos App, use a "dark room" style black background for image galleries.
+    static let galleryBackground: UIColor = .black
+}
+
+final class ImagePresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    public static let duration = 0.25
     
-    /// The image's original view.
-    /// Knowing this allows us to apply a `matchingGeometry` style effect.
     private weak var rootView: UIView?
     
-    private let largeImageView: LargeImageView
-    
-    private var transitioner: LargeImageTransitioner? = nil
-    
-    @MainActor
-    init(url: String, rootView: UIView) {
-        self.largeImageView = .init(url: url)
+    init(rootView: UIView?) {
         self.rootView = rootView
-        super.init(nibName: nil, bundle: nil)
-        
-        view = largeImageView
-        
-        transitioner = LargeImageTransitioner(viewController: self)
-        
-        /// Request a custom animation.
-        modalPresentationStyle = .custom
-        transitioningDelegate = self
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        view.frame = .init(origin: .zero, size: size)
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return Self.duration
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension LargeImageViewController: UIViewControllerTransitioningDelegate {
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ImagePresentingAnimator(rootView: rootView)
-    }
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ImageDismissingAnimator(rootView: rootView, transitioner: transitioner)
-    }
-    
-    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        guard
-            let animator = animator as? ImageDismissingAnimator,
-            let transitioner = animator.transitioner,
-            transitioner.interactionInProgress
-        else {
-          return nil
+    func animateTransition(using context: UIViewControllerContextTransitioning) {
+        guard let toView = context.view(forKey: .to) else {
+            assert(false, "Could not obtain originating views!")
+            context.completeTransition(false)
+            return
         }
-        return transitioner
-    }
-}
-
-final class LargeImageView: UIView {
-    
-    public let imageView: UIImageView = .init()
-    
-    public let frameView: UIView = .init()
-
-    /// Exists to give us the location of the safeAreaLayoutGuide.
-    private let guideView: UIView = .init()
-    
-    init(url: String) {
-        super.init(frame: .zero)
-
-        addSubview(frameView)
-        frameView.translatesAutoresizingMaskIntoConstraints = false
-        frameView.addSubview(imageView)
-
-        imageView.sd_setImage(with: URL(string: url), completed: { (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
-            /// Nothing.
-        })
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-
-        NSLayoutConstraint.activate([
-            /// Use `≤`, not `=`, to keep small images at their intrinsic size.
-            imageView.widthAnchor.constraint(lessThanOrEqualTo: frameView.widthAnchor),
-            imageView.heightAnchor.constraint(lessThanOrEqualTo: frameView.heightAnchor),
-            /// Small images default to top leading corner if not centered.
-            imageView.centerXAnchor.constraint(equalTo: frameView.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: frameView.centerYAnchor),
-        ])
-    }
-    
-    /// Constraints active when the view is "at rest", i.e. not animating.
-    private var restingConstraints: [NSLayoutConstraint] = []
-    public func activateRestingConstraints() -> Void {
-        restingConstraints = [
-            /// View may exit safe area during animation due to table view offset.
-            /// Hence these constraints are temporarily disabled.
-            frameView.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            frameView.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            frameView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            frameView.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-        ]
-        NSLayoutConstraint.activate(restingConstraints)
-    }
-
-    public func deactivateRestingConstraints() -> Void {
-        NSLayoutConstraint.deactivate(restingConstraints)
-        restingConstraints.removeAll()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-final class LargeImageTransitioner: UIPercentDrivenInteractiveTransition {
-    
-    var interactionInProgress = false
-
-    private var shouldCompleteTransition = false
-    private weak var viewController: UIViewController!
-
-    init(viewController: UIViewController) {
-        self.viewController = viewController
-        super.init()
+        guard let largeImageView = toView as? LargeImageView else {
+            assert(false, "Unexpected view type!")
+            context.completeTransition(false)
+            return
+        }
+        context.containerView.addSubview(largeImageView)
         
-        /// Create gesture recognizer.
-        let gesture = UIPanGestureRecognizer(
-            target: self,
-            action: #selector(handleGesture(_:))
+        /// Deactivate before temporary constraints are activated, or we face a conflict.
+        largeImageView.frame = context.containerView.frame
+        largeImageView.deactivateRestingConstraints()
+        
+        /// - Note: do not use `largeImageView` frame as it is periodically incorrect since layout is in flux.
+        let startingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
+        let endingFrame: CGRect = context.containerView.safeAreaLayoutGuide.layoutFrame
+        
+        /// Set animation start point.
+        largeImageView.backgroundColor = .clear
+        let widthConstraint = largeImageView.frameView.widthAnchor.constraint(equalToConstant: startingFrame.width)
+        let heightConstraint = largeImageView.frameView.heightAnchor.constraint(equalToConstant: startingFrame.height)
+        let xConstraint = largeImageView.frameView.leadingAnchor.constraint(equalTo: largeImageView.leadingAnchor, constant: startingFrame.origin.x)
+        let yConstraint = largeImageView.frameView.topAnchor.constraint(equalTo: largeImageView.topAnchor, constant: startingFrame.origin.y)
+        NSLayoutConstraint.activate([widthConstraint, heightConstraint, xConstraint, yConstraint])
+        
+        /// - Note: important that we lay out the superview, so that the offset constraints affect layout!
+        largeImageView.layoutIfNeeded()
+
+        largeImageView.frameView.setNeedsUpdateConstraints()
+
+        /// Send to animation end point.
+        /// Constraint animation: https://stackoverflow.com/questions/12926566/are-nslayoutconstraints-animatable
+        UIView.animate(
+            withDuration: Self.duration,
+            animations: {
+                largeImageView.backgroundColor = .galleryBackground
+
+                widthConstraint.constant = endingFrame.width
+                heightConstraint.constant = endingFrame.height
+                xConstraint.constant = endingFrame.origin.x
+                yConstraint.constant = endingFrame.origin.y
+                largeImageView.layoutIfNeeded()
+            },
+            completion: { _ in
+                NSLayoutConstraint.deactivate([widthConstraint, heightConstraint, xConstraint, yConstraint])
+                largeImageView.activateRestingConstraints()
+
+                context.completeTransition(true)
+            }
         )
-        viewController.view.addGestureRecognizer(gesture)
+    }
+}
+
+final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    public static let duration = ImagePresentingAnimator.duration
+    
+    private weak var rootView: UIView?
+    
+    let transitioner: LargeImageTransitioner?
+    
+    init(rootView: UIView?, transitioner: LargeImageTransitioner?) {
+        self.rootView = rootView
+        self.transitioner = transitioner
     }
     
-    @objc private func handleGesture(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
-        let translation = gestureRecognizer.translation(in: gestureRecognizer.view!.superview!)
-        let distance = sqrt(pow(translation.x, 2) + pow(translation.y, 2))
-        var progress = (distance / 200)
-        progress = CGFloat(fminf(fmaxf(Float(progress), 0.0), 1.0))
-          
-        switch gestureRecognizer.state {
-            case .began:
-                interactionInProgress = true
-                viewController.dismiss(animated: true, completion: nil)
-            
-            case .changed:
-                shouldCompleteTransition = progress > 0.5
-                update(progress)
-            
-            case .cancelled:
-                interactionInProgress = false
-                cancel()
-            
-            case .ended:
-                interactionInProgress = false
-                if shouldCompleteTransition {
-                    finish()
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return Self.duration
+    }
+    
+    func animateTransition(using context: UIViewControllerContextTransitioning) {
+        guard let fromView = context.view(forKey: .from) else {
+            assert(false, "Could not obtain to view!")
+            return
+        }
+        guard let largeImageView = fromView as? LargeImageView else {
+            assert(false, "Unexpected view type!")
+            context.completeTransition(false)
+            return
+        }
+        
+        let startingFrame: CGRect = context.containerView.safeAreaLayoutGuide.layoutFrame
+        let endingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
+        
+        /// Deactivate before temporary constraints are activated, or we face a conflict.
+        context.containerView.addSubview(largeImageView)
+        largeImageView.deactivateRestingConstraints()
+        
+        largeImageView.frame = context.containerView.frame
+        
+        /// Set animation start point.
+        largeImageView.backgroundColor = .galleryBackground
+        let widthConstraint = largeImageView.frameView.widthAnchor.constraint(equalToConstant: startingFrame.width)
+        let heightConstraint = largeImageView.frameView.heightAnchor.constraint(equalToConstant: startingFrame.height)
+        let xConstraint = largeImageView.frameView.leadingAnchor.constraint(equalTo: largeImageView.leadingAnchor, constant: startingFrame.origin.x)
+        let yConstraint = largeImageView.frameView.topAnchor.constraint(equalTo: largeImageView.topAnchor, constant: startingFrame.origin.y)
+        NSLayoutConstraint.activate([widthConstraint, heightConstraint, xConstraint, yConstraint])
+        
+        /// - Note: important that we lay out the superview, so that the offset constraints affect layout!
+        largeImageView.layoutIfNeeded()
+
+        largeImageView.frameView.setNeedsUpdateConstraints()
+
+        /// Set another animation start point.
+        largeImageView.frameView.layer.opacity = 1.0
+        
+        /// Send to animation end point.
+        /// Constraint animation: https://stackoverflow.com/questions/12926566/are-nslayoutconstraints-animatable
+        UIView.animate(
+            withDuration: Self.duration,
+            animations: {
+                largeImageView.backgroundColor = .clear
+
+                widthConstraint.constant = endingFrame.width
+                heightConstraint.constant = endingFrame.height
+                xConstraint.constant = endingFrame.origin.x
+                yConstraint.constant = endingFrame.origin.y
+                largeImageView.layoutIfNeeded()
+                
+                
+                /// Slowly fade down the image, so that when it overlaps with the navigation bar,
+                /// the "pop" disappearance is less jarring.
+                largeImageView.frameView.layer.opacity = 0.25
+            },
+            completion: { _ in
+                /// Remove animation constraints.
+                NSLayoutConstraint.deactivate([widthConstraint, heightConstraint, xConstraint, yConstraint])
+                
+                if context.transitionWasCancelled {
+                    largeImageView.frameView.layer.opacity = 1.0
+                    
+                    /// Set background back to opaque.
+                    largeImageView.backgroundColor = .galleryBackground
+                    
+                    /// Reactivate constraints.
+                    largeImageView.activateRestingConstraints()
+
+                    context.completeTransition(false)
                 } else {
-                    cancel()
+                    context.completeTransition(true)
                 }
-            
-            default:
-                break
-          }
+            }
+        )
     }
 }
