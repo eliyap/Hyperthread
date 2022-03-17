@@ -133,8 +133,13 @@ final class ZoomableImageView: UIScrollView {
         alwaysBounceHorizontal = false
         minimumZoomScale = 1
         maximumZoomScale = 5
-        decelerationRate = .fast /// Matches what I observe in iOS's Photos app.
+        clipsToBounds = false
         self.delegate = self
+        
+        /// Match iOS's Photos app.
+        decelerationRate = .fast
+        showsVerticalScrollIndicator = false
+        showsHorizontalScrollIndicator = false
         
         /// Configure `imageView`.
         addSubview(imageView)
