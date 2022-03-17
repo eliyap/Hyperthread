@@ -95,4 +95,15 @@ extension ZoomableImageView: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
+    /// Abuses `contentInset` to cause undersized content to be centered,
+    /// both horizontally and vertically.
+    func updateFloatCenter() {
+        let excessHeight = frame.height - imageView.frame.height
+        let yInset = max(0, excessHeight / 2)
+        
+        let excessWidth = frame.width - imageView.frame.width
+        let xInset = max(0, excessWidth / 2)
+        
+        contentInset = UIEdgeInsets(top: yInset, left: xInset, bottom: yInset, right: xInset)
+    }
 }
