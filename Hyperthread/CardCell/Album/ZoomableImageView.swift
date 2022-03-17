@@ -49,17 +49,19 @@ final class ZoomableImageView: UIScrollView {
     }
     
     @objc
-    func didDoubleTap(recognizer: UITapGestureRecognizer) -> Void {
+    private func didDoubleTap(recognizer: UITapGestureRecognizer) -> Void {
         if zoomScale == 1 {
+            /// Zoom into tapped area.
             let rect = zoomRectForScale(scale: maximumZoomScale, center: recognizer.location(in: recognizer.view))
             zoom(to: rect, animated: true)
         } else {
+            /// Zoom back out.
             setZoomScale(1, animated: true)
         }
     }
     
     /// Adapted from: https://stackoverflow.com/questions/3967971/how-to-zoom-in-out-photo-on-double-tap-in-the-iphone-wwdc-2010-104-photoscroll/46143499#46143499
-    func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
+    private func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
         let newCenter = imageView.convert(center, from: self)
         let width = imageView.frame.size.width  / scale
         let height = imageView.frame.size.height / scale
