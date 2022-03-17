@@ -35,7 +35,7 @@ final class LargeImageViewController: UIViewController {
         
         view = largeImageView
         
-//        transitioner = LargeImageTransitioner(viewController: self)
+        transitioner = LargeImageTransitioner(viewController: self)
         
         /// Request a custom animation.
         modalPresentationStyle = .custom
