@@ -76,6 +76,14 @@ final class LargeImageView: UIView {
     init(url: String) {
         super.init(frame: .zero)
 
+        #if DEBUG
+        let __ENABLE_FRAME_BORDER__ = true
+        if __ENABLE_FRAME_BORDER__ {
+            frameView.layer.borderWidth = 2
+            frameView.layer.borderColor = UIColor.red.cgColor
+        }
+        #endif
+        
         addSubview(frameView)
         frameView.translatesAutoresizingMaskIntoConstraints = false
         frameView.addSubview(imageView)
