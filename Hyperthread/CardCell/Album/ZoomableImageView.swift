@@ -57,6 +57,8 @@ extension ZoomableImageView: FramedImageView {
 }
 
 extension ZoomableImageView: UIScrollViewDelegate {
+    /// Required to enable zoom.
+    /// Source: https://www.hackingwithswift.com/example-code/uikit/how-to-support-pinch-to-zoom-in-a-uiscrollview
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
