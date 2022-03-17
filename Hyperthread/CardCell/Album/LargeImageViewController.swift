@@ -18,11 +18,20 @@ final class LargeImageViewController: UIViewController {
     
     private var transitioner: LargeImageTransitioner? = nil
     
+    /// When focusing on media, hide the status bar.
+    /// A good idea because
+    /// - zoomed images will exit the safe area
+    /// - the background is black.
+    override var prefersStatusBarHidden: Bool { true }
+    
     @MainActor
     init(url: String, rootView: UIView) {
         self.largeImageView = .init(url: url)
         self.rootView = rootView
         super.init(nibName: nil, bundle: nil)
+        
+        /// Cause modal's preference to take precedent.
+        modalPresentationCapturesStatusBarAppearance = true
         
         view = largeImageView
         
