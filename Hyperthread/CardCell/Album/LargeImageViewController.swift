@@ -24,8 +24,8 @@ final class LargeImageViewController: UIViewController {
     override var prefersStatusBarHidden: Bool { true }
     
     @MainActor
-    init(url: String, rootView: UIView) {
-        self.largeImageView = .init(url: url)
+    init(image: UIImage?, rootView: UIView) {
+        self.largeImageView = .init(image: image)
         self.rootView = rootView
         super.init(nibName: nil, bundle: nil)
         
@@ -79,8 +79,8 @@ final class LargeImageView: UIView {
     /// Exists to give us the location of the safeAreaLayoutGuide.
     private let guideView: UIView = .init()
     
-    init(url: String) {
-        self.frameView = ZoomableImageView()
+    init(image: UIImage?) {
+        self.frameView = ZoomableImageView(image: image)
         super.init(frame: .zero)
 
         addSubview(frameView)

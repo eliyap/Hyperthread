@@ -13,9 +13,10 @@ final class ZoomableImageView: UIScrollView {
     private let imageView: UIImageView = .init()
     
     @MainActor
-    init() {
+    init(image: UIImage?) {
         super.init(frame: .zero)
-
+        imageView.image = image
+        
         /// Configure `self`.
         alwaysBounceVertical = false
         alwaysBounceHorizontal = false
