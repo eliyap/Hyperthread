@@ -66,7 +66,7 @@ extension LargeImageViewController: UIViewControllerTransitioningDelegate {
 
 final class LargeImageView: UIView {
     
-    public let imageView: UIImageView = .init()
+    private let imageView: UIImageView = .init()
     
     public let frameView: UIView = .init()
 
