@@ -87,6 +87,8 @@ final class ImageDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
     
     private weak var rootView: UIView?
     
+    /// Hold reference so `transitioner` is accessible on `interactionControllerForDismissal` method.
+    /// Source: https://www.raywenderlich.com/322-custom-uiviewcontroller-transitions-getting-started
     let transitioner: LargeImageTransitioner?
     
     init(rootView: UIView?, transitioner: LargeImageTransitioner?) {
