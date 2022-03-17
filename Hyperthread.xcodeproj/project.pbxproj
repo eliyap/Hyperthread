@@ -76,6 +76,7 @@
 		22817B9927E1464500D34C71 /* ImageTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9827E1464500D34C71 /* ImageTransition.swift */; };
 		22817B9C27E2B70D00D34C71 /* VideoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9B27E2B70D00D34C71 /* VideoController.swift */; };
 		22817B9E27E3853600D34C71 /* LargeImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9D27E3853600D34C71 /* LargeImageViewController.swift */; };
+		22817BA027E3A0BC00D34C71 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -228,6 +229,7 @@
 		22817B9827E1464500D34C71 /* ImageTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTransition.swift; sourceTree = "<group>"; };
 		22817B9B27E2B70D00D34C71 /* VideoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoController.swift; sourceTree = "<group>"; };
 		22817B9D27E3853600D34C71 /* LargeImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeImageViewController.swift; sourceTree = "<group>"; };
+		22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -544,6 +546,7 @@
 				22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */,
 				22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */,
 				22817B9D27E3853600D34C71 /* LargeImageViewController.swift */,
+				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
 				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
 				22817B9827E1464500D34C71 /* ImageTransition.swift */,
 			);
@@ -935,6 +938,7 @@
 				22FBAAD827B07E0200FEEB71 /* SymbolCircleView.swift in Sources */,
 				22817B9C27E2B70D00D34C71 /* VideoController.swift in Sources */,
 				22144E1D27B9B21F002AAFB6 /* UIImage.fill.swift in Sources */,
+				22817BA027E3A0BC00D34C71 /* ZoomableImageView.swift in Sources */,
 				22D127E52740659E00932614 /* RetweetView.swift in Sources */,
 				221A2992275D680900C283FE /* AlbumController.swift in Sources */,
 				22D127DC27404F4200932614 /* DiscussionTable.swift in Sources */,
