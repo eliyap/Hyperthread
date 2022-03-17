@@ -128,9 +128,16 @@ final class ZoomableImageView: UIScrollView {
     init() {
         super.init(frame: .zero)
 
-        addSubview(imageView)
+        /// Configure `self`.
+        alwaysBounceVertical = false
+        alwaysBounceHorizontal = false
+        minimumZoomScale = 1
+        maximumZoomScale = 5
+        decelerationRate = .fast /// Matches what I observe in iOS's Photos app.
+        self.delegate = self
         
         /// Configure `imageView`.
+        addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         NSLayoutConstraint.activate([
