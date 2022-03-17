@@ -109,6 +109,11 @@ extension ZoomableImageView: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) -> Void {
+        updateFloatCenter()
+    }
+    
     /// Abuses `contentInset` to cause undersized content to be centered,
     /// both horizontally and vertically.
     func updateFloatCenter() {
