@@ -17,7 +17,6 @@ final class MediaViewController: UIViewController {
     private var videoController: VideoController? = nil
     
     /// Eager Component views.
-    private let videoPlayer: AVPlayer = .init()
     private let loadingIndicator: UIActivityIndicatorView = .init()
     private let symbolView: SymbolCircleView = .init()
     
@@ -97,13 +96,13 @@ final class MediaViewController: UIViewController {
             }
             
         case .videoPlayer:
-            let _ = addVideo()
+            let vController = addVideo()
             #warning("TODO: make a more considred choice about which video to play!")
             if
                 let vidUrlString = media.video?.variants.first?.url,
                 let vidURL = URL(string: vidUrlString)
             {
-                videoPlayer.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
+                vController.play(url: vidURL)
                 symbolView.set(symbol: .hidden)
             }
         }
@@ -254,7 +253,6 @@ extension MediaViewController {
         ])
         videoController.videoGravity = .resizeAspect
         videoController.view.translatesAutoresizingMaskIntoConstraints = false
-        videoController.player = videoPlayer
         
         self.videoController = videoController
         return videoController
