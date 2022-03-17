@@ -78,8 +78,8 @@ class AlbumController: UIPageViewController {
             /// Get new views from archive.
             for mediaItem in media {
                 let mediaController = controllerArchive.unarchive()
-                mediaController.configure(media: mediaItem, picUrlString: picUrlString, presentModalAlbum: { [weak self] in
-                    self?.presentModalAlbum()
+                mediaController.configure(media: mediaItem, picUrlString: picUrlString, presentModalAlbum: { [weak self] (image, view) in
+                    self?.presentModalAlbum(image, view)
                 })
                 controllers.append(mediaController)
             }
@@ -206,11 +206,11 @@ fileprivate final class OwnedArchive<Item: AnyObject> {
     }
 }
 
-typealias ModalAlbumCallback = () -> ()
+typealias ModalAlbumCallback = (UIImage?, UIView) -> ()
 
 extension AlbumController {
-    func presentModalAlbum() -> Void {
-        let modal = LargeImageViewController(image: nil, rootView: view)
+    func presentModalAlbum(_ currentImage: UIImage?, _ rootView: UIView) -> Void {
+        let modal = LargeImageViewController(image: currentImage, rootView: rootView)
         guard let root = view.window?.rootViewController else {
             assert(false, "Could not obtain root view controller!")
             return

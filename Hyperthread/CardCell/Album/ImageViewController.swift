@@ -149,7 +149,7 @@ final class MediaViewController: UIViewController {
         
         switch mediaModel.mediaType {
         case .photo:
-            presentModalAlbum?()
+            presentModalAlbum?(imageView?.image, view)
         
         case .videoPlayer, .gifPlayer:
             break
