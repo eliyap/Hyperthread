@@ -14,10 +14,9 @@ final class MediaViewController: UIViewController {
     /// Lazy Component views.
     private var imageView: UIImageView? = nil
     private var gifView: GIFView? = nil
-    private var videoViewController: AVPlayerViewController? = nil
+    private var videoController: VideoController? = nil
     
     /// Eager Component views.
-    private let videoPlayer: AVPlayer = .init()
     private let loadingIndicator: UIActivityIndicatorView = .init()
     private let symbolView: SymbolCircleView = .init()
     
@@ -52,15 +51,15 @@ final class MediaViewController: UIViewController {
         switch media.modelMediaType {
         case .photo, .gifPreview, .videoPreview:
             imageView?.isHidden = false
-            videoViewController?.view.isHidden = true
+            videoController?.view.isHidden = true
             gifView?.isHidden = true
         case .gifPlayer:
             imageView?.isHidden = true
-            videoViewController?.view.isHidden = true
+            videoController?.view.isHidden = true
             gifView?.isHidden = false
         case .videoPlayer:
             imageView?.isHidden = true
-            videoViewController?.view.isHidden = false
+            videoController?.view.isHidden = false
             gifView?.isHidden = true
         }
         
@@ -97,13 +96,13 @@ final class MediaViewController: UIViewController {
             }
             
         case .videoPlayer:
-            let _ = addVideo()
+            let vController = addVideo()
             #warning("TODO: make a more considred choice about which video to play!")
             if
                 let vidUrlString = media.video?.variants.first?.url,
                 let vidURL = URL(string: vidUrlString)
             {
-                videoPlayer.replaceCurrentItem(with: AVPlayerItem(url: vidURL))
+                vController.play(url: vidURL)
                 symbolView.set(symbol: .hidden)
             }
         }
@@ -146,9 +145,22 @@ final class MediaViewController: UIViewController {
         
         switch mediaModel.mediaType {
         case .photo:
-            break
+            guard let url = mediaModel.url else {
+                break
+            }
+            
+            let modal = LargeImageViewController(url: url, rootView: view)
+            guard let root = view.window?.rootViewController else {
+                assert(false, "Could not obtain root view controller!")
+                return
+            }
+            root.present(modal, animated: true, completion: {
+                /// Nothing.
+            })
+        
         case .videoPlayer, .gifPlayer:
             break
+        
         case .videoPreview, .gifPreview:
             /// Show video on Twitter website, since we do not have a local copy.
             guard let urlString = mediaModel.picUrlString else {
@@ -175,19 +187,6 @@ final class MediaViewController: UIViewController {
                 }
             }
         }
-        
-        #warning("Code Stub.")
-        /// Code stub for future big-image zoom and pan view.
-        /*
-        let modal = LargeImageViewController()
-        guard let root = view.window?.rootViewController else {
-            assert(false, "Could not obtain root view controller!")
-            return
-        }
-        root.present(modal, animated: true) {
-            print("Done!")
-        }
-         */
     }
     
     override func viewDidLayoutSubviews() {
@@ -238,26 +237,25 @@ extension MediaViewController {
         return imageView
     }
     
-    func addVideo() -> AVPlayerViewController {
-        if let existing = self.videoViewController { return existing }
+    func addVideo() -> VideoController {
+        if let existing = self.videoController { return existing }
         
-        let videoViewController: AVPlayerViewController = .init()
+        let videoController: VideoController = .init()
         
         /// Insert at the back, behind `symbolView`.
-        adopt(videoViewController, subviewIndex: 0)
+        adopt(videoController, subviewIndex: 0)
         
         NSLayoutConstraint.activate([
-            videoViewController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            videoViewController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            videoViewController.view.heightAnchor.constraint(equalTo: view.heightAnchor),
-            videoViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
+            videoController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            videoController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            videoController.view.heightAnchor.constraint(equalTo: view.heightAnchor),
+            videoController.view.widthAnchor.constraint(equalTo: view.widthAnchor),
         ])
-        videoViewController.videoGravity = .resizeAspect
-        videoViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        videoViewController.player = videoPlayer
+        videoController.videoGravity = .resizeAspect
+        videoController.view.translatesAutoresizingMaskIntoConstraints = false
         
-        self.videoViewController = videoViewController
-        return videoViewController
+        self.videoController = videoController
+        return videoController
     }
     
     func addGIF() -> GIFView {

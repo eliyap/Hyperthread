@@ -42,6 +42,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             """, print: true, DEBUG_TERMINATION)
         #endif
         
+        /// Eagerly load media fetcher, which is implicitly lazy (due to being `static`) by default.
+        let _: MediaFetcher = MediaFetcher.shared
+        
         return true
     }
 
