@@ -44,6 +44,11 @@ final class LargeImageViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         view.frame = .init(origin: .zero, size: size)
+        coordinator.animate(alongsideTransition: nil, completion: { [weak self] _ in
+            UIView.animate(withDuration: 0.1, delay: .zero, animations: {
+                self?.largeImageView.frameView.didTransition(to: size)
+            }, completion: nil)
+        })
     }
     
     required init?(coder: NSCoder) {
