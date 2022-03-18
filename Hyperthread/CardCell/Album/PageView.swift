@@ -216,6 +216,13 @@ extension ModalPageView: UICollectionViewDelegate {
             scrollToItem(at: startIndex, at: [], animated: false)
             hasSetStartIndex = true
         }
+        
+        /// Reset zoom before displaying, similar to iOS's Photos.
+        guard let cell = cell as? ModalPageViewCell else {
+            assert(false, "Incorrect type!")
+            return
+        }
+        cell.zoomableImageView.zoomScale = 1
     }
 }
 
