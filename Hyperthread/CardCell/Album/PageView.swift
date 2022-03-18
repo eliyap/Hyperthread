@@ -336,13 +336,14 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             }
         }()
         
-        /// Send to animation end point.
-        /// Constraint animation: https://stackoverflow.com/questions/12926566/are-nslayoutconstraints-animatable
+        /// Animate fade down.
+        galleryView.backgroundColor = .clear
+        galleryView.pageView.isHidden = true
         UIView.animate(
             withDuration: Self.duration,
-            animations: {
-            },
+            animations: { galleryView.backgroundColor = .galleryBackground },
             completion: { _ in
+                galleryView.pageView.isHidden = false
                 context.completeTransition(true)
             }
         )
