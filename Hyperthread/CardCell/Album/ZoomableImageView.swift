@@ -147,7 +147,7 @@ extension ZoomableImageView: SizeAwareView {
 
 final class _ZoomableImageView: UIScrollView {
     
-    public let imageView: UIImageView = .init()
+    private let imageView: UIImageView = .init()
     
     private var aspectConstraint: NSLayoutConstraint? = nil
 
