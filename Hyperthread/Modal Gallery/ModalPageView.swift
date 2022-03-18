@@ -31,14 +31,6 @@ final class ModalPageView: UICollectionView {
         
         /// Since pictures can animate into place from outside the safe area,  we need to allow out-of-bounds pixels to be shown.
         clipsToBounds = false
-        
-        #if DEBUG
-        let __ENABLE_FRAME_BORDER__ = true
-        if __ENABLE_FRAME_BORDER__ {
-            layer.borderWidth = 2
-            layer.borderColor = UIColor.red.cgColor
-        }
-        #endif
     }
     
     func constrain(to view: UIView) -> Void {
