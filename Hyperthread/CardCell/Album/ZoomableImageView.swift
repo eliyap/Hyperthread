@@ -142,6 +142,12 @@ extension ZoomableImageView: SizeAwareView {
         updateFloatCenter()
     }
 }
+
+/// Provides a view whose frame we can target for a `matchedGeometryEffect` style transition.
+protocol GeometryTargetProvider: UIView {
+    var targetView: UIView { get }
+}
+
 final class _ZoomableImageView: UIScrollView {
     
     private let imageView: UIImageView = .init()
@@ -282,5 +288,11 @@ extension _ZoomableImageView: UIScrollViewDelegate {
 extension _ZoomableImageView: SizeAwareView {
     func didTransition(to size: CGSize) {
         updateFloatCenter()
+    }
+}
+
+extension _ZoomableImageView: GeometryTargetProvider {
+    var targetView: UIView {
+        imageView
     }
 }
