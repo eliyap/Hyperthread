@@ -68,7 +68,7 @@ final class ZoomableImageView: UIScrollView {
         doubleTap.numberOfTapsRequired = 2
         addGestureRecognizer(doubleTap)
     }
-    
+
     @objc
     private func didDoubleTap(recognizer: UITapGestureRecognizer) -> Void {
         if zoomScale == 1 {
