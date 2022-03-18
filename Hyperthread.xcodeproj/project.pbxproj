@@ -78,6 +78,8 @@
 		22817B9E27E3853600D34C71 /* LargeImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9D27E3853600D34C71 /* LargeImageViewController.swift */; };
 		22817BA027E3A0BC00D34C71 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */; };
 		22817BA327E4057200D34C71 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA227E4057200D34C71 /* PageView.swift */; };
+		22817BA527E51B8F00D34C71 /* GeometryTargetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */; };
+		22817BA727E51BF900D34C71 /* ModalPageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -233,6 +235,8 @@
 		22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		22817BA127E3DB2700D34C71 /* ImageZoom.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ImageZoom.md; sourceTree = "<group>"; };
 		22817BA227E4057200D34C71 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
+		22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryTargetProvider.swift; sourceTree = "<group>"; };
+		22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageViewCell.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -550,6 +554,8 @@
 				22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */,
 				22817B9D27E3853600D34C71 /* LargeImageViewController.swift */,
 				22817BA227E4057200D34C71 /* PageView.swift */,
+				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
+				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
 				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
 				22817BA127E3DB2700D34C71 /* ImageZoom.md */,
 				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
@@ -875,6 +881,7 @@
 				22D127E12740655900932614 /* IconView.swift in Sources */,
 				22FA26A02794CC4D00DD8EE4 /* DiscussionDDS.swift in Sources */,
 				22FA26B12795C61100DD8EE4 /* StoreFollowing.swift in Sources */,
+				22817BA527E51B8F00D34C71 /* GeometryTargetProvider.swift in Sources */,
 				2266D0CC276197E20099477D /* ShowAlert.swift in Sources */,
 				2232DD2C2796F1E900936846 /* TableTopBar.swift in Sources */,
 				223BBF862738572C00375530 /* MainTable.swift in Sources */,
@@ -884,6 +891,7 @@
 				22FA26AF2795BAC500DD8EE4 /* UpdateDangling.swift in Sources */,
 				22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */,
 				223BBF6527377E8900375530 /* IngestTweet.swift in Sources */,
+				22817BA727E51BF900D34C71 /* ModalPageViewCell.swift in Sources */,
 				22FA26A22795B6CD00DD8EE4 /* ReferenceSet.swift in Sources */,
 				22817B9927E1464500D34C71 /* ImageTransition.swift in Sources */,
 				2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */,

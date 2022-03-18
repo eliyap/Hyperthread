@@ -143,10 +143,7 @@ extension ZoomableImageView: SizeAwareView {
     }
 }
 
-/// Provides a view whose frame we can target for a `matchedGeometryEffect` style transition.
-protocol GeometryTargetProvider: UIView {
-    var targetView: UIView { get }
-}
+
 
 final class _ZoomableImageView: UIScrollView {
     
