@@ -9,11 +9,11 @@ import UIKit
 
 final class GalleryViewController: UIViewController {
     
-    private let pageView: ModalPageView
+    private let galleryView: GalleryView
+    
+    private let pageViewController: ModalPageViewController
     
     public typealias Cell = ModalPageViewCell
-    
-    private let dataSource: ModalAlbumDataSource
     
     private weak var rootView: UIView?
     
@@ -25,30 +25,45 @@ final class GalleryViewController: UIViewController {
         self.rootView = rootView
         let startIndex = IndexPath(item: startIndex, section: 0)
         self.startIndex = startIndex
-        self.pageView = .init(rootView: rootView, image: images.first ?? nil, startIndex: startIndex)
-        self.dataSource = .init(collectionView: pageView, cellProvider: { collectionView, indexPath, itemIdentifier in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseID, for: indexPath) as? Cell else {
-                fatalError("Failed to create or cast new cell!")
-            }
-            
-            let image: UIImage? = images[indexPath.item]
-            cell.configure(image: image, frame: collectionView.safeAreaLayoutGuide.layoutFrame)
-            
-            return cell
-        })
+        let pageViewController = ModalPageViewController(images: images, rootView: rootView, startIndex: startIndex)
+        self.pageViewController = pageViewController
+        self.galleryView = .init(pageView: pageViewController.pageView)
         super.init(nibName: nil, bundle: nil)
         
-        view = pageView
-        pageView.dataSource = dataSource
+        view = galleryView
         
-        var snapshot: ModalAlbumDataSource.Snapshot = .init()
-        snapshot.appendSections([.all])
-        snapshot.appendItems(Array(0..<images.count), toSection: .all)
-        dataSource.apply(snapshot)
+        addChild(pageViewController)
+        galleryView.addSubview(pageViewController.view)
+        pageViewController.didMove(toParent: self)
         
         /// Request a custom animation.
         modalPresentationStyle = .custom
         transitioningDelegate = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class GalleryView: UIView {
+    
+    weak var pageView: ModalPageView!
+    
+    init(pageView: ModalPageView) {
+        self.pageView = pageView
+        super.init(frame: .zero)
+    }
+    
+    func constrain(to view: UIView) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        pageView.constrain(to: self)
     }
     
     required init?(coder: NSCoder) {
@@ -120,14 +135,13 @@ final class ModalPageLayout: UICollectionViewFlowLayout {
 
 final class ModalPageViewController: UIViewController {
     
-    private let pageView: ModalPageView
+    public let pageView: ModalPageView
     
     public typealias Cell = ModalPageViewCell
     
     private let dataSource: ModalAlbumDataSource
     
-    init(images: [UIImage?], rootView: UIView, startIndex: Int) {
-        let startIndex = IndexPath(item: startIndex, section: 0)
+    init(images: [UIImage?], rootView: UIView, startIndex: IndexPath) {
         self.pageView = .init(rootView: rootView, image: images.first ?? nil, startIndex: startIndex)
         self.dataSource = .init(collectionView: pageView, cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseID, for: indexPath) as? Cell else {
@@ -189,10 +203,10 @@ final class ModalPageView: UICollectionView {
     func constrain(to view: UIView) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: view.topAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
         ])
     }
     
@@ -313,16 +327,16 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             context.completeTransition(false)
             return
         }
-        guard let pageView = toView as? ModalPageView else {
+        guard let galleryView = toView as? GalleryView else {
             assert(false, "Unexpected view type!")
             context.completeTransition(false)
             return
         }
         
         { /// Place target view into its final position by forcing a layout pass.
-            context.containerView.addSubview(pageView)
-            pageView.constrain(to: context.containerView)
-            pageView.setNeedsLayout()
+            context.containerView.addSubview(galleryView)
+            galleryView.constrain(to: context.containerView)
+            galleryView.setNeedsLayout()
             context.containerView.layoutIfNeeded()
             
             guard let cell = pageView.cellForItem(at: startIndex) as? ModalPageViewCell else {
