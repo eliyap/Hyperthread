@@ -23,7 +23,9 @@ final class ModalPageViewController: UIViewController {
     
     init(images: [UIImage?], rootView: UIView, startIndex: Int) {
         self.rootView = rootView
-        self.pageView = .init(rootView: rootView, image: images.first ?? nil)
+        let startIndex = IndexPath(item: startIndex, section: 0)
+        self.startIndex = startIndex
+        self.pageView = .init(rootView: rootView, image: images.first ?? nil, startIndex: startIndex)
         self.dataSource = .init(collectionView: pageView, cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseID, for: indexPath) as? Cell else {
                 fatalError("Failed to create or cast new cell!")
@@ -69,12 +71,15 @@ final class ModalPageView: UICollectionView {
     
     public let previewImage: UIImage?
     
+    private let startIndex: IndexPath
+    
     @MainActor
-    init(rootView: UIView, image: UIImage?) {
+    init(rootView: UIView, image: UIImage?, startIndex: IndexPath) {
         self.previewImage = image
         self.rootView = rootView
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        self.startIndex = startIndex
         super.init(frame: .zero, collectionViewLayout: layout)
         
         delegate = self
