@@ -75,7 +75,6 @@
 		22817B9727E11D6800D34C71 /* AbsoluteFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9627E11D6800D34C71 /* AbsoluteFrame.swift */; };
 		22817B9927E1464500D34C71 /* ImageTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9827E1464500D34C71 /* ImageTransition.swift */; };
 		22817B9C27E2B70D00D34C71 /* VideoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9B27E2B70D00D34C71 /* VideoController.swift */; };
-		22817B9E27E3853600D34C71 /* LargeImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9D27E3853600D34C71 /* LargeImageViewController.swift */; };
 		22817BA027E3A0BC00D34C71 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */; };
 		22817BA327E4057200D34C71 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA227E4057200D34C71 /* PageView.swift */; };
 		22817BA527E51B8F00D34C71 /* GeometryTargetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */; };
@@ -233,7 +232,6 @@
 		22817B9627E11D6800D34C71 /* AbsoluteFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbsoluteFrame.swift; sourceTree = "<group>"; };
 		22817B9827E1464500D34C71 /* ImageTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTransition.swift; sourceTree = "<group>"; };
 		22817B9B27E2B70D00D34C71 /* VideoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoController.swift; sourceTree = "<group>"; };
-		22817B9D27E3853600D34C71 /* LargeImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeImageViewController.swift; sourceTree = "<group>"; };
 		22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		22817BA127E3DB2700D34C71 /* ImageZoom.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ImageZoom.md; sourceTree = "<group>"; };
 		22817BA227E4057200D34C71 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
@@ -556,7 +554,6 @@
 				22FBAAD727B07E0200FEEB71 /* SymbolCircleView.swift */,
 				22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */,
 				22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */,
-				22817B9D27E3853600D34C71 /* LargeImageViewController.swift */,
 				22817BA227E4057200D34C71 /* PageView.swift */,
 				22817BA827E520AC00D34C71 /* ModalPageView.swift */,
 				22817BAA27E5210700D34C71 /* ModalPageLayout.swift */,
@@ -985,7 +982,6 @@
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				22BC9E9327A5C9A000721BD2 /* ImageViewController.swift in Sources */,
-				22817B9E27E3853600D34C71 /* LargeImageViewController.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
 				22FA26A72795B91F00DD8EE4 /* Tweet Shorthand.swift in Sources */,
 				22193DB527859D2D005A7708 /* RealmError.swift in Sources */,
