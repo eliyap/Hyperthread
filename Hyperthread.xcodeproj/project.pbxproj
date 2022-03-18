@@ -556,8 +556,6 @@
 				22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */,
 				22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */,
 				22817BA227E4057200D34C71 /* PageView.swift */,
-				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
-				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
 				22817BA127E3DB2700D34C71 /* ImageZoom.md */,
 				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
 				22817B9827E1464500D34C71 /* ImageTransition.swift */,
@@ -571,6 +569,8 @@
 				22817BA827E520AC00D34C71 /* ModalPageView.swift */,
 				22817BAA27E5210700D34C71 /* ModalPageLayout.swift */,
 				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
+				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
+				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
 			);
 			path = "Modal Gallery";
 			sourceTree = "<group>";
