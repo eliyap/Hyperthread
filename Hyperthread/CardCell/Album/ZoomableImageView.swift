@@ -270,7 +270,17 @@ final class _ZoomableImageView: UIScrollView {
         let excessWidth = size.width - prediction.width
         let xInset = max(0, excessWidth / 2)
         
-        contentInset = UIEdgeInsets(top: yInset, left: xInset, bottom: yInset, right: xInset)
+        /// 22.03.18
+        /// Observed issue where edge insets interfere with dismissal gesture recognizer.
+        /// Theory: view becomes imperceptibly "scrollable" due to floating point errors.
+        /// Solution: reduce insets slightly so view is not scrollable.
+        /// – Note: `UIScrollViewDelegate` methods did not fire, so theory may be incorrect.
+        contentInset = UIEdgeInsets(
+            top: yInset - 1,
+            left: xInset - 1,
+            bottom: yInset - 1,
+            right: xInset - 1
+        )
         
         /// Explicitly set content size to predicted value, as this does not update upon device rotation.
         contentSize = prediction
