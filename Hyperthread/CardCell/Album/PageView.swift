@@ -117,7 +117,7 @@ final class ModalPageViewController: UIViewController {
 
 extension GalleryViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return AlbumPresentingAnimator(rootView: rootView, startIndex: startIndex)
+        return AlbumPresentingAnimator(rootView: rootView)
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -141,11 +141,8 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
     
     private weak var rootView: UIView?
     
-    private let startIndex: IndexPath
-    
-    init(rootView: UIView?, startIndex: IndexPath) {
+    init(rootView: UIView?) {
         self.rootView = rootView
-        self.startIndex = startIndex
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
