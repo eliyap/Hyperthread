@@ -216,68 +216,68 @@ final class _ZoomableImageView: UIScrollView {
         let newAspectConstraint = imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: aspectRatio)
         replace(object: self, on: \.aspectConstraint, with: newAspectConstraint)
         
-        predictInsets(image: image, frame: frame)
+        predictInsets(image: image, size: frame.size)
     }
     
     /// Convenience method.
-    func predictInsets(frame: CGRect) -> Void {
+    func predictInsets(size: CGSize) -> Void {
         guard let image = imageView.image else {
             assert(false, "No image to predict with!")
             return
         }
-        predictInsets(image: image, frame: frame)
+        predictInsets(image: image, size: size)
     }
     
     /// Goal: predict layout insets to center the image, without requiring a layout pass.
     /// Since image size and layout rules are known, we can predict insets.
-    func predictInsets(image: UIImage, frame: CGRect) -> Void {
+    func predictInsets(image: UIImage, size: CGSize) -> Void {
         /// Predict `imageView` height.
-        let tooTall = image.size.height > frame.height
-        let tooWide = image.size.width > frame.width
-        let size: CGSize
+        let tooTall = image.size.height > size.height
+        let tooWide = image.size.width > size.width
+        let prediction: CGSize
         switch (tooTall, tooWide) {
         case (false, false):
-            size = image.size
+            prediction = image.size
             
         case (false, true):
-            size = CGSize(
-                width: frame.width,
-                height: image.size.height * (frame.width / image.size.width)
+            prediction = CGSize(
+                width: size.width,
+                height: image.size.height * (size.width / image.size.width)
             )
             
         case (true, false):
-            size = CGSize(
-                width: image.size.width * (frame.height / image.size.height),
-                height: frame.height
+            prediction = CGSize(
+                width: image.size.width * (size.height / image.size.height),
+                height: size.height
             )
             
         case (true, true):
-            if (image.size.height / image.size.width) > (frame.height / frame.width) {
+            if (image.size.height / image.size.width) > (size.height / size.width) {
                 /// Image is proportionally taller than frame, will be height constrained.
-                size = CGSize(
-                    width: image.size.width * (frame.height / image.size.height),
-                    height: frame.height
+                prediction = CGSize(
+                    width: image.size.width * (size.height / image.size.height),
+                    height: size.height
                 )
             } else {
                 /// Image is proportionally shorter than frame, will be width constrained.
-                size = CGSize(
-                    width: frame.width,
-                    height: image.size.height * (frame.width / image.size.width)
+                prediction = CGSize(
+                    width: size.width,
+                    height: image.size.height * (size.width / image.size.width)
                 )
             }
         }
         
-        print("predicted size: \(size)")
-        let excessHeight = frame.height - size.height
+        print("predicted size: \(prediction)")
+        let excessHeight = size.height - prediction.height
         let yInset = max(0, excessHeight / 2)
         
-        let excessWidth = frame.width - size.width
+        let excessWidth = size.width - prediction.width
         let xInset = max(0, excessWidth / 2)
         
         contentInset = UIEdgeInsets(top: yInset, left: xInset, bottom: yInset, right: xInset)
         
         /// Explicitly set content size to predicted value, as this does not update upon device rotation.
-        contentSize = size
+        contentSize = prediction
     }
     
     @objc

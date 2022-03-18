@@ -107,9 +107,8 @@ final class ModalPageLayout: UICollectionViewFlowLayout {
             }
             
             /// - Important: Relies on `collectionView.bounds` being equal to image frame bounds.
-            cell.zoomableImageView.predictInsets(frame: newBounds)
+            cell.zoomableImageView.predictInsets(size: newBounds.size)
         }
-        
         
         return context
     }
