@@ -48,7 +48,7 @@ final class ModalPageLayout: UICollectionViewFlowLayout {
             }
             
             /// - Important: Relies on `collectionView.bounds` being equal to image frame bounds.
-            cell.willTransition(to: newBounds)
+            cell.willTransition(to: newBounds.size)
         }
         
         return context

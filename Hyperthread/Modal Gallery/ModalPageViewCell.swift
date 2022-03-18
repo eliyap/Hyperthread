@@ -33,8 +33,8 @@ final class ModalPageViewCell: UICollectionViewCell {
     }
     
     /// - Note: non-standard function, not part of `UIView` API.
-    public func willTransition(to bounds: CGRect) -> Void {
-        zoomableImageView.predictInsets(size: bounds.size)
+    public func willTransition(to size: CGSize) -> Void {
+        zoomableImageView.predictInsets(size: size)
     }
     
     public func resetDisplay() -> Void {
