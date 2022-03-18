@@ -124,16 +124,16 @@ final class ModalPageViewController: UIViewController {
 
 extension GalleryViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return AlbumPresentingAnimator(rootView: rootView)
+        return GalleryPresentingAnimator(rootView: rootView)
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return AlbumDismissingAnimator(rootView: rootView, transitioner: transitioner)
+        return GalleryDismissingAnimator(rootView: rootView, transitioner: transitioner)
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         guard
-            let animator = animator as? AlbumDismissingAnimator,
+            let animator = animator as? GalleryDismissingAnimator,
             let transitioner = animator.transitioner,
             transitioner.interactionInProgress
         else {
@@ -146,7 +146,7 @@ extension GalleryViewController: UIViewControllerTransitioningDelegate {
 /// Views pop above navigation bars when animated in, we reduce transparency to make that less jarring.
 let transitionOpacity: Float = 0.25
 
-final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     public static let duration = 0.25
     
     private weak var rootView: UIView?
@@ -214,8 +214,8 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
     }
 }
 
-final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    public static let duration = AlbumPresentingAnimator.duration
+final class GalleryDismissingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    public static let duration = GalleryPresentingAnimator.duration
     
     private weak var rootView: UIView?
     
