@@ -261,7 +261,9 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
         }
         context.containerView.addSubview(snapshot)
         
-        let startingFrame = target.absoluteFrame()
+        /// Ignores `UIScrollView` scaling.
+        let startingFrame = CGRect(origin: target.absoluteFrame().origin, size: target.frame.size)
+        
         let endingFrame = rootView?.absoluteFrame() ?? target.absoluteFrame()
         
         /// Animation start point.
