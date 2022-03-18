@@ -219,6 +219,14 @@ final class _ZoomableImageView: UIScrollView {
         predictInsets(image: image, frame: frame)
     }
     
+    func predictInsets(frame: CGRect) -> Void {
+        guard let image = imageView.image else {
+            assert(false, "No image to predict with!")
+            return
+        }
+        predictInsets(image: image, frame: frame)
+    }
+    
     func predictInsets(image: UIImage, frame: CGRect) -> Void {
         /// Predict `imageView` height.
         let tooTall = image.size.height > frame.height
