@@ -28,6 +28,8 @@ final class ModalPageView: UICollectionView {
         isPagingEnabled = true
         register(ModalPageViewCell.self, forCellWithReuseIdentifier: ModalPageViewCell.reuseID)
         backgroundColor = .clear
+        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator = false
         
         /// Since pictures can animate into place from outside the safe area,  we need to allow out-of-bounds pixels to be shown.
         clipsToBounds = false
