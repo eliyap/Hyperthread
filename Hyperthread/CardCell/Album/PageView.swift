@@ -50,20 +50,6 @@ final class ModalPageViewController: UIViewController {
         transitioningDelegate = self
     }
     
-    /// Conflicting reports on what works, try a couple points as a failsafe.
-    /// https://stackoverflow.com/questions/18087073/start-uicollectionview-at-a-specific-indexpath
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setStartIndex()
-    }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        setStartIndex()
-    }
-    func setStartIndex() -> Void {
-//        pageView.scrollToItem(at: startIndex, at: [], animated: false)
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
