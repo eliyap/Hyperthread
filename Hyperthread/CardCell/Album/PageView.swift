@@ -207,7 +207,7 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
 }
 
 final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    public static let duration = ImagePresentingAnimator.duration
+    public static let duration = AlbumPresentingAnimator.duration
     
     private weak var rootView: UIView?
     
