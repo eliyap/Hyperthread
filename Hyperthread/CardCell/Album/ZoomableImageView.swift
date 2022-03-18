@@ -264,7 +264,6 @@ final class _ZoomableImageView: UIScrollView {
             }
         }
         
-        print("predicted size: \(prediction)")
         let excessHeight = size.height - prediction.height
         let yInset = max(0, excessHeight / 2)
         
