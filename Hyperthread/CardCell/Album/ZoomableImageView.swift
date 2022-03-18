@@ -217,7 +217,7 @@ final class _ZoomableImageView: UIScrollView {
     }
     
     /// Convenience method.
-    func predictInsets(size: CGSize) -> Void {
+    public func predictInsets(size: CGSize) -> Void {
         guard let image = imageView.image else {
             assert(false, "No image to predict with!")
             return
@@ -227,7 +227,7 @@ final class _ZoomableImageView: UIScrollView {
     
     /// Goal: predict layout insets to center the image, without requiring a layout pass.
     /// Since image size and layout rules are known, we can predict insets.
-    func predictInsets(image: UIImage, size: CGSize) -> Void {
+    public func predictInsets(image: UIImage, size: CGSize) -> Void {
         /// Predict `imageView` height.
         let tooTall = image.size.height > size.height
         let tooWide = image.size.width > size.width
