@@ -90,3 +90,13 @@ extension ModalPageView: UICollectionViewDelegateFlowLayout {
         .zero
     }
 }
+
+extension ModalPageView: GeometryTargetProvider {
+    var targetView: UIView {
+        guard let target = cellForItem(at: targetIndex) as? GeometryTargetProvider else {
+            assert(false, "Could not get target!")
+            return self
+        }
+        return target.targetView
+    }
+}
