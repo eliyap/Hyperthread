@@ -419,6 +419,7 @@
 				22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */,
 				22193DAD27840466005A7708 /* UserModal */,
 				222161F02741A8D300220F0C /* CardCell */,
+				22817BAC27E5475A00D34C71 /* Modal Gallery */,
 				22D127DF2740653900932614 /* TweetCell */,
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
 				22A760C827A866610006E9BC /* DiscussionTableWrapper.swift */,
@@ -555,9 +556,6 @@
 				22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */,
 				22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */,
 				22817BA227E4057200D34C71 /* PageView.swift */,
-				22817BA827E520AC00D34C71 /* ModalPageView.swift */,
-				22817BAA27E5210700D34C71 /* ModalPageLayout.swift */,
-				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
 				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
 				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
 				22817BA127E3DB2700D34C71 /* ImageZoom.md */,
@@ -565,6 +563,16 @@
 				22817B9827E1464500D34C71 /* ImageTransition.swift */,
 			);
 			path = Album;
+			sourceTree = "<group>";
+		};
+		22817BAC27E5475A00D34C71 /* Modal Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				22817BA827E520AC00D34C71 /* ModalPageView.swift */,
+				22817BAA27E5210700D34C71 /* ModalPageLayout.swift */,
+				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
+			);
+			path = "Modal Gallery";
 			sourceTree = "<group>";
 		};
 		228D71EE2780127400E306BD /* DateWindow */ = {
