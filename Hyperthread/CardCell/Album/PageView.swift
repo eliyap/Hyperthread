@@ -187,12 +187,10 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         
         /// Animate fade down.
         galleryView.backgroundColor = .clear
-        galleryView.pageView.isHidden = true
         UIView.animate(
             withDuration: Self.duration,
             animations: { galleryView.backgroundColor = .galleryBackground },
             completion: { _ in
-                galleryView.pageView.isHidden = false
                 context.completeTransition(true)
             }
         )
