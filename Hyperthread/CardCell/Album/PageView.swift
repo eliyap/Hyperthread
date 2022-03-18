@@ -302,10 +302,11 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
 }
 
 func scaleCenterFit(_ rect: CGRect, into frame: CGRect) -> CGRect {
+    /// - Note: 0.99 accounts for small floating point errors.
     if (rect.size.width / rect.size.height) > (frame.size.width / frame.size.height) {
         /// Rect is proportionally wider than frame, need to center it vertically.
         let scaledHeight = rect.size.height * (frame.size.width / rect.size.width)
-        assert(0.99 * scaledHeight < frame.size.height, "Scaled height should be shorter than frame!")
+        assert(0.99 * scaledHeight <= frame.size.height, "Scaled height should be shorter than frame!")
         let excessHeight = frame.size.height - scaledHeight
         
         return CGRect(
@@ -315,7 +316,7 @@ func scaleCenterFit(_ rect: CGRect, into frame: CGRect) -> CGRect {
     } else {
         /// Rect is proportionally taller than frame, need to center it horizontally.
         let scaledWidth = rect.size.width * (frame.size.height / rect.size.height)
-        assert(0.99 * scaledWidth < frame.size.width, "Scaled width \(scaledWidth) should be narrower than frame \(frame.width)!")
+        assert(0.99 * scaledWidth <= frame.size.width, "Scaled width \(scaledWidth) should be narrower than frame \(frame.width)!")
         let excessWidth = frame.size.width - scaledWidth
 
         return CGRect(
