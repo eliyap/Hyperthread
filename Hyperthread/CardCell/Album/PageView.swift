@@ -51,6 +51,11 @@ final class ModalPageViewController: UIViewController {
         transitioningDelegate = self
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        pageView.collectionViewLayout.invalidateLayout()
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
