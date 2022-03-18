@@ -266,6 +266,9 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
         
         let endingFrame = rootView?.absoluteFrame() ?? target.absoluteFrame()
         
+        /// Hide original.
+        target.isHidden = true
+
         /// Animation start point.
         galleryView.backgroundColor = .galleryBackground
         snapshot.frame = startingFrame
@@ -280,6 +283,11 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             completion: { _ in
                 snapshot.removeFromSuperview()
                 if context.transitionWasCancelled {
+                    /// Roll back animation.
+                    galleryView.backgroundColor = .galleryBackground
+                    target.isHidden = false
+                    snapshot.frame = startingFrame
+                    
                     context.completeTransition(false)
                 } else {
                     context.completeTransition(true)
