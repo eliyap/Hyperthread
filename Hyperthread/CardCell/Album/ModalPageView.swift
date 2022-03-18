@@ -63,7 +63,7 @@ extension ModalPageView: UICollectionViewDelegate {
             assert(false, "Incorrect type!")
             return
         }
-        cell.zoomableImageView.zoomScale = 1
+        cell.resetDisplay()
     }
 }
 
