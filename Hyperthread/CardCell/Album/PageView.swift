@@ -278,12 +278,12 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
                 snapshot.frame = endingFrame
             },
             completion: { _ in
+                snapshot.removeFromSuperview()
                 if context.transitionWasCancelled {
                     context.completeTransition(false)
                 } else {
                     context.completeTransition(true)
                 }
-                snapshot.removeFromSuperview()
             }
         )
     }
