@@ -61,8 +61,6 @@ extension ModalPageView: UICollectionViewDelegate {
         if hasSetStartIndex == false {
             scrollToItem(at: startIndex, at: [], animated: false)
             hasSetStartIndex = true
-        } else {
-            targetIndex = indexPath
         }
     }
     
@@ -91,6 +89,30 @@ extension ModalPageView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, minimumLineSpacingForSectionAt: Int) -> CGFloat {
         /// Removes page spacing.
         .zero
+    }
+}
+
+/// Update current index for animation when scrolling.
+extension ModalPageView: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard let target = getCurrentIndexPath() else { return }
+        targetIndex = target
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard let target = getCurrentIndexPath() else { return }
+        targetIndex = target
+    }
+}
+
+extension ModalPageView {
+    /// Obtains a single index path by checking the view's center.
+    /// Source: https://stackoverflow.com/a/24396643/12395667
+    func getCurrentIndexPath() -> IndexPath? {
+        let visibleRect = CGRect(origin: contentOffset, size: bounds.size)
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+        let visibleIndexPath = indexPathForItem(at: visiblePoint)
+        return visibleIndexPath
     }
 }
 
