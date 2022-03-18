@@ -216,8 +216,11 @@ extension ModalPageView: UICollectionViewDelegate {
             scrollToItem(at: startIndex, at: [], animated: false)
             hasSetStartIndex = true
         }
-        
-        /// Reset zoom before displaying, similar to iOS's Photos.
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        /// Reset zoom when cell disappears, similar to iOS's Photos.
+        /// - Note: do *not* perform in `willDisplay`, as this interferes with the `contentSize` correction calculated during device rotation.
         guard let cell = cell as? ModalPageViewCell else {
             assert(false, "Incorrect type!")
             return
