@@ -21,6 +21,9 @@ final class GalleryViewController: UIViewController {
     
     private let startIndex: IndexPath
     
+    /// Don't want images going under status bar.
+    override var prefersStatusBarHidden: Bool { true }
+    
     init(images: [UIImage?], rootView: UIView, startIndex: Int) {
         self.rootView = rootView
         let startIndex = IndexPath(item: startIndex, section: 0)
@@ -40,6 +43,10 @@ final class GalleryViewController: UIViewController {
         modalPresentationStyle = .custom
         transitioningDelegate = self
         transitioner = GalleryTransitioner(viewController: self)
+        
+        /// Take control of status bar.
+        /// Docs: https://developer.apple.com/documentation/uikit/uiviewcontroller/1621453-modalpresentationcapturesstatusb
+        modalPresentationCapturesStatusBarAppearance = true
     }
     
     required init?(coder: NSCoder) {
