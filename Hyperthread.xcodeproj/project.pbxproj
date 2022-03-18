@@ -81,6 +81,7 @@
 		22817BA527E51B8F00D34C71 /* GeometryTargetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */; };
 		22817BA727E51BF900D34C71 /* ModalPageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */; };
 		22817BA927E520AC00D34C71 /* ModalPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA827E520AC00D34C71 /* ModalPageView.swift */; };
+		22817BAB27E5210700D34C71 /* ModalPageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BAA27E5210700D34C71 /* ModalPageLayout.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -239,6 +240,7 @@
 		22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryTargetProvider.swift; sourceTree = "<group>"; };
 		22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageViewCell.swift; sourceTree = "<group>"; };
 		22817BA827E520AC00D34C71 /* ModalPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageView.swift; sourceTree = "<group>"; };
+		22817BAA27E5210700D34C71 /* ModalPageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageLayout.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -557,6 +559,7 @@
 				22817B9D27E3853600D34C71 /* LargeImageViewController.swift */,
 				22817BA227E4057200D34C71 /* PageView.swift */,
 				22817BA827E520AC00D34C71 /* ModalPageView.swift */,
+				22817BAA27E5210700D34C71 /* ModalPageLayout.swift */,
 				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
 				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
 				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
@@ -873,6 +876,7 @@
 				22FA26B32795C70F00DD8EE4 /* UpdateRelevance.swift in Sources */,
 				22760A45274AA6ED00F28F0A /* CardBackground.swift in Sources */,
 				22BFD7A52774620600E46DF1 /* HomeTimelineHelper.swift in Sources */,
+				22817BAB27E5210700D34C71 /* ModalPageLayout.swift in Sources */,
 				223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */,
 				223BBF6D27377EC300375530 /* Conversation.swift in Sources */,
 				223BBF7E273846BE00375530 /* LoginState.swift in Sources */,
