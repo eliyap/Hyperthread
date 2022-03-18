@@ -11,7 +11,7 @@ final class ModalPageViewCell: UICollectionViewCell {
     
     public static let reuseID = "ModalPageViewCell"
     
-    public let zoomableImageView: _ZoomableImageView
+    private let zoomableImageView: _ZoomableImageView
     
     @MainActor
     override init(frame: CGRect) {
@@ -30,6 +30,15 @@ final class ModalPageViewCell: UICollectionViewCell {
     
     public func configure(image: UIImage?, frame: CGRect) -> Void {
         zoomableImageView.configure(image: image, frame: frame)
+    }
+    
+    /// - Note: Custom (non-API) function.
+    public func willTransition(to bounds: CGRect) -> Void {
+        zoomableImageView.predictInsets(size: bounds.size)
+    }
+    
+    public func resetDisplay() -> Void {
+        zoomableImageView.zoomScale = 1
     }
     
     required init?(coder: NSCoder) {
