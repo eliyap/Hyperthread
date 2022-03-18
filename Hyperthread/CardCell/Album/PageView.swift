@@ -167,6 +167,8 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         { /// Place target view into its final position by forcing a layout pass.
             context.containerView.addSubview(galleryView)
             galleryView.constrain(to: context.containerView)
+            
+            /// Forcing a layout causes the `UICollectionView` to create and display a cell, allowing us to access its contents.
             galleryView.setNeedsLayout()
             context.containerView.layoutIfNeeded()
             
