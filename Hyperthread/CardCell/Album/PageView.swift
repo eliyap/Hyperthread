@@ -229,75 +229,46 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             assert(false, "Could not obtain to view!")
             return
         }
-        guard let largeImageView = fromView as? LargeImageView else {
+        
+        guard let targetProvider = fromView as? GeometryTargetProvider else {
+            assert(false, "Missing target provider!")
+            context.completeTransition(false)
+            return
+        }
+        
+        guard let galleryView = fromView as? GalleryView else {
             assert(false, "Unexpected view type!")
             context.completeTransition(false)
             return
         }
         
-        let startingFrame: CGRect = context.containerView.safeAreaLayoutGuide.layoutFrame
-        let endingFrame: CGRect = rootView?.absoluteFrame() ?? .zero
+        let target: UIView = { /// Place target view into its final position by forcing a layout pass.
+            context.containerView.addSubview(galleryView)
+            galleryView.constrain(to: context.containerView)
+            
+            /// Forcing a layout causes the `UICollectionView` to create and display a cell, allowing us to access its contents.
+            galleryView.setNeedsLayout()
+            context.containerView.layoutIfNeeded()
+            
+            return targetProvider.targetView
+        }()
         
-        /// Deactivate before temporary constraints are activated, or we face a conflict.
-        context.containerView.addSubview(largeImageView)
-        largeImageView.deactivateRestingConstraints()
+        let startingFrame = target.absoluteFrame()
+        let endingFrame = rootView?.absoluteFrame() ?? target.absoluteFrame()
         
-        largeImageView.frame = context.containerView.frame
+        /// Animation start point.
+        galleryView.backgroundColor = .galleryBackground
+        target.frame = startingFrame
         
-        /// Set animation start point.
-        largeImageView.backgroundColor = .galleryBackground
-        let widthConstraint = largeImageView.frameView.widthAnchor.constraint(equalToConstant: startingFrame.width)
-        let heightConstraint = largeImageView.frameView.heightAnchor.constraint(equalToConstant: startingFrame.height)
-        let xConstraint = largeImageView.frameView.leadingAnchor.constraint(equalTo: largeImageView.leadingAnchor, constant: startingFrame.origin.x)
-        let yConstraint = largeImageView.frameView.topAnchor.constraint(equalTo: largeImageView.topAnchor, constant: startingFrame.origin.y)
-        NSLayoutConstraint.activate([widthConstraint, heightConstraint, xConstraint, yConstraint])
-        
-        /// - Note: important that we lay out the superview, so that the offset constraints affect layout!
-        /// - Note: `setAnimationStartPoint` must come after layout pass to get accuate dimensions.
-        largeImageView.layoutIfNeeded()
-        largeImageView.frameView.setAnimationStartPoint(frame: startingFrame)
-        
-        largeImageView.frameView.setNeedsUpdateConstraints()
-
-        /// Set another animation start point.
-        largeImageView.frameView.layer.opacity = 1.0
-        
-        /// Send to animation end point.
-        /// Constraint animation: https://stackoverflow.com/questions/12926566/are-nslayoutconstraints-animatable
         UIView.animate(
             withDuration: Self.duration,
             animations: {
-                largeImageView.backgroundColor = .clear
-                
-                widthConstraint.constant = endingFrame.width
-                heightConstraint.constant = endingFrame.height
-                xConstraint.constant = endingFrame.origin.x
-                yConstraint.constant = endingFrame.origin.y
-                largeImageView.layoutIfNeeded()
-                
-                /// - Note: `setAnimationEndPoint` must come after layout pass to get accuate dimensions.
-                largeImageView.frameView.setAnimationEndPoint(frame: endingFrame)
-                
-                /// Slowly fade down the image, so that when it overlaps with the navigation bar,
-                /// the "pop" disappearance is less jarring.
-                largeImageView.frameView.layer.opacity = 0.25
+                /// Animation end point.
+                galleryView.backgroundColor = .clear
+                target.frame = endingFrame
             },
             completion: { _ in
-                /// Remove animation constraints.
-                NSLayoutConstraint.deactivate([widthConstraint, heightConstraint, xConstraint, yConstraint])
-                
                 if context.transitionWasCancelled {
-                    largeImageView.frameView.layer.opacity = 1.0
-                    
-                    /// Set background back to opaque.
-                    largeImageView.backgroundColor = .galleryBackground
-                    
-                    /// Reactivate constraints.
-                    largeImageView.activateRestingConstraints()
-                    
-                    /// Reset frame.
-                    largeImageView.frameView.setAnimationStartPoint(frame: startingFrame)
-
                     context.completeTransition(false)
                 } else {
                     context.completeTransition(true)
