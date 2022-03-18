@@ -57,7 +57,6 @@
 		223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8927385AFA00375530 /* OptionalCompare.swift */; };
 		223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8B27385B0F00375530 /* OptionalCast.swift */; };
 		2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2248FF4F2745BEA100C6DEF9 /* Entities.swift */; };
-		224F88D7275E5CD300085678 /* ImageAnimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224F88D6275E5CD300085678 /* ImageAnimate.swift */; };
 		2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */; };
 		2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C927616FDA0099477D /* GetHeight.swift */; };
 		2266D0CC276197E20099477D /* ShowAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0CB276197E20099477D /* ShowAlert.swift */; };
@@ -214,7 +213,6 @@
 		223BBF8927385AFA00375530 /* OptionalCompare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCompare.swift; sourceTree = "<group>"; };
 		223BBF8B27385B0F00375530 /* OptionalCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCast.swift; sourceTree = "<group>"; };
 		2248FF4F2745BEA100C6DEF9 /* Entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entities.swift; sourceTree = "<group>"; };
-		224F88D6275E5CD300085678 /* ImageAnimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnimate.swift; sourceTree = "<group>"; };
 		2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowRefreshControl.swift; sourceTree = "<group>"; };
 		2266D0C927616FDA0099477D /* GetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetHeight.swift; sourceTree = "<group>"; };
 		2266D0CB276197E20099477D /* ShowAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAlert.swift; sourceTree = "<group>"; };
@@ -557,7 +555,6 @@
 				22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */,
 				22817BA227E4057200D34C71 /* PageView.swift */,
 				22817BA127E3DB2700D34C71 /* ImageZoom.md */,
-				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
 			);
 			path = Album;
 			sourceTree = "<group>";
@@ -872,7 +869,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */,
-				224F88D7275E5CD300085678 /* ImageAnimate.swift in Sources */,
 				22FA26A92795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift in Sources */,
 				22193DB327840923005A7708 /* UserModalViewController.swift in Sources */,
 				22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */,

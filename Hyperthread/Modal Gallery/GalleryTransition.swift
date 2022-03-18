@@ -10,6 +10,11 @@ import UIKit
 /// Views pop above navigation bars when animated in, we reduce transparency to make that less jarring.
 let transitionOpacity: Float = 0.25
 
+public extension UIColor {
+    /// Similar to iOS's Photos App, use a "dark room" style black background for image galleries.
+    static let galleryBackground: UIColor = .black
+}
+
 final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     public static let duration = 0.25
     
