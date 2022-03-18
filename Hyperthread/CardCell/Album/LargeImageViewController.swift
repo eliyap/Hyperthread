@@ -85,9 +85,6 @@ final class LargeImageView: UIView {
     
     public let frameView: FramedImageView & SizeAwareView
 
-    /// Exists to give us the location of the safeAreaLayoutGuide.
-    private let guideView: UIView = .init()
-    
     init(image: UIImage?) {
         self.frameView = ZoomableImageView(image: image)
         super.init(frame: .zero)
