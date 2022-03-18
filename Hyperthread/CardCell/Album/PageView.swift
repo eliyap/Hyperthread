@@ -188,13 +188,14 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         let startingFrame = rootView?.absoluteFrame() ?? target.absoluteFrame()
         let endingFrame = target.absoluteFrame()
         
+        /// Animation start point.
         target.frame = startingFrame
-        
-        /// Animate fade down.
         galleryView.backgroundColor = .clear
+        
         UIView.animate(
             withDuration: Self.duration,
             animations: {
+                /// Animation end point.
                 galleryView.backgroundColor = .galleryBackground
                 target.frame = endingFrame
             },
