@@ -71,6 +71,12 @@ final class GalleryView: UIView {
     }
 }
 
+extension GalleryView: GeometryTargetProvider {
+    var targetView: UIView {
+        pageView.targetView
+    }
+}
+
 enum AlbumSection: Hashable {
     case all
 }
