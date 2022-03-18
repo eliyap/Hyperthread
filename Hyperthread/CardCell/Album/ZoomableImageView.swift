@@ -272,6 +272,9 @@ final class _ZoomableImageView: UIScrollView {
         let xInset = max(0, excessWidth / 2)
         
         contentInset = UIEdgeInsets(top: yInset, left: xInset, bottom: yInset, right: xInset)
+        
+        /// Explicitly set content size to predicted value, as this does not update upon device rotation.
+        contentSize = size
     }
     
     @objc
