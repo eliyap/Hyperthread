@@ -174,7 +174,7 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             return
         }
         
-        { /// Place target view into its final position by forcing a layout pass.
+        let target: UIView = { /// Place target view into its final position by forcing a layout pass.
             context.containerView.addSubview(galleryView)
             galleryView.constrain(to: context.containerView)
             
@@ -182,11 +182,7 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             galleryView.setNeedsLayout()
             context.containerView.layoutIfNeeded()
             
-            guard let cell = galleryView.pageView.cellForItem(at: startIndex) as? ModalPageViewCell else {
-                assert(false, "Could not get cell!")
-                context.completeTransition(false)
-                return
-            }
+            return targetProvider.targetView
         }()
         
         /// Animate fade down.
