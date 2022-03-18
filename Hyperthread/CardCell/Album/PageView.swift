@@ -122,7 +122,7 @@ final class ModalPageLayout: UICollectionViewFlowLayout {
             }
             
             /// - Important: Relies on `collectionView.bounds` being equal to image frame bounds.
-            cell.willTransition(to: newBounds)
+            cell.zoomableImageView.predictInsets(size: newBounds.size)
         }
         
         return context
@@ -222,7 +222,7 @@ extension ModalPageView: UICollectionViewDelegate {
             assert(false, "Incorrect type!")
             return
         }
-        cell.resetDisplay()
+        cell.zoomableImageView.zoomScale = 1
     }
 }
 
