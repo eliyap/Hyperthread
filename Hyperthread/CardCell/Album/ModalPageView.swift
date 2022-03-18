@@ -14,9 +14,14 @@ final class ModalPageView: UICollectionView {
     /// Flag value for first appearance.
     private var hasSetStartIndex = false
     
+    /// Cell index for transition animation target.
+    /// Must point to a loaded & visible cell!
+    private var targetIndex: IndexPath
+    
     @MainActor
     init(startIndex: IndexPath) {
         self.startIndex = startIndex
+        self.targetIndex = startIndex
         super.init(frame: .zero, collectionViewLayout: ModalPageLayout())
         
         delegate = self
@@ -53,6 +58,8 @@ extension ModalPageView: UICollectionViewDelegate {
         if hasSetStartIndex == false {
             scrollToItem(at: startIndex, at: [], animated: false)
             hasSetStartIndex = true
+        } else {
+            targetIndex = indexPath
         }
     }
     
