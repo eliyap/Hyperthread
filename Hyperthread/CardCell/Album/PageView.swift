@@ -53,7 +53,10 @@ final class ModalPageViewController: UIViewController {
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        pageView.collectionViewLayout.invalidateLayout()
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            self?.pageView.collectionViewLayout.invalidateLayout()
+        })
+        
     }
     
     required init?(coder: NSCoder) {
