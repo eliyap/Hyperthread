@@ -184,6 +184,7 @@ final class ModalPageView: UICollectionView {
         delegate = self
         isPagingEnabled = true
         register(ModalPageViewCell.self, forCellWithReuseIdentifier: ModalPageViewCell.reuseID)
+        backgroundColor = .clear
         
         #if DEBUG
         let __ENABLE_FRAME_BORDER__ = true
@@ -254,9 +255,6 @@ final class ModalPageViewCell: UICollectionViewCell {
             zoomableImageView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             zoomableImageView.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
         ])
-        
-        // DEBUG
-        self.backgroundColor = .blue
     }
     
     public func configure(image: UIImage?, frame: CGRect) -> Void {
