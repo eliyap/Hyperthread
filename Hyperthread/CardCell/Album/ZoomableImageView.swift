@@ -185,8 +185,8 @@ final class _ZoomableImageView: UIScrollView {
         #if DEBUG
         let __FRAME_BORDER__ = true
         if __FRAME_BORDER__ {
-            layer.borderWidth = 2
-            layer.borderColor = UIColor.blue.cgColor
+            layer.borderWidth = 3
+            layer.borderColor = UIColor.cyan.cgColor
         }
         
         let __IMAGE_FRAME__ = true
