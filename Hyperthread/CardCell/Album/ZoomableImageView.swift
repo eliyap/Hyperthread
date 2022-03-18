@@ -244,7 +244,7 @@ final class _ZoomableImageView: UIScrollView {
             
         case (true, false):
             size = CGSize(
-                width: image.size.height * (frame.height / image.size.height),
+                width: image.size.width * (frame.height / image.size.height),
                 height: frame.height
             )
             
@@ -252,7 +252,7 @@ final class _ZoomableImageView: UIScrollView {
             if (image.size.height / image.size.width) > (frame.height / frame.width) {
                 /// Image is proportionally taller than frame, will be height constrained.
                 size = CGSize(
-                    width: image.size.height * (frame.height / image.size.height),
+                    width: image.size.width * (frame.height / image.size.height),
                     height: frame.height
                 )
             } else {
