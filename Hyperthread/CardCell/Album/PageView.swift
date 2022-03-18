@@ -142,7 +142,7 @@ final class ModalPageViewController: UIViewController {
     private let dataSource: ModalAlbumDataSource
     
     init(images: [UIImage?], rootView: UIView, startIndex: IndexPath) {
-        self.pageView = .init(rootView: rootView, image: images.first ?? nil, startIndex: startIndex)
+        self.pageView = .init(rootView: rootView, startIndex: startIndex)
         self.dataSource = .init(collectionView: pageView, cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseID, for: indexPath) as? Cell else {
                 fatalError("Failed to create or cast new cell!")
@@ -173,16 +173,13 @@ final class ModalPageView: UICollectionView {
     
     public weak var rootView: UIView?
     
-    public let previewImage: UIImage?
-    
     private let startIndex: IndexPath
     
     /// Flag value for first appearance.
     private var hasSetStartIndex = false
     
     @MainActor
-    init(rootView: UIView, image: UIImage?, startIndex: IndexPath) {
-        self.previewImage = image
+    init(rootView: UIView, startIndex: IndexPath) {
         self.rootView = rootView
         self.startIndex = startIndex
         super.init(frame: .zero, collectionViewLayout: ModalPageLayout())
