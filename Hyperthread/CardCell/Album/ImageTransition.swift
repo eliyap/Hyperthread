@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class LargeImageTransitioner: UIPercentDrivenInteractiveTransition {
+final class GalleryTransitioner: UIPercentDrivenInteractiveTransition {
     
     var interactionInProgress = false
 

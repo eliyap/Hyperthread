@@ -81,6 +81,7 @@
 		22817BA727E51BF900D34C71 /* ModalPageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */; };
 		22817BA927E520AC00D34C71 /* ModalPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA827E520AC00D34C71 /* ModalPageView.swift */; };
 		22817BAB27E5210700D34C71 /* ModalPageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BAA27E5210700D34C71 /* ModalPageLayout.swift */; };
+		22817BAF27E5486800D34C71 /* GalleryTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BAE27E5486800D34C71 /* GalleryTransition.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -239,6 +240,7 @@
 		22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageViewCell.swift; sourceTree = "<group>"; };
 		22817BA827E520AC00D34C71 /* ModalPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageView.swift; sourceTree = "<group>"; };
 		22817BAA27E5210700D34C71 /* ModalPageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageLayout.swift; sourceTree = "<group>"; };
+		22817BAE27E5486800D34C71 /* GalleryTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTransition.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -571,6 +573,7 @@
 				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
 				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
 				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
+				22817BAE27E5486800D34C71 /* GalleryTransition.swift */,
 			);
 			path = "Modal Gallery";
 			sourceTree = "<group>";
@@ -980,6 +983,7 @@
 				228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */,
 				22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */,
 				228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */,
+				22817BAF27E5486800D34C71 /* GalleryTransition.swift in Sources */,
 				22FBAAD227AEF85700FEEB71 /* Video.swift in Sources */,
 				2232DD2E2796F75000936846 /* MainTableWrapper.swift in Sources */,
 				22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */,
