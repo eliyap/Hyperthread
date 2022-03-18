@@ -36,7 +36,6 @@ final class ModalPageViewController: UIViewController {
             
             return cell
         })
-        self.startIndex = .init(item: startIndex, section: 0)
         super.init(nibName: nil, bundle: nil)
         
         view = pageView
@@ -72,6 +71,9 @@ final class ModalPageView: UICollectionView {
     public let previewImage: UIImage?
     
     private let startIndex: IndexPath
+    
+    /// Flag value for first appearance.
+    private var hasSetStartIndex = false
     
     @MainActor
     init(rootView: UIView, image: UIImage?, startIndex: IndexPath) {
@@ -111,6 +113,15 @@ final class ModalPageView: UICollectionView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension ModalPageView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if hasSetStartIndex == false {
+            scrollToItem(at: startIndex, at: [], animated: false)
+            hasSetStartIndex = true
+        }
     }
 }
 
