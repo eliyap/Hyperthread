@@ -143,6 +143,9 @@ extension GalleryViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
+/// Views pop above navigation bars when animated in, we reduce transparency to make that less jarring.
+let transitionOpacity: Float = 0.25
+
 final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     public static let duration = 0.25
     
@@ -192,6 +195,7 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         /// Animation start point.
         target.frame = startingFrame
         galleryView.backgroundColor = .clear
+        target.layer.opacity = transitionOpacity
         
         UIView.animate(
             withDuration: Self.duration,
@@ -199,6 +203,7 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
                 /// Animation end point.
                 galleryView.backgroundColor = .galleryBackground
                 target.frame = endingFrame
+                target.layer.opacity = 1
             },
             completion: { _ in
                 context.completeTransition(true)
@@ -272,10 +277,11 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
         
         /// Hide original.
         target.isHidden = true
-
+        
         /// Animation start point.
         galleryView.backgroundColor = .galleryBackground
         snapshot.frame = startingFrame
+        snapshot.layer.opacity = 1
         
         UIView.animate(
             withDuration: Self.duration,
@@ -283,6 +289,7 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
                 /// Animation end point.
                 galleryView.backgroundColor = .clear
                 snapshot.frame = endingFrame
+                snapshot.layer.opacity = transitionOpacity
             },
             completion: { _ in
                 snapshot.removeFromSuperview()
@@ -291,6 +298,7 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
                     galleryView.backgroundColor = .galleryBackground
                     target.isHidden = false
                     snapshot.frame = startingFrame
+                    snapshot.layer.opacity = 1
                     
                     context.completeTransition(false)
                 } else {
