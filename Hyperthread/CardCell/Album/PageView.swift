@@ -254,19 +254,26 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             return targetProvider.targetView
         }()
         
+        guard let snapshot = target.snapshotView(afterScreenUpdates: false) else {
+            assert(false, "Could not get snapshot!")
+            context.completeTransition(false)
+            return
+        }
+        context.containerView.addSubview(snapshot)
+        
         let startingFrame = target.absoluteFrame()
         let endingFrame = rootView?.absoluteFrame() ?? target.absoluteFrame()
         
         /// Animation start point.
         galleryView.backgroundColor = .galleryBackground
-        target.frame = startingFrame
+        snapshot.frame = startingFrame
         
         UIView.animate(
             withDuration: Self.duration,
             animations: {
                 /// Animation end point.
                 galleryView.backgroundColor = .clear
-                target.frame = endingFrame
+                snapshot.frame = endingFrame
             },
             completion: { _ in
                 if context.transitionWasCancelled {
@@ -274,6 +281,7 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
                 } else {
                     context.completeTransition(true)
                 }
+                snapshot.removeFromSuperview()
             }
         )
     }
