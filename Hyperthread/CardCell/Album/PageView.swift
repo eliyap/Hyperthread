@@ -298,7 +298,7 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             galleryView.setNeedsLayout()
             context.containerView.layoutIfNeeded()
             
-            guard let cell = pageView.cellForItem(at: startIndex) as? ModalPageViewCell else {
+            guard let cell = galleryView.pageView.cellForItem(at: startIndex) as? ModalPageViewCell else {
                 assert(false, "Could not get cell!")
                 context.completeTransition(false)
                 return
