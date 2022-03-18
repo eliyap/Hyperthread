@@ -29,6 +29,9 @@ final class ModalPageView: UICollectionView {
         register(ModalPageViewCell.self, forCellWithReuseIdentifier: ModalPageViewCell.reuseID)
         backgroundColor = .clear
         
+        /// Since pictures can animate into place from outside the safe area,  we need to allow out-of-bounds pixels to be shown.
+        clipsToBounds = false
+        
         #if DEBUG
         let __ENABLE_FRAME_BORDER__ = true
         if __ENABLE_FRAME_BORDER__ {
