@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ModalPageViewController: UIViewController {
+final class GalleryViewController: UIViewController {
     
     private let pageView: ModalPageView
     
@@ -233,7 +233,7 @@ extension ModalPageViewCell: GeometryTargetProvider {
     }
 }
 
-extension ModalPageViewController: UIViewControllerTransitioningDelegate {
+extension GalleryViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return AlbumPresentingAnimator(rootView: rootView, startIndex: startIndex)
     }

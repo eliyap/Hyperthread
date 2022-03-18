@@ -218,7 +218,7 @@ extension AlbumController {
             return image === currentImage
         }) ?? 0
         
-        let modal = ModalPageViewController(images: images, rootView: rootView, startIndex: currentIndex)
+        let modal = GalleryViewController(images: images, rootView: rootView, startIndex: currentIndex)
         guard let root = view.window?.rootViewController else {
             assert(false, "Could not obtain root view controller!")
             return
