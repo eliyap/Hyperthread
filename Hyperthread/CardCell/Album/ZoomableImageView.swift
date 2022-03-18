@@ -223,19 +223,19 @@ final class _ZoomableImageView: UIScrollView {
         /// Predict `imageView` height.
         let tooTall = image.size.height > frame.height
         let tooWide = image.size.width > frame.width
-        let actualSize: CGSize
+        let size: CGSize
         switch (tooTall, tooWide) {
         case (false, false):
-            actualSize = image.size
+            size = image.size
             
         case (false, true):
-            actualSize = CGSize(
+            size = CGSize(
                 width: frame.width,
                 height: image.size.height * (frame.width / image.size.width)
             )
             
         case (true, false):
-            actualSize = CGSize(
+            size = CGSize(
                 width: image.size.height * (frame.height / image.size.height),
                 height: frame.height
             )
@@ -243,24 +243,24 @@ final class _ZoomableImageView: UIScrollView {
         case (true, true):
             if (image.size.height / image.size.width) > (frame.height / frame.width) {
                 /// Image is proportionally taller than frame, will be height constrained.
-                actualSize = CGSize(
+                size = CGSize(
                     width: image.size.height * (frame.height / image.size.height),
                     height: frame.height
                 )
             } else {
                 /// Image is proportionally shorter than frame, will be width constrained.
-                actualSize = CGSize(
+                size = CGSize(
                     width: frame.width,
                     height: image.size.height * (frame.width / image.size.width)
                 )
             }
         }
         
-        print("actual \(actualSize)")
-        let excessHeight = frame.height - actualSize.height
+        print("predicted size: \(size)")
+        let excessHeight = frame.height - size.height
         let yInset = max(0, excessHeight / 2)
         
-        let excessWidth = frame.width - actualSize.width
+        let excessWidth = frame.width - size.width
         let xInset = max(0, excessWidth / 2)
         
         contentInset = UIEdgeInsets(top: yInset, left: xInset, bottom: yInset, right: xInset)
