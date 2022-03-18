@@ -131,10 +131,8 @@ final class ModalPageView: UICollectionView {
     init(rootView: UIView, image: UIImage?, startIndex: IndexPath) {
         self.previewImage = image
         self.rootView = rootView
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
         self.startIndex = startIndex
-        super.init(frame: .zero, collectionViewLayout: layout)
+        super.init(frame: .zero, collectionViewLayout: ModalPageLayout())
         
         delegate = self
         isPagingEnabled = true
