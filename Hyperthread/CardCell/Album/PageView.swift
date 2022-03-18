@@ -102,8 +102,11 @@ final class ModalPageLayout: UICollectionViewFlowLayout {
         
         for item in 0..<collectionView.numberOfItems(inSection: 0) {
             guard let cell = collectionView.cellForItem(at: IndexPath(item: item, section: 0)) as? ModalPageViewCell else {
+                /// Cells may not be loaded / visible yet, so it is normal to fail here.
                 continue
             }
+            
+            /// - Important: Relies on `collectionView.bounds` being equal to image frame bounds.
             cell.zoomableImageView.predictInsets(frame: newBounds)
         }
         
