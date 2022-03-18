@@ -254,11 +254,14 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
             return targetProvider.targetView
         }()
         
+        /// Taking a snapshot is possible because the view is already visible.
         guard let snapshot = target.snapshotView(afterScreenUpdates: false) else {
             assert(false, "Could not get snapshot!")
             context.completeTransition(false)
             return
         }
+
+        /// Additionally, we must use container coordinates, as the target view has scaling and offset applied by the scrollview.
         context.containerView.addSubview(snapshot)
         
         /// Ignores `UIScrollView` scaling.
