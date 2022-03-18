@@ -12,8 +12,6 @@ final class ModalPageLayout: UICollectionViewFlowLayout {
     override init() {
         super.init()
         scrollDirection = .horizontal
-        
-        print("auto size\(self.estimatedItemSize == Self.automaticSize)")
     }
     
     /// - Note: called when scrolling view, do not be over-zealous about invalidating.
