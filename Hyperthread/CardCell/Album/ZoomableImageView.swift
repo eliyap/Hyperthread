@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-final class _ZoomableImageView: UIScrollView {
+final class ZoomableImageView: UIScrollView {
     
     private let imageView: UIImageView = .init()
     
@@ -180,7 +180,7 @@ final class _ZoomableImageView: UIScrollView {
     }
 }
 
-extension _ZoomableImageView: UIScrollViewDelegate {
+extension ZoomableImageView: UIScrollViewDelegate {
     /// Required to enable zoom.
     /// Source: https://www.hackingwithswift.com/example-code/uikit/how-to-support-pinch-to-zoom-in-a-uiscrollview
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -207,7 +207,7 @@ extension _ZoomableImageView: UIScrollViewDelegate {
     }
 }
 
-extension _ZoomableImageView: GeometryTargetProvider {
+extension ZoomableImageView: GeometryTargetProvider {
     var targetView: UIView {
         imageView
     }

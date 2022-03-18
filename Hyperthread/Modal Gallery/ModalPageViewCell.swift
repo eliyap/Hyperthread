@@ -11,7 +11,7 @@ final class ModalPageViewCell: UICollectionViewCell {
     
     public static let reuseID = "ModalPageViewCell"
     
-    private let zoomableImageView: _ZoomableImageView
+    private let zoomableImageView: ZoomableImageView
     
     @MainActor
     override init(frame: CGRect) {
