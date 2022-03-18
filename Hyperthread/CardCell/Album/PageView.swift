@@ -39,6 +39,7 @@ final class GalleryViewController: UIViewController {
         /// Request a custom animation.
         modalPresentationStyle = .custom
         transitioningDelegate = self
+        transitioner = LargeImageTransitioner(viewController: self)
     }
     
     required init?(coder: NSCoder) {
@@ -132,7 +133,7 @@ extension GalleryViewController: UIViewControllerTransitioningDelegate {
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         guard
-            let animator = animator as? ImageDismissingAnimator,
+            let animator = animator as? AlbumDismissingAnimator,
             let transitioner = animator.transitioner,
             transitioner.interactionInProgress
         else {
