@@ -150,7 +150,7 @@ protocol GeometryTargetProvider: UIView {
 
 final class _ZoomableImageView: UIScrollView {
     
-    private let imageView: UIImageView = .init()
+    public let imageView: UIImageView = .init()
     
     private var aspectConstraint: NSLayoutConstraint? = nil
 
@@ -202,7 +202,7 @@ final class _ZoomableImageView: UIScrollView {
         addGestureRecognizer(doubleTap)
     }
     
-    public func configure(image: UIImage?) -> Void {
+    public func configure(image: UIImage?, frame: CGRect) -> Void {
         guard let image = image else {
             TableLog.warning("Received nil image in modal!")
             return
@@ -215,6 +215,55 @@ final class _ZoomableImageView: UIScrollView {
         aspectRatio = image.size.width / image.size.height
         let newAspectConstraint = imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: aspectRatio)
         replace(object: self, on: \.aspectConstraint, with: newAspectConstraint)
+        
+        predictInsets(image: image, frame: frame)
+    }
+    
+    func predictInsets(image: UIImage, frame: CGRect) -> Void {
+        /// Predict `imageView` height.
+        let tooTall = image.size.height > frame.height
+        let tooWide = image.size.width > frame.width
+        let actualSize: CGSize
+        switch (tooTall, tooWide) {
+        case (false, false):
+            actualSize = image.size
+            
+        case (false, true):
+            actualSize = CGSize(
+                width: frame.width,
+                height: image.size.height * (frame.width / image.size.width)
+            )
+            
+        case (true, false):
+            actualSize = CGSize(
+                width: image.size.height * (frame.height / image.size.height),
+                height: frame.height
+            )
+            
+        case (true, true):
+            if (image.size.height / image.size.width) > (frame.height / frame.width) {
+                /// Image is proportionally taller than frame, will be height constrained.
+                actualSize = CGSize(
+                    width: image.size.height * (frame.height / image.size.height),
+                    height: frame.height
+                )
+            } else {
+                /// Image is proportionally shorter than frame, will be width constrained.
+                actualSize = CGSize(
+                    width: frame.width,
+                    height: image.size.height * (frame.width / image.size.width)
+                )
+            }
+        }
+        
+        print("actual \(actualSize)")
+        let excessHeight = frame.height - actualSize.height
+        let yInset = max(0, excessHeight / 2)
+        
+        let excessWidth = frame.width - actualSize.width
+        let xInset = max(0, excessWidth / 2)
+        
+        contentInset = UIEdgeInsets(top: yInset, left: xInset, bottom: yInset, right: xInset)
     }
     
     @objc

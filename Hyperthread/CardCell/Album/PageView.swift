@@ -32,7 +32,7 @@ final class ModalPageViewController: UIViewController {
             }
             
             let image: UIImage? = images[indexPath.item]
-            cell.configure(image: image)
+            cell.configure(image: image, frame: collectionView.safeAreaLayoutGuide.layoutFrame)
             
             return cell
         })
@@ -166,8 +166,8 @@ final class ModalPageViewCell: UICollectionViewCell {
         self.backgroundColor = .blue
     }
     
-    public func configure(image: UIImage?) -> Void {
-        zoomableImageView.configure(image: image)
+    public func configure(image: UIImage?, frame: CGRect) -> Void {
+        zoomableImageView.configure(image: image, frame: frame)
     }
     
     required init?(coder: NSCoder) {
