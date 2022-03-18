@@ -199,6 +199,8 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
         
         UIView.animate(
             withDuration: Self.duration,
+            delay: .zero,
+            options: [.curveEaseInOut],
             animations: {
                 /// Animation end point.
                 galleryView.backgroundColor = .galleryBackground
