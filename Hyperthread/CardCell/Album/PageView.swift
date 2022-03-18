@@ -146,7 +146,7 @@ final class ModalPageViewCell: UICollectionViewCell {
     
     public static let reuseID = "ModalPageViewCell"
     
-    private let zoomableImageView: _ZoomableImageView
+    public let zoomableImageView: _ZoomableImageView
     
     @MainActor
     override init(frame: CGRect) {
@@ -229,18 +229,21 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             context.completeTransition(false)
             return
         }
-        context.containerView.addSubview(pageView)
-        pageView.constrain(to: context.containerView)
-        pageView.setNeedsLayout()
-        context.containerView.layoutIfNeeded()
         
-        guard let cell = pageView.cellForItem(at: startIndex) as? ModalPageViewCell else {
-            assert(false, "Could not get cell!")
-            context.completeTransition(false)
-            return
-        }
-        
-        print(cell.targetView.absoluteFrame())
+        { /// Place target view into its final position by forcing a layout pass.
+            context.containerView.addSubview(pageView)
+            pageView.constrain(to: context.containerView)
+            pageView.setNeedsLayout()
+            context.containerView.layoutIfNeeded()
+            
+            guard let cell = pageView.cellForItem(at: startIndex) as? ModalPageViewCell else {
+                assert(false, "Could not get cell!")
+                context.completeTransition(false)
+                return
+            }
+            
+            cell.zoomableImageView.setAnimationStartPoint(frame: context.containerView.safeAreaLayoutGuide.layoutFrame)
+        }()
         
         /// Send to animation end point.
         /// Constraint animation: https://stackoverflow.com/questions/12926566/are-nslayoutconstraints-animatable
