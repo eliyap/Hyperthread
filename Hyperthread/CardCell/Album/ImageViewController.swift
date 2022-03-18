@@ -190,6 +190,8 @@ final class MediaViewController: UIViewController {
         symbolView.layer.cornerRadius = symbolView.layer.bounds.width / 2
         symbolView.clipsToBounds = true
     }
+    
+    func getImage() -> UIImage? { imageView?.image }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

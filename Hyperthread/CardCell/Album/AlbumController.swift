@@ -210,7 +210,15 @@ typealias ModalAlbumCallback = (UIImage?, UIView) -> ()
 
 extension AlbumController {
     func presentModalAlbum(_ currentImage: UIImage?, _ rootView: UIView) -> Void {
-        let modal = LargeImageViewController(image: currentImage, rootView: rootView)
+        
+        /// Extract images and the current index.
+        let images = controllers.map { $0.getImage() }
+        let currentIndex: Int = images.firstIndex(where: { image in
+            guard let image = image, let currentImage = currentImage else { return false }
+            return image === currentImage
+        }) ?? 0
+        
+        let modal = ModalPageViewController(images: images, rootView: rootView, startIndex: 0)
         guard let root = view.window?.rootViewController else {
             assert(false, "Could not obtain root view controller!")
             return
