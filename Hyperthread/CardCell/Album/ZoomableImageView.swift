@@ -297,16 +297,6 @@ final class _ZoomableImageView: UIScrollView {
     }
 }
 
-extension _ZoomableImageView: FramedImageView {
-    func setAnimationStartPoint(frame: CGRect) {
-        updateFloatCenter(frame: frame)
-    }
-    
-    func setAnimationEndPoint(frame: CGRect) {
-        updateFloatCenter(frame: frame)
-    }
-}
-
 extension _ZoomableImageView: UIScrollViewDelegate {
     /// Required to enable zoom.
     /// Source: https://www.hackingwithswift.com/example-code/uikit/how-to-support-pinch-to-zoom-in-a-uiscrollview

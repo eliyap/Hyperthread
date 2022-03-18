@@ -241,8 +241,6 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
                 context.completeTransition(false)
                 return
             }
-            
-            cell.zoomableImageView.setAnimationStartPoint(frame: context.containerView.safeAreaLayoutGuide.layoutFrame)
         }()
         
         /// Send to animation end point.
