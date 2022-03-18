@@ -267,7 +267,8 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
         /// Ignores `UIScrollView` scaling.
         let startingFrame = CGRect(origin: target.absoluteFrame().origin, size: target.frame.size)
         
-        let endingFrame = rootView?.absoluteFrame() ?? target.absoluteFrame()
+        var endingFrame = rootView?.absoluteFrame() ?? target.absoluteFrame()
+        endingFrame = scaleCenterFit(startingFrame, into: endingFrame)
         
         /// Hide original.
         target.isHidden = true
@@ -296,6 +297,30 @@ final class AlbumDismissingAnimator: NSObject, UIViewControllerAnimatedTransitio
                     context.completeTransition(true)
                 }
             }
+        )
+    }
+}
+
+func scaleCenterFit(_ rect: CGRect, into frame: CGRect) -> CGRect {
+    if (rect.size.width / rect.size.height) > (frame.size.width / frame.size.height) {
+        /// Rect is proportionally wider than frame, need to center it vertically.
+        let scaledHeight = rect.size.height * (frame.size.width / rect.size.width)
+        assert(0.99 * scaledHeight < frame.size.height, "Scaled height should be shorter than frame!")
+        let excessHeight = frame.size.height - scaledHeight
+        
+        return CGRect(
+            origin: CGPoint(x: frame.origin.x, y: frame.origin.y + excessHeight / 2),
+            size: CGSize(width: frame.size.width, height: scaledHeight)
+        )
+    } else {
+        /// Rect is proportionally taller than frame, need to center it horizontally.
+        let scaledWidth = rect.size.width * (frame.size.height / rect.size.height)
+        assert(0.99 * scaledWidth < frame.size.width, "Scaled width \(scaledWidth) should be narrower than frame \(frame.width)!")
+        let excessWidth = frame.size.width - scaledWidth
+
+        return CGRect(
+            origin: CGPoint(x: frame.origin.x + excessWidth / 2, y: frame.origin.y),
+            size: CGSize(width: scaledWidth, height: frame.size.height)
         )
     }
 }
