@@ -80,6 +80,8 @@
 		22817BA927E520AC00D34C71 /* ModalPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA827E520AC00D34C71 /* ModalPageView.swift */; };
 		22817BAB27E5210700D34C71 /* ModalPageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BAA27E5210700D34C71 /* ModalPageLayout.swift */; };
 		22817BAF27E5486800D34C71 /* GalleryTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BAE27E5486800D34C71 /* GalleryTransition.swift */; };
+		22817BB127E5493A00D34C71 /* ModalPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BB027E5493A00D34C71 /* ModalPageViewController.swift */; };
+		22817BB327E5496300D34C71 /* ModalAlbumDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BB227E5496300D34C71 /* ModalAlbumDataSource.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -237,6 +239,8 @@
 		22817BA827E520AC00D34C71 /* ModalPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageView.swift; sourceTree = "<group>"; };
 		22817BAA27E5210700D34C71 /* ModalPageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageLayout.swift; sourceTree = "<group>"; };
 		22817BAE27E5486800D34C71 /* GalleryTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTransition.swift; sourceTree = "<group>"; };
+		22817BB027E5493A00D34C71 /* ModalPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageViewController.swift; sourceTree = "<group>"; };
+		22817BB227E5496300D34C71 /* ModalAlbumDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAlbumDataSource.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -562,6 +566,8 @@
 		22817BAC27E5475A00D34C71 /* Modal Gallery */ = {
 			isa = PBXGroup;
 			children = (
+				22817BB027E5493A00D34C71 /* ModalPageViewController.swift */,
+				22817BB227E5496300D34C71 /* ModalAlbumDataSource.swift */,
 				22817BA827E520AC00D34C71 /* ModalPageView.swift */,
 				22817BAA27E5210700D34C71 /* ModalPageLayout.swift */,
 				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
@@ -885,6 +891,8 @@
 				228D71ED277C1D2300E306BD /* CellEvent.swift in Sources */,
 				2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */,
 				22193DAC2783E158005A7708 /* UserTimelineFetch.swift in Sources */,
+				22817BB127E5493A00D34C71 /* ModalPageViewController.swift in Sources */,
+				22817BB327E5496300D34C71 /* ModalAlbumDataSource.swift in Sources */,
 				22BE9C0D27606A280080E475 /* Supertall.swift in Sources */,
 				22D127E12740655900932614 /* IconView.swift in Sources */,
 				22FA26A02794CC4D00DD8EE4 /* DiscussionDDS.swift in Sources */,
