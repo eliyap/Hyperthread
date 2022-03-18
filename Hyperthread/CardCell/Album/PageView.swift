@@ -161,6 +161,13 @@ final class AlbumPresentingAnimator: NSObject, UIViewControllerAnimatedTransitio
             context.completeTransition(false)
             return
         }
+        
+        guard let targetProvider = toView as? GeometryTargetProvider else {
+            assert(false, "Missing target provider!")
+            context.completeTransition(false)
+            return
+        }
+        
         guard let galleryView = toView as? GalleryView else {
             assert(false, "Unexpected view type!")
             context.completeTransition(false)
