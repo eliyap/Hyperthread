@@ -230,11 +230,6 @@ final class GalleryTransitioner: UIPercentDrivenInteractiveTransition {
         var progress = (distance / 200)
         progress = CGFloat(fminf(fmaxf(Float(progress), 0.0), 1.0))
           
-        /// Update for all non-intermediate states.
-        if gestureRecognizer.state != .changed {
-            viewController.setNeedsStatusBarAppearanceUpdate()
-        }
-        
         switch gestureRecognizer.state {
             case .began:
                 interactionInProgress = true
@@ -258,6 +253,14 @@ final class GalleryTransitioner: UIPercentDrivenInteractiveTransition {
             
             default:
                 break
-          }
+        }
+        
+        /// - Note: since `interactionInProgress` affects status bar preference, this must be called **afterwards**.
+        switch gestureRecognizer.state {
+        case .began, .ended, .cancelled:
+            viewController.setNeedsStatusBarAppearanceUpdate()
+        default:
+            break
+        }
     }
 }
