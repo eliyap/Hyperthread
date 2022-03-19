@@ -12,7 +12,7 @@ class AlbumController: UIPageViewController {
     /// Contains **displayed** media controllers.
     public var controllers: [MediaViewController] = []
     
-    /// Contains recycled view controllers. and spawns new ones.
+    /// Contains recycled view controllers, and spawns new ones.
     fileprivate let controllerArchive: OwnedArchive<MediaViewController> = .init(makeView: MediaViewController.init)
     
     /// Constrains the view's height to below some aspect ratio.
@@ -78,7 +78,9 @@ class AlbumController: UIPageViewController {
             /// Get new views from archive.
             for mediaItem in media {
                 let mediaController = controllerArchive.unarchive()
-                mediaController.configure(media: mediaItem, picUrlString: picUrlString)
+                mediaController.configure(media: mediaItem, picUrlString: picUrlString, presentModalAlbum: { [weak self] (image, view) in
+                    self?.presentModalAlbum(image, view)
+                })
                 controllers.append(mediaController)
             }
             
@@ -201,5 +203,29 @@ fileprivate final class OwnedArchive<Item: AnyObject> {
         } else {
             return makeItem()
         }
+    }
+}
+
+typealias ModalAlbumCallback = (UIImage?, UIView) -> ()
+
+extension AlbumController {
+    func presentModalAlbum(_ currentImage: UIImage?, _ rootView: UIView) -> Void {
+        
+        /// Extract images and the current index.
+        let images = controllers.map { $0.getImage() }
+        let currentIndex: Int = images.firstIndex(where: { image in
+            guard let image = image, let currentImage = currentImage else { return false }
+            return image === currentImage
+        }) ?? 0
+        
+        let modal = GalleryViewController(images: images, rootView: rootView, startIndex: currentIndex)
+        guard let root = view.window?.rootViewController else {
+            assert(false, "Could not obtain root view controller!")
+            return
+        }
+        root.present(modal, animated: true, completion: {
+            /// Nothing.
+        })
+        /// Nothing...
     }
 }

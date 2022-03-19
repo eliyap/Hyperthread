@@ -57,7 +57,6 @@
 		223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8927385AFA00375530 /* OptionalCompare.swift */; };
 		223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BBF8B27385B0F00375530 /* OptionalCast.swift */; };
 		2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2248FF4F2745BEA100C6DEF9 /* Entities.swift */; };
-		224F88D7275E5CD300085678 /* ImageAnimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224F88D6275E5CD300085678 /* ImageAnimate.swift */; };
 		2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */; };
 		2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0C927616FDA0099477D /* GetHeight.swift */; };
 		2266D0CC276197E20099477D /* ShowAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2266D0CB276197E20099477D /* ShowAlert.swift */; };
@@ -73,10 +72,17 @@
 		22760A4D274AF5A200F28F0A /* SpacedSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */; };
 		22760A4F274B136200F28F0A /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22760A4E274B136200F28F0A /* Media.swift */; };
 		22817B9727E11D6800D34C71 /* AbsoluteFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9627E11D6800D34C71 /* AbsoluteFrame.swift */; };
-		22817B9927E1464500D34C71 /* ImageTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9827E1464500D34C71 /* ImageTransition.swift */; };
 		22817B9C27E2B70D00D34C71 /* VideoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9B27E2B70D00D34C71 /* VideoController.swift */; };
-		22817B9E27E3853600D34C71 /* LargeImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9D27E3853600D34C71 /* LargeImageViewController.swift */; };
 		22817BA027E3A0BC00D34C71 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */; };
+		22817BA327E4057200D34C71 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA227E4057200D34C71 /* GalleryViewController.swift */; };
+		22817BA527E51B8F00D34C71 /* GeometryTargetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */; };
+		22817BA727E51BF900D34C71 /* ModalPageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */; };
+		22817BA927E520AC00D34C71 /* ModalPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BA827E520AC00D34C71 /* ModalPageView.swift */; };
+		22817BAB27E5210700D34C71 /* ModalPageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BAA27E5210700D34C71 /* ModalPageLayout.swift */; };
+		22817BAF27E5486800D34C71 /* GalleryTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BAE27E5486800D34C71 /* GalleryTransition.swift */; };
+		22817BB127E5493A00D34C71 /* ModalPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BB027E5493A00D34C71 /* ModalPageViewController.swift */; };
+		22817BB327E5496300D34C71 /* ModalAlbumDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BB227E5496300D34C71 /* ModalAlbumDataSource.swift */; };
+		22817BB527E5498400D34C71 /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BB427E5498400D34C71 /* GalleryView.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -210,7 +216,6 @@
 		223BBF8927385AFA00375530 /* OptionalCompare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCompare.swift; sourceTree = "<group>"; };
 		223BBF8B27385B0F00375530 /* OptionalCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalCast.swift; sourceTree = "<group>"; };
 		2248FF4F2745BEA100C6DEF9 /* Entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entities.swift; sourceTree = "<group>"; };
-		224F88D6275E5CD300085678 /* ImageAnimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnimate.swift; sourceTree = "<group>"; };
 		2266D0C727616D6A0099477D /* ArrowRefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowRefreshControl.swift; sourceTree = "<group>"; };
 		2266D0C927616FDA0099477D /* GetHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetHeight.swift; sourceTree = "<group>"; };
 		2266D0CB276197E20099477D /* ShowAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAlert.swift; sourceTree = "<group>"; };
@@ -226,10 +231,18 @@
 		22760A4C274AF5A200F28F0A /* SpacedSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacedSeparator.swift; sourceTree = "<group>"; };
 		22760A4E274B136200F28F0A /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
 		22817B9627E11D6800D34C71 /* AbsoluteFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbsoluteFrame.swift; sourceTree = "<group>"; };
-		22817B9827E1464500D34C71 /* ImageTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTransition.swift; sourceTree = "<group>"; };
 		22817B9B27E2B70D00D34C71 /* VideoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoController.swift; sourceTree = "<group>"; };
-		22817B9D27E3853600D34C71 /* LargeImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeImageViewController.swift; sourceTree = "<group>"; };
 		22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
+		22817BA127E3DB2700D34C71 /* ImageZoom.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ImageZoom.md; sourceTree = "<group>"; };
+		22817BA227E4057200D34C71 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
+		22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryTargetProvider.swift; sourceTree = "<group>"; };
+		22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageViewCell.swift; sourceTree = "<group>"; };
+		22817BA827E520AC00D34C71 /* ModalPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageView.swift; sourceTree = "<group>"; };
+		22817BAA27E5210700D34C71 /* ModalPageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageLayout.swift; sourceTree = "<group>"; };
+		22817BAE27E5486800D34C71 /* GalleryTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTransition.swift; sourceTree = "<group>"; };
+		22817BB027E5493A00D34C71 /* ModalPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageViewController.swift; sourceTree = "<group>"; };
+		22817BB227E5496300D34C71 /* ModalAlbumDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAlbumDataSource.swift; sourceTree = "<group>"; };
+		22817BB427E5498400D34C71 /* GalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryView.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -410,6 +423,7 @@
 				22760A46274ADEF500F28F0A /* MarkReadDaemon.swift */,
 				22193DAD27840466005A7708 /* UserModal */,
 				222161F02741A8D300220F0C /* CardCell */,
+				22817BAC27E5475A00D34C71 /* Modal Gallery */,
 				22D127DF2740653900932614 /* TweetCell */,
 				22D127DB27404F4200932614 /* DiscussionTable.swift */,
 				22A760C827A866610006E9BC /* DiscussionTableWrapper.swift */,
@@ -545,12 +559,26 @@
 				22FBAAD727B07E0200FEEB71 /* SymbolCircleView.swift */,
 				22FBAAD527B07C6000FEEB71 /* GIFViewController.swift */,
 				22FBAADB27B17A4A00FEEB71 /* GIFProgressBarView.swift */,
-				22817B9D27E3853600D34C71 /* LargeImageViewController.swift */,
-				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
-				224F88D6275E5CD300085678 /* ImageAnimate.swift */,
-				22817B9827E1464500D34C71 /* ImageTransition.swift */,
+				22817BA127E3DB2700D34C71 /* ImageZoom.md */,
 			);
 			path = Album;
+			sourceTree = "<group>";
+		};
+		22817BAC27E5475A00D34C71 /* Modal Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				22817BA227E4057200D34C71 /* GalleryViewController.swift */,
+				22817BB427E5498400D34C71 /* GalleryView.swift */,
+				22817BB027E5493A00D34C71 /* ModalPageViewController.swift */,
+				22817BB227E5496300D34C71 /* ModalAlbumDataSource.swift */,
+				22817BA827E520AC00D34C71 /* ModalPageView.swift */,
+				22817BAA27E5210700D34C71 /* ModalPageLayout.swift */,
+				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
+				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
+				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
+				22817BAE27E5486800D34C71 /* GalleryTransition.swift */,
+			);
+			path = "Modal Gallery";
 			sourceTree = "<group>";
 		};
 		228D71EE2780127400E306BD /* DateWindow */ = {
@@ -850,7 +878,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */,
-				224F88D7275E5CD300085678 /* ImageAnimate.swift in Sources */,
 				22FA26A92795B9BB00DD8EE4 /* Tweet.chronologicalSort.swift in Sources */,
 				22193DB327840923005A7708 /* UserModalViewController.swift in Sources */,
 				22D127EA27406F9700932614 /* RetweetSymbol.swift in Sources */,
@@ -859,6 +886,7 @@
 				22FA26B32795C70F00DD8EE4 /* UpdateRelevance.swift in Sources */,
 				22760A45274AA6ED00F28F0A /* CardBackground.swift in Sources */,
 				22BFD7A52774620600E46DF1 /* HomeTimelineHelper.swift in Sources */,
+				22817BAB27E5210700D34C71 /* ModalPageLayout.swift in Sources */,
 				223BBF8C27385B0F00375530 /* OptionalCast.swift in Sources */,
 				223BBF6D27377EC300375530 /* Conversation.swift in Sources */,
 				223BBF7E273846BE00375530 /* LoginState.swift in Sources */,
@@ -866,10 +894,13 @@
 				228D71ED277C1D2300E306BD /* CellEvent.swift in Sources */,
 				2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */,
 				22193DAC2783E158005A7708 /* UserTimelineFetch.swift in Sources */,
+				22817BB127E5493A00D34C71 /* ModalPageViewController.swift in Sources */,
+				22817BB327E5496300D34C71 /* ModalAlbumDataSource.swift in Sources */,
 				22BE9C0D27606A280080E475 /* Supertall.swift in Sources */,
 				22D127E12740655900932614 /* IconView.swift in Sources */,
 				22FA26A02794CC4D00DD8EE4 /* DiscussionDDS.swift in Sources */,
 				22FA26B12795C61100DD8EE4 /* StoreFollowing.swift in Sources */,
+				22817BA527E51B8F00D34C71 /* GeometryTargetProvider.swift in Sources */,
 				2266D0CC276197E20099477D /* ShowAlert.swift in Sources */,
 				2232DD2C2796F1E900936846 /* TableTopBar.swift in Sources */,
 				223BBF862738572C00375530 /* MainTable.swift in Sources */,
@@ -879,8 +910,9 @@
 				22FA26AF2795BAC500DD8EE4 /* UpdateDangling.swift in Sources */,
 				22FD36B1274B454700CFB84C /* ReadIndicatorView.swift in Sources */,
 				223BBF6527377E8900375530 /* IngestTweet.swift in Sources */,
+				22817BA727E51BF900D34C71 /* ModalPageViewCell.swift in Sources */,
 				22FA26A22795B6CD00DD8EE4 /* ReferenceSet.swift in Sources */,
-				22817B9927E1464500D34C71 /* ImageTransition.swift in Sources */,
+				22817BB527E5498400D34C71 /* GalleryView.swift in Sources */,
 				2266D0CA27616FDA0099477D /* GetHeight.swift in Sources */,
 				22D2572E27883A56005FC3D8 /* ScrollPosition.swift in Sources */,
 				22A760CF27A8C8970006E9BC /* UIEdgeInsets.+.swift in Sources */,
@@ -916,6 +948,7 @@
 				22193DA2278280CD005A7708 /* URLError.swift in Sources */,
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
+				22817BA927E520AC00D34C71 /* ModalPageView.swift in Sources */,
 				22A760CD27A883100006E9BC /* DiscussionLoader.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
 				22A760BF27A5F38E0006E9BC /* QuoteView.swift in Sources */,
@@ -932,6 +965,7 @@
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
 				22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */,
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
+				22817BA327E4057200D34C71 /* GalleryViewController.swift in Sources */,
 				22193DAF27840477005A7708 /* URLScheme.swift in Sources */,
 				221A2994275D943E00C283FE /* RemoveDuplicates.swift in Sources */,
 				22817B9727E11D6800D34C71 /* AbsoluteFrame.swift in Sources */,
@@ -953,6 +987,7 @@
 				228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */,
 				22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */,
 				228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */,
+				22817BAF27E5486800D34C71 /* GalleryTransition.swift in Sources */,
 				22FBAAD227AEF85700FEEB71 /* Video.swift in Sources */,
 				2232DD2E2796F75000936846 /* MainTableWrapper.swift in Sources */,
 				22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */,
@@ -963,7 +998,6 @@
 				223BBF7027377EC300375530 /* Tweet.swift in Sources */,
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				22BC9E9327A5C9A000721BD2 /* ImageViewController.swift in Sources */,
-				22817B9E27E3853600D34C71 /* LargeImageViewController.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
 				22FA26A72795B91F00DD8EE4 /* Tweet Shorthand.swift in Sources */,
 				22193DB527859D2D005A7708 /* RealmError.swift in Sources */,

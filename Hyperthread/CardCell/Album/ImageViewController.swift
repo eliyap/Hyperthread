@@ -22,6 +22,9 @@ final class MediaViewController: UIViewController {
     
     private var mediaModel: MediaModel? = nil
     
+    /// Callback to show a larger focused media view.
+    public var presentModalAlbum: ModalAlbumCallback? = nil
+    
     @MainActor
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -45,7 +48,8 @@ final class MediaViewController: UIViewController {
         view.bringSubviewToFront(symbolView)
     }
     
-    func configure(media: Media, picUrlString: String?) -> Void {
+    func configure(media: Media, picUrlString: String?, presentModalAlbum: @escaping ModalAlbumCallback) -> Void {
+        self.presentModalAlbum = presentModalAlbum
         mediaModel = .init(media: media, picUrlString: picUrlString)
         
         switch media.modelMediaType {
@@ -145,18 +149,7 @@ final class MediaViewController: UIViewController {
         
         switch mediaModel.mediaType {
         case .photo:
-            guard let url = mediaModel.url else {
-                break
-            }
-            
-            let modal = LargeImageViewController(url: url, rootView: view)
-            guard let root = view.window?.rootViewController else {
-                assert(false, "Could not obtain root view controller!")
-                return
-            }
-            root.present(modal, animated: true, completion: {
-                /// Nothing.
-            })
+            presentModalAlbum?(imageView?.image, view)
         
         case .videoPlayer, .gifPlayer:
             break
@@ -197,6 +190,8 @@ final class MediaViewController: UIViewController {
         symbolView.layer.cornerRadius = symbolView.layer.bounds.width / 2
         symbolView.clipsToBounds = true
     }
+    
+    func getImage() -> UIImage? { imageView?.image }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
