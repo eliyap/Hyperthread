@@ -22,7 +22,15 @@ final class GalleryViewController: UIViewController {
     private let startIndex: IndexPath
     
     /// Don't want images going under status bar.
-    override var prefersStatusBarHidden: Bool { true }
+    override var prefersStatusBarHidden: Bool {
+        if let transitioner = transitioner {
+            return transitioner.interactionInProgress == false
+        } else {
+            return true
+        }
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { .fade }
     
     init(images: [UIImage?], rootView: UIView, startIndex: Int) {
         self.rootView = rootView

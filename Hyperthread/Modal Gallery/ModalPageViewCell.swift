@@ -20,12 +20,27 @@ final class ModalPageViewCell: UICollectionViewCell {
         
         addSubview(zoomableImageView)
         zoomableImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            zoomableImageView.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            zoomableImageView.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            zoomableImageView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            zoomableImageView.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-        ])
+
+        /// - Important: must be coordinated with superview constraints!
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            /// Fixes layout popping due to sudden appearnce of status bar on iPad when dismissing modal.
+            /// Ignore safe areas, since iPads are effectively rectangular (less corners, but that hardly matters).
+            /// Assumes no iPads have notches.
+            NSLayoutConstraint.activate([
+                zoomableImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                zoomableImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                zoomableImageView.topAnchor.constraint(equalTo: topAnchor),
+                zoomableImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            ])
+        } else { /// Assume iPhone.
+            /// Be extra careful with iPhones, where the notch is large.
+            NSLayoutConstraint.activate([
+                zoomableImageView.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+                zoomableImageView.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+                zoomableImageView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+                zoomableImageView.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            ])
+        }
     }
     
     public func configure(image: UIImage?, frame: CGRect) -> Void {

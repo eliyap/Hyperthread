@@ -253,6 +253,14 @@ final class GalleryTransitioner: UIPercentDrivenInteractiveTransition {
             
             default:
                 break
-          }
+        }
+        
+        /// - Note: since `interactionInProgress` affects status bar preference, this must be called **afterwards**.
+        switch gestureRecognizer.state {
+        case .began, .ended, .cancelled:
+            viewController.setNeedsStatusBarAppearanceUpdate()
+        default:
+            break
+        }
     }
 }
