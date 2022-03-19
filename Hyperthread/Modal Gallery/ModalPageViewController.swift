@@ -41,6 +41,14 @@ final class ModalPageViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            /// 22.03.18
+            /// Fixes wrong item size after resizing multitasking on iPadOS.
+            /// Despite other invalidation methods being in place, this fixed the issue.
+            /// Breaks layout when rotating iPhone, hence conditionally included.
+            pageView.collectionViewLayout.invalidateLayout()
+        }
+
         /// On rotation, reset cell to 1x zoom, to prevent bad layout.
         for cell in pageView.visibleCells {
             guard let cell = cell as? ModalPageViewCell else {
