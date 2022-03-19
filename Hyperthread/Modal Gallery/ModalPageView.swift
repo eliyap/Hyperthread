@@ -37,12 +37,28 @@ final class ModalPageView: UICollectionView {
     
     func constrain(to view: UIView) -> Void {
         translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-        ])
+        
+        /// - Important: must be coordinated with subview constraints!
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            /// Fixes layout popping due to sudden appearnce of status bar on iPad when dismissing modal.
+            /// Ignore safe areas, since iPads are effectively rectangular (less corners, but that hardly matters).
+            /// Assumes no iPads have notches.
+            NSLayoutConstraint.activate([
+                topAnchor.constraint(equalTo: view.topAnchor),
+                bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            ])
+        } else { /// Assume iPhone.
+            /// Be extra careful with iPhones, where the notch is large.
+            NSLayoutConstraint.activate([
+                topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            ])
+        }
+        
     }
     
     required init?(coder: NSCoder) {
