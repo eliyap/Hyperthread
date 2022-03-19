@@ -230,6 +230,11 @@ final class GalleryTransitioner: UIPercentDrivenInteractiveTransition {
         var progress = (distance / 200)
         progress = CGFloat(fminf(fmaxf(Float(progress), 0.0), 1.0))
           
+        /// Update for all non-intermediate states.
+        if gestureRecognizer.state != .changed {
+            viewController.setNeedsStatusBarAppearanceUpdate()
+        }
+        
         switch gestureRecognizer.state {
             case .began:
                 interactionInProgress = true
