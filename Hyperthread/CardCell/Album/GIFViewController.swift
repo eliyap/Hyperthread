@@ -48,6 +48,7 @@ final class GIFView: UIView {
             self.progressBar.setProportion(to: proportion)
         })
         
+        /// When app returns to the foreground, GIFs shoul be unpaused.
         NotificationCenter.default.addObserver(self, selector: #selector(resumePlayback), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
     
