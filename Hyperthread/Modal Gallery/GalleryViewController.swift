@@ -42,6 +42,7 @@ final class GalleryViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         view = galleryView
+        galleryView.closeDelegate = self
         
         /// - Note: subview is added by view.
         addChild(pageViewController)
@@ -80,5 +81,11 @@ extension GalleryViewController: UIViewControllerTransitioningDelegate {
           return nil
         }
         return transitioner
+    }
+}
+
+extension GalleryViewController: CloseDelegate {
+    func closeGallery() {
+        dismiss(animated: true)
     }
 }

@@ -13,6 +13,7 @@ let transitionOpacity: Float = 0.25
 public extension UIColor {
     /// Similar to iOS's Photos App, use a "dark room" style black background for image galleries.
     static let galleryBackground: UIColor = .black
+    static let galleryUI: UIColor = .white
 }
 
 final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransitioning {
@@ -221,6 +222,7 @@ final class GalleryTransitioner: UIPercentDrivenInteractiveTransition {
             target: self,
             action: #selector(handleGesture(_:))
         )
+        gesture.cancelsTouchesInView = false
         viewController.view.addGestureRecognizer(gesture)
     }
     

@@ -44,6 +44,7 @@ final class ZoomableImageView: UIScrollView {
         
         /// Set up double tap to zoom.
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
+        doubleTap.cancelsTouchesInView = false
         doubleTap.numberOfTapsRequired = 2
         addGestureRecognizer(doubleTap)
     }
