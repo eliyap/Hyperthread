@@ -43,8 +43,8 @@ final class GalleryViewController: UIViewController {
         
         view = galleryView
         
+        /// - Note: subview is added by view.
         addChild(pageViewController)
-        galleryView.addSubview(pageViewController.view)
         pageViewController.didMove(toParent: self)
         
         /// Request a custom animation.

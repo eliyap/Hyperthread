@@ -14,6 +14,8 @@ final class GalleryView: UIView {
     init(pageView: ModalPageView) {
         self.pageView = pageView
         super.init(frame: .zero)
+        
+        addSubview(pageView)
     }
     
     func constrain(to view: UIView) -> Void {
