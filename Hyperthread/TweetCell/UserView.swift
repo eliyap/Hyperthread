@@ -11,10 +11,10 @@ import Twig
 
 final class UserView: UIStackView {
     
-    private let vStack: UIStackView = .init()
-    private let profileImage: ProfileImageView = .init()
-    private let nameLabel = UILabel()
-    private let handleLabel = UILabel()
+    private let vStack: UIStackView
+    private let profileImage: ProfileImageView
+    private let nameLabel: UILabel
+    private let handleLabel: UILabel
     fileprivate let _spacing: CGFloat = 5
 
     /// Combine communication line.
@@ -24,6 +24,10 @@ final class UserView: UIStackView {
     private var userID: User.ID? = nil
     
     init(line: CellEventLine? = nil, constrainLines: Bool = true) {
+        self.vStack = .init()
+        self.profileImage = .init()
+        self.nameLabel = .init()
+        self.handleLabel = .init()
         self.line = line
         super.init(frame: .zero)
         axis = .horizontal

@@ -20,13 +20,14 @@ final class GIFView: UIView {
     private var playerLooper: AVPlayerLooper? = nil
     private let queuePlayer: AVQueuePlayer = .init()
     
-    private let progressBar: GIFProgressBarView = .init()
+    private let progressBar: GIFProgressBarView
     
     /// Retains observation on playing video item.
     private var itemObservation: NSKeyValueObservation? = nil
     
     @MainActor
     public init() {
+        self.progressBar = .init()
         super.init(frame: .zero)
         
         playerLayer.videoGravity = .resizeAspect

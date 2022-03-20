@@ -38,9 +38,11 @@ final class TweetCell: ControlledCell {
     var indentConstraint: NSLayoutConstraint
     
     public static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Use same insets for consistency.
-    private let contentInsets = UIEdgeInsets(top: TweetCell.ContentInset, left: TweetCell.ContentInset, bottom: TweetCell.ContentInset, right: TweetCell.ContentInset)
+    private let contentInsets: UIEdgeInsets
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.contentInsets = UIEdgeInsets(top: TweetCell.ContentInset, left: TweetCell.ContentInset, bottom: TweetCell.ContentInset, right: TweetCell.ContentInset)
+        
         /// Indentation views.
         self.depthStack = .init()
         self.colorMarker = .init()

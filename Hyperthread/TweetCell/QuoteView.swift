@@ -18,13 +18,15 @@ final class QuoteView: UIView {
     private static let contentInset: CGFloat = 6
     
     /// Omit additional horizontal whitespace.
-    private let bgInsets = UIEdgeInsets(top: CardBackground.Inset, left: .zero, bottom: .zero, right: CardBackground.Inset)
+    private let bgInsets: UIEdgeInsets
     
     private weak var requester: DiscusssionRequestable?
     private var tweetID: Tweet.ID? = nil
     
     @MainActor
     init() {
+        self.bgInsets = UIEdgeInsets(top: CardBackground.Inset, left: .zero, bottom: .zero, right: CardBackground.Inset)
+        
         self.cardBackground = .init()
         self.stackView = .init()
         self.userView = .init()
