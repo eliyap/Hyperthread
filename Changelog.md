@@ -1,10 +1,10 @@
 #  Hyperthread Changelog
 ### 1.3
 New
-- Image gallery: view albums full screen, zoom into details and pan around
+- Image Gallery: view albums full screen, zoom into details and pan around
 
 Bug Fixes
-- Fixed videos failing to load 
+- fixed videos failing to load 
 
 ### 1.2
 New Features
