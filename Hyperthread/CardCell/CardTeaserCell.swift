@@ -21,14 +21,14 @@ final class CardTeaserCell: ControlledCell {
     private var cancellable: Set<AnyCancellable> = []
 
     /// Component views.
-    let cardBackground = CardBackground()
-    let stackView = UIStackView()
+    let cardBackground: CardBackground
+    let stackView: UIStackView
     let userView: UserView
-    let tweetTextView = TweetTextView()
-    let albumVC = AlbumController()
-    let retweetView = RetweetView()
-    let hairlineView = SpacedSeparator(vertical: .zero, horizontal: CardTeaserCell.ContentSpacing)
-    let summaryView = SummaryView()
+    let tweetTextView: TweetTextView
+    let albumVC: AlbumController
+    let retweetView: RetweetView
+    let hairlineView: SpacedSeparator
+    let summaryView: SummaryView
     
     var realmTokens: [NotificationToken] = []
     
@@ -46,7 +46,16 @@ final class CardTeaserCell: ControlledCell {
     )
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        /// Component views.
+        self.cardBackground = .init()
+        self.stackView = .init()
         self.userView = .init(line: line)
+        self.tweetTextView = .init()
+        self.albumVC = .init()
+        self.retweetView = .init()
+        self.hairlineView = .init(vertical: .zero, horizontal: CardTeaserCell.ContentSpacing)
+        self.summaryView = .init()
+    
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         /// Do not change color when selected.
