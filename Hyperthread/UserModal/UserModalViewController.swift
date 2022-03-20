@@ -22,9 +22,11 @@ final class UserModalViewController: UIViewController {
     
     private static let stackSpacing: CGFloat = 6
     private static let stackInset: CGFloat = 6
-    private let stackInsets: UIEdgeInsets = .init(top: UserModalViewController.stackInset, left: UserModalViewController.stackInset, bottom: UserModalViewController.stackInset, right: UserModalViewController.stackInset)
+    private let stackInsets: UIEdgeInsets
     
     init(user: User) {
+        self.stackInsets = UIEdgeInsets(top: UserModalViewController.stackInset, left: UserModalViewController.stackInset, bottom: UserModalViewController.stackInset, right: UserModalViewController.stackInset)
+        
         self.doneBtn = .init(configuration: .plain(), primaryAction: nil)
         self.stackView = .init()
         self.followingLine = .init(user: user)

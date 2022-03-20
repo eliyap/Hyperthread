@@ -20,10 +20,14 @@ final class GIFView: UIView {
     private var playerLooper: AVPlayerLooper? = nil
     private let queuePlayer: AVQueuePlayer = .init()
     
-    private let progressBar: GIFProgressBarView = .init()
+    private let progressBar: GIFProgressBarView
+    
+    /// Retains observation on playing video item.
+    private var itemObservation: NSKeyValueObservation? = nil
     
     @MainActor
     public init() {
+        self.progressBar = .init()
         super.init(frame: .zero)
         
         playerLayer.videoGravity = .resizeAspect
@@ -57,6 +61,15 @@ final class GIFView: UIView {
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset)
         self.playerLooper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
+        
+        self.itemObservation = playerItem.observe(
+            \.status,
+             changeHandler: { (object, change) in
+                 #warning("Incomplete bug investigation into crashing GIFs!")
+//                 print("ready: \(object.status == .readyToPlay)")
+             }
+        )
+        
         queuePlayer.isMuted = true
         queuePlayer.play()
     }

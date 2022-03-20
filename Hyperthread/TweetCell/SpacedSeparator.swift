@@ -13,10 +13,11 @@ final class SpacedSeparator: UIView {
 
     private let thickness: CGFloat
 
-    private let hairlineView = HairlineView()
+    private let hairlineView: HairlineView
 
     @MainActor
     init(vertical: CGFloat, horizontal: CGFloat, thickness: CGFloat = 1) {
+        self.hairlineView = .init()
         self.thickness = thickness
         self.insets = UIEdgeInsets(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
         super.init(frame: .zero)

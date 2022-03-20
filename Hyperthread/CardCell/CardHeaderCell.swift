@@ -20,20 +20,30 @@ final class CardHeaderCell: ControlledCell {
     private var cancellable: Set<AnyCancellable> = []
 
     /// Component views.
-    let cardBackground = CardBackground()
-    let stackView = UIStackView()
+    let cardBackground: CardBackground
+    let stackView: UIStackView
     let userView: UserView
-    let tweetTextView = TweetTextView()
-    let albumVC = AlbumController()
-    let retweetView = RetweetView()
-    let metricsView = MetricsView()
+    let tweetTextView: TweetTextView
+    let albumVC: AlbumController
+    let retweetView: RetweetView
+    let metricsView: MetricsView
     
     private static let ContentSpacing: CGFloat = CardTeaserCell.ContentSpacing /// Stay consistent.
     private static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Stay consistent.
-    private let contentInsets = UIEdgeInsets(top: CardHeaderCell.ContentInset, left: CardHeaderCell.ContentInset, bottom: CardHeaderCell.ContentInset, right: CardHeaderCell.ContentInset)
+    private let contentInsets: UIEdgeInsets
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.contentInsets = UIEdgeInsets(top: CardHeaderCell.ContentInset, left: CardHeaderCell.ContentInset, bottom: CardHeaderCell.ContentInset, right: CardHeaderCell.ContentInset)
+
+        /// Component views.
+        self.cardBackground = .init()
+        self.stackView = .init()
         self.userView = .init(line: line)
+        self.tweetTextView = .init()
+        self.albumVC = .init()
+        self.retweetView = .init()
+        self.metricsView = .init()
+
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         /// Do not change color when selected.

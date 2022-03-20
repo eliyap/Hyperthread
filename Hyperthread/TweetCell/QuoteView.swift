@@ -10,21 +10,27 @@ import UIKit
 final class QuoteView: UIView {
     
     /// Component views.
-    let cardBackground: CardBackground = .init()
-    let stackView: UIStackView = .init()
-    let userView: UserView = .init()
-    let tweetTextView: TweetTextView = .init()
+    let cardBackground: CardBackground
+    let stackView: UIStackView
+    let userView: UserView
+    let tweetTextView: TweetTextView
     
     private static let contentInset: CGFloat = 6
     
     /// Omit additional horizontal whitespace.
-    private let bgInsets = UIEdgeInsets(top: CardBackground.Inset, left: .zero, bottom: .zero, right: CardBackground.Inset)
+    private let bgInsets: UIEdgeInsets
     
     private weak var requester: DiscusssionRequestable?
     private var tweetID: Tweet.ID? = nil
     
     @MainActor
     init() {
+        self.bgInsets = UIEdgeInsets(top: CardBackground.Inset, left: .zero, bottom: .zero, right: CardBackground.Inset)
+        
+        self.cardBackground = .init()
+        self.stackView = .init()
+        self.userView = .init()
+        self.tweetTextView = .init()
         super.init(frame: .zero)
         
         addSubview(cardBackground)

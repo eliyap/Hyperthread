@@ -21,32 +21,48 @@ final class CardTeaserCell: ControlledCell {
     private var cancellable: Set<AnyCancellable> = []
 
     /// Component views.
-    let cardBackground = CardBackground()
-    let stackView = UIStackView()
+    let cardBackground: CardBackground
+    let stackView: UIStackView
     let userView: UserView
-    let tweetTextView = TweetTextView()
-    let albumVC = AlbumController()
-    let retweetView = RetweetView()
-    let hairlineView = SpacedSeparator(vertical: .zero, horizontal: CardTeaserCell.ContentSpacing)
-    let summaryView = SummaryView()
+    let tweetTextView: TweetTextView
+    let albumVC: AlbumController
+    let retweetView: RetweetView
+    let hairlineView: SpacedSeparator
+    let summaryView: SummaryView
     
     var realmTokens: [NotificationToken] = []
     
     public static let ContentSpacing: CGFloat = 4
     
     public static let ContentInset: CGFloat = 9
-    private let contentInsets: UIEdgeInsets = UIEdgeInsets(top: CardTeaserCell.ContentInset, left: CardTeaserCell.ContentInset, bottom: CardTeaserCell.ContentInset, right: CardTeaserCell.ContentInset)
+    private let contentInsets: UIEdgeInsets
     
     /// Since cards are stacked vertically in the table, halve the doubled insets to compensate.
-    private let cardInsets = UIEdgeInsets(
-        top: CardBackground.Inset / 2,
-        left: CardBackground.Inset,
-        bottom: CardBackground.Inset / 2,
-        right: CardBackground.Inset
-    )
+    private let cardInsets: UIEdgeInsets
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        /// Component views.
+        self.cardBackground = .init()
+        self.stackView = .init()
         self.userView = .init(line: line)
+        self.tweetTextView = .init()
+        self.albumVC = .init()
+        self.retweetView = .init()
+        self.hairlineView = .init(vertical: .zero, horizontal: CardTeaserCell.ContentSpacing)
+        self.summaryView = .init()
+    
+        self.contentInsets = UIEdgeInsets(
+            top: CardTeaserCell.ContentInset, 
+            left: CardTeaserCell.ContentInset, 
+            bottom: CardTeaserCell.ContentInset, 
+            right: CardTeaserCell.ContentInset
+        )
+        self.cardInsets = UIEdgeInsets(
+            top: CardBackground.Inset / 2,
+            left: CardBackground.Inset,
+            bottom: CardBackground.Inset / 2,
+            right: CardBackground.Inset
+        )
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         /// Do not change color when selected.

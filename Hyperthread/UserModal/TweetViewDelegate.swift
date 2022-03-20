@@ -10,7 +10,12 @@ import UIKit
 import RealmSwift
 
 protocol TweetViewDelegate {
+    /// UI action should occur on main thread.
+    @MainActor
     func open(userID: User.ID) -> Void
+    
+    /// UI action should occur on main thread.
+    @MainActor
     func open(hashtag: String) -> Void
 }
 

@@ -9,7 +9,7 @@ import UIKit
 
 final class CardBackground: UIButton {
     
-    private let clipper = CornerClipView()
+    private let clipper: CornerClipView
     private let triangleView: TriangleView
     
     /// How far the view will be inset from its superview.
@@ -19,6 +19,7 @@ final class CardBackground: UIButton {
     
     @MainActor
     init() {
+        self.clipper = .init()
         self.triangleView = TriangleView(size: triangleSize)
         super.init(frame: .zero)
         

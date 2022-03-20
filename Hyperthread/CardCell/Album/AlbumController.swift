@@ -13,7 +13,7 @@ class AlbumController: UIPageViewController {
     public var controllers: [MediaViewController] = []
     
     /// Contains recycled view controllers, and spawns new ones.
-    fileprivate let controllerArchive: OwnedArchive<MediaViewController> = .init(makeView: MediaViewController.init)
+    fileprivate let controllerArchive: OwnedArchive<MediaViewController>
     
     /// Constrains the view's height to below some aspect ratio.
     /// Value is subject to change.
@@ -36,6 +36,7 @@ class AlbumController: UIPageViewController {
     
     @MainActor
     init() {
+        self.controllerArchive = .init(makeView: MediaViewController.init)
         self.countButton = CountButton()
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         

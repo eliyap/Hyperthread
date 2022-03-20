@@ -239,6 +239,12 @@ using namespace realm;
     });
 }
 
+- (void)deleteWithCompletion:(RLMUserOptionalErrorBlock)completion {
+    _app._realmApp->delete_user(_user, ^(realm::util::Optional<app::AppError> error) {
+        [self handleResponse:error completion:completion];
+    });
+}
+
 - (void)logOutWithCompletion:(RLMOptionalErrorBlock)completion {
     _app._realmApp->log_out(_user, ^(realm::util::Optional<app::AppError> error) {
         [self handleResponse:error completion:completion];
@@ -262,10 +268,9 @@ using namespace realm;
         args.push_back(RLMConvertRLMBSONToBson(argument));
     }
 
-    _app._realmApp->call_function(_user,
-                        std::string(name.UTF8String),
-                        args, [completionBlock](util::Optional<app::AppError> error,
-                                                util::Optional<bson::Bson> response) {
+    _app._realmApp->call_function(_user, name.UTF8String, args,
+                                  [completionBlock](util::Optional<bson::Bson>&& response,
+                                                    util::Optional<app::AppError> error) {
         if (error) {
             return completionBlock(nil, RLMAppErrorToNSError(*error));
         }

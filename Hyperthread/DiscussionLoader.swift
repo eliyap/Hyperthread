@@ -9,7 +9,7 @@ import Foundation
 import BlackBox
 import UIKit
 
-protocol DiscussionPresenter: UIViewController, Sendable {
+protocol DiscussionPresenter: UIViewController {
     var loadingCarrier: UserMessageCarrier { get }
     
     @MainActor

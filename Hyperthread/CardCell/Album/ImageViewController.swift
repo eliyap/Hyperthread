@@ -17,8 +17,8 @@ final class MediaViewController: UIViewController {
     private var videoController: VideoController? = nil
     
     /// Eager Component views.
-    private let loadingIndicator: UIActivityIndicatorView = .init()
-    private let symbolView: SymbolCircleView = .init()
+    private let loadingIndicator: UIActivityIndicatorView
+    private let symbolView: SymbolCircleView
     
     private var mediaModel: MediaModel? = nil
     
@@ -27,6 +27,8 @@ final class MediaViewController: UIViewController {
     
     @MainActor
     init() {
+        self.loadingIndicator = .init()
+        self.symbolView = .init()
         super.init(nibName: nil, bundle: nil)
         
         /// Use `flat` instead of `cardBackground` to make it obvious where the image frame is.

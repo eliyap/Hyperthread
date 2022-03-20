@@ -16,32 +16,50 @@ final class TweetCell: ControlledCell {
     override var reuseIdentifier: String? { Self.reuseID }
     
     /// Indentation views.
-    private let depthStack = UIStackView()
-    private let colorMarker = ColorMarkerView()
-    private let depthSpacer = UIView()
+    private let depthStack: UIStackView
+    private let colorMarker: ColorMarkerView
+    private let depthSpacer: UIView
     
     /// Combine communication line.
-    private let line: CellEventLine = .init()
-    private var cancellable: Set<AnyCancellable> = []
+    private let line: CellEventLine
+    private var cancellable: Set<AnyCancellable>
 
     /// Tweet component views.
-    private let stackView = UIStackView()
+    private let stackView: UIStackView
     private let userView: UserView
-    private let tweetTextView: TweetTextView = .init()
-    private let albumVC: AlbumController = .init()
-    private var quoteView: QuoteView? = nil
-    private let retweetView: RetweetView = .init()
-    private let metricsView: MetricsView = .init()
+    private let tweetTextView: TweetTextView
+    private let albumVC: AlbumController
+    private var quoteView: QuoteView?
+    private let retweetView: RetweetView
+    private let metricsView: MetricsView
     private let triangleView: TriangleView
     
     /// Variable Constraint.
     var indentConstraint: NSLayoutConstraint
     
     public static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Use same insets for consistency.
-    private let contentInsets = UIEdgeInsets(top: TweetCell.ContentInset, left: TweetCell.ContentInset, bottom: TweetCell.ContentInset, right: TweetCell.ContentInset)
+    private let contentInsets: UIEdgeInsets
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.contentInsets = UIEdgeInsets(top: TweetCell.ContentInset, left: TweetCell.ContentInset, bottom: TweetCell.ContentInset, right: TweetCell.ContentInset)
+        
+        /// Indentation views.
+        self.depthStack = .init()
+        self.colorMarker = .init()
+        self.depthSpacer = .init()
+        
+        /// Combine communication line.
+        self.line = .init()
+        self.cancellable = []
+
+        /// Tweet component views.
+        self.stackView = UIStackView()
         self.userView = .init(line: line)
+        self.tweetTextView = .init()
+        self.albumVC = .init()
+        self.quoteView = nil
+        self.retweetView = .init()
+        self.metricsView = .init()
         
         let triangleSize = Self.ContentInset * 1.5
         self.triangleView = TriangleView(size: triangleSize)

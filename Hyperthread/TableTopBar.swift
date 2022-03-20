@@ -12,7 +12,7 @@ import Combine
 /// A drop down bar that displays `UserMessage`s.
 final class TableTopBar: UIVisualEffectView, Sendable {
 
-    private let barContents: BarContents = .init()
+    private let barContents: BarContents
     
     private var observers: Set<AnyCancellable> = []
     private var heightConstraint: NSLayoutConstraint? = nil
@@ -21,6 +21,7 @@ final class TableTopBar: UIVisualEffectView, Sendable {
     private static let AnimationDuration: TimeInterval = 0.2
 
     init(loadingCarrier: UserMessageCarrier) {
+        self.barContents = .init()
         self.loadingCarrier = loadingCarrier
         super.init(effect: UIBlurEffect(style: .systemMaterial))
 
