@@ -50,9 +50,12 @@ class ViewController: PMViewController {
             Swift.debugPrint(error.localizedDescription)
         }
         if let url = url {
+            /// Convert non-sendable `URL` to sendable `String`.
+            let callbackURL = url.absoluteString
+            
             Task {
                 do {
-                    let credentials = try await accessToken(callbackURL: url.absoluteString)
+                    let credentials = try await accessToken(callbackURL: callbackURL)
                     Auth.shared.state = .loggedIn(cred: credentials)
                     UserDefaults.groupSuite.oAuthCredentials = credentials
                 
