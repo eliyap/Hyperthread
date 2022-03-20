@@ -1,4 +1,11 @@
 #  Hyperthread Changelog
+### 1.3
+New
+- Image gallery: view albums full screen, zoom into details and pan around
+
+Bug Fixes
+- Fixed videos failing to load 
+
 ### 1.2
 New Features
 - videos and GIFs now shown in-app
@@ -8,7 +15,6 @@ Changes
 
 Bug Fixes
 - profile-image appearance is less abrupt
-- minor performance improvements
 
 I apologize for issues still in the application.
 Hyperthread will continue to improve through future updates.

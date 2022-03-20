@@ -19,6 +19,9 @@ internal enum SchemaVersion: UInt64 {
     /// Changes:
     /// - Added video media representation
     case v1dot2 = 2
+    
+    /// No changes from `v1.2`.
+    case v1dot3 = 3
 }
 
 internal func makeRealm() -> Realm {
