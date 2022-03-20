@@ -38,7 +38,7 @@ final class GalleryViewController: UIViewController {
         self.startIndex = startIndex
         let pageViewController = ModalPageViewController(images: images, startIndex: startIndex)
         self.pageViewController = pageViewController
-        self.galleryView = .init(pageView: pageViewController.pageView)
+        self.galleryView = .init(pageView: pageViewController.pageView, imageCount: images.count)
         super.init(nibName: nil, bundle: nil)
         
         view = galleryView

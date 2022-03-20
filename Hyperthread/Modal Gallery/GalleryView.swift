@@ -11,14 +11,17 @@ final class GalleryView: UIView {
     
     private weak var pageView: ModalPageView!
     private let topShade: TopShadeView
+    private let imageCount: Int
     
     public weak var closeDelegate: CloseDelegate? = nil
     
-    init(pageView: ModalPageView) {
+    init(pageView: ModalPageView, imageCount: Int) {
         self.pageView = pageView
-        self.topShade = .init()
+        self.topShade = .init(imageCount: imageCount)
+        self.imageCount = imageCount
         super.init(frame: .zero)
         
+        pageView.pageDelegate = topShade
         topShade.closeDelegate = self
         
         addSubview(pageView)
@@ -59,13 +62,15 @@ final class TopShadeView: UIStackView {
     
     private let closeButton: CloseButton
     private let countLabel: UILabel
+    private let imageCount: Int
     
     public weak var closeDelegate: CloseDelegate? = nil
     
     @MainActor
-    init() {
+    init(imageCount: Int) {
         self.closeButton = .init()
         self.countLabel = .init()
+        self.imageCount = imageCount
         super.init(frame: .zero)
         
         backgroundColor = .galleryBackground.withAlphaComponent(0.6)
@@ -136,7 +141,7 @@ final class CloseButton: UIButton {
         addSubview(closeIcon)
         addAction(UIAction(handler: { [weak self] action in
             self?.closeDelegate?.closeGallery()
-        }), for: .touchUpInside)    
+        }), for: .touchUpInside)
     }
     
     public func constrain(to view: UIView, horizontalMargin: CGFloat) -> Void {
@@ -162,6 +167,12 @@ final class CloseButton: UIButton {
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension TopShadeView: PageDelegate {
+    func didScrollTo(pageNo: Int) -> Void {
+        print(pageNo)
     }
 }
 

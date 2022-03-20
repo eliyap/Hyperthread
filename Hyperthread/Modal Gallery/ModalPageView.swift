@@ -18,6 +18,8 @@ final class ModalPageView: UICollectionView {
     /// Must point to a loaded & visible cell!
     private var targetIndex: IndexPath
     
+    public weak var pageDelegate: PageDelegate? = nil
+    
     @MainActor
     init(startIndex: IndexPath) {
         self.startIndex = startIndex
@@ -113,6 +115,11 @@ extension ModalPageView: UIScrollViewDelegate {
         guard let target = getCurrentIndexPath() else { return }
         targetIndex = target
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let target = getCurrentIndexPath() else { return }
+        pageDelegate?.didScrollTo(pageNo: target.item + 1)
+    }
 }
 
 extension ModalPageView {
@@ -134,4 +141,9 @@ extension ModalPageView: GeometryTargetProvider {
         }
         return target.targetView
     }
+}
+
+protocol PageDelegate: AnyObject {
+    @MainActor
+    func didScrollTo(pageNo: Int) -> Void
 }
