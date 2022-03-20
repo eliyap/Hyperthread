@@ -10,11 +10,13 @@ import Twig
 
 class ViewController: PMViewController {
 
-    let mainVC = Split()
-    var loginVC = LoginViewController()
+    let mainVC: Split
+    var loginVC: LoginViewController
     var authVC: AuthViewController? = nil
     
     required init?(coder: NSCoder) {
+        self.mainVC = .init()
+        self.loginVC = .init()
         super.init(nibName: nil, bundle: nil)
         adopt(mainVC)
         adopt(loginVC)
