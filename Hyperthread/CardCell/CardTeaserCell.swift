@@ -35,15 +35,10 @@ final class CardTeaserCell: ControlledCell {
     public static let ContentSpacing: CGFloat = 4
     
     public static let ContentInset: CGFloat = 9
-    private let contentInsets: UIEdgeInsets = UIEdgeInsets(top: CardTeaserCell.ContentInset, left: CardTeaserCell.ContentInset, bottom: CardTeaserCell.ContentInset, right: CardTeaserCell.ContentInset)
+    private let contentInsets: UIEdgeInsets
     
     /// Since cards are stacked vertically in the table, halve the doubled insets to compensate.
-    private let cardInsets = UIEdgeInsets(
-        top: CardBackground.Inset / 2,
-        left: CardBackground.Inset,
-        bottom: CardBackground.Inset / 2,
-        right: CardBackground.Inset
-    )
+    private let cardInsets: UIEdgeInsets
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         /// Component views.
@@ -56,6 +51,18 @@ final class CardTeaserCell: ControlledCell {
         self.hairlineView = .init(vertical: .zero, horizontal: CardTeaserCell.ContentSpacing)
         self.summaryView = .init()
     
+        self.contentInsets = UIEdgeInsets(
+            top: CardTeaserCell.ContentInset, 
+            left: CardTeaserCell.ContentInset, 
+            bottom: CardTeaserCell.ContentInset, 
+            right: CardTeaserCell.ContentInset
+        )
+        self.cardInsets = UIEdgeInsets(
+            top: CardBackground.Inset / 2,
+            left: CardBackground.Inset,
+            bottom: CardBackground.Inset / 2,
+            right: CardBackground.Inset
+        )
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         /// Do not change color when selected.
