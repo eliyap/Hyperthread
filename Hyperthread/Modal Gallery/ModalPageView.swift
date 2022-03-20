@@ -129,7 +129,7 @@ extension ModalPageView {
 extension ModalPageView: GeometryTargetProvider {
     var targetView: UIView {
         guard let target = cellForItem(at: targetIndex) as? GeometryTargetProvider else {
-            assert(false, "Could not get target!")
+            assert(false, "Could not get target cell at index \(targetIndex)!")
             return self
         }
         return target.targetView
