@@ -13,10 +13,11 @@ final class GIFProgressBarView: UIView {
 
     public static let UpdateInterval: CMTime = .init(value: 1, timescale: 60) /// - Note: arbitrary number. total guess.
     
-    private let background: ProgressEffectView = .init()
+    private let background: ProgressEffectView
     
     @MainActor
     public init() {
+        self.background = .init()
         super.init(frame: .zero)
         
         addSubview(background)
@@ -49,10 +50,11 @@ final class ProgressEffectView: UIVisualEffectView {
     
     public static let Effect = UIBlurEffect(style: .systemMaterial)
     
-    private let bar: ProgressVibrancyView = .init()
+    private let bar: ProgressVibrancyView
     
     @MainActor
     public init() {
+        self.bar = .init()
         super.init(effect: ProgressEffectView.Effect)
         contentView.addSubview(bar)
     }
