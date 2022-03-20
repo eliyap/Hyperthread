@@ -9,7 +9,7 @@ import UIKit
 
 final class GalleryView: UIView {
     
-    weak var pageView: ModalPageView!
+    private weak var pageView: ModalPageView!
     
     init(pageView: ModalPageView) {
         self.pageView = pageView
