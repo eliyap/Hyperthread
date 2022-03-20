@@ -10,10 +10,10 @@ import UIKit
 final class QuoteView: UIView {
     
     /// Component views.
-    let cardBackground: CardBackground = .init()
-    let stackView: UIStackView = .init()
-    let userView: UserView = .init()
-    let tweetTextView: TweetTextView = .init()
+    let cardBackground: CardBackground
+    let stackView: UIStackView
+    let userView: UserView
+    let tweetTextView: TweetTextView
     
     private static let contentInset: CGFloat = 6
     
@@ -25,6 +25,10 @@ final class QuoteView: UIView {
     
     @MainActor
     init() {
+        self.cardBackground = .init()
+        self.stackView = .init()
+        self.userView = .init()
+        self.tweetTextView = .init()
         super.init(frame: .zero)
         
         addSubview(cardBackground)
