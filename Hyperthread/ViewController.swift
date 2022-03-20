@@ -106,6 +106,8 @@ final class Split: UISplitViewController {
 
 /// Some class that communicates across the split view components.
 protocol SplitDelegate: AnyObject {
+    /// Presenting UI must occur on the main thread.
+    @MainActor
     func present(_ discussion: Discussion) -> Void
 }
 
