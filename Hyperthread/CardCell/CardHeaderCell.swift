@@ -30,9 +30,11 @@ final class CardHeaderCell: ControlledCell {
     
     private static let ContentSpacing: CGFloat = CardTeaserCell.ContentSpacing /// Stay consistent.
     private static let ContentInset: CGFloat = CardTeaserCell.ContentInset /// Stay consistent.
-    private let contentInsets = UIEdgeInsets(top: CardHeaderCell.ContentInset, left: CardHeaderCell.ContentInset, bottom: CardHeaderCell.ContentInset, right: CardHeaderCell.ContentInset)
+    private let contentInsets: UIEdgeInsets
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.contentInsets = UIEdgeInsets(top: CardHeaderCell.ContentInset, left: CardHeaderCell.ContentInset, bottom: CardHeaderCell.ContentInset, right: CardHeaderCell.ContentInset)
+
         /// Component views.
         self.cardBackground = .init()
         self.stackView = .init()
