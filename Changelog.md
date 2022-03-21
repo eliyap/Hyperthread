@@ -1,4 +1,10 @@
 #  Hyperthread Changelog
+### 1.4
+New
+
+Fixed
+- After closing a discussion, expanding then collapsing the app's width no longer re-opens that discussion
+
 ### 1.3
 New
 - Image Gallery: view albums full screen, zoom into details and pan around
