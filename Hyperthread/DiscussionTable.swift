@@ -168,3 +168,14 @@ extension DiscussionTable {
         return true
     }
 }
+
+extension DiscussionTable: PrimaryColumnDelegate {
+    func willShowPrimaryColumnView(isCollapsed: Bool) {
+        if isCollapsed {
+            /// Popping to the main table while collapsed means the user has **dismissed** the discussion.
+            /// Therefore, if the view is expanded, then collapsed, we should *not* collapse onto the detail view!
+            /// To signal this, we remove the discussion reference.
+            discussion = nil
+        }
+    }
+}

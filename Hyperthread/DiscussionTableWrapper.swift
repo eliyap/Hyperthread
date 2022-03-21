@@ -125,3 +125,10 @@ extension DiscussionTableWrapper: DiscusssionRequestable {
         presentFetchedDiscussion(tweetID: tweetID)
     }
 }
+
+extension DiscussionTableWrapper: PrimaryColumnDelegate {
+    func willShowPrimaryColumnView(isCollapsed: Bool) {
+        /// Forward to wrapped view.
+        wrapped.willShowPrimaryColumnView(isCollapsed: isCollapsed)
+    }
+}
