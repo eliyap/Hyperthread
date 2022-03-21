@@ -213,6 +213,8 @@ func scaleCenterFit(_ rect: CGRect, into frame: CGRect) -> CGRect {
 final class GalleryTransitioner: UIPercentDrivenInteractiveTransition {
     
     public private(set) var interactionInProgress = false
+    
+    /// Ranges from 0 when the transition has just begun to 1 when it is complete.
     public private(set) var progress = 0.0
 
     private var shouldCompleteTransition = false
@@ -248,6 +250,9 @@ final class GalleryTransitioner: UIPercentDrivenInteractiveTransition {
             case .changed:
                 shouldCompleteTransition = progress > Self.progressThreshold
                 update(progress)
+                
+                /// Appearance depends on progress percentage.
+                viewController.setNeedsStatusBarAppearanceUpdate()
             
             case .cancelled:
                 interactionInProgress = false
