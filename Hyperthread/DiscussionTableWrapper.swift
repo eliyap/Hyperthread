@@ -17,8 +17,7 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
     /// Records whether we pushed views onto the stack.
     public var hasNavStack = false
     
-    /// Expose underlying discussion to allow `SplitViewController` to decide how to collapse.
-    public var discussion: Discussion? {
+    private var discussion: Discussion? {
         wrapped.discussion
     }
     
