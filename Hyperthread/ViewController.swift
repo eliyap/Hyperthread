@@ -99,6 +99,9 @@ final class Split: UISplitViewController {
         
         /// Monitor split events.
         delegate = self
+        
+        /// Connect delegate.
+        mainVC.primaryColumnDelegate = detailVC
     }
     
     required init?(coder: NSCoder) {
