@@ -122,10 +122,10 @@ extension Split: UISplitViewControllerDelegate {
     /// Docs: https://developer.apple.com/documentation/uikit/uisplitviewcontrollerdelegate/3580925-splitviewcontroller
     func splitViewController(_ svc: UISplitViewController, topColumnForCollapsingToProposedTopColumn proposedTopColumn: UISplitViewController.Column) -> UISplitViewController.Column {
         /// Collapse to document if one is open, otherwise collapse to the document picker.
-        if detailVC.discussion == nil {
-            return .primary
-        } else {
+        if detailVC.shouldCollapseToDetailView {
             return .secondary
+        } else {
+            return .primary
         }
     }
 }

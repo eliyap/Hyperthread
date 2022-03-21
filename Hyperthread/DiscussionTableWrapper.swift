@@ -22,6 +22,11 @@ final class DiscussionTableWrapper: UIViewController, Sendable {
         wrapped.discussion
     }
     
+    /// Expose underlying preference for `SplitViewController` collapsing.
+    public var shouldCollapseToDetailView: Bool {
+        wrapped.shouldCollapseToDetailView
+    }
+    
     @MainActor
     init() {
         topBar = .init(loadingCarrier: loadingCarrier)
