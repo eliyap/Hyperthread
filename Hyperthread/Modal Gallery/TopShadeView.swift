@@ -33,6 +33,9 @@ final class TopShadeView: UIStackView {
         countLabel.textColor = .galleryUI
         countLabel.font = UIFont.preferredFont(forTextStyle: .body)
         countLabel.adjustsFontForContentSizeCategory = true
+        if imageCount == 1 {
+            countLabel.isHidden = true
+        }
         
         setPageLabel(pageNo: startIndex)
     }
