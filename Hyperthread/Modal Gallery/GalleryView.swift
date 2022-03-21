@@ -16,7 +16,7 @@ final class GalleryView: UIView {
     
     /// State information.
     private let imageCount: Int
-    private var shadesHidden = false
+    public private(set) var areShadesHidden = false
     
     /// Delegates.
     public weak var closeDelegate: CloseDelegate? = nil
@@ -58,7 +58,7 @@ final class GalleryView: UIView {
     
     public func transitionShow() -> Void {
         /// If shades are already hidden, leave them hidden when transitioning.
-        if shadesHidden == false {
+        if areShadesHidden == false {
             topShade.transitionShow()
             bottomShade.transitionShow()
         }
@@ -88,7 +88,7 @@ extension GalleryView: GeometryTargetProvider {
 
 extension GalleryView: ShadeToggleDelegate {
     func toggleShades() {
-        if shadesHidden {
+        if areShadesHidden {
             UIView.animate(
                 withDuration: 0.25,
                 delay: .zero,
@@ -96,7 +96,7 @@ extension GalleryView: ShadeToggleDelegate {
                 animations: { [weak self] in
                     self?.topShade.transitionShow()
                     self?.bottomShade.transitionShow()
-                    self?.shadesHidden = false
+                    self?.areShadesHidden = false
                 },
                 completion: nil
             )
@@ -108,7 +108,7 @@ extension GalleryView: ShadeToggleDelegate {
                 animations: { [weak self] in
                     self?.topShade.transitionHide()
                     self?.bottomShade.transitionHide()
-                    self?.shadesHidden = true
+                    self?.areShadesHidden = true
                 },
                 completion: nil
             )
