@@ -60,7 +60,6 @@ final class BottomShadeView: UIView {
     
     public func transitionHide() -> Void {
         transform = .init(translationX: .zero, y: frame.height)
-        print(frame.height)
         layer.opacity = 0
     }
     
