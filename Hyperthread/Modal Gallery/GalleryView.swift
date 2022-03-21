@@ -9,17 +9,22 @@ import UIKit
 
 final class GalleryView: UIView {
     
+    /// Component Views
     private weak var pageView: ModalPageView!
     private let topShade: TopShadeView
+    private let bottomShade: BottomShadeView
+    
+    /// State information.
     private let imageCount: Int
-    
-    public weak var closeDelegate: CloseDelegate? = nil
-    
     private var shadesHidden = false
+    
+    /// Delegates.
+    public weak var closeDelegate: CloseDelegate? = nil
     
     init(pageView: ModalPageView, imageCount: Int, startIndex: Int) {
         self.pageView = pageView
         self.topShade = .init(imageCount: imageCount, startIndex: startIndex)
+        self.bottomShade = .init()
         self.imageCount = imageCount
         super.init(frame: .zero)
         
@@ -29,6 +34,7 @@ final class GalleryView: UIView {
         
         addSubview(pageView)
         addSubview(topShade)
+        addSubview(bottomShade)
     }
     
     /// Called by superview.
@@ -42,6 +48,7 @@ final class GalleryView: UIView {
         ])
         pageView.constrain(to: self)
         topShade.constrain(to: self)
+        bottomShade.constrain(to: self)
     }
     
     public func prepareDismissal(snapshot: UIView) -> Void {
@@ -53,11 +60,13 @@ final class GalleryView: UIView {
         /// If shades are already hidden, leave them hidden when transitioning.
         if shadesHidden == false {
             topShade.transitionShow()
+            bottomShade.transitionShow()
         }
     }
     
     public func transitionHide() -> Void {
         topShade.transitionHide()
+        bottomShade.transitionHide()
     }
     
     required init?(coder: NSCoder) {
@@ -86,6 +95,7 @@ extension GalleryView: ShadeToggleDelegate {
                 options: [.curveEaseOut],
                 animations: { [weak self] in
                     self?.topShade.transitionShow()
+                    self?.bottomShade.transitionShow()
                     self?.shadesHidden = false
                 },
                 completion: nil
@@ -97,10 +107,73 @@ extension GalleryView: ShadeToggleDelegate {
                 options: [.curveEaseIn],
                 animations: { [weak self] in
                     self?.topShade.transitionHide()
+                    self?.bottomShade.transitionHide()
                     self?.shadesHidden = true
                 },
                 completion: nil
             )
         }
+    }
+}
+
+final class BottomShadeView: UIView {
+    
+    private let stack: UIStackView
+    
+    private let shareButton: UIButton
+    
+    private let config = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
+        .applying(UIImage.SymbolConfiguration(paletteColors: [.galleryUI]))
+    
+    @MainActor
+    init() {
+        self.shareButton = .init()
+        self.stack = .init(arrangedSubviews: [
+            shareButton,
+        ])
+        super.init(frame: .zero)
+        backgroundColor = .galleryShade
+        
+        addSubview(stack)
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.distribution = .equalSpacing
+        
+        shareButton.setImage(UIImage(systemName: "square.and.arrow.up", withConfiguration: config), for: .normal)
+    }
+    
+    public func constrain(to view: UIView) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            /// Pin own bottom ignoring safe area.
+            bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            /// But ensure stack is clear of safe area.
+            stack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            /// Similarly, pin sides to screen edges, but stack to safe margins.
+            leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            /// Finally, give this view height by using the stack view's intrinsic height.
+            stack.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1)
+        ])
+    }
+    
+    public func transitionShow() -> Void {
+        transform = .identity
+        layer.opacity = 1
+    }
+    
+    public func transitionHide() -> Void {
+        transform = .init(translationX: .zero, y: frame.height)
+        print(frame.height)
+        layer.opacity = 0
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
