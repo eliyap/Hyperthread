@@ -126,3 +126,9 @@ extension Split: UISplitViewControllerDelegate {
         }
     }
 }
+
+/// Plugin for knowing when `viewWillAppear` is called on the main table.
+protocol PrimaryColumnDelegate: AnyObject {
+    @MainActor
+    func willShowPrimaryColumnView(isCollapsed: Bool) -> Void
+}
