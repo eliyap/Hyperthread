@@ -33,6 +33,21 @@ final class GalleryViewController: UIViewController {
     
     override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { .fade }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        guard let transitioner = transitioner else {
+            /// By default, assume the UI is dark, and the bar should be light.
+            return .lightContent
+        }
+        if transitioner.progress < GalleryTransitioner.progressThreshold {
+            /// Transition not yet done.
+            /// Bonus effect, transition serves to indicate whether transition will be auto-completed.
+            return .lightContent
+        } else {
+            /// Accounts for light and dark mode.
+            return .default
+        }
+    }
+    
     init(images: [UIImage?], rootView: UIView, startIndex: Int) {
         self.rootView = rootView
         let startIndex = IndexPath(item: startIndex, section: 0)
