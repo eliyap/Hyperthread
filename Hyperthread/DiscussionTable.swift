@@ -28,6 +28,9 @@ final class DiscussionTable: UITableViewController {
     /// Used to check whether to collapse to the detail view.
     public private(set) var discussion: Discussion? = nil
     
+    /// Whether to collapse to the detail view.
+    public private(set) var shouldCollapseToDetailView: Bool = false
+    
     private var observers = Set<AnyCancellable>()
     
     typealias DDS = NodeDDS
