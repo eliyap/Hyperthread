@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TopShadeView: UIStackView {
+final class TopShadeView: UIView {
     
     private let closeButton: CloseButton
     private let countLabel: UILabel
@@ -151,5 +151,5 @@ protocol CloseDelegate: AnyObject {
 
 protocol ShadeToggleDelegate: AnyObject {
     @MainActor
-    func toggleShades() -> Void 
+    func toggleShades() -> Void
 }
