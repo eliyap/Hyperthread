@@ -23,10 +23,11 @@ final class GalleryViewController: UIViewController {
     
     /// Don't want images going under status bar.
     override var prefersStatusBarHidden: Bool {
-        if let transitioner = transitioner {
-            return transitioner.interactionInProgress == false
+        if transitioner?.interactionInProgress == true {
+            /// If we're in the process of exiting, show the status bar.
+            return false
         } else {
-            return true
+            return galleryView.areShadesHidden
         }
     }
     
@@ -43,6 +44,7 @@ final class GalleryViewController: UIViewController {
         
         view = galleryView
         galleryView.closeDelegate = self
+        galleryView.shadeToggleDelegate = self
         
         /// - Note: subview is added by view.
         addChild(pageViewController)
@@ -87,5 +89,11 @@ extension GalleryViewController: UIViewControllerTransitioningDelegate {
 extension GalleryViewController: CloseDelegate {
     func closeGallery() {
         dismiss(animated: true)
+    }
+}
+
+extension GalleryViewController: ShadeToggleDelegate {
+    func toggleShades() {
+        setNeedsStatusBarAppearanceUpdate()
     }
 }

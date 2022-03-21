@@ -20,6 +20,7 @@ final class GalleryView: UIView {
     
     /// Delegates.
     public weak var closeDelegate: CloseDelegate? = nil
+    public weak var shadeToggleDelegate: ShadeToggleDelegate? = nil
     
     init(pageView: ModalPageView, imageCount: Int, startIndex: Int) {
         self.pageView = pageView
@@ -97,6 +98,7 @@ extension GalleryView: ShadeToggleDelegate {
                     self?.topShade.transitionShow()
                     self?.bottomShade.transitionShow()
                     self?.areShadesHidden = false
+                    self?.shadeToggleDelegate?.toggleShades()
                 },
                 completion: nil
             )
@@ -109,6 +111,7 @@ extension GalleryView: ShadeToggleDelegate {
                     self?.topShade.transitionHide()
                     self?.bottomShade.transitionHide()
                     self?.areShadesHidden = true
+                    self?.shadeToggleDelegate?.toggleShades()
                 },
                 completion: nil
             )
