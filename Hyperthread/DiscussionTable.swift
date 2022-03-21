@@ -108,9 +108,11 @@ final class DiscussionTable: UITableViewController {
 
 extension DiscussionTable: SplitDelegate {
     func present(_ discussion: Discussion) -> Void {
-        /// - Note: setting the `discussion` alerts ancestor `UISplitViewController` to prefer
-        ///   the secondary view when collapsing.
+        /// Save discussion reference.
         self.discussion = discussion
+        
+        /// Should the split controller collapse, prefer to continue showing this.
+        shouldCollapseToDetailView = true
         
         self.tableView = UITableView()
         spawnDDS(discussion: discussion)
@@ -177,10 +179,9 @@ extension DiscussionTable {
 extension DiscussionTable: PrimaryColumnDelegate {
     func willShowPrimaryColumnView(isCollapsed: Bool) {
         if isCollapsed {
-            /// Popping to the main table while collapsed means the user has **dismissed** the discussion.
-            /// Therefore, if the view is expanded, then collapsed, we should *not* collapse onto the detail view!
-            /// To signal this, we remove the discussion reference.
-            discussion = nil
+            /// Popping to main table while collapsed means the user dismissed the discussion.
+            /// Therefore, if the view is expanded, then collapsed, do *not* collapse onto the detail view!
+            shouldCollapseToDetailView = false
         }
     }
 }
