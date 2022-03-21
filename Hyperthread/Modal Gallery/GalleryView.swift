@@ -41,6 +41,19 @@ final class GalleryView: UIView {
         topShade.constrain(to: self)
     }
     
+    public func prepareDismissal(snapshot: UIView) -> Void {
+        /// - Note: transition takes care of removing from superview in case of cancellation.
+        insertSubview(snapshot, belowSubview: topShade)
+    }
+    
+    public func transitionShow() -> Void {
+        topShade.transitionShow()
+    }
+    
+    public func transitionHide() -> Void {
+        topShade.transitionHide()
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -57,4 +70,3 @@ extension GalleryView: GeometryTargetProvider {
         pageView.targetView
     }
 }
-

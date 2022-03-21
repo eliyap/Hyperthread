@@ -37,6 +37,16 @@ final class TopShadeView: UIStackView {
         setPageLabel(pageNo: startIndex)
     }
     
+    public func transitionShow() -> Void {
+        transform = .identity
+        layer.opacity = 1
+    }
+    
+    public func transitionHide() -> Void {
+        transform = .init(translationX: .zero, y: -frame.height)
+        layer.opacity = 0
+    }
+    
     /// Called by superview.
     public func constrain(to view: UIView) -> Void {
         translatesAutoresizingMaskIntoConstraints = false

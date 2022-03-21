@@ -65,6 +65,7 @@ final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransit
         /// Animation start point.
         target.frame = startingFrame
         galleryView.backgroundColor = .clear
+        galleryView.transitionHide()
         target.layer.opacity = transitionOpacity
         
         UIView.animate(
@@ -74,6 +75,7 @@ final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransit
             animations: {
                 /// Animation end point.
                 galleryView.backgroundColor = .galleryBackground
+                galleryView.transitionShow()
                 target.frame = endingFrame
                 target.layer.opacity = 1
             },
@@ -138,9 +140,6 @@ final class GalleryDismissingAnimator: NSObject, UIViewControllerAnimatedTransit
             return
         }
 
-        /// Additionally, we must use container coordinates, as the target view has scaling and offset applied by the scrollview.
-        context.containerView.addSubview(snapshot)
-        
         /// Ignores `UIScrollView` scaling.
         let startingFrame = CGRect(origin: target.absoluteFrame().origin, size: target.frame.size)
         
@@ -152,6 +151,8 @@ final class GalleryDismissingAnimator: NSObject, UIViewControllerAnimatedTransit
         
         /// Animation start point.
         galleryView.backgroundColor = .galleryBackground
+        galleryView.transitionShow()
+        galleryView.prepareDismissal(snapshot: snapshot) /// Pass snapshot to view so it can be layered.
         snapshot.frame = startingFrame
         snapshot.layer.opacity = 1
         
@@ -160,6 +161,7 @@ final class GalleryDismissingAnimator: NSObject, UIViewControllerAnimatedTransit
             animations: {
                 /// Animation end point.
                 galleryView.backgroundColor = .clear
+                galleryView.transitionHide()
                 snapshot.frame = endingFrame
                 snapshot.layer.opacity = transitionOpacity
             },
@@ -168,6 +170,7 @@ final class GalleryDismissingAnimator: NSObject, UIViewControllerAnimatedTransit
                 if context.transitionWasCancelled {
                     /// Roll back animation.
                     galleryView.backgroundColor = .galleryBackground
+                    galleryView.transitionShow()
                     target.isHidden = false
                     snapshot.frame = startingFrame
                     snapshot.layer.opacity = 1
