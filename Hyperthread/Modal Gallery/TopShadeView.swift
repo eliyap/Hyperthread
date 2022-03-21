@@ -22,7 +22,7 @@ final class TopShadeView: UIView {
         self.imageCount = imageCount
         super.init(frame: .zero)
         
-        backgroundColor = .galleryBackground.withAlphaComponent(0.6)
+        backgroundColor = .galleryShade
         
         addSubview(closeButton)
         closeButton.closeDelegate = self

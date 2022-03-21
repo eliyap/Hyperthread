@@ -13,6 +13,7 @@ let transitionOpacity: Float = 0.25
 public extension UIColor {
     /// Similar to iOS's Photos App, use a "dark room" style black background for image galleries.
     static let galleryBackground: UIColor = .black
+    static let galleryShade: UIColor = .galleryBackground.withAlphaComponent(0.6)
     static let galleryUI: UIColor = .white
 }
 
