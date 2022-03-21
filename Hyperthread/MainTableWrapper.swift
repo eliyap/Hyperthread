@@ -21,6 +21,9 @@ final class MainTableWrapper: UIViewController, Sendable {
     /// Object to notify when something elsewhere in the `UISplitViewController` should change.
     public private(set) weak var splitDelegate: SplitDelegate!
     
+    /// Delegates.
+    public weak var primaryColumnDelegate: PrimaryColumnDelegate? = nil
+    
     init(splitDelegate: SplitDelegate) {
         self.splitDelegate = splitDelegate
         topBar = .init(loadingCarrier: loadingCarrier)
@@ -78,6 +81,16 @@ final class MainTableWrapper: UIViewController, Sendable {
         
         /// Solves issue observed 22.01.31 where iPad resizing failed.
         pinEdges()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let splitController = navigationController?.splitViewController else {
+            assert(false, "Could not find parent split view controller!")
+        }
+        
+        /// Notify delegate.
+        primaryColumnDelegate?.willShowPrimaryColumnView(isCollapsed: splitController.isCollapsed)
     }
     
     @MainActor 
