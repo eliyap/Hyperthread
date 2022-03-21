@@ -20,14 +20,15 @@ extension UIViewController {
         }
         return height
     }
-    
-    func getStatusBarHeight() -> CGFloat {
-        let guess: CGFloat = 20 /// An observed value.
-        guard let height = getWindowScene()?.statusBarManager?.statusBarFrame.height else {
-            /// 22.01.07: this is a common, non-problematic failure.
-            Logger.general.debug("Could not determine status bar height!", print: false, false)
-            return guess
-        }
-        return height
+}
+
+@MainActor
+func getStatusBarHeight() -> CGFloat {
+    let guess: CGFloat = 20 /// An observed value.
+    guard let height = getWindowScene()?.statusBarManager?.statusBarFrame.height else {
+        /// 22.01.07: this is a common, non-problematic failure.
+        Logger.general.debug("Could not determine status bar height!", print: false, false)
+        return guess
     }
+    return height
 }
