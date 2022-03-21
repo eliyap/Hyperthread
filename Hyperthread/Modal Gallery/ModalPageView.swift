@@ -20,6 +20,8 @@ final class ModalPageView: UICollectionView {
     
     public weak var pageDelegate: PageDelegate? = nil
     
+    public weak var shadeToggleDelegate: ShadeToggleDelegate? = nil
+    
     @MainActor
     init(startIndex: IndexPath) {
         self.startIndex = startIndex
@@ -35,6 +37,15 @@ final class ModalPageView: UICollectionView {
         
         /// Since pictures can animate into place from outside the safe area,  we need to allow out-of-bounds pixels to be shown.
         clipsToBounds = false
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        tapGesture.cancelsTouchesInView = false
+        addGestureRecognizer(tapGesture)
+    }
+    
+    @objc
+    private func onTap(_ sender: UITapGestureRecognizer) -> Void {
+        shadeToggleDelegate?.toggleShades()
     }
     
     func constrain(to view: UIView) -> Void {

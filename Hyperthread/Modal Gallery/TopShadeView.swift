@@ -148,3 +148,8 @@ protocol CloseDelegate: AnyObject {
     @MainActor
     func closeGallery() -> Void
 }
+
+protocol ShadeToggleDelegate: AnyObject {
+    @MainActor
+    func toggleShades() -> Void 
+}

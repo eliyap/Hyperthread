@@ -15,6 +15,8 @@ final class GalleryView: UIView {
     
     public weak var closeDelegate: CloseDelegate? = nil
     
+    private var shadesHidden = false
+    
     init(pageView: ModalPageView, imageCount: Int, startIndex: Int) {
         self.pageView = pageView
         self.topShade = .init(imageCount: imageCount, startIndex: startIndex)
@@ -22,6 +24,7 @@ final class GalleryView: UIView {
         super.init(frame: .zero)
         
         pageView.pageDelegate = topShade
+        pageView.shadeToggleDelegate = self
         topShade.closeDelegate = self
         
         addSubview(pageView)
@@ -47,7 +50,10 @@ final class GalleryView: UIView {
     }
     
     public func transitionShow() -> Void {
-        topShade.transitionShow()
+        /// If shades are already hidden, leave them hidden when transitioning.
+        if shadesHidden == false {
+            topShade.transitionShow()
+        }
     }
     
     public func transitionHide() -> Void {
@@ -68,5 +74,33 @@ extension GalleryView: CloseDelegate {
 extension GalleryView: GeometryTargetProvider {
     var targetView: UIView {
         pageView.targetView
+    }
+}
+
+extension GalleryView: ShadeToggleDelegate {
+    func toggleShades() {
+        if shadesHidden {
+            UIView.animate(
+                withDuration: 0.25,
+                delay: .zero,
+                options: [.curveEaseOut],
+                animations: { [weak self] in
+                    self?.topShade.transitionShow()
+                    self?.shadesHidden = false
+                },
+                completion: nil
+            )
+        } else {
+            UIView.animate(
+                withDuration: 0.25,
+                delay: .zero,
+                options: [.curveEaseIn],
+                animations: { [weak self] in
+                    self?.topShade.transitionHide()
+                    self?.shadesHidden = true
+                },
+                completion: nil
+            )
+        }
     }
 }
