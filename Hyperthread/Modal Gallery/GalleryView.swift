@@ -15,9 +15,9 @@ final class GalleryView: UIView {
     
     public weak var closeDelegate: CloseDelegate? = nil
     
-    init(pageView: ModalPageView, imageCount: Int) {
+    init(pageView: ModalPageView, imageCount: Int, startIndex: Int) {
         self.pageView = pageView
-        self.topShade = .init(imageCount: imageCount)
+        self.topShade = .init(imageCount: imageCount, startIndex: startIndex)
         self.imageCount = imageCount
         super.init(frame: .zero)
         
@@ -67,7 +67,7 @@ final class TopShadeView: UIStackView {
     public weak var closeDelegate: CloseDelegate? = nil
     
     @MainActor
-    init(imageCount: Int) {
+    init(imageCount: Int, startIndex: Int) {
         self.closeButton = .init()
         self.countLabel = .init()
         self.imageCount = imageCount
@@ -84,6 +84,8 @@ final class TopShadeView: UIStackView {
         countLabel.textColor = .galleryUI
         countLabel.font = UIFont.preferredFont(forTextStyle: .body)
         countLabel.adjustsFontForContentSizeCategory = true
+        
+        setPageLabel(pageNo: startIndex)
     }
     
     /// Called by superview.
@@ -107,6 +109,10 @@ final class TopShadeView: UIStackView {
         ])
         
         closeButton.constrain(to: self, horizontalMargin: horizontalMargin)
+    }
+    
+    private func setPageLabel(pageNo: Int) -> Void {
+        countLabel.text = "\(pageNo)/\(imageCount)"
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { /** Deliberately ignore event. **/ }
@@ -172,7 +178,7 @@ final class CloseButton: UIButton {
 
 extension TopShadeView: PageDelegate {
     func didScrollTo(pageNo: Int) -> Void {
-        print(pageNo)
+        setPageLabel(pageNo: pageNo)
     }
 }
 
