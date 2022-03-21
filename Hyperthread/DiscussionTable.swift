@@ -24,8 +24,7 @@ final class DiscussionTable: UITableViewController {
     
     public private(set) var dds: DDS! = nil
     
-    /// Simply a reference to the underlying discussion in the data source.
-    /// Used to check whether to collapse to the detail view.
+    /// Saved reference to discussion.
     public private(set) var discussion: Discussion? = nil
     
     /// Whether to collapse to the detail view.
