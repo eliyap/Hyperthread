@@ -237,11 +237,11 @@ final class SelectableImageView: UIImageView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        setShadeMask()
+        renderRecognizedText()
     }
     
     /// Adapted from: https://medium.com/swlh/ios-secrets-see-behind-your-views-fe8afe9072a5
-    func setShadeMask() -> Void {
+    private func setShadeMask(path: CGPath) -> Void {
         /// Shapes drawn in this layer are "cut out" of the shade view.
         let negativeLayer: CAShapeLayer = .init()
         
@@ -249,7 +249,7 @@ final class SelectableImageView: UIImageView {
         viewToRender.layer.addSublayer(negativeLayer)
         viewToRender.backgroundColor = .white /// `CIMaskToAlpha` sets white pixels opaque.
         
-        negativeLayer.path = UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath
+        negativeLayer.path = path
         
         let renderer = UIGraphicsImageRenderer(bounds: frame)
         let image = renderer.image(actions: { context in
@@ -301,8 +301,9 @@ final class SelectableImageView: UIImageView {
                     }
                     
                     guard let self = self else { return }
+                    
                     Task { @MainActor in
-                        self.renderRecognizedText(textResults)
+                        self.results = textResults
                     }
                 })
                 request.customWords = [] /// None, for now.
@@ -325,12 +326,16 @@ final class SelectableImageView: UIImageView {
         }
     }
     
-    private func renderRecognizedText(_ results: [VisionTextResult]) -> Void {
+    var results: [VisionTextResult] = []
+    private func renderRecognizedText() -> Void {
         for result in results {
             #warning("TODO: use string")
             print("Recognized string: \(result.text)")
             print("got box \(result.box)")
         }
+        
+        setShadeMask(path: UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath)
+        print("mask set.")
     }
     
     required init?(coder: NSCoder) {
