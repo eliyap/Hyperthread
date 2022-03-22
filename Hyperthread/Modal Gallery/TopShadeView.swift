@@ -167,7 +167,7 @@ protocol ShadeToggleDelegate: AnyObject {
 
 extension TopShadeView: ImageVisionDelegate {
     func didReport(progress: Double) {
-        print("got progress \(progress)")
+        liveTextButton.didReport(progress: progress)
     }
 }
 
@@ -176,7 +176,7 @@ final class LiveTextButton: UIButton {
     private let textIcon: UIImageView
     
     /// Displays the loading progress of the live text vision request.
-    private let loadView: UIView
+    private let loadView: LoadCircleView
     
     private let config = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
         .applying(UIImage.SymbolConfiguration(paletteColors: [.galleryUI]))
@@ -190,19 +190,11 @@ final class LiveTextButton: UIButton {
         super.init(frame: .zero)
         
         addSubview(loadView)
-        loadView.layer.masksToBounds = true
         
         addSubview(textIcon)
         addAction(UIAction(handler: { [weak self] action in
             self?.textRequestDelegate?.didRequestText()
         }), for: .touchUpInside)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        /// Keeps "circle"corner radius live updated.
-        loadView.layer.cornerRadius = loadView.frame.height / 2
     }
     
     public func constrain(parent: UIView, sibling: UIView, horizontalMargin: CGFloat) -> Void {
@@ -235,10 +227,81 @@ final class LiveTextButton: UIButton {
             loadView.heightAnchor.constraint(equalTo: textIcon.heightAnchor, multiplier: sqrt(2.0)),
             loadView.widthAnchor.constraint(equalTo: textIcon.heightAnchor, multiplier: sqrt(2.0)),
         ])
-        loadView.backgroundColor = .red
     }
     
     required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension LiveTextButton: ImageVisionDelegate {
+    func didReport(progress: Double) {
+        loadView.progress = progress
+    }
+}
+
+final class LoadCircleView: UIView {
+    
+    /// Ranges from 0 to 1.
+    public var progress: Double = 0 {
+        didSet {
+            print("drawing progress \(progress)")
+            redraw()
+        }
+    }
+    
+    private let shapeLayer: CAShapeLayer
+    
+    @MainActor
+    init() {
+        self.shapeLayer = .init()
+        super.init(frame: .zero)
+        
+        backgroundColor = .green
+        
+        layer.addSublayer(shapeLayer)
+        shapeLayer.fillColor = UIColor.red.cgColor
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        redraw()
+    }
+    
+    private func redraw() -> Void {
+        /// Save some time for zero progress.
+        guard progress > 0 else {
+            shapeLayer.path = nil
+            return
+        }
+        
+        /// We assume the view is a square, but take the shorter side just in case.
+        let sideLength = min(frame.height, frame.width)
+        
+        let path = UIBezierPath()
+        
+        let deadCenter = CGPoint(x: sideLength / 2, y: sideLength / 2)
+        path.move(to: deadCenter)
+        
+        /// Start at 12 o clock.
+        let topMid = CGPoint(x: sideLength / 2, y: 0)
+        path.addLine(to: topMid)
+        
+        path.addArc(
+            withCenter: deadCenter,
+            radius: sideLength / 2,
+            /// Start at 12 o clock.
+            startAngle: -.pi / 2,
+            /// Subtract 90 deg to rotate from +x axis.
+            endAngle: (progress * 2 * .pi) - .pi / 2,
+            clockwise: true
+        )
+        
+        path.close()
+        shapeLayer.path = path.cgPath
+    }
+    
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
