@@ -224,8 +224,33 @@ final class SelectableImageView: UIImageView {
         self.maskLayer = .init()
         super.init(frame: .zero)
         
-        shadeView.translatesAutoresizingMaskIntoConstraints = false
+//        addSubview(shadeView)
+//        shadeView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            shadeView.topAnchor.constraint(equalTo: topAnchor),
+//            shadeView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            shadeView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            shadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//        ])
+//        shadeView.backgroundColor = .black.withAlphaComponent(0.7)
         
+        let bounds = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
+        let testMaskView: UIView = .init(frame: bounds)
+        
+        let testLayer: CAShapeLayer = .init()
+        testMaskView.layer.addSublayer(testLayer)
+        testMaskView.backgroundColor = .white
+        testLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 20).cgPath
+        
+        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        let image = renderer.image { rendererContext in
+          testLayer.render(in: rendererContext.cgContext)
+        }
+        if let masked = CIImage(image: image) {
+            let uimasked = UIImage(ciImage: masked)
+            let uiimage = UIImageView(image: uimasked)
+            addSubview(uiimage)
+        }
     }
     
     override func layoutSubviews() {
