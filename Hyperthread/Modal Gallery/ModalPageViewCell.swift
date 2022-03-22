@@ -81,3 +81,11 @@ protocol ActiveCellDelegate {
     @MainActor
     func didBecomeActiveCell() -> Void
 }
+
+extension ModalPageViewCell: ActiveCellDelegate {
+    /// Called when the cell becomes the "main cell" on screen.
+    /// Note this may occur in the midst of scrolling.
+    func didBecomeActiveCell() -> Void {
+        zoomableImageView.didBecomeActiveCell()
+    }
+}
