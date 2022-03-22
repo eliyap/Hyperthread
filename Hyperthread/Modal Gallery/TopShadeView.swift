@@ -11,6 +11,7 @@ final class TopShadeView: UIView {
     
     private let closeButton: CloseButton
     private let countLabel: UILabel
+    private let liveTextButton: LiveTextButton
     private let imageCount: Int
     
     public weak var closeDelegate: CloseDelegate? {
@@ -22,6 +23,7 @@ final class TopShadeView: UIView {
     init(imageCount: Int, startIndex: Int) {
         self.closeButton = .init()
         self.countLabel = .init()
+        self.liveTextButton = .init()
         self.imageCount = imageCount
         super.init(frame: .zero)
         
@@ -29,6 +31,7 @@ final class TopShadeView: UIView {
         
         addSubview(closeButton)
         addSubview(countLabel)
+        addSubview(liveTextButton)
         
         countLabel.text = "–/–"
         countLabel.textColor = .galleryUI
@@ -82,6 +85,7 @@ final class TopShadeView: UIView {
         ])
         
         closeButton.constrain(parent: self, sibling: countLabel, horizontalMargin: horizontalMargin)
+        liveTextButton.constrain(parent: self, sibling: countLabel, horizontalMargin: horizontalMargin)
     }
     
     private func setPageLabel(pageNo: Int) -> Void {
@@ -159,5 +163,51 @@ protocol ShadeToggleDelegate: AnyObject {
 extension TopShadeView: ImageVisionDelegate {
     func didReport(progress: Double) {
         print("got progress \(progress)")
+    }
+}
+
+final class LiveTextButton: UIButton {
+    
+    private let textIcon: UIImageView
+    
+    private let config = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
+        .applying(UIImage.SymbolConfiguration(paletteColors: [.galleryUI]))
+    
+    @MainActor
+    init() {
+        self.textIcon = .init(image: UIImage(systemName: "chevron.left", withConfiguration: config))
+        super.init(frame: .zero)
+        
+        addSubview(textIcon)
+        addAction(UIAction(handler: { [weak self] action in
+            #warning("TODO: call into live text here")
+//            self?.closeDelegate?.closeGallery()
+        }), for: .touchUpInside)
+    }
+    
+    public func constrain(parent: UIView, sibling: UIView, horizontalMargin: CGFloat) -> Void {
+        translatesAutoresizingMaskIntoConstraints = false
+        textIcon.translatesAutoresizingMaskIntoConstraints = false
+        
+        /// Constrain visible part to superview, not actual area.
+        NSLayoutConstraint.activate([
+            parent.rightAnchor.constraint(equalToSystemSpacingAfter: textIcon.rightAnchor, multiplier: horizontalMargin),
+            /// Ensure view covers label.
+            textIcon.bottomAnchor.constraint(equalTo: sibling.bottomAnchor),
+            textIcon.topAnchor.constraint(equalTo: sibling.topAnchor),
+        ])
+        
+        /// Expand hitbox in all directions to provide a generous touch target.
+        /// Because this button is in a hard to hit position, it's extra important to be generous.
+        NSLayoutConstraint.activate([
+            textIcon.leftAnchor.constraint(equalToSystemSpacingAfter: leftAnchor, multiplier: 2),
+            rightAnchor.constraint(equalToSystemSpacingAfter: textIcon.rightAnchor, multiplier: 2),
+            textIcon.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: textIcon.bottomAnchor, multiplier: 2),
+        ])
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
