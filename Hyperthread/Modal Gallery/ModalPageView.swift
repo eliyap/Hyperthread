@@ -133,6 +133,7 @@ extension ModalPageView: UIScrollViewDelegate {
     /// Keep other views up to date on the current cell when scrolling.
     private func updateTarget() -> Void {
         guard let target = getCurrentIndexPath() else { return }
+        targetIndex = target
         pageDelegate?.didScrollTo(pageNo: target.item + 1)
         guard let cell = getCurrentCell() else { return }
         cell.didBecomeActiveCell()
