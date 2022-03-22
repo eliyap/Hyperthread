@@ -121,8 +121,12 @@ extension GalleryView: ShadeToggleDelegate {
 }
 
 extension GalleryView: ImageVisionDelegate {
-    func didReport(progress: Double) {
+    func didReport(progress: Double) -> Void {
         topShade.didReport(progress: progress)
+    }
+    
+    func didChangeHighlightState(to highlighting: Bool) {
+        topShade.didChangeHighlightState(to: highlighting)
     }
 }
 
