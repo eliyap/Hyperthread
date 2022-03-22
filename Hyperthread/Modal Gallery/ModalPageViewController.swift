@@ -72,6 +72,10 @@ extension ModalPageViewController: ImageVisionDelegate {
     func didReport(progress: Double) -> Void {
         imageVisionDelegate?.didReport(progress: progress)
     }
+    
+    func didChangeHighlightState(to highlighting: Bool) {
+        imageVisionDelegate?.didChangeHighlightState(to: highlighting)
+    }
 }
 
 extension ModalPageViewController: TextRequestDelegate {
