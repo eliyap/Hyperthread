@@ -88,10 +88,6 @@ final class TopShadeView: UIView {
         countLabel.text = "\(pageNo)/\(imageCount)"
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { /** Deliberately ignore event. **/ }
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) { /** Deliberately ignore event. **/ }
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) { /** Deliberately ignore event. **/ }
-    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
