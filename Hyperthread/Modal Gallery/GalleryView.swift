@@ -19,7 +19,10 @@ final class GalleryView: UIView {
     public private(set) var areShadesHidden = false
     
     /// Delegates.
-    public weak var closeDelegate: CloseDelegate? = nil
+    public weak var closeDelegate: CloseDelegate? {
+        get { topShade.closeDelegate }
+        set { topShade.closeDelegate = newValue }
+    }
     public weak var shadeToggleDelegate: ShadeToggleDelegate? = nil
     
     init(imageCount: Int, startIndex: Int) {
@@ -27,8 +30,6 @@ final class GalleryView: UIView {
         self.bottomShade = .init()
         self.imageCount = imageCount
         super.init(frame: .zero)
-        
-        topShade.closeDelegate = self
         
         addSubview(topShade)
         addSubview(bottomShade)
@@ -76,12 +77,6 @@ final class GalleryView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension GalleryView: CloseDelegate {
-    func closeGallery() {
-        closeDelegate?.closeGallery()
     }
 }
 

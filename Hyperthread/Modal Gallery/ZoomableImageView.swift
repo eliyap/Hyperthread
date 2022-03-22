@@ -17,7 +17,7 @@ final class ZoomableImageView: UIScrollView {
     private var aspectConstraint: NSLayoutConstraint? = nil
 
     /// Delegates.
-    public weak var imageVisionDelegate: ImageVisionDelegate? = nil {
+    public weak var imageVisionDelegate: ImageVisionDelegate? {
         get { imageView.imageVisionDelegate }
         set { imageView.imageVisionDelegate = newValue }
     }
