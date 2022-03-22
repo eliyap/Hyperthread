@@ -368,11 +368,13 @@ struct VisionTextResult: Sendable {
         let textRange: Range<String.Index> = text.startIndex..<text.endIndex
         if let rect = try? vn.boundingBox(for: textRange) {
             /// The Vision framework has the y axis pointing up, so we need to invert it.
-            let invertedTopLeft = CGPoint(x: rect.topLeft.x, y: 1 - rect.topLeft.y)
-            let invertedTopRight = CGPoint(x: rect.topRight.x, y: 1 - rect.topRight.y)
-            let invertedBottomLeft = CGPoint(x: rect.bottomLeft.x, y: 1 - rect.bottomLeft.y)
-            let invertedBottomRight = CGPoint(x: rect.bottomRight.x, y: 1 - rect.bottomRight.y)
-            box = Box(topLeft: invertedTopLeft, topRight: invertedTopRight, bottomLeft: invertedBottomLeft, bottomRight: invertedBottomRight)
+            /// Points are provided in a 1 by 1 box.
+            box = Box(
+                topLeft: CGPoint(x: rect.topLeft.x, y: 1 - rect.topLeft.y), 
+                topRight: CGPoint(x: rect.topRight.x, y: 1 - rect.topRight.y), 
+                bottomLeft: CGPoint(x: rect.bottomLeft.x, y: 1 - rect.bottomLeft.y), 
+                bottomRight: CGPoint(x: rect.bottomRight.x, y: 1 - rect.bottomRight.y)
+            )
         } else {
             box = nil
         }
