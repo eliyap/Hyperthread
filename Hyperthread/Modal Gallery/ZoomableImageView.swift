@@ -326,7 +326,9 @@ final class SelectableImageView: UIImageView {
         }
     }
     
-    var results: [VisionTextResult] = []
+    var results: [VisionTextResult] = [] {
+        didSet { renderRecognizedText() }
+    }
     private func renderRecognizedText() -> Void {
         let path = CGMutablePath()
         for result in results {
@@ -338,12 +340,13 @@ final class SelectableImageView: UIImageView {
             boxPath.addLine(to: box.bottomLeft)
             boxPath.close()
             
-            path.addPath(boxPath.cgPath)
+            path.addPath(box.cgPath(in: frame))
             #warning("TODO: use string")
             print("Recognized string: \(result.text)")
             print("got box \(result.box)")
         }
         
+        print(frame)
 //        setShadeMask(path: UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath)
         setShadeMask(path: path)
         print("mask set.")
@@ -364,7 +367,12 @@ struct VisionTextResult: Sendable {
         
         let textRange: Range<String.Index> = text.startIndex..<text.endIndex
         if let rect = try? vn.boundingBox(for: textRange) {
-            box = .init(topLeft: rect.topLeft, topRight: rect.topRight, bottomLeft: rect.bottomLeft, bottomRight: rect.bottomRight)
+            /// The Vision framework has the y axis pointing up, so we need to invert it.
+            let invertedTopLeft = CGPoint(x: rect.topLeft.x, y: 1 - rect.topLeft.y)
+            let invertedTopRight = CGPoint(x: rect.topRight.x, y: 1 - rect.topRight.y)
+            let invertedBottomLeft = CGPoint(x: rect.bottomLeft.x, y: 1 - rect.bottomLeft.y)
+            let invertedBottomRight = CGPoint(x: rect.bottomRight.x, y: 1 - rect.bottomRight.y)
+            box = Box(topLeft: invertedTopLeft, topRight: invertedTopRight, bottomLeft: invertedBottomLeft, bottomRight: invertedBottomRight)
         } else {
             box = nil
         }
@@ -377,14 +385,26 @@ extension VisionTextResult {
         let topRight: CGPoint
         let bottomLeft: CGPoint
         let bottomRight: CGPoint
-    }
-    
-    public func cgPath(in frame: CGRect) -> CGPath {
-        let boxPath = UIBezierPath()
-        boxPath.move(to: CGPoint(x: topLeft.x * frame.width + frame.origin.x, y: topLeft.y * frame.height + frame.origin.y))
-        boxPath.addLine(to: CGPoint(x: topRight.x * frame.width + frame.origin.x, y: topRight.y * frame.height + frame.origin.y))
-        boxPath.addLine(to: CGPoint(x: bottomRight.x * frame.width + frame.origin.x, y: bottomRight.y * frame.height + frame.origin.y))
-        boxPath.addLine(to: CGPoint(x: bottomLeft.x * frame.width + frame.origin.x, y: bottomLeft.y * frame.height + frame.origin.y))
-        boxPath.close()
+        
+        public func cgPath(in frame: CGRect) -> CGPath {
+            let boxPath = UIBezierPath()
+            
+            let scaledTopLeft = CGPoint(x: topLeft.x * frame.width + frame.origin.x, y: topLeft.y * frame.height + frame.origin.y)
+            boxPath.move(to: scaledTopLeft)
+            
+            let scaledTopRight = CGPoint(x: topRight.x * frame.width + frame.origin.x, y: topRight.y * frame.height + frame.origin.y)
+            boxPath.addLine(to: scaledTopRight)
+            
+            let scaledBottomRight = CGPoint(x: bottomRight.x * frame.width + frame.origin.x, y: bottomRight.y * frame.height + frame.origin.y)
+            boxPath.addLine(to: scaledBottomRight)
+            
+            let scaledBottomLeft = CGPoint(x: bottomLeft.x * frame.width + frame.origin.x, y: bottomLeft.y * frame.height + frame.origin.y)
+            boxPath.addLine(to: scaledBottomLeft)
+            
+            boxPath.close()
+
+            print(scaledTopLeft)
+            return boxPath.cgPath
+        }
     }
 }
