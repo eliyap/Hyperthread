@@ -213,17 +213,17 @@ final class SelectableImageView: UIImageView {
         }
     }
     
-    let shadeView: UIView
-    let fillLayer: CAShapeLayer
-    let maskLayer: CAShapeLayer
+    private let shadeView: UIView
+    
+    /// Delegates.
+    public weak var imageVisionDelegate: ImageVisionDelegate? = nil
     
     @MainActor
     init() {
         self.shadeView = .init()
-        self.fillLayer = .init()
-        self.maskLayer = .init()
         super.init(frame: .zero)
         
+        /// Add view to darken non-text areas when the user activates "live text mode".
         addSubview(shadeView)
         shadeView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -233,11 +233,7 @@ final class SelectableImageView: UIImageView {
             shadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         shadeView.backgroundColor = .black.withAlphaComponent(0.7)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        renderRecognizedText()
+        shadeView.isHidden = true
     }
     
     /// Adapted from: https://medium.com/swlh/ios-secrets-see-behind-your-views-fe8afe9072a5
@@ -301,15 +297,19 @@ final class SelectableImageView: UIImageView {
                     }
                     
                     guard let self = self else { return }
-                    
                     Task { @MainActor in
-                        self.results = textResults
+                        self.renderRecognizedText(results: textResults)
                     }
                 })
                 request.customWords = [] /// None, for now.
                 request.recognitionLevel = .accurate
                 request.usesLanguageCorrection = true
-                request.progressHandler = { (request: VNRequest, progress: Double, error: Error?) in
+                request.progressHandler = { [weak self] (request: VNRequest, progress: Double, error: Error?) in
+                    guard let self = self else { return }
+                    Task { @MainActor in
+                        self.imageVisionDelegate?.didReport(progress: progress)
+                    }
+                    
                     #warning("TODO: show request progress")
                 }
 
@@ -326,10 +326,7 @@ final class SelectableImageView: UIImageView {
         }
     }
     
-    var results: [VisionTextResult] = [] {
-        didSet { renderRecognizedText() }
-    }
-    private func renderRecognizedText() -> Void {
+    private func renderRecognizedText(results: [VisionTextResult]) -> Void {
         let path = CGMutablePath()
         for result in results {
             guard let box = result.box else { continue }
@@ -346,4 +343,8 @@ final class SelectableImageView: UIImageView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+protocol ImageVisionDelegate: AnyObject {
+    func didReport(progress: Double) -> Void
 }
