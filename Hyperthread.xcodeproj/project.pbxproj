@@ -119,6 +119,7 @@
 		22D2573127883F75005FC3D8 /* ReferenceCrawler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */; };
 		22D257342788459D005FC3D8 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 22D257332788459D005FC3D8 /* Algorithms */; };
 		22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */; };
+		22DBDC5327EA1EFF005D0595 /* VisionTextResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */; };
 		22EE928D2799C5BB003C9056 /* UserMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE928C2799C5BB003C9056 /* UserMessage.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
 		22F2463F274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */; };
@@ -281,6 +282,7 @@
 		22D2572D27883A56005FC3D8 /* ScrollPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollPosition.swift; sourceTree = "<group>"; };
 		22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceCrawler.swift; sourceTree = "<group>"; };
 		22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncHomeTimeline.swift; sourceTree = "<group>"; };
+		22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionTextResult.swift; sourceTree = "<group>"; };
 		22EE928C2799C5BB003C9056 /* UserMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessage.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
 		22F2463E274D6A9E00AE17AD /* NSLayoutConstraint.replace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.replace.swift; sourceTree = "<group>"; };
@@ -581,6 +583,7 @@
 				22817BAA27E5210700D34C71 /* ModalPageLayout.swift */,
 				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
 				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
+				22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */,
 				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
 				22817BAE27E5486800D34C71 /* GalleryTransition.swift */,
 			);
@@ -941,6 +944,7 @@
 				22144E1B27B83B79002AAFB6 /* CardTeaserCell.style.swift in Sources */,
 				22193DAA2783DD5E005A7708 /* FollowingCache.swift in Sources */,
 				22760A4F274B136200F28F0A /* Media.swift in Sources */,
+				22DBDC5327EA1EFF005D0595 /* VisionTextResult.swift in Sources */,
 				22BC9E9127A5C97800721BD2 /* ColorMarkerView.swift in Sources */,
 				22FBAAD427AF1EC800FEEB71 /* Tweet.addVideo.swift in Sources */,
 				22EE928D2799C5BB003C9056 /* UserMessage.swift in Sources */,
