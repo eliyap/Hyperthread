@@ -333,21 +333,12 @@ final class SelectableImageView: UIImageView {
         let path = CGMutablePath()
         for result in results {
             guard let box = result.box else { continue }
-            let boxPath = UIBezierPath()
-            boxPath.move(to: box.topLeft)
-            boxPath.addLine(to: box.topRight)
-            boxPath.addLine(to: box.bottomRight)
-            boxPath.addLine(to: box.bottomLeft)
-            boxPath.close()
-            
             path.addPath(box.cgPath(in: frame))
+            
             #warning("TODO: use string")
             print("Recognized string: \(result.text)")
             print("got box \(result.box)")
         }
-        
-        print(frame)
-//        setShadeMask(path: UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath)
         setShadeMask(path: path)
         print("mask set.")
     }
@@ -388,6 +379,7 @@ extension VisionTextResult {
         let bottomLeft: CGPoint
         let bottomRight: CGPoint
         
+        /// Scale the box from vision's 1x1 bounding box to a `CGPath` in the provided frame.
         public func cgPath(in frame: CGRect) -> CGPath {
             let boxPath = UIBezierPath()
             
