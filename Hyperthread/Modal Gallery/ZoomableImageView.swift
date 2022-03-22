@@ -233,16 +233,22 @@ final class SelectableImageView: UIImageView {
             shadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         shadeView.backgroundColor = .black.withAlphaComponent(0.7)
-        
-        let bounds = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
-        let testMaskView: UIView = .init(frame: bounds)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setShadeMask()
+    }
+    
+    func setShadeMask() -> Void {
+        let testMaskView: UIView = .init(frame: frame)
         
         let testLayer: CAShapeLayer = .init()
         testMaskView.layer.addSublayer(testLayer)
         testMaskView.backgroundColor = .white
-        testLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 20).cgPath
+        testLayer.path = UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath
         
-        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        let renderer = UIGraphicsImageRenderer(bounds: frame)
         let image = renderer.image { rendererContext in
             testMaskView.layer.render(in: rendererContext.cgContext)
         }
@@ -250,28 +256,24 @@ final class SelectableImageView: UIImageView {
         if let masked = CIImage(image: image) {
             let uimasked = UIImage(ciImage: masked.applyingFilter("CIMaskToAlpha"))
             let uiimage = UIImageView(image: uimasked)
-            uiimage.bounds = bounds
+            uiimage.frame = frame
             addSubview(uiimage)
             shadeView.mask = uiimage
             print("ding.")
         }
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-    
     private func performRecognition(with image: UIImage) {
         /// 22.03.21 without `Task` wrapper, `DispatchQueue` call caused UI hitches and concurrency runtime warnings.
         Task { @MainActor in
-            DispatchQueue.global(qos: .userInitiated).async{
+            DispatchQueue.global(qos: .userInitiated).async {
                 guard let cgImage = image.cgImage else {
                     assert(false, "Could not obtain CGImage from UIImage")
                     BlackBox.Logger.general.warning("Could not obtain CGImage from UIImage")
                     return
                 }
                 
-                let request = VNRecognizeTextRequest(completionHandler: { (request: VNRequest?, error: Error?) in
+                let request = VNRecognizeTextRequest(completionHandler: { [weak self] (request: VNRequest?, error: Error?) in
                     if let error = error {
                         assert(false, "Error \(error)")
                         BlackBox.Logger.general.error("Vision Reqest Error: \(error)")
@@ -281,28 +283,24 @@ final class SelectableImageView: UIImageView {
                         assert(false, "Request returned no results")
                         return
                     }
-                    for result in results {
-                        guard let observation = result as? VNRecognizedTextObservation else { continue }
-
-                        /// Only look at the best candidate.
-                        /// We have _absolutely no idea_ what's coming through twitter, so we have no way to rank candidates.
-                        let maxCandidates = 1
+                    
+                    /// Only look at the best candidate.
+                    /// We have _absolutely no idea_ what's coming through twitter, so we have no way to rank candidates.
+                    let maxCandidates = 1
+                    let textResults = results.compactMap { (result) -> VNRecognizedText? in
+                        guard let observation = result as? VNRecognizedTextObservation else {
+                            return nil
+                        }
                         guard let candidate: VNRecognizedText = observation.topCandidates(maxCandidates).first else {
-                            return
+                            return nil
                         }
-                        
-                        let text = candidate.string
-                        let textRange: Range<String.Index> = text.startIndex..<text.endIndex
-
-                        #warning("TODO: use string")
-                        print("Recognized string: \(text)")
-                        if let box: VNRectangleObservation = try? candidate.boundingBox(for: textRange) {
-//                            print("got box \(box)")
-                            /// NOTE: not necessarily a rectangle aligned with the axes of the image.
-                        }
+                        return candidate
                     }
-
-                    print("request complete.")
+                    
+                    guard let self = self else { return }
+                    Task { @MainActor in
+                        self.renderRecognizedText(textResults)
+                    }
                 })
                 request.customWords = [] /// None, for now.
                 request.recognitionLevel = .accurate
@@ -320,6 +318,20 @@ final class SelectableImageView: UIImageView {
                     BlackBox.Logger.general.error("Vision request failed with error \(error)")
                     return
                 }
+            }
+        }
+    }
+    
+    private func renderRecognizedText(_ textResults: [VNRecognizedText]) -> Void {
+        for result in textResults {
+            let text = result.string
+            let textRange: Range<String.Index> = text.startIndex..<text.endIndex
+
+            #warning("TODO: use string")
+            print("Recognized string: \(text)")
+            if let box: VNRectangleObservation = try? result.boundingBox(for: textRange) {
+                print("got box \(box)")
+                /// NOTE: not necessarily a rectangle aligned with the axes of the image.
             }
         }
     }
