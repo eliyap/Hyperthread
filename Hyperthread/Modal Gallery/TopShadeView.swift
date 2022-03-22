@@ -169,6 +169,10 @@ extension TopShadeView: ImageVisionDelegate {
     func didReport(progress: Double) {
         liveTextButton.didReport(progress: progress)
     }
+    
+    func didChangeHighlightState(to highlighting: Bool) {
+        liveTextButton.didChangeHighlightState(to: highlighting)
+    }
 }
 
 final class LiveTextButton: UIButton {
