@@ -290,14 +290,14 @@ final class SelectableImageView: UIImageView {
                     /// Only look at the best candidate.
                     /// We have _absolutely no idea_ what's coming through twitter, so we have no way to rank candidates.
                     let maxCandidates = 1
-                    let textResults = results.compactMap { (result) -> VisionResult? in
+                    let textResults = results.compactMap { (result) -> VisionTextResult? in
                         guard let observation = result as? VNRecognizedTextObservation else {
                             return nil
                         }
                         guard let candidate: VNRecognizedText = observation.topCandidates(maxCandidates).first else {
                             return nil
                         }
-                        return VisionResult(candidate)
+                        return VisionTextResult(candidate)
                     }
                     
                     guard let self = self else { return }
@@ -325,7 +325,7 @@ final class SelectableImageView: UIImageView {
         }
     }
     
-    private func renderRecognizedText(_ results: [VisionResult]) -> Void {
+    private func renderRecognizedText(_ results: [VisionTextResult]) -> Void {
         for result in results {
             #warning("TODO: use string")
             print("Recognized string: \(result.text)")
@@ -338,7 +338,8 @@ final class SelectableImageView: UIImageView {
     }
 }
 
-struct VisionResult: Sendable {
+/// Simplified representation of `VNRecognizedText`.
+struct VisionTextResult: Sendable {
     let text: String
     let box: Self.Box?
     
@@ -354,7 +355,7 @@ struct VisionResult: Sendable {
     }
 }
 
-extension VisionResult {
+extension VisionTextResult {
     struct Box: Sendable {
         let topLeft: CGPoint
         let topRight: CGPoint
