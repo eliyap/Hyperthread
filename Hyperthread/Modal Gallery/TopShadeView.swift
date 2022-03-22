@@ -164,3 +164,9 @@ protocol ShadeToggleDelegate: AnyObject {
     @MainActor
     func toggleShades() -> Void
 }
+
+extension TopShadeView: ImageVisionDelegate {
+    func didReport(progress: Double) {
+        print("got progress \(progress)")
+    }
+}

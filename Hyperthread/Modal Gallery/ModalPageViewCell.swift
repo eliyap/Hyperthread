@@ -13,6 +13,9 @@ final class ModalPageViewCell: UICollectionViewCell {
     
     private let zoomableImageView: ZoomableImageView
     
+    /// Delegates.
+    public weak var imageVisionDelegate: ImageVisionDelegate? = nil
+    
     @MainActor
     override init(frame: CGRect) {
         self.zoomableImageView = .init()
@@ -41,6 +44,8 @@ final class ModalPageViewCell: UICollectionViewCell {
                 zoomableImageView.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             ])
         }
+        
+        zoomableImageView.imageVisionDelegate = self
     }
     
     public func configure(image: UIImage?, frame: CGRect) -> Void {
@@ -64,5 +69,11 @@ final class ModalPageViewCell: UICollectionViewCell {
 extension ModalPageViewCell: GeometryTargetProvider {
     var targetView: UIView {
         zoomableImageView.targetView
+    }
+}
+
+extension ModalPageViewCell: ImageVisionDelegate {
+    func didReport(progress: Double) -> Void {
+        imageVisionDelegate?.didReport(progress: progress)
     }
 }

@@ -52,9 +52,14 @@ final class GalleryViewController: UIViewController {
         self.rootView = rootView
         let startIndex = IndexPath(item: startIndex, section: 0)
         self.startIndex = startIndex
-        let pageViewController = ModalPageViewController(images: images, startIndex: startIndex)
+        
+        /// Due to a circular (weak) dependency, we need to do a little dance.
+        let galleryView = GalleryView(imageCount: images.count, startIndex: startIndex.item + 1)
+        self.galleryView = galleryView
+        let pageViewController = ModalPageViewController(images: images, startIndex: startIndex, imageVisionDelegate: galleryView)
         self.pageViewController = pageViewController
-        self.galleryView = .init(pageView: pageViewController.pageView, imageCount: images.count, startIndex: startIndex.item + 1)
+        galleryView.bindPageView(pageViewController.pageView)
+        
         super.init(nibName: nil, bundle: nil)
         
         view = galleryView

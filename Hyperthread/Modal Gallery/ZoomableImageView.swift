@@ -16,6 +16,9 @@ final class ZoomableImageView: UIScrollView {
     
     private var aspectConstraint: NSLayoutConstraint? = nil
 
+    /// Delegates.
+    public weak var imageVisionDelegate: ImageVisionDelegate? = nil
+    
     @MainActor
     init() {
         self.imageView = .init()
@@ -50,6 +53,8 @@ final class ZoomableImageView: UIScrollView {
         doubleTap.cancelsTouchesInView = false
         doubleTap.numberOfTapsRequired = 2
         addGestureRecognizer(doubleTap)
+        
+        imageView.imageVisionDelegate = self
     }
     
     public func configure(image: UIImage?, frame: CGRect) -> Void {
@@ -203,6 +208,12 @@ extension ZoomableImageView: GeometryTargetProvider {
     }
 }
 
+extension ZoomableImageView: ImageVisionDelegate {
+    func didReport(progress: Double) -> Void {
+        imageVisionDelegate?.didReport(progress: progress)
+    }
+}
+
 final class SelectableImageView: UIImageView {
     
     override var image: UIImage? {
@@ -333,8 +344,8 @@ final class SelectableImageView: UIImageView {
             path.addPath(box.cgPath(in: frame))
             
             #warning("TODO: use string")
-            print("Recognized string: \(result.text)")
-            print("got box \(result.box)")
+//            print("Recognized string: \(result.text)")
+//            print("got box \(result.box)")
         }
         setShadeMask(path: path)
         print("mask set.")
@@ -346,5 +357,6 @@ final class SelectableImageView: UIImageView {
 }
 
 protocol ImageVisionDelegate: AnyObject {
+    @MainActor
     func didReport(progress: Double) -> Void
 }

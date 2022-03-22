@@ -22,20 +22,24 @@ final class GalleryView: UIView {
     public weak var closeDelegate: CloseDelegate? = nil
     public weak var shadeToggleDelegate: ShadeToggleDelegate? = nil
     
-    init(pageView: ModalPageView, imageCount: Int, startIndex: Int) {
-        self.pageView = pageView
+    init(imageCount: Int, startIndex: Int) {
         self.topShade = .init(imageCount: imageCount, startIndex: startIndex)
         self.bottomShade = .init()
         self.imageCount = imageCount
         super.init(frame: .zero)
         
-        pageView.pageDelegate = topShade
-        pageView.shadeToggleDelegate = self
         topShade.closeDelegate = self
         
-        addSubview(pageView)
         addSubview(topShade)
         addSubview(bottomShade)
+    }
+    
+    /// Due to a circular (weak) dependency, we need to do a little dance.
+    public func bindPageView(_ pageView: ModalPageView) {
+        self.pageView = pageView
+        pageView.pageDelegate = topShade
+        pageView.shadeToggleDelegate = self
+        insertSubview(pageView, at: 0)
     }
     
     /// Called by superview.
@@ -116,5 +120,11 @@ extension GalleryView: ShadeToggleDelegate {
                 completion: nil
             )
         }
+    }
+}
+
+extension GalleryView: ImageVisionDelegate {
+    func didReport(progress: Double) {
+        topShade.didReport(progress: progress)
     }
 }

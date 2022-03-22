@@ -15,7 +15,10 @@ final class ModalPageViewController: UIViewController {
     
     private let dataSource: ModalAlbumDataSource
     
-    init(images: [UIImage?], startIndex: IndexPath) {
+    /// Delegates.
+    public weak var imageVisionDelegate: ImageVisionDelegate? = nil
+    
+    init(images: [UIImage?], startIndex: IndexPath, imageVisionDelegate: ImageVisionDelegate) {
         self.pageView = .init(startIndex: startIndex)
         self.dataSource = .init(collectionView: pageView, cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseID, for: indexPath) as? Cell else {
@@ -24,7 +27,7 @@ final class ModalPageViewController: UIViewController {
             
             let image: UIImage? = images[indexPath.item]
             cell.configure(image: image, frame: collectionView.safeAreaLayoutGuide.layoutFrame)
-            
+            cell.imageVisionDelegate = imageVisionDelegate
             return cell
         })
         super.init(nibName: nil, bundle: nil)
@@ -62,5 +65,11 @@ final class ModalPageViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension ModalPageViewController: ImageVisionDelegate {
+    func didReport(progress: Double) -> Void {
+        imageVisionDelegate?.didReport(progress: progress)
     }
 }
