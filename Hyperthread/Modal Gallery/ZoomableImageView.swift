@@ -290,14 +290,14 @@ final class SelectableImageView: UIImageView {
                     /// Only look at the best candidate.
                     /// We have _absolutely no idea_ what's coming through twitter, so we have no way to rank candidates.
                     let maxCandidates = 1
-                    let textResults = results.compactMap { (result) -> VNRecognizedText? in
+                    let textResults = results.compactMap { (result) -> VisionResult? in
                         guard let observation = result as? VNRecognizedTextObservation else {
                             return nil
                         }
                         guard let candidate: VNRecognizedText = observation.topCandidates(maxCandidates).first else {
                             return nil
                         }
-                        return candidate
+                        return VisionResult(candidate)
                     }
                     
                     guard let self = self else { return }
@@ -309,7 +309,7 @@ final class SelectableImageView: UIImageView {
                 request.recognitionLevel = .accurate
                 request.usesLanguageCorrection = true
                 request.progressHandler = { (request: VNRequest, progress: Double, error: Error?) in
-                    
+                    #warning("TODO: show request progress")
                 }
 
                 /// Dispatch request.
@@ -325,21 +325,40 @@ final class SelectableImageView: UIImageView {
         }
     }
     
-    private func renderRecognizedText(_ textResults: [VNRecognizedText]) -> Void {
-        for result in textResults {
-            let text = result.string
-            let textRange: Range<String.Index> = text.startIndex..<text.endIndex
-
+    private func renderRecognizedText(_ results: [VisionResult]) -> Void {
+        for result in results {
             #warning("TODO: use string")
-            print("Recognized string: \(text)")
-            if let box: VNRectangleObservation = try? result.boundingBox(for: textRange) {
-                print("got box \(box)")
-                /// NOTE: not necessarily a rectangle aligned with the axes of the image.
-            }
+            print("Recognized string: \(result.text)")
+            print("got box \(result.box)")
         }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+struct VisionResult: Sendable {
+    let text: String
+    let box: Self.Box?
+    
+    init(_ vn: VNRecognizedText) {
+        text = vn.string
+        
+        let textRange: Range<String.Index> = text.startIndex..<text.endIndex
+        if let rect = try? vn.boundingBox(for: textRange) {
+            box = .init(topLeft: rect.topLeft, topRight: rect.topRight, bottomLeft: rect.bottomLeft, bottomRight: rect.bottomRight)
+        } else {
+            box = nil
+        }
+    }
+}
+
+extension VisionResult {
+    struct Box: Sendable {
+        let topLeft: CGPoint
+        let topRight: CGPoint
+        let bottomLeft: CGPoint
+        let bottomRight: CGPoint
     }
 }
