@@ -230,10 +230,6 @@ final class SelectableImageView: UIImageView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        // Set the path to the mask layer.
-        maskLayer.path = UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath
-        // Set the mask of the view.
-        layer.mask = maskLayer;
     }
     
     private func performRecognition(with image: UIImage) {
