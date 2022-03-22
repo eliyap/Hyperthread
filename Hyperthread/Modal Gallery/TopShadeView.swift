@@ -75,7 +75,7 @@ final class TopShadeView: UIView {
         
         countLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            rightAnchor.constraint(equalToSystemSpacingAfter: countLabel.rightAnchor, multiplier: horizontalMargin),
+            centerXAnchor.constraint(equalTo: countLabel.centerXAnchor),
             /// Ensure view covers label.
             bottomAnchor.constraint(equalToSystemSpacingBelow: countLabel.bottomAnchor, multiplier: 1),
             topConstraint,
