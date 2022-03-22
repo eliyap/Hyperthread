@@ -143,6 +143,26 @@ extension ModalPageView {
         let visibleIndexPath = indexPathForItem(at: visiblePoint)
         return visibleIndexPath
     }
+    
+    private func getCurrentCell() -> ModalPageViewCell? {
+        /// Need to de-multiplex which cell is being addressed to show text.
+        guard let current = getCurrentIndexPath() else {
+            assert(false, "Could not find current index")
+            BlackBox.Logger.general.error("Could not find current index")
+            return nil
+        }
+        guard let cell = cellForItem(at: current) else {
+            assert(false, "Could not get cell at current index \(current)")
+            BlackBox.Logger.general.error("Could not get cell at current index \(current)")
+            return nil
+        }
+        guard let modalCell = cell as? ModalPageViewCell else {
+            assert(false, "Unexpected type")
+            BlackBox.Logger.general.error("Unexpected type")
+            return nil
+        }
+        return modalCell
+    }
 }
 
 extension ModalPageView: GeometryTargetProvider {
@@ -162,20 +182,9 @@ protocol PageDelegate: AnyObject {
 
 extension ModalPageView: TextRequestDelegate {
     func didRequestText() {
-        /// Need to de-multiplex which cell is being addressed to show text.
-        guard let current = getCurrentIndexPath() else {
-            assert(false, "Could not find current index")
-            BlackBox.Logger.general.error("Could not find current index")
-            return
-        }
-        guard let cell = cellForItem(at: current) else {
-            assert(false, "Could not get cell at current index \(current)")
-            BlackBox.Logger.general.error("Could not get cell at current index \(current)")
-            return
-        }
-        guard let modalCell = cell as? ModalPageViewCell else {
-            assert(false, "Unexpected type")
-            BlackBox.Logger.general.error("Unexpected type")
+        guard let modalCell = getCurrentCell() else {
+            assert(false, "Could not get cell")
+            BlackBox.Logger.general.error("Could not get cell")
             return
         }
         modalCell.textRequestDelegate?.didRequestText()
