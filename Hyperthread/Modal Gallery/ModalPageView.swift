@@ -157,7 +157,6 @@ extension ModalPageView {
             return nil
         }
         guard let cell = cellForItem(at: current) else {
-            assert(false, "Could not get cell at current index \(current)")
             BlackBox.Logger.general.error("Could not get cell at current index \(current)")
             return nil
         }
