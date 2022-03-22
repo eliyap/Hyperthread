@@ -57,7 +57,6 @@ extension VisionTextResult {
             
             boxPath.close()
 
-            print(scaledTopLeft)
             return boxPath.cgPath
         }
     }
