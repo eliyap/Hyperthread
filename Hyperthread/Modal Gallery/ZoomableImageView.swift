@@ -364,6 +364,9 @@ final class SelectableImageView: UIImageView {
 protocol ImageVisionDelegate: AnyObject {
     @MainActor
     func didReport(progress: Double) -> Void
+    
+    @MainActor
+    func didChangeHighlightState(to highlighting: Bool) -> Void
 }
 
 protocol TextRequestDelegate: AnyObject {
