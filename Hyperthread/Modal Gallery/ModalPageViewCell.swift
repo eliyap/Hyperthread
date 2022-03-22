@@ -19,6 +19,10 @@ final class ModalPageViewCell: UICollectionViewCell {
         set { zoomableImageView.imageVisionDelegate = newValue }
     }
     
+    public weak var textRequestDelegate: TextRequestDelegate? {
+        zoomableImageView.textRequestDelegate
+    }
+    
     @MainActor
     override init(frame: CGRect) {
         self.zoomableImageView = .init()

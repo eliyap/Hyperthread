@@ -22,6 +22,10 @@ final class ZoomableImageView: UIScrollView {
         set { imageView.imageVisionDelegate = newValue }
     }
     
+    public weak var textRequestDelegate: TextRequestDelegate? {
+        imageView
+    }
+    
     @MainActor
     init() {
         self.imageView = .init()
@@ -354,4 +358,15 @@ final class SelectableImageView: UIImageView {
 protocol ImageVisionDelegate: AnyObject {
     @MainActor
     func didReport(progress: Double) -> Void
+}
+
+protocol TextRequestDelegate: AnyObject {
+    @MainActor
+    func didRequestText() -> Void
+}
+
+extension SelectableImageView: TextRequestDelegate {
+    func didRequestText() {
+        print("received text request.")
+    }
 }

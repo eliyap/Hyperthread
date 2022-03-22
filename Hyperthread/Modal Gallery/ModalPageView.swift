@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BlackBox
 
 final class ModalPageView: UICollectionView {
     
@@ -157,4 +158,26 @@ extension ModalPageView: GeometryTargetProvider {
 protocol PageDelegate: AnyObject {
     @MainActor
     func didScrollTo(pageNo: Int) -> Void
+}
+
+extension ModalPageView: TextRequestDelegate {
+    func didRequestText() {
+        /// Need to de-multiplex which cell is being addressed to show text.
+        guard let current = getCurrentIndexPath() else {
+            assert(false, "Could not find current index")
+            BlackBox.Logger.general.error("Could not find current index")
+            return
+        }
+        guard let cell = cellForItem(at: current) else {
+            assert(false, "Could not get cell at current index \(current)")
+            BlackBox.Logger.general.error("Could not get cell at current index \(current)")
+            return
+        }
+        guard let modalCell = cell as? ModalPageViewCell else {
+            assert(false, "Unexpected type")
+            BlackBox.Logger.general.error("Unexpected type")
+            return
+        }
+        modalCell.textRequestDelegate?.didRequestText()
+    }
 }

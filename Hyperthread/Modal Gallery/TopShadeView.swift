@@ -19,6 +19,11 @@ final class TopShadeView: UIView {
         set { closeButton.closeDelegate = newValue }
     }
     
+    public weak var textRequestDelegate: TextRequestDelegate? {
+        get { liveTextButton.textRequestDelegate }
+        set { liveTextButton.textRequestDelegate = newValue }
+    }
+    
     @MainActor
     init(imageCount: Int, startIndex: Int) {
         self.closeButton = .init()
@@ -173,6 +178,8 @@ final class LiveTextButton: UIButton {
     private let config = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
         .applying(UIImage.SymbolConfiguration(paletteColors: [.galleryUI]))
     
+    public weak var textRequestDelegate: TextRequestDelegate? = nil
+    
     @MainActor
     init() {
         self.textIcon = .init(image: UIImage(systemName: "text.viewfinder", withConfiguration: config))
@@ -180,6 +187,7 @@ final class LiveTextButton: UIButton {
         
         addSubview(textIcon)
         addAction(UIAction(handler: { [weak self] action in
+            self?.textRequestDelegate?.didRequestText()
             #warning("TODO: call into live text here")
 //            self?.closeDelegate?.closeGallery()
         }), for: .touchUpInside)

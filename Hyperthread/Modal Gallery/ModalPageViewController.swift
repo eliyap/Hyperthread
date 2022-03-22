@@ -73,3 +73,9 @@ extension ModalPageViewController: ImageVisionDelegate {
         imageVisionDelegate?.didReport(progress: progress)
     }
 }
+
+extension ModalPageViewController: TextRequestDelegate {
+    func didRequestText() {
+        pageView.didRequestText()
+    }
+}

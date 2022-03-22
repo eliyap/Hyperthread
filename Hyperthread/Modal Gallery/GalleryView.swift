@@ -33,6 +33,8 @@ final class GalleryView: UIView {
         
         addSubview(topShade)
         addSubview(bottomShade)
+        
+        topShade.textRequestDelegate = self
     }
     
     /// Due to a circular (weak) dependency, we need to do a little dance.
@@ -121,5 +123,12 @@ extension GalleryView: ShadeToggleDelegate {
 extension GalleryView: ImageVisionDelegate {
     func didReport(progress: Double) {
         topShade.didReport(progress: progress)
+    }
+}
+
+extension GalleryView: TextRequestDelegate {
+    func didRequestText() -> Void {
+        /// Simply forwards request.
+        pageView.didRequestText()
     }
 }
