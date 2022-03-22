@@ -240,27 +240,30 @@ final class SelectableImageView: UIImageView {
         setShadeMask()
     }
     
+    /// Adapted from: https://medium.com/swlh/ios-secrets-see-behind-your-views-fe8afe9072a5
     func setShadeMask() -> Void {
-        let testMaskView: UIView = .init(frame: frame)
+        /// Shapes drawn in this layer are "cut out" of the shade view.
+        let negativeLayer: CAShapeLayer = .init()
         
-        let testLayer: CAShapeLayer = .init()
-        testMaskView.layer.addSublayer(testLayer)
-        testMaskView.backgroundColor = .white
-        testLayer.path = UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath
+        let viewToRender: UIView = .init(frame: frame)
+        viewToRender.layer.addSublayer(negativeLayer)
+        viewToRender.backgroundColor = .white /// `CIMaskToAlpha` sets white pixels opaque.
+        
+        negativeLayer.path = UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath
         
         let renderer = UIGraphicsImageRenderer(bounds: frame)
-        let image = renderer.image { rendererContext in
-            testMaskView.layer.render(in: rendererContext.cgContext)
+        let image = renderer.image(actions: { context in
+            viewToRender.layer.render(in: context.cgContext)
+        })
+        guard let unmasked = CIImage(image: image) else {
+            assert(false, "Could not convert UIImage to CGImage")
+            BlackBox.Logger.general.error("Could not convert UIImage to CGImage")
+            return
         }
         
-        if let masked = CIImage(image: image) {
-            let uimasked = UIImage(ciImage: masked.applyingFilter("CIMaskToAlpha"))
-            let uiimage = UIImageView(image: uimasked)
-            uiimage.frame = frame
-            addSubview(uiimage)
-            shadeView.mask = uiimage
-            print("ding.")
-        }
+        let maskView = UIImageView(image: UIImage(ciImage: unmasked.applyingFilter("CIMaskToAlpha")))
+        maskView.frame = frame
+        shadeView.mask = maskView
     }
     
     private func performRecognition(with image: UIImage) {
