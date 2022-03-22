@@ -137,7 +137,7 @@ extension ModalPageView: UIScrollViewDelegate {
 extension ModalPageView {
     /// Obtains a single index path by checking the view's center.
     /// Source: https://stackoverflow.com/a/24396643/12395667
-    func getCurrentIndexPath() -> IndexPath? {
+    private func getCurrentIndexPath() -> IndexPath? {
         let visibleRect = CGRect(origin: contentOffset, size: bounds.size)
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
         let visibleIndexPath = indexPathForItem(at: visiblePoint)
