@@ -224,15 +224,15 @@ final class SelectableImageView: UIImageView {
         self.maskLayer = .init()
         super.init(frame: .zero)
         
-//        addSubview(shadeView)
-//        shadeView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            shadeView.topAnchor.constraint(equalTo: topAnchor),
-//            shadeView.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            shadeView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            shadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//        ])
-//        shadeView.backgroundColor = .black.withAlphaComponent(0.7)
+        addSubview(shadeView)
+        shadeView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            shadeView.topAnchor.constraint(equalTo: topAnchor),
+            shadeView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            shadeView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            shadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+        shadeView.backgroundColor = .black.withAlphaComponent(0.7)
         
         let bounds = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
         let testMaskView: UIView = .init(frame: bounds)
@@ -246,24 +246,14 @@ final class SelectableImageView: UIImageView {
         let image = renderer.image { rendererContext in
             testMaskView.layer.render(in: rendererContext.cgContext)
         }
-        let context = CIContext(options: nil)
+        
         if let masked = CIImage(image: image) {
             let uimasked = UIImage(ciImage: masked.applyingFilter("CIMaskToAlpha"))
             let uiimage = UIImageView(image: uimasked)
             uiimage.bounds = bounds
             addSubview(uiimage)
+            shadeView.mask = uiimage
             print("ding.")
-
-//            filter.setValue(masked, forKey: kCIInputImageKey)
-//            if let output = filter.outputImage {
-//                if let outout = context.createCGImage(output, from: output.extent) {
-//                    let uimasked = UIImage(cgImage: outout)
-//                    let uiimage = UIImageView(image: uimasked)
-//                    uiimage.frame = bounds
-//                    addSubview(uiimage)
-//                    print("ding.")
-//                }
-//            }
         }
     }
     
