@@ -175,6 +175,9 @@ final class LiveTextButton: UIButton {
     
     private let textIcon: UIImageView
     
+    /// Displays the loading progress of the live text vision request.
+    private let loadView: UIView
+    
     private let config = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
         .applying(UIImage.SymbolConfiguration(paletteColors: [.galleryUI]))
     
@@ -183,14 +186,23 @@ final class LiveTextButton: UIButton {
     @MainActor
     init() {
         self.textIcon = .init(image: UIImage(systemName: "text.viewfinder", withConfiguration: config))
+        self.loadView = .init()
         super.init(frame: .zero)
+        
+        addSubview(loadView)
+        loadView.layer.masksToBounds = true
         
         addSubview(textIcon)
         addAction(UIAction(handler: { [weak self] action in
             self?.textRequestDelegate?.didRequestText()
-            #warning("TODO: call into live text here")
-//            self?.closeDelegate?.closeGallery()
         }), for: .touchUpInside)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        /// Keeps "circle"corner radius live updated.
+        loadView.layer.cornerRadius = loadView.frame.height / 2
     }
     
     public func constrain(parent: UIView, sibling: UIView, horizontalMargin: CGFloat) -> Void {
@@ -213,6 +225,17 @@ final class LiveTextButton: UIButton {
             textIcon.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
             bottomAnchor.constraint(equalToSystemSpacingBelow: textIcon.bottomAnchor, multiplier: 2),
         ])
+        
+        loadView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loadView.centerXAnchor.constraint(equalTo: textIcon.centerXAnchor),
+            loadView.centerYAnchor.constraint(equalTo: textIcon.centerYAnchor),
+            
+            /// Diameter of circle should match or exceed diagonal of (squarish) image.
+            loadView.heightAnchor.constraint(equalTo: textIcon.heightAnchor, multiplier: sqrt(2.0)),
+            loadView.widthAnchor.constraint(equalTo: textIcon.heightAnchor, multiplier: sqrt(2.0)),
+        ])
+        loadView.backgroundColor = .red
     }
     
     required init(coder: NSCoder) {
