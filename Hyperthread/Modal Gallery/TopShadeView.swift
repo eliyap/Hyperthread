@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BlackBox
 
 final class TopShadeView: UIView {
     
@@ -260,19 +261,18 @@ extension LiveTextButton: ImageVisionDelegate {
         isEnabled = (progress == 1)
         textIcon.image = Self.icon(enabled: progress == 1)
         
-        loadView.progress = progress
+        loadView.didReport(progress: progress)
+    }
+    
+    func didChangeHighlightState(to highlighting: Bool) {
+        loadView.didChangeHighlightState(to: highlighting)
     }
 }
 
 final class LoadCircleView: UIView {
     
     /// Ranges from 0 to 1.
-    public var progress: Double = 0 {
-        didSet {
-            print("drawing progress \(progress)")
-            redraw()
-        }
-    }
+    private var reportedProgress: Double = 0.0
     
     private let shapeLayer: CAShapeLayer
     
@@ -290,10 +290,12 @@ final class LoadCircleView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        redraw()
+        
+        /// Use saved progress.
+        redraw(progress: self.reportedProgress)
     }
     
-    private func redraw() -> Void {
+    private func redraw(progress: Double) -> Void {
         /// Save some time for zero progress.
         guard progress > 0 else {
             shapeLayer.path = nil
@@ -328,5 +330,32 @@ final class LoadCircleView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension LoadCircleView: ImageVisionDelegate {
+    func didReport(progress: Double) -> Void {
+        print("drawing progress \(progress)")
+        self.reportedProgress = progress
+        redraw(progress: progress)
+    }
+    
+    func didChangeHighlightState(to highlighting: Bool) {
+        if highlighting {
+            shapeLayer.fillColor = UIColor.yellow.cgColor
+        } else {
+            /// Make indicator low contrast, so it's subtle.
+            /// This is non-interactive, and non-actionable, so it is fine if this is never seen.
+            shapeLayer.fillColor = UIColor.systemGray5.cgColor
+        }
+        
+        /// Safety check.
+        if highlighting {
+            guard reportedProgress == 1 else {
+                assert(false, "Tried to draw without finishing progress!")
+                BlackBox.Logger.general.warning("Tried to draw without finishing progress!")
+                return
+            }
+        }
     }
 }
