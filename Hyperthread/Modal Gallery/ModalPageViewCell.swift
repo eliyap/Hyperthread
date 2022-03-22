@@ -76,3 +76,8 @@ extension ModalPageViewCell: GeometryTargetProvider {
         zoomableImageView.targetView
     }
 }
+
+protocol ActiveCellDelegate {
+    @MainActor
+    func didBecomeActiveCell() -> Void
+}
