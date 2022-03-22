@@ -178,18 +178,20 @@ final class LiveTextButton: UIButton {
     /// Displays the loading progress of the live text vision request.
     private let loadView: LoadCircleView
     
-    private let config = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
-        .applying(UIImage.SymbolConfiguration(paletteColors: [.galleryUI]))
+    private var progress: Double = 0
     
     public weak var textRequestDelegate: TextRequestDelegate? = nil
     
     @MainActor
     init() {
-        self.textIcon = .init(image: UIImage(systemName: "text.viewfinder", withConfiguration: config))
+        self.textIcon = .init(image: Self.icon(enabled: false))
         self.loadView = .init()
         super.init(frame: .zero)
         
         addSubview(loadView)
+        
+        /// Prevents view from eating touches.
+        loadView.isUserInteractionEnabled = false
         
         addSubview(textIcon)
         addAction(UIAction(handler: { [weak self] action in
@@ -229,6 +231,18 @@ final class LiveTextButton: UIButton {
         ])
     }
     
+    private static let enabledConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
+        .applying(UIImage.SymbolConfiguration(paletteColors: [.galleryUI]))
+    private static let disabledConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
+        .applying(UIImage.SymbolConfiguration(paletteColors: [.systemGray2]))
+    
+    private static func icon(enabled: Bool) -> UIImage? {
+        let config = enabled
+            ? enabledConfig
+            : disabledConfig
+        return UIImage(systemName: "text.viewfinder", withConfiguration: config)
+    }
+    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -236,6 +250,12 @@ final class LiveTextButton: UIButton {
 
 extension LiveTextButton: ImageVisionDelegate {
     func didReport(progress: Double) {
+        self.progress = progress
+        
+        /// Disable presses until signalled complete.
+        isEnabled = (progress == 1)
+        textIcon.image = Self.icon(enabled: progress == 1)
+        
         loadView.progress = progress
     }
 }
@@ -257,10 +277,11 @@ final class LoadCircleView: UIView {
         self.shapeLayer = .init()
         super.init(frame: .zero)
         
-        backgroundColor = .green
-        
         layer.addSublayer(shapeLayer)
-        shapeLayer.fillColor = UIColor.red.cgColor
+        
+        /// Make indicator low contrast, so it's subtle.
+        /// This is non-interactive, and non-actionable, so it is fine if this is never seen.
+        shapeLayer.fillColor = UIColor.systemGray5.cgColor
     }
     
     override func layoutSubviews() {
