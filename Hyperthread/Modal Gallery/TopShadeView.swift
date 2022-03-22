@@ -175,7 +175,7 @@ final class LiveTextButton: UIButton {
     
     @MainActor
     init() {
-        self.textIcon = .init(image: UIImage(systemName: "chevron.left", withConfiguration: config))
+        self.textIcon = .init(image: UIImage(systemName: "text.viewfinder", withConfiguration: config))
         super.init(frame: .zero)
         
         addSubview(textIcon)
