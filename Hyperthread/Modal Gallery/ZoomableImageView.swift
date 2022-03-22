@@ -246,10 +246,17 @@ final class SelectableImageView: UIImageView {
         let image = renderer.image { rendererContext in
           testLayer.render(in: rendererContext.cgContext)
         }
-        if let masked = CIImage(image: image) {
-            let uimasked = UIImage(ciImage: masked)
-            let uiimage = UIImageView(image: uimasked)
-            addSubview(uiimage)
+        let context = CIContext(options: nil)
+        if let masked = CIImage(image: image), let filter = CIFilter(name: "CIMaskToAlpha") {
+            filter.setValue(masked, forKey: kCIInputImageKey)
+            if let output = filter.outputImage {
+                if let outout = context.createCGImage(output, from: output.extent) {
+                    let uimasked = UIImage(cgImage: outout)
+                    let uiimage = UIImageView(image: uimasked)
+                    addSubview(uiimage)
+                    print("ding.")
+                }
+            }
         }
     }
     
