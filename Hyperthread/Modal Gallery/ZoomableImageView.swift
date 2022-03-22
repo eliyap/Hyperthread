@@ -17,7 +17,10 @@ final class ZoomableImageView: UIScrollView {
     private var aspectConstraint: NSLayoutConstraint? = nil
 
     /// Delegates.
-    public weak var imageVisionDelegate: ImageVisionDelegate? = nil
+    public weak var imageVisionDelegate: ImageVisionDelegate? = nil {
+        get { imageView.imageVisionDelegate }
+        set { imageView.imageVisionDelegate = newValue }
+    }
     
     @MainActor
     init() {
@@ -53,8 +56,6 @@ final class ZoomableImageView: UIScrollView {
         doubleTap.cancelsTouchesInView = false
         doubleTap.numberOfTapsRequired = 2
         addGestureRecognizer(doubleTap)
-        
-        imageView.imageVisionDelegate = self
     }
     
     public func configure(image: UIImage?, frame: CGRect) -> Void {
@@ -205,12 +206,6 @@ extension ZoomableImageView: UIScrollViewDelegate {
 extension ZoomableImageView: GeometryTargetProvider {
     var targetView: UIView {
         imageView
-    }
-}
-
-extension ZoomableImageView: ImageVisionDelegate {
-    func didReport(progress: Double) -> Void {
-        imageVisionDelegate?.didReport(progress: progress)
     }
 }
 
