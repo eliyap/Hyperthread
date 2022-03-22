@@ -13,7 +13,10 @@ final class TopShadeView: UIView {
     private let countLabel: UILabel
     private let imageCount: Int
     
-    public weak var closeDelegate: CloseDelegate? = nil
+    public weak var closeDelegate: CloseDelegate? {
+        get { closeButton.closeDelegate }
+        set { closeButton.closeDelegate = newValue }
+    }
     
     @MainActor
     init(imageCount: Int, startIndex: Int) {
@@ -25,8 +28,6 @@ final class TopShadeView: UIView {
         backgroundColor = .galleryShade
         
         addSubview(closeButton)
-        closeButton.closeDelegate = self
-        
         addSubview(countLabel)
         
         countLabel.text = "–/–"
@@ -93,12 +94,6 @@ final class TopShadeView: UIView {
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension TopShadeView: CloseDelegate {
-    func closeGallery() {
-        closeDelegate?.closeGallery()
     }
 }
 
