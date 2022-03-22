@@ -213,6 +213,12 @@ extension ZoomableImageView: GeometryTargetProvider {
     }
 }
 
+extension ZoomableImageView: ActiveCellDelegate {
+    func didBecomeActiveCell() {
+        imageView.didBecomeActiveCell()
+    }
+}
+
 final class SelectableImageView: UIImageView {
     
     override var image: UIImage? {
@@ -368,5 +374,12 @@ protocol TextRequestDelegate: AnyObject {
 extension SelectableImageView: TextRequestDelegate {
     func didRequestText() {
         print("received text request.")
+    }
+}
+
+extension SelectableImageView: ActiveCellDelegate {
+    func didBecomeActiveCell() {
+        /// Report progress when cell becomes active, so that button may be updated.
+        imageVisionDelegate?.didReport(progress: visionRequestProgress)
     }
 }

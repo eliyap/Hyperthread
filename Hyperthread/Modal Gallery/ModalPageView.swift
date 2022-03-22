@@ -131,6 +131,8 @@ extension ModalPageView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let target = getCurrentIndexPath() else { return }
         pageDelegate?.didScrollTo(pageNo: target.item + 1)
+        guard let cell = getCurrentCell() else { return }
+        cell.didBecomeActiveCell()
     }
 }
 
