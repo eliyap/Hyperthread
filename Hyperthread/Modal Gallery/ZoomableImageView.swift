@@ -7,15 +7,18 @@
 
 import UIKit
 import SDWebImage
+import Vision
+import BlackBox
 
 final class ZoomableImageView: UIScrollView {
     
-    private let imageView: UIImageView = .init()
+    private let imageView: SelectableImageView
     
     private var aspectConstraint: NSLayoutConstraint? = nil
 
     @MainActor
     init() {
+        self.imageView = .init()
         super.init(frame: .zero)
         
         /// Configure `self`.
@@ -197,5 +200,106 @@ extension ZoomableImageView: UIScrollViewDelegate {
 extension ZoomableImageView: GeometryTargetProvider {
     var targetView: UIView {
         imageView
+    }
+}
+
+final class SelectableImageView: UIImageView {
+    
+    override var image: UIImage? {
+        didSet {
+            if let image = image {
+                performRecognition(with: image)
+            }
+        }
+    }
+    
+    let shadeView: UIView
+    let fillLayer: CAShapeLayer
+    let maskLayer: CAShapeLayer
+    
+    @MainActor
+    init() {
+        self.shadeView = .init()
+        self.fillLayer = .init()
+        self.maskLayer = .init()
+        super.init(frame: .zero)
+        
+        shadeView.translatesAutoresizingMaskIntoConstraints = false
+        
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // Set the path to the mask layer.
+        maskLayer.path = UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath
+        // Set the mask of the view.
+        layer.mask = maskLayer;
+    }
+    
+    private func performRecognition(with image: UIImage) {
+        /// 22.03.21 without `Task` wrapper, `DispatchQueue` call caused UI hitches and concurrency runtime warnings.
+        Task { @MainActor in
+            DispatchQueue.global(qos: .userInitiated).async{
+                guard let cgImage = image.cgImage else {
+                    assert(false, "Could not obtain CGImage from UIImage")
+                    BlackBox.Logger.general.warning("Could not obtain CGImage from UIImage")
+                    return
+                }
+                
+                let request = VNRecognizeTextRequest(completionHandler: { (request: VNRequest?, error: Error?) in
+                    if let error = error {
+                        assert(false, "Error \(error)")
+                        BlackBox.Logger.general.error("Vision Reqest Error: \(error)")
+                        return
+                    }
+                    guard let results = request?.results else {
+                        assert(false, "Request returned no results")
+                        return
+                    }
+                    for result in results {
+                        guard let observation = result as? VNRecognizedTextObservation else { continue }
+
+                        /// Only look at the best candidate.
+                        /// We have _absolutely no idea_ what's coming through twitter, so we have no way to rank candidates.
+                        let maxCandidates = 1
+                        guard let candidate: VNRecognizedText = observation.topCandidates(maxCandidates).first else {
+                            return
+                        }
+                        
+                        let text = candidate.string
+                        let textRange: Range<String.Index> = text.startIndex..<text.endIndex
+
+                        #warning("TODO: use string")
+                        print("Recognized string: \(text)")
+                        if let box: VNRectangleObservation = try? candidate.boundingBox(for: textRange) {
+//                            print("got box \(box)")
+                            /// NOTE: not necessarily a rectangle aligned with the axes of the image.
+                        }
+                    }
+
+                    print("request complete.")
+                })
+                request.customWords = [] /// None, for now.
+                request.recognitionLevel = .accurate
+                request.usesLanguageCorrection = true
+                request.progressHandler = { (request: VNRequest, progress: Double, error: Error?) in
+                    
+                }
+
+                /// Dispatch request.
+                let imageRequestHandler = VNImageRequestHandler(cgImage: cgImage)
+                do {
+                    try imageRequestHandler.perform([request])
+                } catch let error {
+                    assert(false, "Vision request failed with error \(error)")
+                    BlackBox.Logger.general.error("Vision request failed with error \(error)")
+                    return
+                }
+            }
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
