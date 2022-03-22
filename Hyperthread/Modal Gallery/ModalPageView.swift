@@ -119,16 +119,19 @@ extension ModalPageView: UICollectionViewDelegateFlowLayout {
 /// Update current index for animation when scrolling.
 extension ModalPageView: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard let target = getCurrentIndexPath() else { return }
-        targetIndex = target
+        updateTarget()
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard let target = getCurrentIndexPath() else { return }
-        targetIndex = target
+        updateTarget()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updateTarget()
+    }
+    
+    /// Keep other views up to date on the current cell when scrolling.
+    private func updateTarget() -> Void {
         guard let target = getCurrentIndexPath() else { return }
         pageDelegate?.didScrollTo(pageNo: target.item + 1)
         guard let cell = getCurrentCell() else { return }
