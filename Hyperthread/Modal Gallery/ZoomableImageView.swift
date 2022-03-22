@@ -328,13 +328,24 @@ final class SelectableImageView: UIImageView {
     
     var results: [VisionTextResult] = []
     private func renderRecognizedText() -> Void {
+        let path = CGMutablePath()
         for result in results {
+            guard let box = result.box else { continue }
+            let boxPath = UIBezierPath()
+            boxPath.move(to: box.topLeft)
+            boxPath.addLine(to: box.topRight)
+            boxPath.addLine(to: box.bottomRight)
+            boxPath.addLine(to: box.bottomLeft)
+            boxPath.close()
+            
+            path.addPath(boxPath.cgPath)
             #warning("TODO: use string")
             print("Recognized string: \(result.text)")
             print("got box \(result.box)")
         }
         
-        setShadeMask(path: UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath)
+//        setShadeMask(path: UIBezierPath(roundedRect: frame, cornerRadius: 20).cgPath)
+        setShadeMask(path: path)
         print("mask set.")
     }
     
@@ -366,5 +377,14 @@ extension VisionTextResult {
         let topRight: CGPoint
         let bottomLeft: CGPoint
         let bottomRight: CGPoint
+    }
+    
+    public func cgPath(in frame: CGRect) -> CGPath {
+        let boxPath = UIBezierPath()
+        boxPath.move(to: CGPoint(x: topLeft.x * frame.width + frame.origin.x, y: topLeft.y * frame.height + frame.origin.y))
+        boxPath.addLine(to: CGPoint(x: topRight.x * frame.width + frame.origin.x, y: topRight.y * frame.height + frame.origin.y))
+        boxPath.addLine(to: CGPoint(x: bottomRight.x * frame.width + frame.origin.x, y: bottomRight.y * frame.height + frame.origin.y))
+        boxPath.addLine(to: CGPoint(x: bottomLeft.x * frame.width + frame.origin.x, y: bottomLeft.y * frame.height + frame.origin.y))
+        boxPath.close()
     }
 }
