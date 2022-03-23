@@ -231,6 +231,10 @@ final class SelectableImageView: UIImageView {
     
     private let shadeView: UIView
     
+    /// Progress value for the vision request on the image.
+    /// 0 when image is nil.
+    public private(set) var visionRequestProgress: Double = 0
+    
     /// Delegates.
     public weak var imageVisionDelegate: ImageVisionDelegate? = nil
     
@@ -315,6 +319,10 @@ final class SelectableImageView: UIImageView {
                     guard let self = self else { return }
                     Task { @MainActor in
                         self.renderRecognizedText(results: textResults)
+                        
+                        /// Report completion, which sometimes does not happen with the progress handler.
+                        self.imageVisionDelegate?.didReport(progress: 1.0)
+                        self.visionRequestProgress = 1.0
                     }
                 })
                 request.customWords = [] /// None, for now.
@@ -324,6 +332,7 @@ final class SelectableImageView: UIImageView {
                     guard let self = self else { return }
                     Task { @MainActor in
                         self.imageVisionDelegate?.didReport(progress: progress)
+                        self.visionRequestProgress = progress
                     }
                     
                     #warning("TODO: show request progress")
