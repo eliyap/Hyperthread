@@ -122,6 +122,10 @@ extension GalleryView: ShadeToggleDelegate {
 
 extension GalleryView: ImageVisionDelegate {
     func didReport(progress: Double) -> Void {
+        /// Disable view updates while scrolling.
+        /// Update is requested when scrolling stops, so final still will certainly be reported.
+        guard pageView.isScrolling == false else { return }
+        
         topShade.didReport(progress: progress)
     }
     
