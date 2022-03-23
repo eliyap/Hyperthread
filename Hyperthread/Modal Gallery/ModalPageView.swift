@@ -203,7 +203,7 @@ protocol PageDelegate: AnyObject {
 }
 
 extension ModalPageView: TextRequestDelegate {
-    func didRequestText() {
+    func didRequestText(show: Bool?) {
         /// Disallow state change whilst scrolling.
         guard isScrolling == false else { return }
         
@@ -212,6 +212,6 @@ extension ModalPageView: TextRequestDelegate {
             BlackBox.Logger.general.error("Could not get cell")
             return
         }
-        modalCell.textRequestDelegate?.didRequestText()
+        modalCell.textRequestDelegate?.didRequestText(show: show)
     }
 }

@@ -379,16 +379,20 @@ protocol ImageVisionDelegate: AnyObject {
 }
 
 protocol TextRequestDelegate: AnyObject {
+    /// Indicates a request to show or hide live text.
+    /// If no state is specified, consider this a toggle request.
     @MainActor
-    func didRequestText() -> Void
+    func didRequestText(show: Bool?) -> Void
 }
 
 extension SelectableImageView: TextRequestDelegate {
-    func didRequestText() {
-        if shadeView.isHidden {
+    func didRequestText(show: Bool?) {
+        switch (show, shadeView.isHidden) {
+        case (.some(true), _), (nil, true):
             shadeView.isHidden = false
             imageVisionDelegate?.didChangeHighlightState(to: true)
-        } else {
+        
+        case (.some(false), _), (nil, false):
             shadeView.isHidden = true
             imageVisionDelegate?.didChangeHighlightState(to: false)
         }

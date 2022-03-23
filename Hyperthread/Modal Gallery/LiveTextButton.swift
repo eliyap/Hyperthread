@@ -32,7 +32,7 @@ final class LiveTextButton: UIButton {
         
         addSubview(textIcon)
         addAction(UIAction(handler: { [weak self] action in
-            self?.textRequestDelegate?.didRequestText()
+            self?.textRequestDelegate?.didRequestText(show: nil)
         }), for: .touchUpInside)
     }
     

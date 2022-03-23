@@ -131,8 +131,8 @@ extension GalleryView: ImageVisionDelegate {
 }
 
 extension GalleryView: TextRequestDelegate {
-    func didRequestText() -> Void {
+    func didRequestText(show: Bool?) -> Void {
         /// Simply forwards request.
-        pageView.didRequestText()
+        pageView.didRequestText(show: show)
     }
 }
