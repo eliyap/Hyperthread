@@ -112,7 +112,8 @@ final class LoadCircleView: UIView {
     
     /// Make indicator low contrast, so it's subtle.
     /// This is non-interactive, and non-actionable, so it is fine if this is never seen.
-    public static let loadingColor: CGColor = UIColor.systemGray5.cgColor
+    /// Color approximates `UIColor.sytemGray5` in dark mode.
+    public static let loadingColor: CGColor = UIColor(white: 0.2125, alpha: 1).cgColor
     
     @MainActor
     init() {
