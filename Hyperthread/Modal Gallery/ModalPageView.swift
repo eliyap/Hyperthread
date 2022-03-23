@@ -123,6 +123,15 @@ extension ModalPageView: UICollectionViewDelegateFlowLayout {
 extension ModalPageView: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isScrolling = true
+        
+        /// When starting to scroll, disable the live text overlay.
+        /// See semantics markdown for more details.
+        guard let modalCell = getCurrentCell() else {
+            assert(false, "Could not get cell")
+            BlackBox.Logger.general.error("Could not get cell")
+            return
+        }
+        modalCell.textRequestDelegate?.didRequestText(show: false)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
