@@ -204,6 +204,9 @@ protocol PageDelegate: AnyObject {
 
 extension ModalPageView: TextRequestDelegate {
     func didRequestText() {
+        /// Disallow state change whilst scrolling.
+        guard isScrolling == false else { return }
+        
         guard let modalCell = getCurrentCell() else {
             assert(false, "Could not get cell")
             BlackBox.Logger.general.error("Could not get cell")
