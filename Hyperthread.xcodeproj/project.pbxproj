@@ -252,6 +252,7 @@
 		22817BB427E5498400D34C71 /* GalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryView.swift; sourceTree = "<group>"; };
 		228A097927EB9F47003714A0 /* ShadeCloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadeCloseButton.swift; sourceTree = "<group>"; };
 		228A097B27EB9FCD003714A0 /* LiveTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextButton.swift; sourceTree = "<group>"; };
+		228A097D27EBA906003714A0 /* Live Text Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Live Text Notes.md"; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -592,6 +593,7 @@
 				22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */,
 				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
 				22817BAE27E5486800D34C71 /* GalleryTransition.swift */,
+				228A097D27EBA906003714A0 /* Live Text Notes.md */,
 			);
 			path = "Modal Gallery";
 			sourceTree = "<group>";
