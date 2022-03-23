@@ -189,7 +189,7 @@ final class LiveTextButton: UIButton {
     
     @MainActor
     init() {
-        self.textIcon = .init(image: Self.icon(enabled: false))
+        self.textIcon = .init(image: Self.icon(state: .loading))
         self.loadView = .init()
         super.init(frame: .zero)
         
@@ -236,16 +236,8 @@ final class LiveTextButton: UIButton {
         ])
     }
     
-    private static let enabledConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
-        .applying(UIImage.SymbolConfiguration(paletteColors: [.galleryUI]))
-    private static let disabledConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
-        .applying(UIImage.SymbolConfiguration(paletteColors: [.systemGray2]))
-    
-    private static func icon(enabled: Bool) -> UIImage? {
-        let config = enabled
-            ? enabledConfig
-            : disabledConfig
-        return UIImage(systemName: "text.viewfinder", withConfiguration: config)
+    private static func icon(state: VisionRequestState) -> UIImage? {
+        return UIImage(systemName: "text.viewfinder", withConfiguration: state.symbolConfig)
     }
     
     required init(coder: NSCoder) {
@@ -259,12 +251,22 @@ extension LiveTextButton: ImageVisionDelegate {
         
         /// Disable presses until signalled complete.
         isEnabled = (progress == 1)
-        textIcon.image = Self.icon(enabled: progress == 1)
+        
+        if progress == 1 {
+            textIcon.image = Self.icon(state: .ready)
+        } else {
+            textIcon.image = Self.icon(state: .loading)
+        }
         
         loadView.didReport(progress: progress)
     }
     
     func didChangeHighlightState(to highlighting: Bool) {
+        if highlighting {
+            textIcon.image = Self.icon(state: .highlighting)
+        } else {
+            textIcon.image = Self.icon(state: .ready)
+        }
         loadView.didChangeHighlightState(to: highlighting)
     }
 }
@@ -342,7 +344,7 @@ extension LoadCircleView: ImageVisionDelegate {
     
     func didChangeHighlightState(to highlighting: Bool) {
         if highlighting {
-            shapeLayer.fillColor = UIColor.yellow.cgColor
+            shapeLayer.fillColor = UIColor.white.cgColor
         } else {
             /// Make indicator low contrast, so it's subtle.
             /// This is non-interactive, and non-actionable, so it is fine if this is never seen.
