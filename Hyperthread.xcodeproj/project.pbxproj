@@ -85,6 +85,7 @@
 		22817BB127E5493A00D34C71 /* ModalPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BB027E5493A00D34C71 /* ModalPageViewController.swift */; };
 		22817BB327E5496300D34C71 /* ModalAlbumDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BB227E5496300D34C71 /* ModalAlbumDataSource.swift */; };
 		22817BB527E5498400D34C71 /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BB427E5498400D34C71 /* GalleryView.swift */; };
+		228A097A27EB9F48003714A0 /* ShadeCloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A097927EB9F47003714A0 /* ShadeCloseButton.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -248,6 +249,7 @@
 		22817BB027E5493A00D34C71 /* ModalPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPageViewController.swift; sourceTree = "<group>"; };
 		22817BB227E5496300D34C71 /* ModalAlbumDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAlbumDataSource.swift; sourceTree = "<group>"; };
 		22817BB427E5498400D34C71 /* GalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryView.swift; sourceTree = "<group>"; };
+		228A097927EB9F47003714A0 /* ShadeCloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadeCloseButton.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -576,6 +578,7 @@
 				22817BA227E4057200D34C71 /* GalleryViewController.swift */,
 				22817BB427E5498400D34C71 /* GalleryView.swift */,
 				226D2BB527E7F82100ACB0CA /* TopShadeView.swift */,
+				228A097927EB9F47003714A0 /* ShadeCloseButton.swift */,
 				226D2BB727E806C000ACB0CA /* BottomShadeView.swift */,
 				22817BB027E5493A00D34C71 /* ModalPageViewController.swift */,
 				22817BB227E5496300D34C71 /* ModalAlbumDataSource.swift */,
@@ -958,6 +961,7 @@
 				223BBF6327377E8900375530 /* FetchAndStoreUsers.swift in Sources */,
 				22193DA2278280CD005A7708 /* URLError.swift in Sources */,
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
+				228A097A27EB9F48003714A0 /* ShadeCloseButton.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
 				22817BA927E520AC00D34C71 /* ModalPageView.swift in Sources */,
 				22A760CD27A883100006E9BC /* DiscussionLoader.swift in Sources */,
