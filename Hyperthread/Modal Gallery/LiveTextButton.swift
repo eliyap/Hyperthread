@@ -206,7 +206,9 @@ enum VisionRequestState {
     var symbolColor: UIColor {
         switch self {
         case .loading:
-            return .systemGray2
+            /// Mode independent color.
+            /// Approximates `UIColor.systemGray2` in dark mode.
+            return UIColor(white: 0.4785, alpha: 1)
         case .ready:
             return .galleryUI
         case .highlighting:
@@ -214,4 +216,3 @@ enum VisionRequestState {
         }
     }
 }
-
