@@ -359,3 +359,23 @@ extension LoadCircleView: ImageVisionDelegate {
         }
     }
 }
+
+enum VisionRequestState {
+    case loading, ready, highlighting
+    
+    private static let baseConfig = UIImage.SymbolConfiguration(font: .preferredFont(forTextStyle: .body))
+    var symbolConfig: UIImage.SymbolConfiguration {
+        Self.baseConfig.applying(UIImage.SymbolConfiguration(paletteColors: [self.symbolColor]))
+    }
+    
+    var symbolColor: UIColor {
+        switch self {
+        case .loading:
+            return .systemGray2
+        case .ready:
+            return .galleryUI
+        case .highlighting:
+            return .galleryBackground
+        }
+    }
+}
