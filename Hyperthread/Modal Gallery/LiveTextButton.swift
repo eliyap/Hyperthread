@@ -110,6 +110,10 @@ final class LoadCircleView: UIView {
     
     private let shapeLayer: CAShapeLayer
     
+    /// Make indicator low contrast, so it's subtle.
+    /// This is non-interactive, and non-actionable, so it is fine if this is never seen.
+    public static let loadingColor: CGColor = UIColor.systemGray5.cgColor
+    
     @MainActor
     init() {
         self.shapeLayer = .init()
@@ -117,9 +121,7 @@ final class LoadCircleView: UIView {
         
         layer.addSublayer(shapeLayer)
         
-        /// Make indicator low contrast, so it's subtle.
-        /// This is non-interactive, and non-actionable, so it is fine if this is never seen.
-        shapeLayer.fillColor = UIColor.systemGray5.cgColor
+        shapeLayer.fillColor = Self.loadingColor
     }
     
     override func layoutSubviews() {
@@ -178,9 +180,7 @@ extension LoadCircleView: ImageVisionDelegate {
         if highlighting {
             shapeLayer.fillColor = UIColor.white.cgColor
         } else {
-            /// Make indicator low contrast, so it's subtle.
-            /// This is non-interactive, and non-actionable, so it is fine if this is never seen.
-            shapeLayer.fillColor = UIColor.systemGray5.cgColor
+            shapeLayer.fillColor = Self.loadingColor
         }
         
         /// Safety check.
