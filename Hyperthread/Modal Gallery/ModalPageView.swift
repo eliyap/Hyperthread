@@ -24,7 +24,7 @@ final class ModalPageView: UICollectionView {
     public weak var shadeToggleDelegate: ShadeToggleDelegate? = nil
     
     /// Whether scroll view is currently scrolling.
-    private var isScrolling: Bool = false
+    public private(set) var isScrolling: Bool = false
     
     @MainActor
     init(startIndex: IndexPath) {
