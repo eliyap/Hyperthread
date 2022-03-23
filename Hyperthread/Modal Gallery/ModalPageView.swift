@@ -23,6 +23,9 @@ final class ModalPageView: UICollectionView {
     
     public weak var shadeToggleDelegate: ShadeToggleDelegate? = nil
     
+    /// Whether scroll view is currently scrolling.
+    private var isScrolling: Bool = false
+    
     @MainActor
     init(startIndex: IndexPath) {
         self.startIndex = startIndex
@@ -118,12 +121,26 @@ extension ModalPageView: UICollectionViewDelegateFlowLayout {
 
 /// Update current index for animation when scrolling.
 extension ModalPageView: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isScrolling = true
+    }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        isScrolling = false
+        
         updateTarget()
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if decelerate == false {
+            isScrolling = false
+        }
+        
         updateTarget()
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        isScrolling = false
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
