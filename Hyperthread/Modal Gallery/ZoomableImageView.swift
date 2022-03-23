@@ -230,6 +230,7 @@ final class SelectableImageView: UIImageView {
     }
     
     private let shadeView: UIView
+    private var isShadeShowing = false
     
     /// Progress value for the vision request on the image.
     /// 0 when image is nil.
@@ -253,7 +254,7 @@ final class SelectableImageView: UIImageView {
             shadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         shadeView.backgroundColor = .black.withAlphaComponent(0.7)
-        shadeView.isHidden = true
+        shadeView.layer.opacity = .zero
     }
     
     /// Adapted from: https://medium.com/swlh/ios-secrets-see-behind-your-views-fe8afe9072a5
@@ -387,15 +388,21 @@ protocol TextRequestDelegate: AnyObject {
 
 extension SelectableImageView: TextRequestDelegate {
     func didRequestText(show: Bool?) {
-        switch (show, shadeView.isHidden) {
-        case (.some(true), _), (nil, true):
-            shadeView.isHidden = false
-            imageVisionDelegate?.didChangeHighlightState(to: true)
-        
-        case (.some(false), _), (nil, false):
-            shadeView.isHidden = true
-            imageVisionDelegate?.didChangeHighlightState(to: false)
-        }
+        let animationDuration = 0.15
+        UIView.animate(withDuration: animationDuration, delay: .zero, options: [], animations: { [weak self] in
+            guard let self = self else { return }
+            switch (show, self.isShadeShowing) {
+            case (.some(true), _), (nil, false):
+                self.isShadeShowing = true
+                self.shadeView.layer.opacity = 1
+                self.imageVisionDelegate?.didChangeHighlightState(to: true)
+            
+            case (.some(false), _), (nil, true):
+                self.isShadeShowing = false
+                self.shadeView.layer.opacity = .zero
+                self.imageVisionDelegate?.didChangeHighlightState(to: false)
+            }
+        }, completion: nil)
     }
 }
 
