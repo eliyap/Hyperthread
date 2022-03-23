@@ -376,7 +376,13 @@ protocol TextRequestDelegate: AnyObject {
 
 extension SelectableImageView: TextRequestDelegate {
     func didRequestText() {
-        print("received text request.")
+        if shadeView.isHidden {
+            shadeView.isHidden = false
+            imageVisionDelegate?.didChangeHighlightState(to: true)
+        } else {
+            shadeView.isHidden = true
+            imageVisionDelegate?.didChangeHighlightState(to: false)
+        }
     }
 }
 
