@@ -15,9 +15,6 @@ final class ModalPageViewController: UIViewController {
     
     private let dataSource: ModalAlbumDataSource
     
-    /// Delegates.
-    public weak var imageVisionDelegate: ImageVisionDelegate? = nil
-    
     init(images: [UIImage?], startIndex: IndexPath, imageVisionDelegate: ImageVisionDelegate) {
         self.pageView = .init(startIndex: startIndex)
         self.dataSource = .init(collectionView: pageView, cellProvider: { collectionView, indexPath, itemIdentifier in
@@ -65,16 +62,6 @@ final class ModalPageViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension ModalPageViewController: ImageVisionDelegate {
-    func didReport(progress: Double) -> Void {
-        imageVisionDelegate?.didReport(progress: progress)
-    }
-    
-    func didChangeHighlightState(to highlighting: Bool) {
-        imageVisionDelegate?.didChangeHighlightState(to: highlighting)
     }
 }
 
