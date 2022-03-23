@@ -79,5 +79,7 @@ extension ModalPageViewController: ImageVisionDelegate {
 }
 
 extension ModalPageViewController: TextRequestDelegate {
+    func didRequestText(show: Bool?) {
+        pageView.didRequestText(show: show)
     }
 }
