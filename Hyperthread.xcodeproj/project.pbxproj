@@ -87,6 +87,7 @@
 		22817BB527E5498400D34C71 /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22817BB427E5498400D34C71 /* GalleryView.swift */; };
 		228A097A27EB9F48003714A0 /* ShadeCloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A097927EB9F47003714A0 /* ShadeCloseButton.swift */; };
 		228A097C27EB9FCD003714A0 /* LiveTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A097B27EB9FCD003714A0 /* LiveTextButton.swift */; };
+		228A097F27EFBAF8003714A0 /* SelectableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A097E27EFBAF8003714A0 /* SelectableImageView.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -253,6 +254,7 @@
 		228A097927EB9F47003714A0 /* ShadeCloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadeCloseButton.swift; sourceTree = "<group>"; };
 		228A097B27EB9FCD003714A0 /* LiveTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextButton.swift; sourceTree = "<group>"; };
 		228A097D27EBA906003714A0 /* Live Text Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Live Text Notes.md"; sourceTree = "<group>"; };
+		228A097E27EFBAF8003714A0 /* SelectableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableImageView.swift; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -590,6 +592,7 @@
 				22817BAA27E5210700D34C71 /* ModalPageLayout.swift */,
 				22817BA627E51BF900D34C71 /* ModalPageViewCell.swift */,
 				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
+				228A097E27EFBAF8003714A0 /* SelectableImageView.swift */,
 				22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */,
 				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
 				22817BAE27E5486800D34C71 /* GalleryTransition.swift */,
@@ -988,6 +991,7 @@
 				22817BA327E4057200D34C71 /* GalleryViewController.swift in Sources */,
 				22193DAF27840477005A7708 /* URLScheme.swift in Sources */,
 				221A2994275D943E00C283FE /* RemoveDuplicates.swift in Sources */,
+				228A097F27EFBAF8003714A0 /* SelectableImageView.swift in Sources */,
 				22817B9727E11D6800D34C71 /* AbsoluteFrame.swift in Sources */,
 				22FBAAD827B07E0200FEEB71 /* SymbolCircleView.swift in Sources */,
 				22817B9C27E2B70D00D34C71 /* VideoController.swift in Sources */,
