@@ -161,10 +161,13 @@ final class SelectableImageView: UIImageView {
     }
 }
 
+/// A class that receives or forwards information about a `Vision` request through the application.
 protocol ImageVisionDelegate: AnyObject {
+    /// Handle information from `VNRecognizeTextRequest.progressHandler`, or the request's completion.
     @MainActor
     func didReport(progress: Double) -> Void
     
+    /// Handle updates about the highlighting state of the view.
     @MainActor
     func didChangeHighlightState(to highlighting: Bool) -> Void
 }
