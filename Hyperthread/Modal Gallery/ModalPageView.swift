@@ -75,7 +75,6 @@ final class ModalPageView: UICollectionView {
                 trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             ])
         }
-        
     }
     
     required init?(coder: NSCoder) {
