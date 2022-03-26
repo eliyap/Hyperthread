@@ -29,8 +29,11 @@ final class SelectableImageView: UIImageView {
     /// Delegates.
     public weak var imageVisionDelegate: ImageVisionDelegate? = nil
     
+    private let tokenizer: UITextInputStringTokenizer
+    
     @MainActor
     init() {
+        self.tokenizer = .init()
         self.shadeView = .init()
         super.init(frame: .zero)
         
@@ -203,5 +206,163 @@ extension SelectableImageView: ActiveCellDelegate {
     func didBecomeActiveCell() {
         /// Report progress when cell becomes active, so that button may be updated.
         imageVisionDelegate?.didReport(progress: visionRequestProgress)
+    }
+}
+
+final class LiveTextPosition: UITextPosition {
+    
+    override init() {
+        super.init()
+    }
+}
+
+final class LiveTextRange: UITextRange {
+    private var _start: LiveTextPosition
+    private var _end: LiveTextPosition
+    override var start: UITextPosition {
+        get { _start }
+        set { _start = newValue as! LiveTextPosition }
+    }
+    override var end: UITextPosition {
+        get { _end }
+        set { _end = newValue as! LiveTextPosition }
+    }
+    
+    init(start: LiveTextPosition, end: LiveTextPosition) {
+        self._start = start
+        self._end = end
+        super.init()
+    }
+}
+
+extension SelectableImageView: UITextInput {
+    func text(in range: UITextRange) -> String? {
+        <#code#>
+    }
+    
+    var selectedTextRange: UITextRange? {
+        get {
+            <#code#>
+        }
+        set(selectedTextRange) {
+            <#code#>
+        }
+    }
+    
+    var beginningOfDocument: UITextPosition {
+        #warning("TODO")
+        let pos: LiveTextPosition = .init()
+        return pos
+    }
+    
+    var endOfDocument: UITextPosition {
+        #warning("TODO")
+        let pos: LiveTextPosition = .init()
+        return pos
+    }
+    
+    func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? {
+        <#code#>
+    }
+    
+    func position(from position: UITextPosition, offset: Int) -> UITextPosition? {
+        <#code#>
+    }
+    
+    func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? {
+        <#code#>
+    }
+    
+    func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult {
+        <#code#>
+    }
+    
+    func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int {
+        <#code#>
+    }
+    
+    var inputDelegate: UITextInputDelegate? {
+        get {
+            <#code#>
+        }
+        set(inputDelegate) {
+            <#code#>
+        }
+    }
+    
+    var tokenizer: UITextInputTokenizer {
+        <#code#>
+    }
+    
+    func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? {
+        <#code#>
+    }
+    
+    func characterRange(byExtending position: UITextPosition, in direction: UITextLayoutDirection) -> UITextRange? {
+        <#code#>
+    }
+    
+    func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection {
+        <#code#>
+    }
+    
+    func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) {
+        <#code#>
+    }
+    
+    func firstRect(for range: UITextRange) -> CGRect {
+        <#code#>
+    }
+    
+    func caretRect(for position: UITextPosition) -> CGRect {
+        <#code#>
+    }
+    
+    func selectionRects(for range: UITextRange) -> [UITextSelectionRect] {
+        <#code#>
+    }
+    
+    func closestPosition(to point: CGPoint) -> UITextPosition? {
+        <#code#>
+    }
+    
+    func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? {
+        <#code#>
+    }
+    
+    func characterRange(at point: CGPoint) -> UITextRange? {
+        <#code#>
+    }
+    
+    var hasText: Bool {
+        <#code#>
+    }
+    
+    func insertText(_ text: String) {
+        <#code#>
+    }
+    
+    func deleteBackward() {
+        <#code#>
+    }
+    
+    /// No text input.
+    var markedTextRange: UITextRange? { return nil }
+    
+    /// No text input.
+    var markedTextStyle: [NSAttributedString.Key : Any]? {
+        get { return nil }
+        set(markedTextStyle) { assert(false, "Do not set marked text!") }
+    }
+    
+    /// No text input.
+    func setMarkedText(_ markedText: String?, selectedRange: NSRange) { assert(false, "Do not set marked text!") }
+    
+    /// No text input.
+    func unmarkText() { assert(false, "Do not set marked text!") }
+    
+    /// Cannot edit contents.
+    func replace(_ range: UITextRange, withText text: String) {
+        assert(false, "Non Editable!")
     }
 }
