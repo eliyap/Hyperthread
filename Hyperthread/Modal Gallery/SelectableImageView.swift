@@ -39,3 +39,15 @@ final class SelectableImageView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+extension SelectableImageView: TextRequestDelegate {
+    func didRequestText(show: Bool?) {
+        visionImageView.didRequestText(show: show)
+    }
+}
+
+extension SelectableImageView: ActiveCellDelegate {
+    func didBecomeActiveCell() {
+        visionImageView.didBecomeActiveCell()
+    }
+}
