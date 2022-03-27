@@ -11,6 +11,8 @@ class CustomTextLabel: UIView {
 		self.labelText = labelText
 		super.init(frame: .zero)
 		commonInit()
+        
+        backgroundColor = .clear
 	}
 	
 	/// Initializer for using `CustomTextLabel` with interface builder
@@ -63,13 +65,9 @@ class CustomTextLabel: UIView {
 	}
 	
 	/// The attributes used by this text label to draw the text in `labelText`
-	var attributes: [NSAttributedString.Key: Any]? = {
-		return [
-			.foregroundColor: UIColor.label,
-			.backgroundColor: UIColor.systemBackground,
-			.font: CustomTextLabel.font,
-		]
-	}()
+    var attributes: [NSAttributedString.Key: Any]? {
+        nil
+    }
 	
 	/// The currently selected text range, which gets modified via UITextInput's callbacks
 	var currentSelectedTextRange: UITextRange? = CustomTextRange(startOffset: 0, endOffset: 0)
@@ -107,16 +105,6 @@ extension CustomTextLabel: UITextInput {
 		return String(labelText[subrange])
 	}
 	
-	func replace(_ range: UITextRange, withText text: String) {
-		guard let range = range as? CustomTextRange,
-			  let textSubrange = Range(NSRange(location: range.startOffset, length: range.endOffset - range.startOffset), in: self.labelText) else {
-			fatalError()
-		}
-		
-		self.labelText.replaceSubrange(textSubrange, with: text)
-		textDidChange()
-	}
-	
 	var selectedTextRange: UITextRange? {
 		get {
 			currentSelectedTextRange
@@ -124,27 +112,6 @@ extension CustomTextLabel: UITextInput {
 		set(selectedTextRange) {
 			currentSelectedTextRange = selectedTextRange
 		}
-	}
-	
-	var markedTextRange: UITextRange? {
-		return nil // TODO: confirm this is ok
-	}
-	
-	var markedTextStyle: [NSAttributedString.Key : Any]? {
-		get {
-			return attributes
-		}
-		set(markedTextStyle) {
-			attributes = markedTextStyle
-		}
-	}
-	
-	func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
-		// TODO: implement
-	}
-	
-	func unmarkText() {
-		// TODO: implement
 	}
 	
 	var beginningOfDocument: UITextPosition {
@@ -262,14 +229,6 @@ extension CustomTextLabel: UITextInput {
 		@unknown default:
 			fatalError()
 		}
-	}
-	
-	func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection {
-		.natural // Only support natural alignment
-	}
-	
-	func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) {
-		// Only support natural alignment
 	}
 	
 	// MARK: - Geometery
@@ -425,45 +384,6 @@ extension CustomTextLabel: UITextInput {
 		!labelText.isEmpty
 	}
 	
-	func insertText(_ text: String) {
-		if let currentSelectedTextRange = currentSelectedTextRange {
-			replace(currentSelectedTextRange, withText: text)
-			textDidChange()
-		}
-		
-		if let start = currentSelectedTextRange?.start as? CustomTextPosition {
-			let newSelectionLocation = start.offset + text.count
-			currentSelectedTextRange = CustomTextRange(startOffset: newSelectionLocation, endOffset: newSelectionLocation)
-		}
-	}
-	
-	func deleteBackward() {
-		guard let currentSelectedTextRange = currentSelectedTextRange else {
-			// no selection, how do we delete?
-			fatalError()
-		}
-		
-		var newSelectionIndex = 0
-		if currentSelectedTextRange.isEmpty { // empty selection, just use the start position and move back by one if possible
-			if let start = currentSelectedTextRange.start as? CustomTextPosition, start.offset > 0, start.offset <= labelText.count {
-				if start.offset - 1 > 0 {
-					if let subrange = Range(NSRange(location: start.offset - 1, length: 1), in: labelText) {
-						labelText.removeSubrange(subrange)
-						newSelectionIndex = start.offset - 1
-					}
-				}
-			}
-		} else if let start = currentSelectedTextRange.start as? CustomTextPosition, let end = currentSelectedTextRange.end as? CustomTextPosition { // there is a selection
-			if let subrange = Range(NSRange(location: start.offset, length: end.offset - start.offset), in: labelText) {
-				labelText.removeSubrange(subrange)
-				newSelectionIndex = start.offset
-			}
-		}
-		
-		self.currentSelectedTextRange = CustomTextRange(startOffset: newSelectionIndex, endOffset: newSelectionIndex)
-		textDidChange()
-	}
-	
 	// MARK: - Helpers
 	
 	/// Return the line index and the substring representing the line of a given `UITextPosition`
@@ -499,4 +419,27 @@ extension CustomTextLabel: UITextInput {
 		// Turn our text position into an index into `labelText`
 		return labelText.index(labelText.startIndex, offsetBy: max(position.offset, 0))
 	}
+    
+    // MARK: - Writing Direction Conformance
+    func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection {
+        return .leftToRight
+    }
+
+    func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) {
+        assert(false, "Not Supported")
+    }
+
+    // MARK: - Edit Text Conformance
+    func insertText(_ text: String) { assert(false, "Not Supported") }
+    func deleteBackward() { assert(false, "Not Supported") }
+    func replace(_ range: UITextRange, withText text: String) { assert(false, "Not Supported") }
+
+    // MARK: - Marked Text Conformance
+    func setMarkedText(_ markedText: String?, selectedRange: NSRange) { assert(false, "Not Supported") }
+    func unmarkText() { assert(false, "Not Supported") }
+    var markedTextStyle: [NSAttributedString.Key : Any]? {
+        get { return nil }
+        set(markedTextStyle) { assert(false, "Not Supported") }
+    }
+    var markedTextRange: UITextRange? { return nil }
 }
