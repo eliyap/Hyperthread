@@ -171,8 +171,9 @@ extension CustomTextLabel: UITextInput {
 			return .orderedAscending
 		} else if position > other {
 			return .orderedDescending
+		} else {
+			return .orderedSame
 		}
-		return .orderedSame
 	}
 	
 	func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int {
