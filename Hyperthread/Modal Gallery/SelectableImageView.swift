@@ -1,5 +1,5 @@
 //
-//  SelectableImageView.swift
+//  VisionImageView.swift
 //  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 26/3/22.
@@ -9,7 +9,7 @@ import UIKit
 import Vision
 import BlackBox
 
-final class SelectableImageView: UIImageView {
+final class VisionImageView: UIImageView {
     
     override var image: UIImage? {
         didSet {
@@ -179,7 +179,7 @@ protocol TextRequestDelegate: AnyObject {
     func didRequestText(show: Bool?) -> Void
 }
 
-extension SelectableImageView: TextRequestDelegate {
+extension VisionImageView: TextRequestDelegate {
     func didRequestText(show: Bool?) {
         let animationDuration = 0.15
         UIView.animate(withDuration: animationDuration, delay: .zero, options: [], animations: { [weak self] in
@@ -199,7 +199,7 @@ extension SelectableImageView: TextRequestDelegate {
     }
 }
 
-extension SelectableImageView: ActiveCellDelegate {
+extension VisionImageView: ActiveCellDelegate {
     func didBecomeActiveCell() {
         /// Report progress when cell becomes active, so that button may be updated.
         imageVisionDelegate?.didReport(progress: visionRequestProgress)

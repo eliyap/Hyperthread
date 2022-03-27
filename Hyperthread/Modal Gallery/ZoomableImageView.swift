@@ -12,7 +12,7 @@ import BlackBox
 
 final class ZoomableImageView: UIScrollView {
     
-    private let imageView: SelectableImageView
+    private let imageView: VisionImageView
     
     private var aspectConstraint: NSLayoutConstraint? = nil
 
