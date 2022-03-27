@@ -352,10 +352,11 @@ extension CustomTextLabel: UITextInput {
         /// Find character where the `x` falls inside.
 		var x: CGFloat = 0.0
         var candidates = Array(line.enumerated())
+        var lineOffset: Int? = nil
 //        candidates = Array([candidates.first, candidates.last].compacted())
-		for (index, character) in candidates {
+		for (lineIdx, char) in candidates {
             /// Render and measure character's on screen width.
-            let charWidth = NSAttributedString(string: String(character), attributes: attributes).size().width
+            let charWidth = NSAttributedString(string: String(char), attributes: attributes).size().width
 			
             /// Check if `x` is within range.
             guard (x <= point.x) && (point.x < x + charWidth) else {
@@ -368,12 +369,21 @@ extension CustomTextLabel: UITextInput {
             let widthFraction = (point.x - x) / charWidth
             let adj = (widthFraction < 0.5) ? 0 : 1
             
-            /// Calculate our offset in terms of the full string, not just this line.
-            let lineIndex = line.index(line.startIndex, offsetBy: index + adj)
-            let labelOffset = labelText.distance(from: labelText.startIndex, to: lineIndex)
-            return CustomTextPosition(offset: labelOffset)
+            lineOffset = lineIdx + adj
+            break
 		}
-		return CustomTextPosition(offset: 0)
+        
+        /// `x` exceeded, assume position is past the end of the line.
+        if lineOffset == nil, let (endIdx, _) = candidates.last {
+            lineOffset = endIdx
+        }
+        
+        guard let lineOffset = lineOffset else { return nil }
+        
+        /// Calculate our offset in terms of the full string, not just this line.
+        let lineIndex = line.index(line.startIndex, offsetBy: lineOffset)
+        let labelOffset = labelText.distance(from: labelText.startIndex, to: lineIndex)
+        return CustomTextPosition(offset: labelOffset)
 	}
 	
 	func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? {
