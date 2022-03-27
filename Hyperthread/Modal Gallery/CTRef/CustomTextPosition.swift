@@ -27,5 +27,4 @@ extension CustomTextPosition: Comparable {
 	static func > (lhs: CustomTextPosition, rhs: CustomTextPosition) -> Bool {
 		lhs.offset > rhs.offset
 	}
-
 }
