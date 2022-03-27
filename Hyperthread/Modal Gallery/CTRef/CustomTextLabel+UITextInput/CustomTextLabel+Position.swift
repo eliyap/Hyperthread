@@ -67,22 +67,14 @@ extension CustomTextLabel {
             assert(false, "Unexpected type")
             return nil
         }
-        
-        var proposedIndex: Int = position.offset
-        if direction == .left {
-            proposedIndex = position.offset - offset
+        switch direction {
+        case .right, .down:
+            return self.position(from: position, offset: offset)
+        case .left, .up:
+            return self.position(from: position, offset: -offset)
+        @unknown default:
+            fatalError()
         }
-        
-        if direction == .right {
-            proposedIndex = position.offset + offset
-        }
-        
-        // return nil if proposed index is out of bounds
-        guard proposedIndex >= 0 && proposedIndex <= labelText.count else {
-            return nil
-        }
-        
-        return CustomTextPosition(offset: proposedIndex)
     }
     
     func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult {
