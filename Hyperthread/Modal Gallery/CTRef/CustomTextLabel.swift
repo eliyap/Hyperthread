@@ -78,11 +78,14 @@ extension CustomTextLabel: UITextInput {
 			assert(false, "Unexpected type")
 			return nil
 		}
-		let location =  max(rangeStart.offset, 0)
+		
+		let location = max(rangeStart.offset, 0)
 		let length = max(min(labelText.count - location, rangeEnd.offset - location), 0)
 		
-		guard location < labelText.count,
-			  let subrange = Range(NSRange(location: location, length:length), in: labelText) else {
+		guard 
+			location < labelText.count,
+			let subrange = Range(NSRange(location: location, length:length), in: labelText) 
+		else {
 			return nil
 		}
 		
