@@ -195,7 +195,7 @@ extension CustomTextLabel: UITextInput {
 	}
 	
 	var tokenizer: UITextInputTokenizer {
-		UITextInputStringTokenizer(textInput: self)
+        return UITextInputStringTokenizer(textInput: self)
 	}
 	
 	func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? {
