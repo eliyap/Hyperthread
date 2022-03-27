@@ -34,12 +34,6 @@ class CustomTextLabel: UIView {
 		attributedString.draw(in: rect)
 	}
 	
-	/// An intrinsicContentSize override to size this view based on the size of `labelText` when drawn with `attributes`
-	override var intrinsicContentSize: CGSize {
-		let size = NSAttributedString(string: labelText, attributes: attributes).size()
-		return CGSize(width: ceil(size.width), height: ceil(size.height))
-	}
-	
 	/// A helper function to call when our text contents have changed
 	fileprivate func textDidChange() {
 		invalidateIntrinsicContentSize()
