@@ -126,7 +126,7 @@ extension CustomTextLabel {
                 width: rectWidth,
                 height: CustomTextLabel.font.lineHeight
             )
-            selectionRects.append(CustomTextSelectionRect(rect: rect, writingDirection: .leftToRight, containsStart: containsStart, containsEnd: containsEnd))
+            selectionRects.append(CustomTextSelectionRect(rect: rect, containsStart: containsStart, containsEnd: containsEnd))
         }
         
         // Return our constructed array

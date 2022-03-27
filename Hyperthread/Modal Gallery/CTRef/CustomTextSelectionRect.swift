@@ -8,9 +8,6 @@ class CustomTextSelectionRect: UITextSelectionRect {
 	/// The internal `CGRect` defining the size and location of the selection
 	private let internalRect: CGRect
 	
-    /// The internal storage for the current writing direction of this text selection
-	private let internalWritingDirection: NSWritingDirection
-	
     /// The internal storage for whether this selection rect contains the start of the selection
 	private let internalContainsStart: Bool
 	
@@ -24,9 +21,8 @@ class CustomTextSelectionRect: UITextSelectionRect {
 	///   - containsStart: Whether this rect contains the start of the selection (only false in multi-rect selections)
 	///   - containsEnd: Whether this rect contains the end of the selection (only false in multi-rect selections)
 	///   - isVertical: Whether the text in the selection is vertical
-	init(rect: CGRect, writingDirection: NSWritingDirection, containsStart: Bool, containsEnd: Bool) {
+	init(rect: CGRect, containsStart: Bool, containsEnd: Bool) {
 		internalRect = rect
-		internalWritingDirection = writingDirection
 		internalContainsStart = containsStart
 		internalContainsEnd = containsEnd
 		super.init()
@@ -40,10 +36,6 @@ class CustomTextSelectionRect: UITextSelectionRect {
 		}
 	}
 	
-	override var writingDirection: NSWritingDirection {
-		return internalWritingDirection
-	}
-	
 	override var containsStart: Bool {
 		return internalContainsStart
 	}
@@ -54,4 +46,5 @@ class CustomTextSelectionRect: UITextSelectionRect {
     
     /// Leave default behaviour.
     override var isVertical: Bool { super.isVertical }
+    override var writingDirection: NSWritingDirection { return super.writingDirection }    
 }
