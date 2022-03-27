@@ -20,6 +20,12 @@ struct MultiRectangleTextStore {
     
     subscript(_ range: Range<MultiRectangleTextIndex>) -> String {
         guard range.isEmpty == false else { return "" }
+        
+        guard range.lowerBound != .invalid, range.upperBound != .invalid else {
+            assert(false, "Invalid range")
+            return ""
+        }
+        
         if range.lowerBound.row == range.upperBound.row {
 			let line = lines[range.lowerBound.row]
 			let substring = line[range.lowerBound.column..<range.upperBound.column]
@@ -36,6 +42,22 @@ struct MultiRectangleTextStore {
 			return start + "\n" + middle + "\n" + end
 		}
     }
+    
+    var startIndex: MultiRectangleTextIndex {
+        guard let first = lines.first else {
+            return .invalid
+        }
+        
+        return .init(row: 0, column: first.startIndex)
+    }
+    
+    var endIndex: MultiRectangleTextIndex {
+		guard let last = lines.last else {
+			return .invalid
+		}
+		
+		return .init(row: lines.count - 1, column: last.endIndex)
+	}
 }
 
 /// 2D index into a `MultiRectangleTextStore`.
@@ -47,6 +69,8 @@ struct MultiRectangleTextIndex {
 	
 	/// The "column" on which the index is located.
     let column: String.Index
+    
+    public static let invalid: Self = .init(row: NSNotFound, column: "".startIndex)
 }
 
 extension MultiRectangleTextIndex: Comparable {
