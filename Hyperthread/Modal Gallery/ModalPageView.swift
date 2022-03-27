@@ -152,7 +152,12 @@ extension ModalPageView: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateTarget()
+        /// - Note: do not update active cell, as this causes glitchy behaviour on the live text button.
+        
+        /// Do update target index, as this causes partial page turns to update the page number.
+        guard let target = getCurrentIndexPath() else { return }
+        targetIndex = target
+        pageDelegate?.didScrollTo(pageNo: target.item + 1)
     }
     
     /// Keep other views up to date on the current cell when scrolling.
