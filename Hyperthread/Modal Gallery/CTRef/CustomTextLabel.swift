@@ -338,7 +338,7 @@ extension CustomTextLabel: UITextInput {
                 width: rectWidth,
                 height: CustomTextLabel.font.lineHeight
             )
-			selectionRects.append(CustomTextSelectionRect(rect: rect, writingDirection: .leftToRight, containsStart: containsStart, containsEnd: containsEnd, isVertical: false))
+			selectionRects.append(CustomTextSelectionRect(rect: rect, writingDirection: .leftToRight, containsStart: containsStart, containsEnd: containsEnd))
 		}
 		
 		// Return our constructed array
