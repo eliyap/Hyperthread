@@ -237,25 +237,25 @@ extension CustomTextLabel: UITextInput {
 			return .zero
 		}
 		
-		// Determine which line index and line the range starts in
+		/// Determine which line index and line the range starts in.
 		let (startLineIndex, startLine) = indexAndLine(from: rangeStart)
 		
-		// Determine the x position
+		/// Determine the `x` position.
 		var initialXPosition: CGFloat = 0
 		var rectWidth: CGFloat = 0
 		
-		// If our start and end line indices are the same, just get the whole range
+		/// If our start and end line indices are the same, just get the whole range.
 		if rangeStart.offset >= labelText.count {
 			initialXPosition = self.intrinsicContentSize.width
 		} else {
 			let startTextIndex = labelText.index(labelText.startIndex, offsetBy: rangeStart.offset)
 			let endTextIndex = labelText.index(startTextIndex, offsetBy: max(rangeEnd.offset - rangeStart.offset - 1, 0))
 			
-			// Get the substring from the start of the line we're on to the start of our selection
+			/// Get the substring from the start of the line we're on to the start of our selection.
 			let preSubstring = startLine.prefix(upTo: labelText.index(labelText.startIndex, offsetBy: rangeStart.offset))
 			let preSize = NSAttributedString(string: String(preSubstring), attributes: attributes).size()
 			
-			// Get the substring from the start of our range to the end of the line
+			/// Get the substring from the start of our range to the end of the line.
 			let selectionLineEndIndex = min(endTextIndex, startLine.index(before: startLine.endIndex))
 			let actualSubstring = startLine[startTextIndex...selectionLineEndIndex]
 			let actualSize = NSAttributedString(string: String(actualSubstring), attributes: attributes).size()
@@ -264,15 +264,14 @@ extension CustomTextLabel: UITextInput {
 			rectWidth = actualSize.width
 		}
 		
-		// Return the rect
 		return CGRect(x: initialXPosition, y: CGFloat(startLineIndex)*CustomTextLabel.font.lineHeight, width: rectWidth, height: CustomTextLabel.font.lineHeight)
 	}
 	
 	func caretRect(for position: UITextPosition) -> CGRect {
-		// Turn our text position into an index into `labelText`
+		/// Turn our text position into an index into `labelText`.
 		let labelTextPositionIndex = stringIndex(from: position)
 		
-		// Determine what line index and line our text position is on
+		/// Determine what line index and line our text position is on.
 		let (lineIndex, line) = indexAndLine(from: position)
 		
 		// Get the substring from the beginning of that line up to our text position
