@@ -58,6 +58,10 @@ struct MultiRectangleTextStore {
 		
 		return .init(row: lines.count - 1, column: last.endIndex)
 	}
+    
+    var isEmpty: Bool {
+        lines.isEmpty
+    }
 }
 
 /// 2D index into a `MultiRectangleTextStore`.
