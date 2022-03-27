@@ -264,7 +264,7 @@ extension CustomTextLabel: UITextInput {
 			rectWidth = actualSize.width
 		}
 		
-		return CGRect(x: initialXPosition, y: CGFloat(startLineIndex)*CustomTextLabel.font.lineHeight, width: rectWidth, height: CustomTextLabel.font.lineHeight)
+		return CGRect(x: initialXPosition, y: CGFloat(startLineIndex) * CustomTextLabel.font.lineHeight, width: rectWidth, height: CustomTextLabel.font.lineHeight)
 	}
 	
 	func caretRect(for position: UITextPosition) -> CGRect {
@@ -373,9 +373,15 @@ extension CustomTextLabel: UITextInput {
 	}
 	
 	func characterRange(at point: CGPoint) -> UITextRange? {
-		guard let textPosition = closestPosition(to: point) as? CustomTextPosition else {
+		guard let textPosition = closestPosition(to: point) else { 
 			return nil
 		}
+		
+		guard let textPosition = textPosition as? CustomTextPosition else {
+			assert(false, "Unexpected type")
+			return nil
+		}
+		
 		return CustomTextRange(startOffset: textPosition.offset, endOffset: textPosition.offset + 1)
 	}
 	
