@@ -18,19 +18,8 @@ extension CustomTextLabel {
             return nil
         }
         
-        let start = max(rangeStart.offset, 0)
-        let end = min(labelText.count, rangeEnd.offset)
-        var length = end - start
-        length = max(length, 0)
-        
-        guard
-            start < labelText.count,
-            let subrange = Range(NSRange(location: start, length: length), in: labelText)
-        else {
-            return nil
-        }
-        
-        return String(labelText[subrange])
+        let customRange = rangeStart.index..<rangeEnd.index
+        return labelText[customRange]
     }
     
     var selectedTextRange: UITextRange? {
