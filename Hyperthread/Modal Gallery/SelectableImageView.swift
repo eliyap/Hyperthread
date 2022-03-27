@@ -205,3 +205,34 @@ extension SelectableImageView: ActiveCellDelegate {
         imageVisionDelegate?.didReport(progress: visionRequestProgress)
     }
 }
+
+import WebKit
+final class HackView: WKWebView {
+    init() {
+        super.init(frame: .zero, configuration: .init())
+        loadHTMLString("Hello World!", baseURL: nil)
+        
+        addGestureRecognizer(HackReck(target: self, action: #selector(handleTap(sender:))))
+    }
+    
+    @objc
+    func handleTap(sender: UITapGestureRecognizer) {
+        print("tapper")
+    }
+
+    /// Disable hit testing
+//    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+//
+//        return nil
+//    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class HackReck: UITapGestureRecognizer {
+    override init(target: Any?, action: Selector?) {
+        super.init(target: target, action: action)
+    }
+}
