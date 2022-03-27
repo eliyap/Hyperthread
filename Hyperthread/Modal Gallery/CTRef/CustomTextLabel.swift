@@ -113,6 +113,7 @@ extension CustomTextLabel: UITextInput {
 	
 	func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? {
 		guard let fromPosition = fromPosition as? CustomTextPosition, let toPosition = toPosition as? CustomTextPosition else {
+			assert(false, "Unexpected type")
 			return nil
 		}
 		return CustomTextRange(startOffset: fromPosition.offset, endOffset: toPosition.offset)
