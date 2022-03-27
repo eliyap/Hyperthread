@@ -137,6 +137,7 @@ extension CustomTextLabel: UITextInput {
 	
 	func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? {
 		guard let position = position as? CustomTextPosition else {
+			assert(false, "Unexpected type")
 			return nil
 		}
 		
