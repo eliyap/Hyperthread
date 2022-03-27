@@ -23,7 +23,7 @@ final class ZoomableImageView: UIScrollView {
     }
     
     public weak var textRequestDelegate: TextRequestDelegate? {
-        imageView
+        imageView.textRequestDelegate
     }
     
     @MainActor
