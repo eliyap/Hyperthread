@@ -232,8 +232,11 @@ extension CustomTextLabel: UITextInput {
 	
 	// MARK: - Geometery
 	func firstRect(for range: UITextRange) -> CGRect {
-		guard let rangeStart = range.start as? CustomTextPosition,
-			  let rangeEnd = range.end as? CustomTextPosition else {
+		guard 
+			let rangeStart = range.start as? CustomTextPosition,
+			let rangeEnd = range.end as? CustomTextPosition 
+		else {
+			assert(false, "Unexpected type")
 			return .zero
 		}
 		
@@ -381,7 +384,7 @@ extension CustomTextLabel: UITextInput {
 			assert(false, "Unexpected type")
 			return nil
 		}
-		
+
 		return CustomTextRange(startOffset: textPosition.offset, endOffset: textPosition.offset + 1)
 	}
 	
