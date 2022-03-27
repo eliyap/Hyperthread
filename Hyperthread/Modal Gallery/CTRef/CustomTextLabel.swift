@@ -315,7 +315,7 @@ extension CustomTextLabel: UITextInput {
 			/// Get substring from start of range to end of line.
 			let selectionStartIndex = max(startTextIndex, line.startIndex)
 			let selectionEndIndex = max(min(endTextIndex, line.index(before: line.endIndex)), selectionStartIndex)
-			let actualSubstring = line[selectionStartIndex...selectionEndIndex]
+			let actualSubstring = line[selectionStartIndex..<selectionEndIndex]
 			let actualSize = NSAttributedString(string: String(actualSubstring), attributes: attributes).size()
 			
 			var xPos: CGFloat = 0
