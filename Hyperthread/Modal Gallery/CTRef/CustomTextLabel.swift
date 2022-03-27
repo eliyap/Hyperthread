@@ -22,11 +22,6 @@ class CustomTextLabel: UIView {
 		commonInit()
 	}
 	
-	/// A convenience initializer for a custom text label with an empty labelText
-	convenience init() {
-		self.init(labelText: "")
-	}
-	
 	/// Common code to be called after initialization
 	private func commonInit() {
 		self.backgroundColor = .systemBackground
