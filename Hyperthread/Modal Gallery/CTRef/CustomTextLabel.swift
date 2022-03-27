@@ -10,21 +10,8 @@ class CustomTextLabel: UIView {
 	init(labelText: String) {
 		self.labelText = labelText
 		super.init(frame: .zero)
-		commonInit()
         
         backgroundColor = .clear
-	}
-	
-	/// Initializer for using `CustomTextLabel` with interface builder
-	/// - Parameter coder: An unarchiver object
-	required init?(coder: NSCoder) {
-		super.init(coder: coder)
-		commonInit()
-	}
-	
-	/// Common code to be called after initialization
-	private func commonInit() {
-		self.backgroundColor = .systemBackground
 	}
 	
 	/// The width of the caret rect for use in `UITextInput` conformance
@@ -78,6 +65,10 @@ class CustomTextLabel: UIView {
 	static fileprivate func linesFromString(string: String) -> [Substring] {
 		return string.split(separator: "\n", omittingEmptySubsequences: false)
 	}
+    
+    required init?(coder: NSCoder) {
+        fatalError("No.")
+    }
 }
 
 // MARK: - UITextInput Conformance
