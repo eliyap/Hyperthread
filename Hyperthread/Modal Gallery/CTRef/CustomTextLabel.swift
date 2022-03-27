@@ -23,7 +23,8 @@ class CustomTextLabel: UIView {
 	/// The text to be drawn to screen by this `CustomTextLabel`
 	var labelText: String = "" {
 		didSet {
-			textDidChange()
+            invalidateIntrinsicContentSize()
+            setNeedsDisplay()
 		}
 	}
 	
@@ -32,12 +33,6 @@ class CustomTextLabel: UIView {
 		super.draw(rect)
 		let attributedString = NSAttributedString(string: labelText, attributes: attributes)
 		attributedString.draw(in: rect)
-	}
-	
-	/// A helper function to call when our text contents have changed
-	fileprivate func textDidChange() {
-		invalidateIntrinsicContentSize()
-		setNeedsDisplay()
 	}
 	
 	/// The attributes used by this text label to draw the text in `labelText`
