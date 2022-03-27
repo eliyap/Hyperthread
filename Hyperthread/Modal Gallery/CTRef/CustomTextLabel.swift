@@ -79,12 +79,14 @@ extension CustomTextLabel: UITextInput {
 			return nil
 		}
 		
-		let location = max(rangeStart.offset, 0)
-		let length = max(min(labelText.count - location, rangeEnd.offset - location), 0)
+		let start = max(rangeStart.offset, 0)
+        let end = min(labelText.count, rangeEnd.offset)
+		var length = end - start
+		length = max(length, 0)
 		
 		guard 
-			location < labelText.count,
-			let subrange = Range(NSRange(location: location, length:length), in: labelText) 
+			start < labelText.count,
+			let subrange = Range(NSRange(location: start, length:length), in: labelText)
 		else {
 			return nil
 		}
