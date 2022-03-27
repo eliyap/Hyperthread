@@ -319,20 +319,25 @@ extension CustomTextLabel: UITextInput {
 			let selectionStartIndex = max(startTextIndex, line.startIndex)
 			let selectionEndIndex = max(min(endTextIndex, line.index(before: line.endIndex)), selectionStartIndex)
 			let actualSubstring = line[selectionStartIndex...selectionEndIndex]
-			let actualSize = NSAttributedString(string: String(actualSubstring), attributes: attributes).size()
+			let actualSize = NSAttributedString(string: String(actualSubstring)).size()
 			
 			var xPos: CGFloat = 0
 			if containsStart {
 				/// Get substring from the start of current line to start of selection.
 				let preSubstring = line.prefix(upTo: labelText.index(labelText.startIndex, offsetBy: rangeStart.offset))
-				let preSize = NSAttributedString(string: String(preSubstring), attributes: attributes).size()
+				let preSize = NSAttributedString(string: String(preSubstring)).size()
 				xPos = preSize.width
 			}
 			
 			let rectWidth = actualSize.width
 			
 			// Make the selection rect for this line
-			let rect = CGRect(x: xPos, y: CGFloat(index)*CustomTextLabel.font.lineHeight, width: rectWidth, height: CustomTextLabel.font.lineHeight)
+			let rect = CGRect(
+                x: xPos,
+                y: CGFloat(index) * CustomTextLabel.font.lineHeight,
+                width: rectWidth,
+                height: CustomTextLabel.font.lineHeight
+            )
 			selectionRects.append(CustomTextSelectionRect(rect: rect, writingDirection: .leftToRight, containsStart: containsStart, containsEnd: containsEnd, isVertical: false))
 		}
 		
