@@ -13,6 +13,12 @@ final class SelectableImageView: UIView {
     
     private let visionImageView: VisionImageView
     
+    /// Passthroughs.
+    var image: UIImage? {
+        get { visionImageView.image }
+        set { visionImageView.image = newValue }
+    }
+    
     /// Delegates.
     public weak var imageVisionDelegate: ImageVisionDelegate? {
         get { visionImageView.imageVisionDelegate }
