@@ -44,7 +44,10 @@ final class SelectableImageView: UIView {
             visionImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         
-        let ctl = CustomTextLabel(labelText: "HELLO WORLD.")
+        let ctl = CustomTextLabel(labelText: """
+            HELLO WORLD.
+            HELLO WORLD.
+            """)
         addSubview(ctl)
         ctl.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

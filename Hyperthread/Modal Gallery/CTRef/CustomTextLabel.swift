@@ -42,7 +42,9 @@ class CustomTextLabel: UIView {
 	
 	/// The attributes used by this text label to draw the text in `labelText`
     var attributes: [NSAttributedString.Key: Any]? {
-        nil
+        [
+            .font: Self.font
+        ]
     }
 	
 	/// The currently selected text range, which gets modified via UITextInput's callbacks
@@ -319,13 +321,13 @@ extension CustomTextLabel: UITextInput {
 			let selectionStartIndex = max(startTextIndex, line.startIndex)
 			let selectionEndIndex = max(min(endTextIndex, line.index(before: line.endIndex)), selectionStartIndex)
 			let actualSubstring = line[selectionStartIndex...selectionEndIndex]
-			let actualSize = NSAttributedString(string: String(actualSubstring)).size()
+			let actualSize = NSAttributedString(string: String(actualSubstring), attributes: attributes).size()
 			
 			var xPos: CGFloat = 0
 			if containsStart {
 				/// Get substring from the start of current line to start of selection.
 				let preSubstring = line.prefix(upTo: labelText.index(labelText.startIndex, offsetBy: rangeStart.offset))
-				let preSize = NSAttributedString(string: String(preSubstring)).size()
+				let preSize = NSAttributedString(string: String(preSubstring), attributes: attributes).size()
 				xPos = preSize.width
 			}
 			
