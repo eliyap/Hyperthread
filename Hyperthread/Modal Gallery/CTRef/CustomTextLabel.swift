@@ -5,7 +5,13 @@ import UIKit
 /// A simple custom text label that conforms to `UITextInput` for use with `UITextInteraction`
 class CustomTextLabel: UIView {
 	
-	/// Primary initializer that takes in the labelText to display for this label
+    /// The width of the caret rect for use in `UITextInput` conformance
+    fileprivate static let caretWidth: CGFloat = 2.0
+    
+    /// The font used by the the `CustomTextLabel`
+    fileprivate static let font = UIFont.systemFont(ofSize: 20.0)
+    
+    /// Primary initializer that takes in the labelText to display for this label
 	/// - Parameter labelText: the string to display
 	init(labelText: String) {
 		self.labelText = labelText
@@ -13,12 +19,6 @@ class CustomTextLabel: UIView {
         
         backgroundColor = .clear
 	}
-	
-	/// The width of the caret rect for use in `UITextInput` conformance
-	fileprivate static let caretWidth: CGFloat = 2.0
-	
-	/// The font used by the the `CustomTextLabel`
-	fileprivate static let font = UIFont.systemFont(ofSize: 20.0)
 	
 	/// The text to be drawn to screen by this `CustomTextLabel`
 	var labelText: String = "" {
