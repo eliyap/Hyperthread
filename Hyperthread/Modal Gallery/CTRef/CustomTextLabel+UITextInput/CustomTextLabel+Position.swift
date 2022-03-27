@@ -108,7 +108,6 @@ extension CustomTextLabel {
     }
     
     func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? {
-        
         switch direction {
         case .left, .up:
             return range.start
@@ -127,9 +126,9 @@ extension CustomTextLabel {
         
         switch direction {
         case .left, .up:
-            return CustomTextRange(startOffset: 0, endOffset: position.offset)
+            return CustomTextRange(range: labelText.startIndex..<position.index)
         case .right, .down:
-            return CustomTextRange(startOffset: position.offset, endOffset: labelText.count)
+            return CustomTextRange(range: position.index..<labelText.endIndex)
         @unknown default:
             fatalError()
         }
