@@ -622,12 +622,20 @@
 			isa = PBXGroup;
 			children = (
 				228A098627F0D0D1003714A0 /* CustomTextLabel.swift */,
-				228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */,
+				228A098F27F11810003714A0 /* CustomTextLabel+UITextInput */,
 				228A098327F0D0D1003714A0 /* CustomTextPosition.swift */,
 				228A098427F0D0D1003714A0 /* CustomTextRange.swift */,
 				228A098527F0D0D1003714A0 /* CustomTextSelectionRect.swift */,
 			);
 			path = CTRef;
+			sourceTree = "<group>";
+		};
+		228A098F27F11810003714A0 /* CustomTextLabel+UITextInput */ = {
+			isa = PBXGroup;
+			children = (
+				228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */,
+			);
+			path = "CustomTextLabel+UITextInput";
 			sourceTree = "<group>";
 		};
 		228D71EE2780127400E306BD /* DateWindow */ = {
