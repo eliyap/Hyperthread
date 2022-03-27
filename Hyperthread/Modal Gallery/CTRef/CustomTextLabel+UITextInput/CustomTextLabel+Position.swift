@@ -109,13 +109,11 @@ extension CustomTextLabel {
     
     func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? {
         
-        let isStartFirst = compare(range.start, to: range.end) == .orderedAscending
-        
         switch direction {
         case .left, .up:
-            return isStartFirst ? range.start : range.end
+            return range.start
         case .right, .down:
-            return isStartFirst ? range.end : range.start
+            return range.end
         @unknown default:
             fatalError()
         }
