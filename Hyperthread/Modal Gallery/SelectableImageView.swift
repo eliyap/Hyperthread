@@ -43,6 +43,23 @@ final class SelectableImageView: UIView {
             visionImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             visionImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
+        
+        let ctl = CustomTextLabel(labelText: "HELLO WORLD.")
+        addSubview(ctl)
+        ctl.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            ctl.topAnchor.constraint(equalTo: topAnchor),
+            ctl.bottomAnchor.constraint(equalTo: bottomAnchor),
+            ctl.leadingAnchor.constraint(equalTo: leadingAnchor),
+            ctl.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+        
+        let newInteraction = UITextInteraction(for: .nonEditable)
+        newInteraction.textInput = ctl
+        ctl.addInteraction(newInteraction)
+        
+        
+        print("user ", isUserInteractionEnabled)
     }
     
     required init?(coder: NSCoder) {
