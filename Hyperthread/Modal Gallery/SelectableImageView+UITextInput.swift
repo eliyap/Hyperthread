@@ -25,27 +25,6 @@ extension SelectableImageView: UITextInput {
         }
     }
     
-    var markedTextRange: UITextRange? {
-        <#code#>
-    }
-    
-    var markedTextStyle: [NSAttributedString.Key : Any]? {
-        get {
-            <#code#>
-        }
-        set(markedTextStyle) {
-            <#code#>
-        }
-    }
-    
-    func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
-        <#code#>
-    }
-    
-    func unmarkText() {
-        <#code#>
-    }
-    
     var beginningOfDocument: UITextPosition {
         <#code#>
     }
@@ -138,4 +117,13 @@ extension SelectableImageView: UITextInput {
     func deleteBackward() {
         <#code#>
     }
+    
+    // MARK: - Marked Text Conformance
+    func setMarkedText(_ markedText: String?, selectedRange: NSRange) { assert(false, "Not Supported") }
+    func unmarkText() { assert(false, "Not Supported") }
+    var markedTextStyle: [NSAttributedString.Key : Any]? {
+        get { return nil }
+        set(markedTextStyle) { assert(false, "Not Supported") }
+    }
+    var markedTextRange: UITextRange? { return nil }
 }
