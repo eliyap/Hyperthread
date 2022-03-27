@@ -7,11 +7,14 @@ class CustomTextSelectionRect: UITextSelectionRect {
 	
 	/// The internal `CGRect` defining the size and location of the selection
 	private let internalRect: CGRect
-	/// The internal storage for the current writing direction of this text selection
+	
+    /// The internal storage for the current writing direction of this text selection
 	private let internalWritingDirection: NSWritingDirection
-	/// The internal storage for whether this selection rect contains the start of the selection
+	
+    /// The internal storage for whether this selection rect contains the start of the selection
 	private let internalContainsStart: Bool
-	/// The internal storage for whether this selection rect contains the end of the selection
+	
+    /// The internal storage for whether this selection rect contains the end of the selection
 	private let internalContainsEnd: Bool
 	
 	/// An initializer to create a `CustomTextSelectionRect` with all necessary properties
