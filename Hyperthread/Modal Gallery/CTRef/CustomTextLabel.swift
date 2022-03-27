@@ -307,32 +307,34 @@ extension CustomTextLabel: UITextInput {
 		
 		var selectionRects: [CustomTextSelectionRect] = []
 		for (index, line) in lines.enumerated() {
-			// Check if this is a valid line for selection
-			if !line.isEmpty && index >= startLineIndex && index <= endLineIndex {
-				let containsStart = line.startIndex <= startTextIndex && startTextIndex < line.endIndex
-				let containsEnd = line.startIndex <= endTextIndex && endTextIndex < line.endIndex
-				
-				// Get the substring from the start of our range to the end of the line
-				let selectionLineStartIndex = max(startTextIndex,line.startIndex)
-				let selectionLineEndIndex = max(min(endTextIndex, line.index(before: line.endIndex)), selectionLineStartIndex)
-				let actualSubstring = line[selectionLineStartIndex...selectionLineEndIndex]
-				let actualSize = NSAttributedString(string: String(actualSubstring), attributes: attributes).size()
-				
-				// Set the initial x position
-				var initialXPosition: CGFloat = 0
-				if containsStart {
-					// Get the substring from the start of the line we're on to the start of our selection
-					let preSubstring = line.prefix(upTo: labelText.index(labelText.startIndex, offsetBy: rangeStart.offset))
-					let preSize = NSAttributedString(string: String(preSubstring), attributes: attributes).size()
-					initialXPosition = preSize.width
-				}
-				
-				let rectWidth = actualSize.width
-				
-				// Make the selection rect for this line
-				let rect = CGRect(x: initialXPosition, y: CGFloat(index)*CustomTextLabel.font.lineHeight, width: rectWidth, height: CustomTextLabel.font.lineHeight)
-				selectionRects.append(CustomTextSelectionRect(rect: rect, writingDirection: .leftToRight, containsStart: containsStart, containsEnd: containsEnd, isVertical: false))
+			/// Check if line is valid selection target.
+			guard line.isEmpty == false, index >= startLineIndex, index <= endLineIndex else {
+				continue
 			}
+			
+			let containsStart = line.startIndex <= startTextIndex && startTextIndex < line.endIndex
+			let containsEnd = line.startIndex <= endTextIndex && endTextIndex < line.endIndex
+			
+			// Get the substring from the start of our range to the end of the line
+			let selectionLineStartIndex = max(startTextIndex,line.startIndex)
+			let selectionLineEndIndex = max(min(endTextIndex, line.index(before: line.endIndex)), selectionLineStartIndex)
+			let actualSubstring = line[selectionLineStartIndex...selectionLineEndIndex]
+			let actualSize = NSAttributedString(string: String(actualSubstring), attributes: attributes).size()
+			
+			// Set the initial x position
+			var initialXPosition: CGFloat = 0
+			if containsStart {
+				// Get the substring from the start of the line we're on to the start of our selection
+				let preSubstring = line.prefix(upTo: labelText.index(labelText.startIndex, offsetBy: rangeStart.offset))
+				let preSize = NSAttributedString(string: String(preSubstring), attributes: attributes).size()
+				initialXPosition = preSize.width
+			}
+			
+			let rectWidth = actualSize.width
+			
+			// Make the selection rect for this line
+			let rect = CGRect(x: initialXPosition, y: CGFloat(index)*CustomTextLabel.font.lineHeight, width: rectWidth, height: CustomTextLabel.font.lineHeight)
+			selectionRects.append(CustomTextSelectionRect(rect: rect, writingDirection: .leftToRight, containsStart: containsStart, containsEnd: containsEnd, isVertical: false))
 		}
 		
 		// Return our constructed array
@@ -379,7 +381,7 @@ extension CustomTextLabel: UITextInput {
 			assert(false, "Unexpected type")
 			return nil
 		}
-		
+
 		return min(max(proposedPosition, rangeStart), rangeEnd)
 	}
 	
