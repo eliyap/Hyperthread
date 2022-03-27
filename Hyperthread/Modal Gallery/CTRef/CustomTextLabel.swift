@@ -264,7 +264,12 @@ extension CustomTextLabel: UITextInput {
 			rectWidth = actualSize.width
 		}
 		
-		return CGRect(x: initialXPosition, y: CGFloat(startLineIndex) * CustomTextLabel.font.lineHeight, width: rectWidth, height: CustomTextLabel.font.lineHeight)
+		return CGRect(
+            x: initialXPosition,
+            y: CGFloat(startLineIndex) * CustomTextLabel.font.lineHeight,
+            width: rectWidth,
+            height: CustomTextLabel.font.lineHeight
+        )
 	}
 	
 	func caretRect(for position: UITextPosition) -> CGRect {
