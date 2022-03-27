@@ -7,6 +7,32 @@
 
 import UIKit
 
+final class LiveTextPosition: UITextPosition {
+    
+    public let index: String.Index
+    
+    init(index: String.Index) {
+        self.index = index
+        super.init()
+    }
+}
+
+final class LiveTextRange: UITextRange {
+    public let range: Range<String.Index>
+    
+    override var start: LiveTextPosition {
+        LiveTextPosition(index: range.lowerBound)
+    }
+    override var end: LiveTextPosition {
+        LiveTextPosition(index: range.upperBound)
+    }
+    
+    init(range: Range<String.Index>) {
+        self.range = range
+        super.init()
+    }
+}
+
 extension SelectableImageView: UITextInput {
     func text(in range: UITextRange) -> String? {
         <#code#>
