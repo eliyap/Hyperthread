@@ -35,7 +35,20 @@ final class LiveTextRange: UITextRange {
 
 extension SelectableImageView: UITextInput {
     func text(in range: UITextRange) -> String? {
-        <#code#>
+        guard let liveTextRange = range as? LiveTextRange else {
+            assert(false, "Unexpected type")
+            return nil
+        }
+        guard
+            liveTextRange.range.lowerBound >= textContents.startIndex,
+            liveTextRange.range.upperBound <= textContents.endIndex
+        else {
+            assert(false, "Out of bounds")
+            return nil
+        }
+        
+        let sub: Substring = textContents[liveTextRange.range]
+        return String(sub)
     }
     
     var selectedTextRange: UITextRange? {

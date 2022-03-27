@@ -29,6 +29,8 @@ final class SelectableImageView: UIImageView {
     /// Delegates.
     public weak var imageVisionDelegate: ImageVisionDelegate? = nil
     
+    public let textContents = "TEMPORARY STRING CONTENTS"
+    
     @MainActor
     init() {
         self.shadeView = .init()
