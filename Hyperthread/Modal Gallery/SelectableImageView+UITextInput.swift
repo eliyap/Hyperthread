@@ -63,11 +63,11 @@ extension SelectableImageView: UITextInput {
     }
     
     var beginningOfDocument: UITextPosition {
-        <#code#>
+        return LiveTextPosition(index: textContents.startIndex)
     }
     
     var endOfDocument: UITextPosition {
-        <#code#>
+        return LiveTextPosition(index: textContents.endIndex)
     }
     
     func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? {
