@@ -285,7 +285,7 @@ extension CustomTextLabel: UITextInput {
 	}
 	
 	func selectionRects(for range: UITextRange) -> [UITextSelectionRect] {
-		guard 
+		guard
 			let rangeStart = range.start as? CustomTextPosition,
 			let rangeEnd = range.end as? CustomTextPosition 
 		else {
@@ -351,10 +351,14 @@ extension CustomTextLabel: UITextInput {
         
         /// Find character where the `x` falls inside.
 		var x: CGFloat = 0.0
-        var candidates = Array(line.enumerated())
         var lineOffset: Int? = nil
+        
+        
+        /// TODO – demonstrates how we can restrict selection to 1 line at a time.
+        var candidates = Array(line.enumerated())
         candidates = Array([candidates.first, candidates.last].compacted())
-		for (lineIdx, char) in candidates {
+		
+        for (lineIdx, char) in candidates {
             /// Render and measure character's on screen width.
             let charWidth = NSAttributedString(string: String(char), attributes: attributes).size().width
 			
