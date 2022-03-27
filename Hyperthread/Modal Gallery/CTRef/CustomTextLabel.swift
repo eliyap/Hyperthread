@@ -86,7 +86,7 @@ extension CustomTextLabel: UITextInput {
 		
 		guard 
 			start < labelText.count,
-			let subrange = Range(NSRange(location: start, length:length), in: labelText)
+			let subrange = Range(NSRange(location: start, length: length), in: labelText)
 		else {
 			return nil
 		}
