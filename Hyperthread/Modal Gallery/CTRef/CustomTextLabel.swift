@@ -367,11 +367,19 @@ extension CustomTextLabel: UITextInput {
 	}
 	
 	func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? {
-		guard let proposedPosition = closestPosition(to: point) as? CustomTextPosition,
-			  let rangeStart = range.start as? CustomTextPosition,
-			  let rangeEnd = range.end as? CustomTextPosition else {
+		guard let proposedPosition = closestPosition(to: point) else { 
 			return nil
 		}
+
+        guard 
+			let proposedPosition = proposedPosition as? CustomTextPosition,
+			let rangeStart = range.start as? CustomTextPosition,
+			let rangeEnd = range.end as? CustomTextPosition 
+		else {
+			assert(false, "Unexpected type")
+			return nil
+		}
+		
 		return min(max(proposedPosition, rangeStart), rangeEnd)
 	}
 	
