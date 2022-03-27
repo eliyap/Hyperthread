@@ -97,6 +97,7 @@
 		228A098E27F117CA003714A0 /* CustomTextLabel+UITextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */; };
 		228A099127F11836003714A0 /* CustomTextLabel+Ignored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099027F11836003714A0 /* CustomTextLabel+Ignored.swift */; };
 		228A099327F11894003714A0 /* CustomTextLabel+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099227F11894003714A0 /* CustomTextLabel+Helpers.swift */; };
+		228A099527F118EE003714A0 /* CustomTextLabel+Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099427F118EE003714A0 /* CustomTextLabel+Geometry.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -273,6 +274,7 @@
 		228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+UITextInput.swift"; sourceTree = "<group>"; };
 		228A099027F11836003714A0 /* CustomTextLabel+Ignored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+Ignored.swift"; sourceTree = "<group>"; };
 		228A099227F11894003714A0 /* CustomTextLabel+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+Helpers.swift"; sourceTree = "<group>"; };
+		228A099427F118EE003714A0 /* CustomTextLabel+Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+Geometry.swift"; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -638,6 +640,7 @@
 			isa = PBXGroup;
 			children = (
 				228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */,
+				228A099427F118EE003714A0 /* CustomTextLabel+Geometry.swift */,
 				228A099227F11894003714A0 /* CustomTextLabel+Helpers.swift */,
 				228A099027F11836003714A0 /* CustomTextLabel+Ignored.swift */,
 			);
@@ -1076,6 +1079,7 @@
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				22BC9E9327A5C9A000721BD2 /* ImageViewController.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
+				228A099527F118EE003714A0 /* CustomTextLabel+Geometry.swift in Sources */,
 				22FA26A72795B91F00DD8EE4 /* Tweet Shorthand.swift in Sources */,
 				228A097C27EB9FCD003714A0 /* LiveTextButton.swift in Sources */,
 				22193DB527859D2D005A7708 /* RealmError.swift in Sources */,
