@@ -354,20 +354,24 @@ extension CustomTextLabel: UITextInput {
         var candidates = Array(line.enumerated())
 //        candidates = Array([candidates.first, candidates.last].compacted())
 		for (index, character) in candidates {
+            /// Render and measure character's on screen width.
             let charWidth = NSAttributedString(string: String(character), attributes: attributes).size().width
 			
-			if x <= point.x && point.x < x + charWidth {
-				// Selection ocurred inside this character, should we go one back or one forward?
-				let offset = point.x - x > charWidth / 2.0
-					? index + 1
-					: index
-				// Calculate our offset in terms of the full string, not just this line.
-				let labelTextIndex = line.index(line.startIndex, offsetBy: offset)
-				return CustomTextPosition(offset: labelText.distance(from: labelText.startIndex, to: labelTextIndex))
-				
-			} else {
-				x = x + charWidth
-			}
+            /// Check if `x` is within range.
+            guard (x <= point.x) && (point.x < x + charWidth) else {
+                /// If not, proceed to next character.
+                x = x + charWidth
+                continue
+            }
+            
+            /// Decide to round partial character up or down.
+            let widthFraction = (point.x - x) / charWidth
+            let adj = (widthFraction < 0.5) ? 0 : 1
+            
+            /// Calculate our offset in terms of the full string, not just this line.
+            let lineIndex = line.index(line.startIndex, offsetBy: index + adj)
+            let labelOffset = labelText.distance(from: labelText.startIndex, to: lineIndex)
+            return CustomTextPosition(offset: labelOffset)
 		}
 		return CustomTextPosition(offset: 0)
 	}
