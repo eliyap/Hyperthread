@@ -12,7 +12,7 @@ import BlackBox
 
 final class ZoomableImageView: UIScrollView {
     
-    private let imageView: VisionImageView
+    private let imageView: SelectableImageView
     
     private var aspectConstraint: NSLayoutConstraint? = nil
 
@@ -47,7 +47,6 @@ final class ZoomableImageView: UIScrollView {
         /// Configure `imageView`.
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
         
         NSLayoutConstraint.activate([
             /// Use `≤`, not `=`, to keep small images at their intrinsic size.

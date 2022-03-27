@@ -33,6 +33,16 @@ final class SelectableImageView: UIView {
     init() {
         self.visionImageView = .init()
         super.init(frame: .zero)
+        
+        addSubview(visionImageView)
+        visionImageView.contentMode = .scaleAspectFit
+        visionImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            visionImageView.topAnchor.constraint(equalTo: topAnchor),
+            visionImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            visionImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            visionImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
     }
     
     required init?(coder: NSCoder) {
