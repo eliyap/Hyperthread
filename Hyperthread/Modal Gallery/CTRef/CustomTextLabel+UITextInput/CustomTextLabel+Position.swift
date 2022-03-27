@@ -32,11 +32,11 @@ extension CustomTextLabel {
     }
     
     var beginningOfDocument: UITextPosition {
-        CustomTextPosition(offset: 0)
+        CustomTextPosition(index: labelText.startIndex)
     }
     
     var endOfDocument: UITextPosition {
-        CustomTextPosition(offset: labelText.count)
+        CustomTextPosition(index: labelText.endIndex)
     }
     
     func textRange(from fromPosition: UITextPosition, to toPosition: UITextPosition) -> UITextRange? {
