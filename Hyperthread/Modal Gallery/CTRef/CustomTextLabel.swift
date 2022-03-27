@@ -286,7 +286,12 @@ extension CustomTextLabel: UITextInput {
 		let size = NSAttributedString(string: String(substring), attributes: attributes).size()
 		
 		// Make the caret rect, accounting for which line we're on
-		return CGRect(x: size.width, y:CustomTextLabel.font.lineHeight * CGFloat(lineIndex), width: CustomTextLabel.caretWidth, height: CustomTextLabel.font.lineHeight)
+		return CGRect(
+            x: size.width,
+            y: CustomTextLabel.font.lineHeight * CGFloat(lineIndex),
+            width: CustomTextLabel.caretWidth,
+            height: CustomTextLabel.font.lineHeight
+        )
 	}
 	
 	func selectionRects(for range: UITextRange) -> [UITextSelectionRect] {
