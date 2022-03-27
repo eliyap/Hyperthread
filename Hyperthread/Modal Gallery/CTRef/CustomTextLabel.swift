@@ -59,6 +59,59 @@ struct MultiRectangleTextStore {
 		return .init(row: lines.count - 1, column: last.endIndex)
 	}
     
+    func index(_ original: MultiRectangleTextIndex, offsetBy offset: Int) -> MultiRectangleTextIndex {
+		if offset == 0 {
+			return original
+		} else if offset > 0 { 
+			var offset = offset
+			var row = original.row
+			var column = original.column
+			while true {
+				guard row < lines.count else {
+					return .invalid
+				}
+
+				/// Check if offset exceeds line length.
+				let line = lines[row]
+				let remaining = line.distance(from: column, to: line.endIndex)
+				
+				if remaining < offset {
+					/// If so, move to next line and repeat.
+					offset -= remaining
+					row += 1
+					column = lines[row].startIndex
+				} else {
+					let newColumn = line.index(column, offsetBy: offset)
+					return .init(row: row, column: newColumn)
+				}
+			}
+		} else { 
+			/// Make offset positive.
+			var offset = -offset
+			var row = original.row
+			var column = original.column
+			while true {
+				guard row >= 0 else {
+					return .invalid
+				}
+
+				/// Check if offset exceeds line length.
+				let line = lines[row]
+				let remaining = line.distance(from: line.startIndex, to: column)
+				
+				if remaining < offset {
+					/// If so, move to previous line and repeat.
+					offset -= remaining
+					row -= 1
+					column = lines[row].endIndex
+				} else {
+					let newColumn = line.index(column, offsetBy: -offset)
+					return .init(row: row, column: newColumn)
+				}
+			}
+		}
+    }
+    
     var isEmpty: Bool {
         lines.isEmpty
     }
