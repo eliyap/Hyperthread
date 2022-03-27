@@ -94,6 +94,7 @@
 		228A098927F0D0D1003714A0 /* CustomTextSelectionRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098527F0D0D1003714A0 /* CustomTextSelectionRect.swift */; };
 		228A098A27F0D0D1003714A0 /* CustomTextLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098627F0D0D1003714A0 /* CustomTextLabel.swift */; };
 		228A098C27F0EE26003714A0 /* VisionImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098B27F0EE26003714A0 /* VisionImageView.swift */; };
+		228A098E27F117CA003714A0 /* CustomTextLabel+UITextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -267,6 +268,7 @@
 		228A098527F0D0D1003714A0 /* CustomTextSelectionRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextSelectionRect.swift; sourceTree = "<group>"; };
 		228A098627F0D0D1003714A0 /* CustomTextLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextLabel.swift; sourceTree = "<group>"; };
 		228A098B27F0EE26003714A0 /* VisionImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionImageView.swift; sourceTree = "<group>"; };
+		228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+UITextInput.swift"; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -620,6 +622,7 @@
 			isa = PBXGroup;
 			children = (
 				228A098627F0D0D1003714A0 /* CustomTextLabel.swift */,
+				228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */,
 				228A098327F0D0D1003714A0 /* CustomTextPosition.swift */,
 				228A098427F0D0D1003714A0 /* CustomTextRange.swift */,
 				228A098527F0D0D1003714A0 /* CustomTextSelectionRect.swift */,
@@ -966,6 +969,7 @@
 				22FBAAD627B07C6000FEEB71 /* GIFViewController.swift in Sources */,
 				223BBF7127377EC300375530 /* Query.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
+				228A098E27F117CA003714A0 /* CustomTextLabel+UITextInput.swift in Sources */,
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
 				22FA26B52795C77A00DD8EE4 /* Realm.TransactionToken.swift in Sources */,
 				22A760C527A750390006E9BC /* CountButton.swift in Sources */,
