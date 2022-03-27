@@ -285,9 +285,12 @@ extension CustomTextLabel: UITextInput {
 	}
 	
 	func selectionRects(for range: UITextRange) -> [UITextSelectionRect] {
-		guard let rangeStart = range.start as? CustomTextPosition,
-			  let rangeEnd = range.end as? CustomTextPosition else {
-			fatalError()
+		guard 
+			let rangeStart = range.start as? CustomTextPosition,
+			let rangeEnd = range.end as? CustomTextPosition 
+		else {
+			assert(false, "Unexpected type")
+			return []
 		}
 		
 		let lines = CustomTextLabel.linesFromString(string: labelText)
