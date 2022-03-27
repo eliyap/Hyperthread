@@ -353,7 +353,7 @@ extension CustomTextLabel: UITextInput {
 		var x: CGFloat = 0.0
         var candidates = Array(line.enumerated())
         var lineOffset: Int? = nil
-//        candidates = Array([candidates.first, candidates.last].compacted())
+        candidates = Array([candidates.first, candidates.last].compacted())
 		for (lineIdx, char) in candidates {
             /// Render and measure character's on screen width.
             let charWidth = NSAttributedString(string: String(char), attributes: attributes).size().width
