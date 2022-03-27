@@ -44,7 +44,7 @@ extension CustomTextLabel {
             assert(false, "Unexpected type")
             return nil
         }
-        return CustomTextRange(startOffset: fromPosition.offset, endOffset: toPosition.offset)
+        return CustomTextRange(range: fromPosition.index..<toPosition.index)
     }
     
     func position(from position: UITextPosition, offset: Int) -> UITextPosition? {
