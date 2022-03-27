@@ -127,19 +127,6 @@ extension CustomTextLabel {
         return toPosition.offset - from.offset
     }
     
-    var inputDelegate: UITextInputDelegate? {
-        get {
-            nil // TODO: implement
-        }
-        set(inputDelegate) {
-            // TODO: implement
-        }
-    }
-    
-    var tokenizer: UITextInputTokenizer {
-        return UITextInputStringTokenizer(textInput: self)
-    }
-    
     func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? {
         
         let isStartFirst = compare(range.start, to: range.end) == .orderedAscending

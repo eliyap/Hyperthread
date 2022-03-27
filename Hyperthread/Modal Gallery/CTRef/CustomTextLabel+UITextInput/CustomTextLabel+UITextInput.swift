@@ -11,6 +11,19 @@ import UIKit
 extension CustomTextLabel: UITextInput {
     /// - Note: Functions divided into files by theme, due to high complexity of protocol.
     
+    var inputDelegate: UITextInputDelegate? {
+        get {
+            nil // TODO: implement
+        }
+        set(inputDelegate) {
+            // TODO: implement
+        }
+    }
+    
+    var tokenizer: UITextInputTokenizer {
+        return UITextInputStringTokenizer(textInput: self)
+    }
+    
     var hasText: Bool {
         !labelText.isEmpty
     }
