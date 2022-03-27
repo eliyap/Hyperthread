@@ -159,8 +159,11 @@ extension CustomTextLabel: UITextInput {
 	}
 	
 	func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult {
-		guard let position = position as? CustomTextPosition,
-			  let other = other as? CustomTextPosition else {
+		guard 
+			let position = position as? CustomTextPosition,
+			let other = other as? CustomTextPosition 
+		else {
+			assert(false, "Unexpected type")
 			return .orderedSame
 		}
 		
