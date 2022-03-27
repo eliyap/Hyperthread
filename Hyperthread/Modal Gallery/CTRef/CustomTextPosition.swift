@@ -2,17 +2,17 @@
 
 import UIKit
 
-class CustomTextPosition: UITextPosition {
+final class CustomTextPosition: UITextPosition {
 	/// The offset from the start index of the text position
-	let offset: Int
+    let index: MultiRectangleTextIndex
 	
-	init(offset: Int) {
-		self.offset = offset
+	init(index: MultiRectangleTextIndex) {
+		self.index = index
 	}
 }
 
 extension CustomTextPosition: Comparable {
 	static func < (lhs: CustomTextPosition, rhs: CustomTextPosition) -> Bool {
-		lhs.offset < rhs.offset
+		lhs.index < rhs.index
 	}
 }
