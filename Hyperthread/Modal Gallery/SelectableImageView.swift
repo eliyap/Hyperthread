@@ -29,10 +29,6 @@ final class SelectableImageView: UIImageView {
     /// Delegates.
     public weak var imageVisionDelegate: ImageVisionDelegate? = nil
     
-    public let textContents = "TEMPORARY STRING CONTENTS"
-    public var selection: LiveTextRange? = nil
-    public let _tokenizer = UITextInputStringTokenizer()
-    
     @MainActor
     init() {
         self.shadeView = .init()
