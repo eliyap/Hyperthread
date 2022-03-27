@@ -2,8 +2,6 @@
 
 import UIKit
 
-
-/// A UITextPosition subclass for use with UITextInput
 class CustomTextPosition: UITextPosition {
 	/// The offset from the start index of the text position
 	let offset: Int
@@ -15,7 +13,6 @@ class CustomTextPosition: UITextPosition {
 	}
 }
 
-/// An extension on CustomTextPosition to make it easier to use in comparisons
 extension CustomTextPosition: Comparable {
 	static func < (lhs: CustomTextPosition, rhs: CustomTextPosition) -> Bool {
 		lhs.offset < rhs.offset
