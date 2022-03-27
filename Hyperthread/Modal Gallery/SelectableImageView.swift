@@ -60,9 +60,6 @@ final class SelectableImageView: UIView {
         let newInteraction = UITextInteraction(for: .nonEditable)
         newInteraction.textInput = ctl
         ctl.addInteraction(newInteraction)
-        
-        
-        print("user ", isUserInteractionEnabled)
     }
     
     required init?(coder: NSCoder) {
