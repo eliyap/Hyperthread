@@ -12,10 +12,6 @@ extension SelectableImageView: UITextInput {
         <#code#>
     }
     
-    func replace(_ range: UITextRange, withText text: String) {
-        <#code#>
-    }
-    
     var selectedTextRange: UITextRange? {
         get {
             <#code#>
@@ -110,13 +106,10 @@ extension SelectableImageView: UITextInput {
         <#code#>
     }
     
-    func insertText(_ text: String) {
-        <#code#>
-    }
-    
-    func deleteBackward() {
-        <#code#>
-    }
+    // MARK: - Edit Text Conformance
+    func insertText(_ text: String) { assert(false, "Not Supported") }
+    func deleteBackward() { assert(false, "Not Supported") }
+    func replace(_ range: UITextRange, withText text: String) { assert(false, "Not Supported") }
     
     // MARK: - Marked Text Conformance
     func setMarkedText(_ markedText: String?, selectedRange: NSRange) { assert(false, "Not Supported") }
