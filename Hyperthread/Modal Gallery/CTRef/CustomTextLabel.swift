@@ -349,13 +349,16 @@ extension CustomTextLabel: UITextInput {
         lineNo = min(lineNo, lines.endIndex - 1)
         let line = lines[lineNo]
         
-		var totalWidth: CGFloat = 0.0
-		for (index, character) in line.enumerated() {
-			let characterSize = NSAttributedString(string: String(character), attributes: attributes).size()
+        /// Find character where the `x` falls inside.
+		var x: CGFloat = 0.0
+        var candidates = Array(line.enumerated())
+//        candidates = Array([candidates.first, candidates.last].compacted())
+		for (index, character) in candidates {
+            let charWidth = NSAttributedString(string: String(character), attributes: attributes).size().width
 			
-			if totalWidth <= point.x && point.x < totalWidth + characterSize.width {
+			if x <= point.x && point.x < x + charWidth {
 				// Selection ocurred inside this character, should we go one back or one forward?
-				let offset = point.x - totalWidth > characterSize.width / 2.0
+				let offset = point.x - x > charWidth / 2.0
 					? index + 1
 					: index
 				// Calculate our offset in terms of the full string, not just this line.
@@ -363,7 +366,7 @@ extension CustomTextLabel: UITextInput {
 				return CustomTextPosition(offset: labelText.distance(from: labelText.startIndex, to: labelTextIndex))
 				
 			} else {
-				totalWidth = totalWidth + characterSize.width
+				x = x + charWidth
 			}
 		}
 		return CustomTextPosition(offset: 0)
