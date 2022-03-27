@@ -98,13 +98,13 @@ extension CustomTextLabel {
     func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int {
         guard
             let from = from as? CustomTextPosition,
-            let toPosition = toPosition as? CustomTextPosition
+            let to = toPosition as? CustomTextPosition
         else {
             assert(false, "Unexpected type")
             return 0
         }
         
-        return toPosition.offset - from.offset
+        return labelText.offset(from: from.index, to: to.index)
     }
     
     func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? {
