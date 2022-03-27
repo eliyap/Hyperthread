@@ -53,14 +53,13 @@ extension CustomTextLabel {
             return nil
         }
         
-        let proposedIndex = position.offset + offset
-        
-        // return nil if proposed index is out of bounds, per documentation
-        guard proposedIndex >= 0 && proposedIndex <= labelText.count else {
+        let proposedIndex = labelText.index(position.index, offsetBy: offset)
+        if proposedIndex == .invalid {
+            /// Per documentation.
             return nil
+        } else {
+            return CustomTextPosition(index: proposedIndex)
         }
-        
-        return CustomTextPosition(offset: proposedIndex)
     }
     
     func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? {
