@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BlackBox
 
 final class LiveTextPosition: UITextPosition {
     
@@ -90,68 +91,114 @@ extension SelectableImageView: UITextInput {
     }
     
     func position(from position: UITextPosition, offset: Int) -> UITextPosition? {
-        <#code#>
+        guard let liveTextPosition = position as? LiveTextPosition else {
+            assert(false, "Unexpected type")
+            return nil
+        }
+
+        let currentOffset = textContents.distance(from: textContents.startIndex, to: liveTextPosition.index)
+        let newOffset = currentOffset + offset
+        guard newOffset <= textContents.count else {
+            BlackBox.Logger.general.warning("Offset is out of range")
+            return nil
+        }
+        
+        let newIndex = textContents.index(textContents.startIndex, offsetBy: newOffset)
+        return LiveTextPosition(index: newIndex)
     }
     
     func position(from position: UITextPosition, in direction: UITextLayoutDirection, offset: Int) -> UITextPosition? {
-        <#code#>
+        #warning("TODO")
+        return nil
     }
     
     func compare(_ position: UITextPosition, to other: UITextPosition) -> ComparisonResult {
-        <#code#>
+        guard
+            let liveTextPosition = position as? LiveTextPosition,
+            let otherLiveTextPosition = other as? LiveTextPosition
+        else {
+            assert(false, "Unexpected type")
+            return .orderedSame
+        }
+
+        if liveTextPosition.index < otherLiveTextPosition.index {
+            return .orderedAscending
+        } else if liveTextPosition.index > otherLiveTextPosition.index {
+            return .orderedDescending
+        } else {
+            return .orderedSame
+        }
     }
     
     func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int {
-        <#code#>
+        guard
+            let liveTextStart = from as? LiveTextPosition,
+            let liveTextEnd = toPosition as? LiveTextPosition
+        else {
+            assert(false, "Unexpected type")
+            return 0
+        }
+        
+        let start = textContents.distance(from: textContents.startIndex, to: liveTextStart.index)
+        let end = textContents.distance(from: textContents.startIndex, to: liveTextEnd.index)
+        return end - start
     }
     
     var inputDelegate: UITextInputDelegate? {
         get {
-            <#code#>
+            nil
         }
         set(inputDelegate) {
-            <#code#>
+            /// Nothing.
         }
     }
     
     var tokenizer: UITextInputTokenizer {
-        <#code#>
+        _tokenizer
     }
     
     func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? {
-        <#code#>
+        #warning("TODO")
+        return nil
     }
     
     func characterRange(byExtending position: UITextPosition, in direction: UITextLayoutDirection) -> UITextRange? {
-        <#code#>
+        #warning("TODO")
+        return nil
     }
     
     func firstRect(for range: UITextRange) -> CGRect {
-        <#code#>
+        #warning("TODO")
+        return .zero
     }
     
     func caretRect(for position: UITextPosition) -> CGRect {
-        <#code#>
+        #warning("TODO")
+        return .zero
     }
     
     func selectionRects(for range: UITextRange) -> [UITextSelectionRect] {
-        <#code#>
+        #warning("TODO")
+        return []
     }
     
     func closestPosition(to point: CGPoint) -> UITextPosition? {
-        <#code#>
+        #warning("TODO")
+        return nil
     }
     
     func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? {
-        <#code#>
+        #warning("TODO")
+        return nil
     }
     
     func characterRange(at point: CGPoint) -> UITextRange? {
-        <#code#>
+        #warning("TODO")
+        return nil
     }
     
     var hasText: Bool {
-        <#code#>
+        return true
     }
     
     // MARK: - Writing Direction Conformance

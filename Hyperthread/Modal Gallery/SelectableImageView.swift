@@ -31,6 +31,7 @@ final class SelectableImageView: UIImageView {
     
     public let textContents = "TEMPORARY STRING CONTENTS"
     public var selection: LiveTextRange? = nil
+    public let _tokenizer = UITextInputStringTokenizer()
     
     @MainActor
     init() {
