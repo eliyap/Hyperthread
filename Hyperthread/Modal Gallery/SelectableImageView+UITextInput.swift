@@ -52,11 +52,13 @@ extension SelectableImageView: UITextInput {
     }
     
     var selectedTextRange: UITextRange? {
-        get {
-            <#code#>
-        }
+        get { self.selection }
         set(selectedTextRange) {
-            <#code#>
+            guard let liveTextRange = selectedTextRange as? LiveTextRange else {
+                assert(false, "Unexpected type")
+                self.selection = nil
+            }
+            self.selection = liveTextRange
         }
     }
     

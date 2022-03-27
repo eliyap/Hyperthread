@@ -30,6 +30,7 @@ final class SelectableImageView: UIImageView {
     public weak var imageVisionDelegate: ImageVisionDelegate? = nil
     
     public let textContents = "TEMPORARY STRING CONTENTS"
+    public var selection: LiveTextRange? = nil
     
     @MainActor
     init() {
