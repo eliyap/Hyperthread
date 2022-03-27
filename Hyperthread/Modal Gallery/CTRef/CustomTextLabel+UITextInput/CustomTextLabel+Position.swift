@@ -143,6 +143,7 @@ extension CustomTextLabel {
     
     func characterRange(byExtending position: UITextPosition, in direction: UITextLayoutDirection) -> UITextRange? {
         guard let position = position as? CustomTextPosition else {
+            assert(false, "Unexpected type")
             return nil
         }
         
