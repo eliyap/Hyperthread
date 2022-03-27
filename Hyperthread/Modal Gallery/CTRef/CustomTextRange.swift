@@ -2,25 +2,22 @@ import UIKit
 
 class CustomTextRange: UITextRange {
 	
-	let startOffset: Int
+    let range: Range<MultiRectangleTextIndex>
 	
-    let endOffset: Int
-	
-	init(startOffset: Int, endOffset: Int) {
-		self.startOffset = startOffset
-		self.endOffset = endOffset
+	init(range: Range<MultiRectangleTextIndex>) {
+        self.range = range
 		super.init()
 	}
 	
 	override var isEmpty: Bool {
-		return startOffset == endOffset
+        return range.isEmpty
 	}
 	
 	override var start: UITextPosition {
-		return CustomTextPosition(offset: startOffset)
+        return CustomTextPosition(index: range.lowerBound)
 	}
 	
 	override var end: UITextPosition {
-		return CustomTextPosition(offset: endOffset)
+		return CustomTextPosition(index: range.upperBound)
 	}
 }
