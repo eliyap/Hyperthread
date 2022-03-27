@@ -126,14 +126,6 @@ extension SelectableImageView: UITextInput {
         <#code#>
     }
     
-    func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection {
-        <#code#>
-    }
-    
-    func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) {
-        <#code#>
-    }
-    
     func firstRect(for range: UITextRange) -> CGRect {
         <#code#>
     }
@@ -160,6 +152,15 @@ extension SelectableImageView: UITextInput {
     
     var hasText: Bool {
         <#code#>
+    }
+    
+    // MARK: - Writing Direction Conformance
+    func baseWritingDirection(for position: UITextPosition, in direction: UITextStorageDirection) -> NSWritingDirection {
+        return .leftToRight
+    }
+    
+    func setBaseWritingDirection(_ writingDirection: NSWritingDirection, for range: UITextRange) {
+        assert(false, "Not Supported")
     }
     
     // MARK: - Edit Text Conformance
