@@ -343,12 +343,12 @@ extension CustomTextLabel: UITextInput {
 	}
 	
 	func closestPosition(to point: CGPoint) -> UITextPosition? {
-		let lines = CustomTextLabel.linesFromString(string: labelText)
-		// Get a valid line index
-		let lineIndex = max(min(Int(point.y /  CustomTextLabel.font.lineHeight), lines.count - 1), 0)
-		// Get the line from that index
-		let line = lines[lineIndex]
-		
+        /// Find the line.
+        let lines = CustomTextLabel.linesFromString(string: labelText)
+        var lineNo = Int(point.y /  CustomTextLabel.font.lineHeight)
+        lineNo = min(lineNo, lines.endIndex - 1)
+        let line = lines[lineNo]
+        
 		var totalWidth: CGFloat = 0.0
 		for (index, character) in line.enumerated() {
 			let characterSize = NSAttributedString(string: String(character), attributes: attributes).size()
