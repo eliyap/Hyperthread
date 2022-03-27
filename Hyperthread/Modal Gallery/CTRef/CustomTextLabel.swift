@@ -2,6 +2,63 @@
 
 import UIKit
 
+struct MultiRectangleTextStore {
+    
+    let lines: [String]
+    
+    init(_ string: String) {
+        self.lines = string
+            .split(separator: "\n", omittingEmptySubsequences: false)
+            .map({ (substring: Substring) in
+                return String(substring)
+            })
+    }
+    
+    var text: String {
+        lines.joined(separator: "\n")
+    }
+    
+    subscript(_ range: Range<MultiRectangleTextIndex>) -> String {
+        guard range.isEmpty == false else { return "" }
+        if range.lowerBound.row == range.upperBound.row {
+			let line = lines[range.lowerBound.row]
+			let substring = line[range.lowerBound.column..<range.upperBound.column]
+			return String(substring)
+		} else {
+			let startLine = lines[range.lowerBound.row]
+			let endLine = lines[range.upperBound.row]
+			let middleLines = lines[(range.lowerBound.row + 1)..<range.upperBound.row]
+			
+			let start = startLine[range.lowerBound.column..<startLine.endIndex]
+			let middle = middleLines.joined(separator: "\n")
+            let end = endLine[endLine.startIndex..<range.upperBound.column]
+			
+			return start + "\n" + middle + "\n" + end
+		}
+    }
+}
+
+/// 2D index into a `MultiRectangleTextStore`.
+struct MultiRectangleTextIndex {
+	/// The "line" on which the index is located.
+	/// Min: 0
+	/// Max: lines.count - 1
+    let row: Int
+	
+	/// The "column" on which the index is located.
+    let column: String.Index
+}
+
+extension MultiRectangleTextIndex: Comparable {
+    static func <(lhs: Self, rhs: Self) -> Bool {
+		if (lhs.row == rhs.row) {
+			return lhs.column < rhs.column
+		} else { 
+			return lhs.row < rhs.row
+		}
+	}
+}
+
 /// A simple custom text label that conforms to `UITextInput` for use with `UITextInteraction`
 class CustomTextLabel: UIView {
 	
@@ -14,14 +71,14 @@ class CustomTextLabel: UIView {
     /// Primary initializer that takes in the labelText to display for this label
 	/// - Parameter labelText: the string to display
 	init(labelText: String) {
-		self.labelText = labelText
+        self.labelText = .init(labelText)
 		super.init(frame: .zero)
         
         backgroundColor = .clear
 	}
 	
 	/// The text to be drawn to screen by this `CustomTextLabel`
-	var labelText: String = "" {
+    var labelText: MultiRectangleTextStore = .init("") {
 		didSet {
             invalidateIntrinsicContentSize()
             setNeedsDisplay()
@@ -31,7 +88,7 @@ class CustomTextLabel: UIView {
 	/// A simple draw call override that uses `NSAttributedString` to draw `labelText` with `attributes`
 	override func draw(_ rect: CGRect) {
 		super.draw(rect)
-		let attributedString = NSAttributedString(string: labelText, attributes: attributes)
+        let attributedString = NSAttributedString(string: labelText.text, attributes: attributes)
 		attributedString.draw(in: rect)
 	}
 	
