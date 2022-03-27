@@ -177,8 +177,11 @@ extension CustomTextLabel: UITextInput {
 	}
 	
 	func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int {
-		guard let from = from as? CustomTextPosition,
-			  let toPosition = toPosition as? CustomTextPosition else {
+		guard 
+			let from = from as? CustomTextPosition,
+			let toPosition = toPosition as? CustomTextPosition 
+		else {
+			assert(false, "Unexpected type")
 			return 0
 		}
 		
