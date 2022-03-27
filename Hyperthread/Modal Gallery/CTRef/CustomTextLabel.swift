@@ -71,8 +71,12 @@ class CustomTextLabel: UIView {
 extension CustomTextLabel: UITextInput {
 	
 	func text(in range: UITextRange) -> String? {
-		guard let rangeStart = range.start as? CustomTextPosition, let rangeEnd = range.end as? CustomTextPosition else {
-			fatalError()
+		guard 
+			let rangeStart = range.start as? CustomTextPosition, 
+			let rangeEnd = range.end as? CustomTextPosition 
+		else {
+			assert(false, "Unexpected type")
+			return nil
 		}
 		let location =  max(rangeStart.offset, 0)
 		let length = max(min(labelText.count - location, rangeEnd.offset - location), 0)
