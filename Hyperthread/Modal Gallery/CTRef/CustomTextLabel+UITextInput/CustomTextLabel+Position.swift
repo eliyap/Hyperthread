@@ -80,6 +80,18 @@ extension CustomTextLabel {
         }
         
         let proposedIndex = labelText.index(position.index, offsetBy: offset)
+        
+        #if DEBUG
+        if __LOG_LIVE_TEXT__ {
+            LiveTextLog.debug("""
+                \(#function)
+                - position: \(position.index)
+                - offset: \(offset)
+                - result: \(proposedIndex)
+                """, print: true, true)
+        }
+        #endif
+        
         if proposedIndex == .invalid {
             /// Per documentation.
             return nil
