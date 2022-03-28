@@ -198,7 +198,7 @@ class CustomTextLabel: UIView {
     }
 	
 	/// The currently selected text range, which gets modified via UITextInput's callbacks
-	var currentSelectedTextRange: UITextRange? = CustomTextRange(startOffset: 0, endOffset: 0)
+	var currentSelectedTextRange: UITextRange? = nil
 	
 	/// A text view should be allowed to become first responder
 	override var canBecomeFirstResponder: Bool {
