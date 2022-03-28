@@ -138,15 +138,28 @@ extension CustomTextLabel {
         let line = labelText.lines[lineNo]
         let lineWidth = NSAttributedString(string: line, attributes: attributes).size().width
         
+        let result: CustomTextPosition
         if point.x < (lineWidth / 2) {
             /// Closest to the left.
             let index = LiveString.Index(row: lineNo, column: line.startIndex)
-            return CustomTextPosition(index: index)
+            result = CustomTextPosition(index: index)
         } else {
             /// Closest to the right.
             let index = LiveString.Index(row: lineNo, column: line.endIndex)
-            return CustomTextPosition(index: index)
+            result = CustomTextPosition(index: index)
         }
+
+        #if DEBUG
+        if __LOG_LIVE_TEXT__ {
+            LiveTextLog.debug("""
+                \(#function)
+                - point: \(point)
+                - index: \(result.index)
+                """, print: true, true)
+        }
+        #endif
+
+        return result
     }
     
     func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? {
