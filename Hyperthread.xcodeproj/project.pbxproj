@@ -102,6 +102,7 @@
 		228A099C27F1FAB8003714A0 /* LiveString.Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099B27F1FAB8003714A0 /* LiveString.Index.swift */; };
 		228A099E27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099D27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift */; };
 		228A09A027F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099F27F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift */; };
+		228A09A227F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A09A127F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -283,6 +284,7 @@
 		228A099B27F1FAB8003714A0 /* LiveString.Index.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveString.Index.swift; sourceTree = "<group>"; };
 		228A099D27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextGranularity+CustomStringConvertible.swift"; sourceTree = "<group>"; };
 		228A099F27F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextDirection+CustomStringConvertible.swift"; sourceTree = "<group>"; };
+		228A09A127F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+UITextInputTokenizer.swift"; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -651,6 +653,7 @@
 			isa = PBXGroup;
 			children = (
 				228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */,
+				228A09A127F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift */,
 				228A099627F11938003714A0 /* CustomTextLabel+Position.swift */,
 				228A099427F118EE003714A0 /* CustomTextLabel+Geometry.swift */,
 				228A099027F11836003714A0 /* CustomTextLabel+Ignored.swift */,
@@ -1044,6 +1047,7 @@
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				228A097A27EB9F48003714A0 /* ShadeCloseButton.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
+				228A09A227F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift in Sources */,
 				22817BA927E520AC00D34C71 /* ModalPageView.swift in Sources */,
 				22A760CD27A883100006E9BC /* DiscussionLoader.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
