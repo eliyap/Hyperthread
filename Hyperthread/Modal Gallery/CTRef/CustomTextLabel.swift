@@ -2,7 +2,7 @@
 
 import UIKit
 
-struct MultiRectangleTextStore {
+struct LiveString {
     
     public let lines: [String]
     
@@ -134,7 +134,7 @@ struct MultiRectangleTextStore {
     }
 }
 
-/// 2D index into a `MultiRectangleTextStore`.
+/// 2D index into a `LiveString`.
 struct MultiRectangleTextIndex {
 	/// The "line" on which the index is located.
 	/// Min: 0
@@ -176,7 +176,7 @@ class CustomTextLabel: UIView {
 	}
 	
 	/// The text to be drawn to screen by this `CustomTextLabel`
-    var labelText: MultiRectangleTextStore = .init("") {
+    var labelText: LiveString = .init("") {
 		didSet {
             invalidateIntrinsicContentSize()
             setNeedsDisplay()
