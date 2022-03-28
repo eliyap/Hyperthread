@@ -125,51 +125,29 @@ extension CustomTextLabel {
     }
     
     func closestPosition(to point: CGPoint) -> UITextPosition? {
-        /// Find the line.
-        let lines = CustomTextLabel.linesFromString(string: labelText)
-        var lineNo = Int(point.y /  CustomTextLabel.font.lineHeight)
-        lineNo = min(lineNo, lines.endIndex - 1)
-        let line = lines[lineNo]
+        /// Estimate line from `y`.
+        let lineHeight = CustomTextLabel.font.lineHeight
+        var lineNo = Int(point.y / lineHeight)
         
-        /// Find character where the `x` falls inside.
-        var x: CGFloat = 0.0
-        var lineOffset: Int? = nil
-        
-        
-        /// TODO – demonstrates how we can restrict selection to 1 line at a time.
-        var candidates = Array(line.enumerated())
-        candidates = Array([candidates.first, candidates.last].compacted())
-        
-        for (lineIdx, char) in candidates {
-            /// Render and measure character's on screen width.
-            let charWidth = NSAttributedString(string: String(char), attributes: attributes).size().width
-            
-            /// Check if `x` is within range.
-            guard (x <= point.x) && (point.x < x + charWidth) else {
-                /// If not, proceed to next character.
-                x = x + charWidth
-                continue
-            }
-            
-            /// Decide to round partial character up or down.
-            let widthFraction = (point.x - x) / charWidth
-            let adj = (widthFraction < 0.5) ? 0 : 1
-            
-            lineOffset = lineIdx + adj
-            break
+        /// Clamp line to valid indices.
+        if lineNo < 0 {
+            lineNo = 0
+        } else if lineNo >= labelText.lines.count {
+            lineNo = labelText.lines.count - 1
         }
+
+        let line = labelText.lines[lineNo]
+        let lineWidth = NSAttributedString(string: line, attributes: attributes).size().width
         
-        /// `x` exceeded, assume position is past the end of the line.
-        if lineOffset == nil, let (endIdx, _) = candidates.last {
-            lineOffset = endIdx
+        if point.x < (lineWidth / 2) {
+            /// Closest to the left.
+            let index = MultiRectangleTextIndex(row: lineNo, column: line.startIndex)
+            return CustomTextPosition(index: index)
+        } else {
+            /// Closest to the right.
+            let index = MultiRectangleTextIndex(row: lineNo, column: line.endIndex)
+            return CustomTextPosition(index: index)
         }
-        
-        guard let lineOffset = lineOffset else { return nil }
-        
-        /// Calculate our offset in terms of the full string, not just this line.
-        let lineIndex = line.index(line.startIndex, offsetBy: lineOffset)
-        let labelOffset = labelText.distance(from: labelText.startIndex, to: lineIndex)
-        return CustomTextPosition(offset: labelOffset)
     }
     
     func closestPosition(to point: CGPoint, within range: UITextRange) -> UITextPosition? {
