@@ -63,6 +63,7 @@ extension CustomTextLabel {
         assert(toPosition.index != .invalid, "Invalid position")
         guard fromPosition.index <= toPosition.index else {
             BlackBox.Logger.general.error("""
+                
                 - fromPosition: \(fromPosition.index)
                 - toPosition: \(toPosition.index)
                 """)
