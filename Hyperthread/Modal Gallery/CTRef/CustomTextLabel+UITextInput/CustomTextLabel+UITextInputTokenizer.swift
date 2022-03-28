@@ -151,19 +151,37 @@ extension CustomTextLabel: UITextInputTokenizer {
             return true
         }
         
-        /// https://ericasadun.com/2014/07/08/swift-coping-with-bad-enum-typedefs/
-        /// Looks like they glommed two enums together and just let it sit there.
-        switch direction.rawValue {
-        case UITextStorageDirection.forward.rawValue, UITextLayoutDirection.right.rawValue, UITextLayoutDirection.down.rawValue:
-            return isPositionRightmost(position, with: granularity)
-        
-        case UITextStorageDirection.backward.rawValue, UITextLayoutDirection.left.rawValue, UITextLayoutDirection.up.rawValue:
-            return isPositionLeftmost(position, with: granularity)
-        
-        default:
-            assert(false, "Unknown direction value \(direction.rawValue)")
-            return true
+        func shadow(_ position: CustomTextPosition, atBoundary granularity: UITextGranularity, inDirection direction: UITextDirection) -> Bool {
+            /// https://ericasadun.com/2014/07/08/swift-coping-with-bad-enum-typedefs/
+            /// Looks like they glommed two enums together and just let it sit there.
+            switch direction.rawValue {
+            case UITextStorageDirection.forward.rawValue, UITextLayoutDirection.right.rawValue, UITextLayoutDirection.down.rawValue:
+                return isPositionRightmost(position, with: granularity)
+            
+            case UITextStorageDirection.backward.rawValue, UITextLayoutDirection.left.rawValue, UITextLayoutDirection.up.rawValue:
+                return isPositionLeftmost(position, with: granularity)
+            
+            default:
+                assert(false, "Unknown direction value \(direction.rawValue)")
+                return true
+            }
         }
+        
+        let result = shadow(position, atBoundary: granularity, inDirection: direction)
+        
+        #if DEBUG
+        if __LOG_LIVE_TEXT__ {
+            LiveTextLog.debug("""
+                \(#function)
+                - position: \(position.index)
+                - granularity: \(granularity)
+                - direction: \(direction)
+                - result: \(result)
+                """, print: true, true)
+        }
+        #endif
+        
+        return result
     }
     
     private func isPositionRightmost(_ position: CustomTextPosition, with granularity: UITextGranularity) -> Bool {
