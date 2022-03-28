@@ -105,6 +105,15 @@ extension CustomTextLabel {
             assert(false, "Unexpected type")
             return nil
         }
+        
+        #if DEBUG
+        if __LOG_LIVE_TEXT__ {
+            LiveTextLog.debug("""
+                \(#function)
+                """, print: true, true)
+        }
+        #endif
+        
         switch direction {
         case .right, .down:
             return self.position(from: position, offset: offset)
