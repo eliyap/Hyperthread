@@ -34,6 +34,10 @@ extension LiveString.Index: Comparable {
 
 extension LiveString.Index: CustomStringConvertible {
     var description: String {
-        "(row: \(row), index \(column.encodedOffset))"
+        if self == .invalid {
+            return "(invalid index)"
+        } else {
+            return "(row: \(row), index \(column.encodedOffset))"
+        }
     }
 }
