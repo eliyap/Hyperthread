@@ -151,68 +151,78 @@ extension CustomTextLabel: UITextInputTokenizer {
             return true
         }
         
-        let line = labelText.lines[position.index.row]
-        
         /// https://ericasadun.com/2014/07/08/swift-coping-with-bad-enum-typedefs/
         /// Looks like they glommed two enums together and just let it sit there.
         switch direction.rawValue {
         case UITextStorageDirection.forward.rawValue, UITextLayoutDirection.right.rawValue, UITextLayoutDirection.down.rawValue:
-            switch granularity {
-            case .character:
-                /// All characters are by definition at a character boundary.
-                return true
-            
-            case .word:
-                /// Check line boundary first.
-                guard position.index.column != line.endIndex else {
-                    return true
-                }
-                
-                /// Check is at word boundary.
-                let nextCharacter: Character = line[position.index.column]
-                return nextCharacter.isWhitespace
-            
-            case .sentence, .paragraph, .line:
-                return position.index.column == line.endIndex
-            
-            case .document:
-                return position.index == labelText.endIndex
-            
-            @unknown default:
-                assert(false, "Unknown granularity \(granularity.rawValue)")
-                return true
-            }
+            return isPositionRightmost(position, with: granularity)
         
         case UITextStorageDirection.backward.rawValue, UITextLayoutDirection.left.rawValue, UITextLayoutDirection.up.rawValue:
-            switch granularity {
-            case .character:
-                /// All characters are by definition at a character boundary.
-                return true
-            
-            case .word:
-                /// Check line boundary first.
-                guard position.index.column != line.startIndex else {
-                    return true
-                }
-                
-                /// Check is at word boundary.
-                let prevIndex = line.index(position.index.column, offsetBy: -1)
-                let prevCharacter: Character = line[prevIndex]
-                return prevCharacter.isWhitespace
-            
-            case .sentence, .paragraph, .line:
-                return position.index.column == line.startIndex
-            
-            case .document:
-                return position.index == labelText.startIndex
-            
-            @unknown default:
-                assert(false, "Unknown granularity \(granularity.rawValue)")
-                return true
-            }
+            return isPositionLeftmost(position, with: granularity)
         
         default:
             assert(false, "Unknown direction value \(direction.rawValue)")
+            return true
+        }
+    }
+    
+    private func isPositionRightmost(_ position: CustomTextPosition, with granularity: UITextGranularity) -> Bool {
+        let line = labelText.lines[position.index.row]
+        
+        switch granularity {
+        case .character:
+            /// All characters are by definition at a character boundary.
+            return true
+        
+        case .word:
+            /// Check line boundary first.
+            guard position.index.column != line.endIndex else {
+                return true
+            }
+            
+            /// Check is at word boundary.
+            let nextCharacter: Character = line[position.index.column]
+            return nextCharacter.isWhitespace
+        
+        case .sentence, .paragraph, .line:
+            return position.index.column == line.endIndex
+        
+        case .document:
+            return position.index == labelText.endIndex
+        
+        @unknown default:
+            assert(false, "Unknown granularity \(granularity.rawValue)")
+            return true
+        }
+    }
+    
+    private func isPositionLeftmost(_ position: CustomTextPosition, with granularity: UITextGranularity) -> Bool {
+        let line = labelText.lines[position.index.row]
+        
+        switch granularity {
+        case .character:
+            /// All characters are by definition at a character boundary.
+            return true
+        
+        case .word:
+            /// Check line boundary first.
+            guard position.index.column != line.startIndex else {
+                return true
+            }
+            
+            /// Check is at word boundary.
+            let prevIndex = line.index(position.index.column, offsetBy: -1)
+            let prevCharacter: Character = line[prevIndex]
+            return prevCharacter.isWhitespace
+        
+        case .sentence, .paragraph, .line:
+            return position.index.column == line.startIndex
+        
+        case .document:
+            return position.index == labelText.startIndex
+        
+        @unknown default:
+            assert(false, "Unknown granularity \(granularity.rawValue)")
             return true
         }
     }
