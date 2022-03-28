@@ -26,3 +26,5 @@ enum HTRealmError: Error {
 
 /// UserDefaults
 let DefaultsLog = BlackBox.Logger(name: "UserDefaults")
+
+let LiveTextLog = BlackBox.Logger(name: "LiveText")
