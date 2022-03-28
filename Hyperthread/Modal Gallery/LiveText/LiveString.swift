@@ -44,7 +44,11 @@ struct LiveString {
             let middle = middleLines.joined(separator: "\n")
             let end = endLine[endLine.startIndex..<range.upperBound.column]
             
-            return start + "\n" + middle + "\n" + end
+            if middle.isEmpty {
+                return start + "\n" + end
+            } else {
+                return start + "\n" + middle + "\n" + end
+            }
         }
     }
     
