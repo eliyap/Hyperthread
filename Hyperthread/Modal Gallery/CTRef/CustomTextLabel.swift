@@ -73,13 +73,13 @@ struct MultiRectangleTextStore {
 
 				/// Check if offset exceeds line length.
 				let line = lines[row]
+                column = line.startIndex
 				let remaining = line.distance(from: column, to: line.endIndex)
 				
 				if remaining < offset {
 					/// If so, move to next line and repeat.
 					offset -= remaining
 					row += 1
-					column = lines[row].startIndex
 				} else {
 					let newColumn = line.index(column, offsetBy: offset)
 					return .init(row: row, column: newColumn)
@@ -97,13 +97,13 @@ struct MultiRectangleTextStore {
 
 				/// Check if offset exceeds line length.
 				let line = lines[row]
+                column = line.endIndex
 				let remaining = line.distance(from: line.startIndex, to: column)
 				
 				if remaining < offset {
 					/// If so, move to previous line and repeat.
 					offset -= remaining
 					row -= 1
-					column = lines[row].endIndex
 				} else {
 					let newColumn = line.index(column, offsetBy: -offset)
 					return .init(row: row, column: newColumn)
