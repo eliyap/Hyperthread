@@ -160,7 +160,7 @@ extension CustomTextLabel {
             assert(false, "Unexpected type")
             return 0
         }
-        let result = labelText.offset(from: from.index, to: to.index)
+        let result = labelText[from.index..<to.index].count
 
         #if DEBUG
         if __LOG_LIVE_TEXT__ {

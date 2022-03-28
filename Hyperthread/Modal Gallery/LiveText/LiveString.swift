@@ -120,23 +120,6 @@ struct LiveString {
             }
         }
     }
-
-    func offset(from start: LiveString.Index, to end: LiveString.Index) -> Int {
-        if start.row == end.row {
-            let line = lines[start.row]
-            return line.distance(from: start.column, to: end.column)
-        } else {
-            let startLine = lines[start.row]
-            let endLine = lines[end.row]
-            let middleLines = lines[(start.row + 1)..<end.row]
-            
-            let start = startLine.distance(from: start.column, to: startLine.endIndex)
-            let middle = middleLines.reduce(0, { $0 + $1.count })
-            let end = endLine.distance(from: endLine.startIndex, to: end.column)
-            
-            return start + middle + end
-        }
-    }
     
     var isEmpty: Bool {
         lines.isEmpty
