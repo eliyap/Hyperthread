@@ -63,12 +63,8 @@ extension CustomTextLabel {
         assert(toPosition.index != .invalid, "Invalid position")
         guard fromPosition.index <= toPosition.index else {
             BlackBox.Logger.general.error("""
-                fromPosition
-                - \(fromPosition.index.row))
-                - \(fromPosition.index.column.encodedOffset))
-                toPosition
-                - \(toPosition.index.row))
-                - \(toPosition.index.column.encodedOffset))
+                - fromPosition: \(fromPosition.index)
+                - toPosition: \(toPosition.index)
                 """)
             return CustomTextRange(range: toPosition.index..<fromPosition.index)
         }
