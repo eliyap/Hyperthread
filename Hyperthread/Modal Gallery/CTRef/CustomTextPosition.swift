@@ -4,9 +4,9 @@ import UIKit
 
 final class CustomTextPosition: UITextPosition {
 	/// The offset from the start index of the text position
-    let index: MultiRectangleTextIndex
+    let index: LiveString.Index
 	
-	init(index: MultiRectangleTextIndex) {
+	init(index: LiveString.Index) {
 		self.index = index
 	}
 }

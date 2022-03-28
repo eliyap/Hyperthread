@@ -140,11 +140,11 @@ extension CustomTextLabel {
         
         if point.x < (lineWidth / 2) {
             /// Closest to the left.
-            let index = MultiRectangleTextIndex(row: lineNo, column: line.startIndex)
+            let index = LiveString.Index(row: lineNo, column: line.startIndex)
             return CustomTextPosition(index: index)
         } else {
             /// Closest to the right.
-            let index = MultiRectangleTextIndex(row: lineNo, column: line.endIndex)
+            let index = LiveString.Index(row: lineNo, column: line.endIndex)
             return CustomTextPosition(index: index)
         }
     }

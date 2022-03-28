@@ -23,7 +23,7 @@ struct LiveString {
         lines.joined(separator: "\n")
     }
     
-    subscript(_ range: Range<MultiRectangleTextIndex>) -> String {
+    subscript(_ range: Range<LiveString.Index>) -> String {
         guard range.isEmpty == false else { return "" }
         
         guard range.lowerBound != .invalid, range.upperBound != .invalid else {
@@ -48,7 +48,7 @@ struct LiveString {
         }
     }
     
-    var startIndex: MultiRectangleTextIndex {
+    var startIndex: LiveString.Index {
         guard let first = lines.first else {
             return .invalid
         }
@@ -56,7 +56,7 @@ struct LiveString {
         return .init(row: 0, column: first.startIndex)
     }
     
-    var endIndex: MultiRectangleTextIndex {
+    var endIndex: LiveString.Index {
         guard let last = lines.last else {
             return .invalid
         }
@@ -64,7 +64,7 @@ struct LiveString {
         return .init(row: lines.count - 1, column: last.endIndex)
     }
     
-    func index(_ original: MultiRectangleTextIndex, offsetBy offset: Int) -> MultiRectangleTextIndex {
+    func index(_ original: LiveString.Index, offsetBy offset: Int) -> LiveString.Index {
         if offset == 0 {
             return original
         } else if offset > 0 {
@@ -117,7 +117,7 @@ struct LiveString {
         }
     }
 
-    func offset(from start: MultiRectangleTextIndex, to end: MultiRectangleTextIndex) -> Int {
+    func offset(from start: LiveString.Index, to end: LiveString.Index) -> Int {
         if start.row == end.row {
             let line = lines[start.row]
             return line.distance(from: start.column, to: end.column)
