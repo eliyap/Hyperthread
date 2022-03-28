@@ -139,16 +139,33 @@ extension CustomTextLabel {
         let lineWidth = NSAttributedString(string: line, attributes: attributes).size().width
         
         let result: CustomTextPosition
-        if point.x < (lineWidth / 2) {
-            /// Closest to the left.
+        if point.x < 0 {
+            /// Off to the left.
             let index = LiveString.Index(row: lineNo, column: line.startIndex)
             result = CustomTextPosition(index: index)
-        } else {
-            /// Closest to the right.
+        } else if point.x > lineWidth {
+            /// Off to the right.
             let index = LiveString.Index(row: lineNo, column: line.endIndex)
             result = CustomTextPosition(index: index)
+        } else {
+            /// Temporary `result`.
+            var r: CustomTextPosition? = nil
+            
+            var accumulatedWidth: CGFloat = 0
+            for lineIndex: String.Index in line.indices {
+                let char = String(line[lineIndex])
+                let charWidth: CGFloat = NSAttributedString(string: char, attributes: attributes).size().width
+                if point.x < accumulatedWidth + charWidth {
+                    let index = LiveString.Index(row: lineNo, column: lineIndex)
+                    r = CustomTextPosition(index: index)
+                    break
+                }
+                accumulatedWidth += charWidth
+            }
+            
+            result = r ?? CustomTextPosition(index: LiveString.Index(row: lineNo, column: line.endIndex))
         }
-
+        
         #if DEBUG
         if __LOG_LIVE_TEXT__ {
             LiveTextLog.debug("""
