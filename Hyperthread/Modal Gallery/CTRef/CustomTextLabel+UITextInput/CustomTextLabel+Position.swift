@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BlackBox
 
 /// Functions relating to internally referenced text positions.
 extension CustomTextLabel {
@@ -44,6 +45,21 @@ extension CustomTextLabel {
             assert(false, "Unexpected type")
             return nil
         }
+        
+        assert(fromPosition.index != .invalid, "Invalid position")
+        assert(toPosition.index != .invalid, "Invalid position")
+        guard fromPosition.index <= toPosition.index else {
+            BlackBox.Logger.general.error("""
+                fromPosition
+                - \(fromPosition.index.row))
+                - \(fromPosition.index.column.encodedOffset))
+                toPosition
+                - \(toPosition.index.row))
+                - \(toPosition.index.column.encodedOffset))
+                """)
+            return CustomTextRange(range: toPosition.index..<fromPosition.index)
+        }
+        
         return CustomTextRange(range: fromPosition.index..<toPosition.index)
     }
     
