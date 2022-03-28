@@ -20,7 +20,20 @@ extension CustomTextLabel {
         }
         
         let customRange = rangeStart.index..<rangeEnd.index
-        return labelText[customRange]
+        let result = labelText[customRange]
+        
+        #if DEBUG
+        if __LOG_LIVE_TEXT__ {
+            LiveTextLog.debug("""
+                \(#function)
+                - start: \(rangeStart.index)
+                - end: \(rangeEnd.index)
+                - result: \(result)
+                """, print: true, true)
+        }
+        #endif
+        
+        return result
     }
     
     var selectedTextRange: UITextRange? {
