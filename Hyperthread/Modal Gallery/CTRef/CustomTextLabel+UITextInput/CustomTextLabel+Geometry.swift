@@ -180,11 +180,25 @@ extension CustomTextLabel {
             return nil
         }
         
+        let result: CustomTextRange
+        
         let index = textPosition.index
         if index == labelText.endIndex {
-            return CustomTextRange(range: labelText.index(index, offsetBy: -1)..<index)
+            result = .init(range: labelText.index(index, offsetBy: -1)..<index)
         } else {
-            return CustomTextRange(range: index..<labelText.index(index, offsetBy: 1))
+            result = .init(range: index..<labelText.index(index, offsetBy: 1))
         }
+        
+        #if DEBUG
+        if __LOG_LIVE_TEXT__ {
+            LiveTextLog.debug("""
+                \(#function)
+                - point: \(point)
+                - index: \(index)
+                """, print: true, true)
+        }
+        #endif
+        
+        return result
     }
 }
