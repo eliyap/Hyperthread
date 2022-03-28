@@ -132,6 +132,16 @@ extension CustomTextLabel {
             assert(false, "Unexpected type")
             return .orderedSame
         }
+
+        #if DEBUG
+        if __LOG_LIVE_TEXT__ {
+            LiveTextLog.debug("""
+                \(#function)
+                - position: \(position.index)
+                - other: \(other.index)
+                """, print: true, true)
+        }
+        #endif
         
         if position < other {
             return .orderedAscending
