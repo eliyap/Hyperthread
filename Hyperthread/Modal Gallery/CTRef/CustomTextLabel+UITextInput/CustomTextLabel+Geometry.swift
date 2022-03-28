@@ -89,8 +89,8 @@ extension CustomTextLabel {
         
         var result: [CustomTextSelectionRect] = []
 
-        let lCol: String.Index
-        let rCol: String.Index
+        var lCol: String.Index
+        var rCol: String.Index
         for row in start.row...end.row {
             let line = labelText.lines[row]
 
@@ -168,6 +168,10 @@ extension CustomTextLabel {
     }
     
     func characterRange(at point: CGPoint) -> UITextRange? {
+        guard labelText.isEmpty == false else {
+            return nil
+        }
+        
         guard let textPosition = closestPosition(to: point) else {
             return nil
         }
@@ -176,7 +180,12 @@ extension CustomTextLabel {
             assert(false, "Unexpected type")
             return nil
         }
-
-        return CustomTextRange(startOffset: textPosition.offset, endOffset: textPosition.offset + 1)
+        
+        let index = textPosition.index
+        if index == labelText.endIndex {
+            return CustomTextRange(range: labelText.index(index, offsetBy: -1)..<index)
+        } else {
+            return CustomTextRange(range: index..<labelText.index(index, offsetBy: 1))
+        }
     }
 }
