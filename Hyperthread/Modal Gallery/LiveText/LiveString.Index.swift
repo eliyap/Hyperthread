@@ -31,3 +31,9 @@ extension LiveString.Index: Comparable {
         }
     }
 }
+
+extension LiveString.Index: CustomStringConvertible {
+    var description: String {
+        "(row: \(row), index \(column.encodedOffset)"
+    }
+}
