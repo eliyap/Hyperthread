@@ -54,24 +54,23 @@ extension CustomTextLabel {
     }
     
     func caretRect(for position: UITextPosition) -> CGRect {
-        /// Turn our text position into an index into `labelText`.
-        let labelTextPositionIndex = stringIndex(from: position)
+        guard let position = position as? CustomTextPosition else {
+            assert(false, "Unexpected type")
+            return .zero
+        }
+
+        let index = position.index
+        let line = labelText.lines[index.row]
+        let lineHeight = Self.font.lineHeight
         
-        /// Determine what line index and line our text position is on.
-        let (lineIndex, line) = indexAndLine(from: position)
-        
-        // Get the substring from the beginning of that line up to our text position
-        let substring = line.prefix(upTo: labelTextPositionIndex)
-        
-        // Check the size of that substring, our caret should draw just to the right edge of this range
-        let size = NSAttributedString(string: String(substring), attributes: attributes).size()
-        
-        // Make the caret rect, accounting for which line we're on
+        let prefix = line.prefix(upTo: index.column)
+        let prefixWidth = NSAttributedString(string: String(prefix), attributes: attributes).size().width
+
         return CGRect(
-            x: size.width,
-            y: CustomTextLabel.font.lineHeight * CGFloat(lineIndex),
+            x: prefixWidth,
+            y: CGFloat(index.row) * lineHeight,
             width: CustomTextLabel.caretWidth,
-            height: CustomTextLabel.font.lineHeight
+            height: lineHeight
         )
     }
     
