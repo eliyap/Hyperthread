@@ -16,45 +16,40 @@ extension CustomTextLabel {
     /// > when the range encompasses multiple lines of text.
     func firstRect(for range: UITextRange) -> CGRect {
         guard
-            let rangeStart = range.start as? CustomTextPosition,
-            let rangeEnd = range.end as? CustomTextPosition
+            let start = range.start as? CustomTextPosition,
+            let end = range.end as? CustomTextPosition
         else {
             assert(false, "Unexpected type")
             return .zero
         }
         
-        /// Determine which line index and line the range starts in.
-        let (startLineIndex, startLine) = indexAndLine(from: rangeStart)
+        let line = labelText.lines[start.index.row]
+        let startIndex = start.index.column
         
-        /// Determine the `x` position.
-        var initialXPosition: CGFloat = 0
-        var rectWidth: CGFloat = 0
-        
-        /// If our start and end line indices are the same, just get the whole range.
-        if rangeStart.offset >= labelText.count {
-            initialXPosition = self.intrinsicContentSize.width
+        /// Find the end index.
+        let endIndex: String.Index
+        if start.index.row == end.index.row {
+            endIndex = end.index.column
         } else {
-            let startTextIndex = labelText.index(labelText.startIndex, offsetBy: rangeStart.offset)
-            let endTextIndex = labelText.index(startTextIndex, offsetBy: max(rangeEnd.offset - rangeStart.offset - 1, 0))
-            
-            /// Get the substring from the start of the line we're on to the start of our selection.
-            let preSubstring = startLine.prefix(upTo: labelText.index(labelText.startIndex, offsetBy: rangeStart.offset))
-            let preSize = NSAttributedString(string: String(preSubstring), attributes: attributes).size()
-            
-            /// Get the substring from the start of our range to the end of the line.
-            let selectionLineEndIndex = min(endTextIndex, startLine.index(before: startLine.endIndex))
-            let actualSubstring = startLine[startTextIndex...selectionLineEndIndex]
-            let actualSize = NSAttributedString(string: String(actualSubstring), attributes: attributes).size()
-            
-            initialXPosition = preSize.width
-            rectWidth = actualSize.width
+            endIndex = line.endIndex
         }
         
+        /// Find prefix width.
+        let prefix = line.prefix(upTo: start.index.column)
+        let prefixWidth = NSAttributedString(string: String(prefix), attributes: attributes).size().width
+
+        /// Find fragment width.
+        let fragment = line[startIndex..<endIndex]
+        let fragmentWidth = NSAttributedString(string: String(fragment), attributes: attributes).size().width
+
+        /// Estimate line height.
+        let lineHeight = Self.font.lineHeight
+
         return CGRect(
-            x: initialXPosition,
-            y: CGFloat(startLineIndex) * CustomTextLabel.font.lineHeight,
-            width: rectWidth,
-            height: CustomTextLabel.font.lineHeight
+            x: prefixWidth,
+            y: CGFloat(start.index.row) * lineHeight,
+            width: fragmentWidth,
+            height: lineHeight
         )
     }
     

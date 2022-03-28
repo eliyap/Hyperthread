@@ -4,7 +4,7 @@ import UIKit
 
 struct MultiRectangleTextStore {
     
-    let lines: [String]
+    public let lines: [String]
     
     init(_ string: String) {
         self.lines = string
