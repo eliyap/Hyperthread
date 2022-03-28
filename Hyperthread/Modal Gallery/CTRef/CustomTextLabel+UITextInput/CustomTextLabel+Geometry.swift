@@ -84,53 +84,44 @@ extension CustomTextLabel {
             return []
         }
         
-        let lines = CustomTextLabel.linesFromString(string: labelText)
-        // Determine which line index and line the range starts and ends in
-        let (startLineIndex, _) = indexAndLine(from: rangeStart)
-        let (endLineIndex, _) = indexAndLine(from: rangeEnd)
+        let start = rangeStart.index
+        let end = rangeEnd.index
         
-        // Translate our range indexes into text indexes
-        let startTextIndex = labelText.index(labelText.startIndex, offsetBy: rangeStart.offset)
-        let endTextIndex = labelText.index(startTextIndex, offsetBy: max(rangeEnd.offset - rangeStart.offset - 1, 0))
-        
-        var selectionRects: [CustomTextSelectionRect] = []
-        for (index, line) in lines.enumerated() {
-            /// Check if line is valid selection target.
-            guard line.isEmpty == false, index >= startLineIndex, index <= endLineIndex else {
-                continue
-            }
+        var result: [CustomTextSelectionRect] = []
+
+        let lCol: String.Index
+        let rCol: String.Index
+        for row in start.row...end.row {
+            let line = labelText.lines[row]
+
+            lCol = row == start.row 
+                ? start.column 
+                : line.startIndex
+            rCol = row == end.row 
+                ? end.column 
+                : line.endIndex
             
-            let containsStart = line.startIndex <= startTextIndex && startTextIndex < line.endIndex
-            let containsEnd = line.startIndex <= endTextIndex && endTextIndex < line.endIndex
-            
-            /// Get substring from start of range to end of line.
-            let selectionStartIndex = max(startTextIndex, line.startIndex)
-            let selectionEndIndex = max(min(endTextIndex, line.index(before: line.endIndex)), selectionStartIndex)
-            let actualSubstring = line[selectionStartIndex..<selectionEndIndex]
-            let actualSize = NSAttributedString(string: String(actualSubstring), attributes: attributes).size()
-            
-            var xPos: CGFloat = 0
-            if containsStart {
-                /// Get substring from the start of current line to start of selection.
-                let preSubstring = line.prefix(upTo: labelText.index(labelText.startIndex, offsetBy: rangeStart.offset))
-                let preSize = NSAttributedString(string: String(preSubstring), attributes: attributes).size()
-                xPos = preSize.width
-            }
-            
-            let rectWidth = actualSize.width
-            
-            // Make the selection rect for this line
-            let rect = CGRect(
-                x: xPos,
-                y: CGFloat(index) * CustomTextLabel.font.lineHeight,
-                width: rectWidth,
+            let fragment = line[lCol..<rCol]
+            let size = NSAttributedString(string: String(fragment), attributes: attributes).size()
+
+            var rect = CGRect(
+                x: 0,
+                y: CustomTextLabel.font.lineHeight * CGFloat(row),
+                width: size.width,
                 height: CustomTextLabel.font.lineHeight
             )
-            selectionRects.append(CustomTextSelectionRect(rect: rect, containsStart: containsStart, containsEnd: containsEnd))
+
+            if row == start.row { 
+                /// Calculate prefix width.
+                let prefix = line.prefix(upTo: start.column)
+                let prefixWidth = NSAttributedString(string: String(prefix), attributes: attributes).size().width
+                rect.origin.x += prefixWidth
+            }
+
+            result.append(CustomTextSelectionRect(rect: rect, containsStart: row == start.row, containsEnd: row == end.row))
         }
-        
-        // Return our constructed array
-        return selectionRects
+
+        return result
     }
     
     func closestPosition(to point: CGPoint) -> UITextPosition? {
