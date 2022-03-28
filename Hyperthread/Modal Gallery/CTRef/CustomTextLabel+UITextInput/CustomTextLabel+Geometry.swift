@@ -9,6 +9,11 @@ import UIKit
 
 /// Functions relating to the on screen geometry of text.
 extension CustomTextLabel {
+    /// Docs: https://developer.apple.com/documentation/uikit/uitextinput/1614570-firstrect
+    /// >  The first rectangle in a range of text.
+    /// > You might use this rectangle to draw a correction rectangle.
+    /// > The “first” in the name refers *the rectangle enclosing the first line*
+    /// > when the range encompasses multiple lines of text.
     func firstRect(for range: UITextRange) -> CGRect {
         guard
             let rangeStart = range.start as? CustomTextPosition,
