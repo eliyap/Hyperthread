@@ -160,8 +160,20 @@ extension CustomTextLabel {
             assert(false, "Unexpected type")
             return 0
         }
-        
-        return labelText.offset(from: from.index, to: to.index)
+        let result = labelText.offset(from: from.index, to: to.index)
+
+        #if DEBUG
+        if __LOG_LIVE_TEXT__ {
+            LiveTextLog.debug("""
+                \(#function)
+                - from: \(from.index)
+                - to: \(to.index)
+                - result: \(result)
+                """, print: true, true)
+        }
+        #endif
+
+        return result
     }
     
     func position(within range: UITextRange, farthestIn direction: UITextLayoutDirection) -> UITextPosition? {
