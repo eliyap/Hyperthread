@@ -31,28 +31,46 @@ extension CustomTextLabel: UITextInput {
 
 extension CustomTextLabel: UITextInputTokenizer {
     func rangeEnclosingPosition(_ position: UITextPosition, with granularity: UITextGranularity, inDirection direction: UITextDirection) -> UITextRange? {
-        guard let position = position as? CustomTextPosition else {
-            assert(false, "Unexpected type")
+        /// Enclose business logic to allow debugging statements.
+        func shadow(_ position: UITextPosition, with granularity: UITextGranularity, inDirection direction: UITextDirection) -> UITextRange? {
+            guard let position = position as? CustomTextPosition else {
+                assert(false, "Unexpected type")
+                
+                /// Return empty range.
+                return nil
+            }
             
-            /// Return empty range.
-            return nil
-        }
-        
-        /// https://ericasadun.com/2014/07/08/swift-coping-with-bad-enum-typedefs/
-        /// Looks like they glommed two enums together and just let it sit there.
-        switch direction.rawValue {
-        case UITextStorageDirection.forward.rawValue, UITextLayoutDirection.right.rawValue, UITextLayoutDirection.down.rawValue:
-            return rangeAfter(position, with: granularity)
-        
-        case UITextStorageDirection.backward.rawValue, UITextLayoutDirection.left.rawValue, UITextLayoutDirection.up.rawValue:
-            return rangeBefore(position, with: granularity)
-        
-        default:
-            assert(false, "Unknown direction value \(direction.rawValue)")
+            /// https://ericasadun.com/2014/07/08/swift-coping-with-bad-enum-typedefs/
+            /// Looks like they glommed two enums together and just let it sit there.
+            switch direction.rawValue {
+            case UITextStorageDirection.forward.rawValue, UITextLayoutDirection.right.rawValue, UITextLayoutDirection.down.rawValue:
+                return rangeAfter(position, with: granularity)
             
-            /// Return empty range.
-            return CustomTextRange(range: position.index..<position.index)
+            case UITextStorageDirection.backward.rawValue, UITextLayoutDirection.left.rawValue, UITextLayoutDirection.up.rawValue:
+                return rangeBefore(position, with: granularity)
+            
+            default:
+                assert(false, "Unknown direction value \(direction.rawValue)")
+                
+                /// Return empty range.
+                return CustomTextRange(range: position.index..<position.index)
+            }
         }
+                
+        #if DEBUG
+        if __LOG_LIVE_TEXT__ {
+            if let position = position as? CustomTextPosition {
+                LiveTextLog.debug("""
+                    \(#function)
+                    - position: \(position.index)
+                    - granularity: \(granularity)
+                    - direction: \(direction)
+                    """, print: true, true)
+            }
+        }
+        #endif
+        
+        return shadow(position, with: granularity, inDirection: direction)
     }
     
     private func rangeAfter(_ position: CustomTextPosition, with granularity: UITextGranularity) -> CustomTextRange {
