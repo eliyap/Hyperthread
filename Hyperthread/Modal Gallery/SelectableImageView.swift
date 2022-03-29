@@ -45,8 +45,8 @@ final class SelectableImageView: UIView {
         ])
         
         let ctl = CustomTextLabel(labelText: """
-            HELLO WORLD.
-            HELLO WORLD.
+            POTATO POTATO.
+            POTATO POTATO.
             """)
         addSubview(ctl)
         ctl.translatesAutoresizingMaskIntoConstraints = false
