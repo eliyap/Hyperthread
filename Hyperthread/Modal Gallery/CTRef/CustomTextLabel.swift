@@ -21,7 +21,7 @@ class CustomTextLabel: UIView {
 	}
 	
 	/// The text to be drawn to screen by this `CustomTextLabel`
-    var labelText: LiveString = .init("") {
+    var labelText: LiveDocument = .init("") {
 		didSet {
             invalidateIntrinsicContentSize()
             setNeedsDisplay()

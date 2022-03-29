@@ -60,7 +60,7 @@ extension CustomTextLabel: UITextInputTokenizer {
             return CustomTextRange(range: position.index..<position.index)
         }
         
-        let endIndex: LiveString.Index
+        let endIndex: LiveDocument.Index
         switch granularity {
         case .character:
             let newColumn = line.index(position.index.column, offsetBy: +1)
@@ -106,7 +106,7 @@ extension CustomTextLabel: UITextInputTokenizer {
             return CustomTextRange(range: position.index..<position.index)
         }
         
-        let startIndex: LiveString.Index
+        let startIndex: LiveDocument.Index
         switch granularity {
         case .character:
             let newColumn = line.index(position.index.column, offsetBy: -1)

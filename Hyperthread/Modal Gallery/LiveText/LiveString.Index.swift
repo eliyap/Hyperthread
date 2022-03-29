@@ -1,5 +1,5 @@
 //
-//  LiveString.Index.swift
+//  LiveDocument.Index.swift
 //  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 28/3/22.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-extension LiveString {
-    /// 2D index into a `LiveString`.
+extension LiveDocument {
+    /// 2D index into a `LiveDocument`.
     struct Index {
         /// The "line" on which the index is located.
         /// Min: 0
@@ -22,7 +22,7 @@ extension LiveString {
     }
 }
 
-extension LiveString.Index: Comparable {
+extension LiveDocument.Index: Comparable {
     static func <(lhs: Self, rhs: Self) -> Bool {
         if (lhs.row == rhs.row) {
             return lhs.column < rhs.column
@@ -32,7 +32,7 @@ extension LiveString.Index: Comparable {
     }
 }
 
-extension LiveString.Index: CustomStringConvertible {
+extension LiveDocument.Index: CustomStringConvertible {
     var description: String {
         if self == .invalid {
             return "(invalid index)"

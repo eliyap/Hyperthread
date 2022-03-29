@@ -2,9 +2,9 @@ import UIKit
 
 class CustomTextRange: UITextRange {
 	
-    let range: Range<LiveString.Index>
+    let range: Range<LiveDocument.Index>
 	
-	init(range: Range<LiveString.Index>) {
+	init(range: Range<LiveDocument.Index>) {
         self.range = range
 		super.init()
 	}

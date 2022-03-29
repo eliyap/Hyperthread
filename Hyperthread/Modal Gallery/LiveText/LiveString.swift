@@ -1,5 +1,5 @@
 //
-//  LiveString.swift
+//  LiveDocument.swift
 //  Hyperthread
 //
 //  Created by Secret Asian Man Dev on 28/3/22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LiveString {
+struct LiveDocument {
     
     public let lines: [String]
     
@@ -23,7 +23,7 @@ struct LiveString {
         lines.joined(separator: "\n")
     }
     
-    subscript(_ range: Range<LiveString.Index>) -> String {
+    subscript(_ range: Range<LiveDocument.Index>) -> String {
         guard range.isEmpty == false else { return "" }
         
         guard range.lowerBound != .invalid, range.upperBound != .invalid else {
@@ -52,7 +52,7 @@ struct LiveString {
         }
     }
     
-    var startIndex: LiveString.Index {
+    var startIndex: LiveDocument.Index {
         guard let first = lines.first else {
             return .invalid
         }
@@ -60,7 +60,7 @@ struct LiveString {
         return .init(row: 0, column: first.startIndex)
     }
     
-    var endIndex: LiveString.Index {
+    var endIndex: LiveDocument.Index {
         guard let last = lines.last else {
             return .invalid
         }
@@ -68,7 +68,7 @@ struct LiveString {
         return .init(row: lines.count - 1, column: last.endIndex)
     }
     
-    func index(_ original: LiveString.Index, offsetBy offset: Int) -> LiveString.Index {
+    func index(_ original: LiveDocument.Index, offsetBy offset: Int) -> LiveDocument.Index {
         if offset == 0 {
             return original
         } else if offset > 0 {
