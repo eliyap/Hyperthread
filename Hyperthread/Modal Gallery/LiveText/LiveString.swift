@@ -7,6 +7,17 @@
 
 import Foundation
 
+import UIKit
+struct TempRectChar {
+    private static let font: UIFont = UIFont.systemFont(ofSize: 20.0)
+    
+    public let char: Character
+    public let height: CGFloat = Self.font.lineHeight
+    public var width: CGFloat {
+        NSAttributedString(string: String(char), attributes: [.font: Self.font]).size().width
+    }
+}
+
 typealias LiveLine = [Character]
 
 struct LiveDocument {
