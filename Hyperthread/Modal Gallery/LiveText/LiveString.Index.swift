@@ -16,9 +16,9 @@ extension LiveDocument {
         let row: Int
         
         /// The "column" on which the index is located.
-        let column: String.Index
+        let column: Int
         
-        public static let invalid: Self = .init(row: NSNotFound, column: "".startIndex)
+        public static let invalid: Self = .init(row: NSNotFound, column: 0)
     }
 }
 
@@ -37,7 +37,7 @@ extension LiveDocument.Index: CustomStringConvertible {
         if self == .invalid {
             return "(invalid index)"
         } else {
-            return "(row: \(row), index \(column.encodedOffset))"
+            return "(row: \(row), index \(column))"
         }
     }
 }

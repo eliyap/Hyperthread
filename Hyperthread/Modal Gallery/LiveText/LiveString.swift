@@ -7,20 +7,24 @@
 
 import Foundation
 
+typealias LiveLine = [Character]
+
 struct LiveDocument {
     
-    public let lines: [String]
+    public let lines: [[Character]]
     
     init(_ string: String) {
         self.lines = string
             .split(separator: "\n", omittingEmptySubsequences: false)
             .map({ (substring: Substring) in
-                return String(substring)
+                return .init(substring)
             })
     }
     
     var text: String {
-        lines.joined(separator: "\n")
+        lines
+            .map { String($0) }
+            .joined(separator: "\n")
     }
     
     subscript(_ range: Range<LiveDocument.Index>) -> String {
@@ -41,7 +45,9 @@ struct LiveDocument {
             let middleLines = lines[(range.lowerBound.row + 1)..<range.upperBound.row]
             
             let start = startLine[range.lowerBound.column..<startLine.endIndex]
-            let middle = middleLines.joined(separator: "\n")
+            let middle = middleLines
+                .map { String($0) }
+                .joined(separator: "\n")
             let end = endLine[endLine.startIndex..<range.upperBound.column]
             
             if middle.isEmpty {

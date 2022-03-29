@@ -27,7 +27,7 @@ extension CustomTextLabel {
         let startIndex = start.index.column
         
         /// Find the end index.
-        let endIndex: String.Index
+        let endIndex: LiveLine.Index
         if start.index.row == end.index.row {
             endIndex = end.index.column
         } else {
@@ -88,8 +88,8 @@ extension CustomTextLabel {
         
         var result: [CustomTextSelectionRect] = []
 
-        var lCol: String.Index
-        var rCol: String.Index
+        var lCol: LiveLine.Index
+        var rCol: LiveLine.Index
         for row in start.row...end.row {
             let line = labelText.lines[row]
 
@@ -136,7 +136,7 @@ extension CustomTextLabel {
         }
 
         let line = labelText.lines[lineNo]
-        let lineWidth = NSAttributedString(string: line, attributes: attributes).size().width
+        let lineWidth = NSAttributedString(string: String(line), attributes: attributes).size().width
         
         let result: CustomTextPosition
         if point.x < 0 {
@@ -152,7 +152,7 @@ extension CustomTextLabel {
             var r: CustomTextPosition? = nil
             
             var accumulatedWidth: CGFloat = 0
-            for lineIndex: String.Index in line.indices {
+            for lineIndex: LiveLine.Index in line.indices {
                 let char = String(line[lineIndex])
                 let charWidth: CGFloat = NSAttributedString(string: char, attributes: attributes).size().width
                 if point.x < accumulatedWidth + charWidth {
