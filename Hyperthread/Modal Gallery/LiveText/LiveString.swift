@@ -18,23 +18,23 @@ struct TempRectChar {
     }
 }
 
-typealias LiveLine = [Character]
+typealias LiveLine = [TempRectChar]
 
 struct LiveDocument {
     
-    public let lines: [[Character]]
+    public let lines: [LiveLine]
     
     init(_ string: String) {
         self.lines = string
             .split(separator: "\n", omittingEmptySubsequences: false)
-            .map({ (substring: Substring) in
-                return .init(substring)
+            .map({ (substring: Substring) -> LiveLine in
+                return substring.map { LiveLine.Element(char: $0) }
             })
     }
     
     var text: String {
         lines
-            .map { String($0) }
+            .map { (line: LiveLine) in String(line.map(\.char)) }
             .joined(separator: "\n")
     }
     
@@ -49,7 +49,7 @@ struct LiveDocument {
         if range.lowerBound.row == range.upperBound.row {
             let line = lines[range.lowerBound.row]
             let substring = line[range.lowerBound.column..<range.upperBound.column]
-            return String(substring)
+            return String(substring.map(\.char))
         } else {
             let startLine = lines[range.lowerBound.row]
             let endLine = lines[range.upperBound.row]
@@ -57,14 +57,14 @@ struct LiveDocument {
             
             let start = startLine[range.lowerBound.column..<startLine.endIndex]
             let middle = middleLines
-                .map { String($0) }
+                .map { (line: LiveLine) in String(line.map(\.char)) }
                 .joined(separator: "\n")
             let end = endLine[endLine.startIndex..<range.upperBound.column]
             
             if middle.isEmpty {
-                return start + "\n" + end
+                return start.map(\.char) + "\n" + end.map(\.char)
             } else {
-                return start + "\n" + middle + "\n" + end
+                return start.map(\.char) + "\n" + middle + "\n" + end.map(\.char)
             }
         }
     }

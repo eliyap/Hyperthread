@@ -68,14 +68,14 @@ extension CustomTextLabel: UITextInputTokenizer {
         
         case .word:
             /// Check is not at word boundary.
-            let nextCharacter: Character = line[position.index.column]
+            let nextCharacter: Character = line[position.index.column].char
             guard nextCharacter.isWhitespace == false else {
                 /// Return empty range.
                 return CustomTextRange(range: position.index..<position.index)
             }
             
             let trailing = line[position.index.column..<line.endIndex]
-            if let nextWhitespace = trailing.firstIndex(where: { char in char.isWhitespace }) {
+            if let nextWhitespace = trailing.firstIndex(where: { char in char.char.isWhitespace }) {
                 endIndex = .init(row: position.index.row, column: nextWhitespace)
             } else {
                 endIndex = .init(row: position.index.row, column: line.endIndex)
@@ -115,14 +115,14 @@ extension CustomTextLabel: UITextInputTokenizer {
         case .word:
             /// Check is not at word boundary.
             let prevColumn = line.index(position.index.column, offsetBy: -1)
-            let prevCharacter: Character = line[prevColumn]
+            let prevCharacter: Character = line[prevColumn].char
             guard prevCharacter.isWhitespace == false else {
                 /// Return empty range.
                 return CustomTextRange(range: position.index..<position.index)
             }
             
             let leading = line[position.index.column..<line.endIndex]
-            if let nextWhitespace = leading.lastIndex(where: { char in char.isWhitespace }) {
+            if let nextWhitespace = leading.lastIndex(where: { char in char.char.isWhitespace }) {
                 let afterWhitespace = line.index(nextWhitespace, offsetBy: 1)
                 startIndex = .init(row: position.index.row, column: afterWhitespace)
             } else {
@@ -199,7 +199,7 @@ extension CustomTextLabel: UITextInputTokenizer {
             }
             
             /// Check is at word boundary.
-            let nextCharacter: Character = line[position.index.column]
+            let nextCharacter: Character = line[position.index.column].char
             return nextCharacter.isWhitespace
         
         case .sentence, .paragraph, .line:
@@ -230,7 +230,7 @@ extension CustomTextLabel: UITextInputTokenizer {
             
             /// Check is at word boundary.
             let prevIndex = line.index(position.index.column, offsetBy: -1)
-            let prevCharacter: Character = line[prevIndex]
+            let prevCharacter: Character = line[prevIndex].char
             return prevCharacter.isWhitespace
         
         case .sentence, .paragraph, .line:

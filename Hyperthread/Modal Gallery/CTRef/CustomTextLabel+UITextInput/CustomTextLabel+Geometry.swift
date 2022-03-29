@@ -36,11 +36,11 @@ extension CustomTextLabel {
         
         /// Find prefix width.
         let prefix = line.prefix(upTo: start.index.column)
-        let prefixWidth = NSAttributedString(string: String(prefix), attributes: attributes).size().width
+        let prefixWidth = prefix.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
 
         /// Find fragment width.
         let fragment = line[startIndex..<endIndex]
-        let fragmentWidth = NSAttributedString(string: String(fragment), attributes: attributes).size().width
+        let fragmentWidth = fragment.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
 
         /// Estimate line height.
         let lineHeight = Self.font.lineHeight
@@ -64,7 +64,7 @@ extension CustomTextLabel {
         let lineHeight = Self.font.lineHeight
         
         let prefix = line.prefix(upTo: index.column)
-        let prefixWidth = NSAttributedString(string: String(prefix), attributes: attributes).size().width
+        let prefixWidth = prefix.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
 
         return CGRect(
             x: prefixWidth,
@@ -101,19 +101,19 @@ extension CustomTextLabel {
                 : line.endIndex
             
             let fragment = line[lCol..<rCol]
-            let size = NSAttributedString(string: String(fragment), attributes: attributes).size()
+            let fragmentWidth = fragment.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
 
             var rect = CGRect(
                 x: 0,
                 y: CustomTextLabel.font.lineHeight * CGFloat(row),
-                width: size.width,
+                width: fragmentWidth,
                 height: CustomTextLabel.font.lineHeight
             )
 
             if row == start.row { 
                 /// Calculate prefix width.
                 let prefix = line.prefix(upTo: start.column)
-                let prefixWidth = NSAttributedString(string: String(prefix), attributes: attributes).size().width
+                let prefixWidth = prefix.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
                 rect.origin.x += prefixWidth
             }
 
@@ -136,7 +136,7 @@ extension CustomTextLabel {
         }
 
         let line = labelText.lines[lineNo]
-        let lineWidth = NSAttributedString(string: String(line), attributes: attributes).size().width
+        let lineWidth = line.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
         
         let result: CustomTextPosition
         if point.x < 0 {
@@ -153,8 +153,7 @@ extension CustomTextLabel {
             
             var accumulatedWidth: CGFloat = 0
             for lineIndex: LiveLine.Index in line.indices {
-                let char = String(line[lineIndex])
-                let charWidth: CGFloat = NSAttributedString(string: char, attributes: attributes).size().width
+                let charWidth: CGFloat = line[lineIndex].width
                 if point.x < accumulatedWidth + charWidth {
                     let index = LiveDocument.Index(row: lineNo, column: lineIndex)
                     r = CustomTextPosition(index: index)
