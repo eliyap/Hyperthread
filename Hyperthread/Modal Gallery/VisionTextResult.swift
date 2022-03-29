@@ -62,13 +62,20 @@ extension VisionTextResult {
     }
 }
 
-struct LiveTextString: Sendable {
+struct LiveTextLine: Sendable {
 
     public let characters: [LiveTextCharacter]
+    public let box: BoundingBox
 
-    init(_ text: VNRecognizedText) {
-        var chars: [LiveTextCharacter] = []
+    init?(_ text: VNRecognizedText) {
         let string = text.string
+        guard let wholeBox = try? text.boundingBox(for: string.startIndex..<string.endIndex) else {
+            assert(false, "Failed to get box for text \(string)")
+            return nil
+        }
+        self.box = BoundingBox(wholeBox)
+        
+        var chars: [LiveTextCharacter] = []
         var curr = string.startIndex
         while curr < string.endIndex {
             let range = curr..<string.index(after: curr)
@@ -81,6 +88,10 @@ struct LiveTextString: Sendable {
         }
         
         self.characters = chars
+    }
+    
+    var string: String {
+        characters.map(\.character).reduce("", {$0 + $1})
     }
 }
 
