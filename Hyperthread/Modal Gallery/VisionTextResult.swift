@@ -61,3 +61,44 @@ extension VisionTextResult {
         }
     }
 }
+
+struct LiveTextString: Sendable {
+
+    public let characters: [LiveTextCharacter]
+
+    init(_ text: VNRecognizedText) {
+        var chars: [LiveTextCharacter] = []
+        let string = text.string
+        var curr = string.startIndex
+        while curr < string.endIndex {
+            let range = curr..<string.index(after: curr)
+            guard let box = try? text.boundingBox(for: range) else {
+                assert(false, "Failed to get box for character in text \(string)")
+                continue
+            }
+            chars.append(.init(box: BoundingBox(box), character: string[range]))
+            curr = string.index(after: curr)
+        }
+        
+        self.characters = chars
+    }
+}
+
+struct LiveTextCharacter: Sendable {
+    public let box: BoundingBox
+    public let character: Substring
+}
+
+struct BoundingBox: Sendable {
+    public let topLeft: CGPoint
+    public let topRight: CGPoint
+    public let bottomLeft: CGPoint
+    public let bottomRight: CGPoint
+    
+    init(_ observation: VNRectangleObservation) {
+        self.topLeft = observation.topLeft
+        self.topRight = observation.topRight
+        self.bottomLeft = observation.bottomLeft
+        self.bottomRight = observation.bottomRight
+    }
+}
