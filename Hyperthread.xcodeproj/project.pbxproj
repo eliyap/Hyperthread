@@ -88,7 +88,6 @@
 		228A097A27EB9F48003714A0 /* ShadeCloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A097927EB9F47003714A0 /* ShadeCloseButton.swift */; };
 		228A097C27EB9FCD003714A0 /* LiveTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A097B27EB9FCD003714A0 /* LiveTextButton.swift */; };
 		228A097F27EFBAF8003714A0 /* SelectableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A097E27EFBAF8003714A0 /* SelectableImageView.swift */; };
-		228A098127F0B606003714A0 /* SelectableImageView+UITextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098027F0B606003714A0 /* SelectableImageView+UITextInput.swift */; };
 		228A098C27F0EE26003714A0 /* VisionImageView+ActiveCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098B27F0EE26003714A0 /* VisionImageView+ActiveCellDelegate.swift */; };
 		228A099E27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099D27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift */; };
 		228A09A027F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099F27F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift */; };
@@ -261,7 +260,6 @@
 		228A097B27EB9FCD003714A0 /* LiveTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextButton.swift; sourceTree = "<group>"; };
 		228A097D27EBA906003714A0 /* Live Text Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Live Text Notes.md"; sourceTree = "<group>"; };
 		228A097E27EFBAF8003714A0 /* SelectableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableImageView.swift; sourceTree = "<group>"; };
-		228A098027F0B606003714A0 /* SelectableImageView+UITextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectableImageView+UITextInput.swift"; sourceTree = "<group>"; };
 		228A098B27F0EE26003714A0 /* VisionImageView+ActiveCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VisionImageView+ActiveCellDelegate.swift"; sourceTree = "<group>"; };
 		228A099D27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextGranularity+CustomStringConvertible.swift"; sourceTree = "<group>"; };
 		228A099F27F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextDirection+CustomStringConvertible.swift"; sourceTree = "<group>"; };
@@ -611,7 +609,6 @@
 				22817B9F27E3A0BC00D34C71 /* ZoomableImageView.swift */,
 				228A097E27EFBAF8003714A0 /* SelectableImageView.swift */,
 				228A098B27F0EE26003714A0 /* VisionImageView+ActiveCellDelegate.swift */,
-				228A098027F0B606003714A0 /* SelectableImageView+UITextInput.swift */,
 				22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */,
 				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
 				22817BAE27E5486800D34C71 /* GalleryTransition.swift */,
@@ -999,7 +996,6 @@
 				22A760BF27A5F38E0006E9BC /* QuoteView.swift in Sources */,
 				22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */,
 				22A760C927A866610006E9BC /* DiscussionTableWrapper.swift in Sources */,
-				228A098127F0B606003714A0 /* SelectableImageView+UITextInput.swift in Sources */,
 				22193DB72785A878005A7708 /* OnFollow.swift in Sources */,
 				22FA26B72795D1FB00DD8EE4 /* LinkConversations.swift in Sources */,
 				222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */,
