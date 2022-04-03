@@ -153,7 +153,7 @@ final class GalleryDismissingAnimator: NSObject, UIViewControllerAnimatedTransit
         /// Animation start point.
         galleryView.backgroundColor = .galleryBackground
         galleryView.transitionShow()
-        galleryView.prepareDismissal(snapshot: snapshot) /// Pass snapshot to view so it can be layered.
+        galleryView.insert(snapshot: snapshot) /// Pass snapshot to view so it can be layered.
         snapshot.frame = startingFrame
         snapshot.layer.opacity = 1
         

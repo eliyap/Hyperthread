@@ -60,7 +60,7 @@ final class GalleryView: UIView {
         bottomShade.constrain(to: self)
     }
     
-    public func prepareDismissal(snapshot: UIView) -> Void {
+    public func insert(snapshot: UIView) -> Void {
         /// - Note: transition takes care of removing from superview in case of cancellation.
         insertSubview(snapshot, belowSubview: topShade)
     }
