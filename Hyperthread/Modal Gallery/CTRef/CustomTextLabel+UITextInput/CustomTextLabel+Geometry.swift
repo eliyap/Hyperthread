@@ -124,26 +124,22 @@ extension CustomTextLabel {
     }
     
     func closestPosition(to point: CGPoint) -> UITextPosition? {
-        /// Estimate line from `y`.
-        let lineHeight = CustomTextLabel.font.lineHeight
-        var lineNo = Int(point.y / lineHeight)
-        
-        /// Clamp line to valid indices.
-        if lineNo < 0 {
-            lineNo = 0
-        } else if lineNo >= labelText.lines.count {
-            lineNo = labelText.lines.count - 1
+        guard
+            let closest = labelText.lines.closest(to: point),
+            let lineNo = labelText.lines.firstIndex(of: closest)
+        else {
+            return nil
         }
         
         let line = labelText.lines[lineNo]
         let lineWidth = line.chars.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
 
         let result: CustomTextPosition
-        if point.x < 0 {
+        if point.x < line.origin.x {
             /// Off to the left.
             let index = LiveDocument.Index(row: lineNo, column: line.startIndex)
             result = CustomTextPosition(index: index)
-        } else if point.x > lineWidth {
+        } else if point.x > (lineWidth + line.width) {
             /// Off to the right.
             let index = LiveDocument.Index(row: lineNo, column: line.endIndex)
             result = CustomTextPosition(index: index)
@@ -151,7 +147,7 @@ extension CustomTextLabel {
             /// Temporary `result`.
             var r: CustomTextPosition? = nil
 
-            var accumulatedWidth: CGFloat = 0
+            var accumulatedWidth: CGFloat = line.origin.x
             for lineIndex: LiveLine.Index in line.chars.indices {
                 let charWidth: CGFloat = line[lineIndex].width
                 if point.x < accumulatedWidth + charWidth {
