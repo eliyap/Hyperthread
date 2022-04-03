@@ -40,6 +40,35 @@ struct LiveLine {
     init(chars: [Element], origin: CGPoint) {
         self.chars = chars
         self.origin = origin
+        self.width = chars.map(\.width).reduce(0, +)
+    }
+    
+    let height = CustomTextLabel.font.lineHeight
+    let width: CGFloat
+}
+
+extension Collection where Element == LiveLine {
+    func closest(to point: CGPoint) -> Element? {
+        guard var candidate: Element = first else { return nil }
+        var minDistance: CGFloat = .infinity
+        for element in self {
+            let corners: [CGPoint] = [
+                element.origin,
+                .init(x: element.origin.x, y: element.origin.y + element.height),
+                .init(x: element.origin.x + element.width, y: element.origin.y),
+                .init(x: element.origin.x + element.width, y: element.origin.y + element.height)
+            ]
+
+            for corner in corners {
+                let distance = corner.distance(to: point)
+                if distance < minDistance {
+                    minDistance = distance
+                    candidate = element
+                }
+            }
+        }
+
+        return candidate
     }
 }
 
