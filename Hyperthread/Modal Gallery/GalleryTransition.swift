@@ -63,6 +63,13 @@ final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransit
         let startingFrame = rootView?.absoluteFrame() ?? target.absoluteFrame()
         let endingFrame = target.absoluteFrame()
         
+        /// Taking a snapshot is possible because the view is already visible.
+        guard let snapshot = target.snapshotView(afterScreenUpdates: true) else {
+            assert(false, "Could not get snapshot!")
+            context.completeTransition(false)
+            return
+        }
+        
         /// Animation start point.
         target.frame = startingFrame
         galleryView.backgroundColor = .clear
