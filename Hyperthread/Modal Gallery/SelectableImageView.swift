@@ -9,13 +9,9 @@ import UIKit
 import LTImage
 
 extension SelectableImageView: ActiveCellDelegate {
-    func didBecomeActiveCell() {
-        visionImageView.didBecomeActiveCell()
-    }
+    
 }
 
 extension SelectableImageView: GeometryTargetProvider {
-    var targetView: UIView {
-        visionImageView
-    }
+    
 }
