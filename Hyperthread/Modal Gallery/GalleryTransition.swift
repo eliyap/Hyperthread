@@ -70,6 +70,10 @@ final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransit
             return
         }
         
+        /// Prepare for transition.
+        galleryView.insert(snapshot: snapshot)
+        target.isHidden = true
+        
         /// Animation start point.
         snapshot.frame = startingFrame
         galleryView.backgroundColor = .clear
@@ -88,6 +92,10 @@ final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransit
                 snapshot.layer.opacity = 1
             },
             completion: { _ in
+                /// Clean up after transition.
+                snapshot.removeFromSuperview()
+                target.isHidden = false
+                
                 context.completeTransition(true)
             }
         )
