@@ -89,20 +89,9 @@
 		228A097C27EB9FCD003714A0 /* LiveTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A097B27EB9FCD003714A0 /* LiveTextButton.swift */; };
 		228A097F27EFBAF8003714A0 /* SelectableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A097E27EFBAF8003714A0 /* SelectableImageView.swift */; };
 		228A098127F0B606003714A0 /* SelectableImageView+UITextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098027F0B606003714A0 /* SelectableImageView+UITextInput.swift */; };
-		228A098727F0D0D1003714A0 /* CustomTextPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098327F0D0D1003714A0 /* CustomTextPosition.swift */; };
-		228A098827F0D0D1003714A0 /* CustomTextRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098427F0D0D1003714A0 /* CustomTextRange.swift */; };
-		228A098927F0D0D1003714A0 /* CustomTextSelectionRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098527F0D0D1003714A0 /* CustomTextSelectionRect.swift */; };
-		228A098A27F0D0D1003714A0 /* CustomTextLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098627F0D0D1003714A0 /* CustomTextLabel.swift */; };
 		228A098C27F0EE26003714A0 /* VisionImageView+ActiveCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098B27F0EE26003714A0 /* VisionImageView+ActiveCellDelegate.swift */; };
-		228A098E27F117CA003714A0 /* CustomTextLabel+UITextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */; };
-		228A099127F11836003714A0 /* CustomTextLabel+Ignored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099027F11836003714A0 /* CustomTextLabel+Ignored.swift */; };
-		228A099527F118EE003714A0 /* CustomTextLabel+Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099427F118EE003714A0 /* CustomTextLabel+Geometry.swift */; };
-		228A099727F11938003714A0 /* CustomTextLabel+Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099627F11938003714A0 /* CustomTextLabel+Position.swift */; };
-		228A099A27F1FA17003714A0 /* LiveString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099927F1FA17003714A0 /* LiveString.swift */; };
-		228A099C27F1FAB8003714A0 /* LiveString.Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099B27F1FAB8003714A0 /* LiveString.Index.swift */; };
 		228A099E27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099D27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift */; };
 		228A09A027F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A099F27F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift */; };
-		228A09A227F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228A09A127F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift */; };
 		228D71E7277A953500E306BD /* DateWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E6277A953500E306BD /* DateWindow.swift */; };
 		228D71E9277AC06100E306BD /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71E8277AC06100E306BD /* TimeInterval.swift */; };
 		228D71EB277C1BD400E306BD /* FollowingLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228D71EA277C1BD400E306BD /* FollowingLine.swift */; };
@@ -273,20 +262,9 @@
 		228A097D27EBA906003714A0 /* Live Text Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Live Text Notes.md"; sourceTree = "<group>"; };
 		228A097E27EFBAF8003714A0 /* SelectableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableImageView.swift; sourceTree = "<group>"; };
 		228A098027F0B606003714A0 /* SelectableImageView+UITextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectableImageView+UITextInput.swift"; sourceTree = "<group>"; };
-		228A098327F0D0D1003714A0 /* CustomTextPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextPosition.swift; sourceTree = "<group>"; };
-		228A098427F0D0D1003714A0 /* CustomTextRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextRange.swift; sourceTree = "<group>"; };
-		228A098527F0D0D1003714A0 /* CustomTextSelectionRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextSelectionRect.swift; sourceTree = "<group>"; };
-		228A098627F0D0D1003714A0 /* CustomTextLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextLabel.swift; sourceTree = "<group>"; };
 		228A098B27F0EE26003714A0 /* VisionImageView+ActiveCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VisionImageView+ActiveCellDelegate.swift"; sourceTree = "<group>"; };
-		228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+UITextInput.swift"; sourceTree = "<group>"; };
-		228A099027F11836003714A0 /* CustomTextLabel+Ignored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+Ignored.swift"; sourceTree = "<group>"; };
-		228A099427F118EE003714A0 /* CustomTextLabel+Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+Geometry.swift"; sourceTree = "<group>"; };
-		228A099627F11938003714A0 /* CustomTextLabel+Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+Position.swift"; sourceTree = "<group>"; };
-		228A099927F1FA17003714A0 /* LiveString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveString.swift; sourceTree = "<group>"; };
-		228A099B27F1FAB8003714A0 /* LiveString.Index.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveString.Index.swift; sourceTree = "<group>"; };
 		228A099D27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextGranularity+CustomStringConvertible.swift"; sourceTree = "<group>"; };
 		228A099F27F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextDirection+CustomStringConvertible.swift"; sourceTree = "<group>"; };
-		228A09A127F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomTextLabel+UITextInputTokenizer.swift"; sourceTree = "<group>"; };
 		228D71E6277A953500E306BD /* DateWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWindow.swift; sourceTree = "<group>"; };
 		228D71E8277AC06100E306BD /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		228D71EA277C1BD400E306BD /* FollowingLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingLine.swift; sourceTree = "<group>"; };
@@ -634,47 +612,12 @@
 				228A097E27EFBAF8003714A0 /* SelectableImageView.swift */,
 				228A098B27F0EE26003714A0 /* VisionImageView+ActiveCellDelegate.swift */,
 				228A098027F0B606003714A0 /* SelectableImageView+UITextInput.swift */,
-				228A099827F1F9BF003714A0 /* LiveText */,
-				228A098227F0D085003714A0 /* CTRef */,
 				22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */,
 				22817BA427E51B8F00D34C71 /* GeometryTargetProvider.swift */,
 				22817BAE27E5486800D34C71 /* GalleryTransition.swift */,
 				228A097D27EBA906003714A0 /* Live Text Notes.md */,
 			);
 			path = "Modal Gallery";
-			sourceTree = "<group>";
-		};
-		228A098227F0D085003714A0 /* CTRef */ = {
-			isa = PBXGroup;
-			children = (
-				228A098627F0D0D1003714A0 /* CustomTextLabel.swift */,
-				228A098F27F11810003714A0 /* CustomTextLabel+UITextInput */,
-				228A098327F0D0D1003714A0 /* CustomTextPosition.swift */,
-				228A098427F0D0D1003714A0 /* CustomTextRange.swift */,
-				228A098527F0D0D1003714A0 /* CustomTextSelectionRect.swift */,
-			);
-			path = CTRef;
-			sourceTree = "<group>";
-		};
-		228A098F27F11810003714A0 /* CustomTextLabel+UITextInput */ = {
-			isa = PBXGroup;
-			children = (
-				228A098D27F117CA003714A0 /* CustomTextLabel+UITextInput.swift */,
-				228A09A127F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift */,
-				228A099627F11938003714A0 /* CustomTextLabel+Position.swift */,
-				228A099427F118EE003714A0 /* CustomTextLabel+Geometry.swift */,
-				228A099027F11836003714A0 /* CustomTextLabel+Ignored.swift */,
-			);
-			path = "CustomTextLabel+UITextInput";
-			sourceTree = "<group>";
-		};
-		228A099827F1F9BF003714A0 /* LiveText */ = {
-			isa = PBXGroup;
-			children = (
-				228A099927F1FA17003714A0 /* LiveString.swift */,
-				228A099B27F1FAB8003714A0 /* LiveString.Index.swift */,
-			);
-			path = LiveText;
 			sourceTree = "<group>";
 		};
 		228D71EE2780127400E306BD /* DateWindow */ = {
@@ -988,7 +931,6 @@
 				228A099E27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift in Sources */,
 				223BBF6D27377EC300375530 /* Conversation.swift in Sources */,
 				223BBF7E273846BE00375530 /* LoginState.swift in Sources */,
-				228A099A27F1FA17003714A0 /* LiveString.swift in Sources */,
 				22D127E7274065E900932614 /* UserView.swift in Sources */,
 				228D71ED277C1D2300E306BD /* CellEvent.swift in Sources */,
 				2248FF502745BEA100C6DEF9 /* Entities.swift in Sources */,
@@ -1019,7 +961,6 @@
 				22FBAAD627B07C6000FEEB71 /* GIFViewController.swift in Sources */,
 				223BBF7127377EC300375530 /* Query.swift in Sources */,
 				223BBF7A2737867800375530 /* AuthView.swift in Sources */,
-				228A098E27F117CA003714A0 /* CustomTextLabel+UITextInput.swift in Sources */,
 				22760A41274A8B4200F28F0A /* TweetTextView.swift in Sources */,
 				22FA26B52795C77A00DD8EE4 /* Realm.TransactionToken.swift in Sources */,
 				22A760C527A750390006E9BC /* CountButton.swift in Sources */,
@@ -1033,13 +974,10 @@
 				22680A90276B4159008827F8 /* PublicMetrics.swift in Sources */,
 				223BBF84273847E900375530 /* LoginViewController.swift in Sources */,
 				22144E1B27B83B79002AAFB6 /* CardTeaserCell.style.swift in Sources */,
-				228A099727F11938003714A0 /* CustomTextLabel+Position.swift in Sources */,
 				22193DAA2783DD5E005A7708 /* FollowingCache.swift in Sources */,
 				22760A4F274B136200F28F0A /* Media.swift in Sources */,
 				22DBDC5327EA1EFF005D0595 /* VisionTextResult.swift in Sources */,
 				22BC9E9127A5C97800721BD2 /* ColorMarkerView.swift in Sources */,
-				228A098827F0D0D1003714A0 /* CustomTextRange.swift in Sources */,
-				228A098727F0D0D1003714A0 /* CustomTextPosition.swift in Sources */,
 				22FBAAD427AF1EC800FEEB71 /* Tweet.addVideo.swift in Sources */,
 				22EE928D2799C5BB003C9056 /* UserMessage.swift in Sources */,
 				223BBF7C273791A100375530 /* PMViewController.swift in Sources */,
@@ -1055,28 +993,24 @@
 				221A2970275D533D00C283FE /* ControlledCell.swift in Sources */,
 				228A097A27EB9F48003714A0 /* ShadeCloseButton.swift in Sources */,
 				223BBF82273847C300375530 /* Adopt.swift in Sources */,
-				228A09A227F21679003714A0 /* CustomTextLabel+UITextInputTokenizer.swift in Sources */,
 				22817BA927E520AC00D34C71 /* ModalPageView.swift in Sources */,
 				22A760CD27A883100006E9BC /* DiscussionLoader.swift in Sources */,
 				223BBF6E27377EC300375530 /* User.swift in Sources */,
 				22A760BF27A5F38E0006E9BC /* QuoteView.swift in Sources */,
 				22D257272787E402005FC3D8 /* LoadAppData.swift in Sources */,
 				22A760C927A866610006E9BC /* DiscussionTableWrapper.swift in Sources */,
-				228A098927F0D0D1003714A0 /* CustomTextSelectionRect.swift in Sources */,
 				228A098127F0B606003714A0 /* SelectableImageView+UITextInput.swift in Sources */,
 				22193DB72785A878005A7708 /* OnFollow.swift in Sources */,
 				22FA26B72795D1FB00DD8EE4 /* LinkConversations.swift in Sources */,
 				222161F22741A8EA00220F0C /* CardHeaderCell.swift in Sources */,
 				223BBF2B27377BE500375530 /* AppDelegate.swift in Sources */,
 				223BBF7427377EF100375530 /* Logger.swift in Sources */,
-				228A099127F11836003714A0 /* CustomTextLabel+Ignored.swift in Sources */,
 				223BBF8A27385AFA00375530 /* OptionalCompare.swift in Sources */,
 				223BBF2D27377BE500375530 /* SceneDelegate.swift in Sources */,
 				22FA26A52795B85400DD8EE4 /* Tweet+Identifiable.swift in Sources */,
 				222161F42741C2F400220F0C /* AssetColors.swift in Sources */,
 				22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */,
 				22760A47274ADEF500F28F0A /* MarkReadDaemon.swift in Sources */,
-				228A099C27F1FAB8003714A0 /* LiveString.Index.swift in Sources */,
 				228A09A027F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift in Sources */,
 				22817BA327E4057200D34C71 /* GalleryViewController.swift in Sources */,
 				22193DAF27840477005A7708 /* URLScheme.swift in Sources */,
@@ -1102,7 +1036,6 @@
 				226D2BB827E806C000ACB0CA /* BottomShadeView.swift in Sources */,
 				22FA269A2794846F00DD8EE4 /* FirstFetch.swift in Sources */,
 				228D71F22780142200E306BD /* UserTimelineWindow.swift in Sources */,
-				228A098A27F0D0D1003714A0 /* CustomTextLabel.swift in Sources */,
 				22817BAF27E5486800D34C71 /* GalleryTransition.swift in Sources */,
 				22FBAAD227AEF85700FEEB71 /* Video.swift in Sources */,
 				2232DD2E2796F75000936846 /* MainTableWrapper.swift in Sources */,
@@ -1116,7 +1049,6 @@
 				22193DA427829C5E005A7708 /* ProfileImageView.swift in Sources */,
 				22BC9E9327A5C9A000721BD2 /* ImageViewController.swift in Sources */,
 				223BBF7827377F5100375530 /* Storage.swift in Sources */,
-				228A099527F118EE003714A0 /* CustomTextLabel+Geometry.swift in Sources */,
 				22FA26A72795B91F00DD8EE4 /* Tweet Shorthand.swift in Sources */,
 				228A097C27EB9FCD003714A0 /* LiveTextButton.swift in Sources */,
 				22193DB527859D2D005A7708 /* RealmError.swift in Sources */,

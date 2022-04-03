@@ -45,7 +45,7 @@ final class SelectableImageView: UIView {
             visionImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
         
-        let ctl = CustomTextLabel(labelText: """
+        let ctl = SelectionLabel(labelText: """
             POTATO POTATO.
             POTATO POTATO.
             """)
