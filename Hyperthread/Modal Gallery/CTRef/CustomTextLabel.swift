@@ -31,8 +31,13 @@ class CustomTextLabel: UIView {
 	/// A simple draw call override that uses `NSAttributedString` to draw `labelText` with `attributes`
 	override func draw(_ rect: CGRect) {
 		super.draw(rect)
-        let attributedString = NSAttributedString(string: labelText.text, attributes: attributes)
-		attributedString.draw(in: rect)
+        for line in labelText.lines {
+            let str = line.chars.map(\.char).reduce("", {"\($0)\($1)"})
+            let attributedString = NSAttributedString(string: str, attributes: attributes)
+            attributedString.draw(at: line.origin)
+        }
+//        let attributedString = NSAttributedString(string: labelText.text, attributes: attributes)
+//		attributedString.draw(in: rect)
 	}
 	
 	/// The attributes used by this text label to draw the text in `labelText`

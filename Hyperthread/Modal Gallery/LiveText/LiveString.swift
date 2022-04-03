@@ -34,6 +34,13 @@ struct LiveLine {
     }
     
     let chars: [Element]
+    
+    let origin: CGPoint
+    
+    init(chars: [Element], origin: CGPoint) {
+        self.chars = chars
+        self.origin = origin
+    }
 }
 
 struct LiveDocument {
@@ -41,12 +48,14 @@ struct LiveDocument {
     public let lines: [LiveLine]
     
     init(_ string: String) {
-        self.lines = string
-            .split(separator: "\n", omittingEmptySubsequences: false)
-            .map({ (substring: Substring) -> LiveLine in
-                let chars = substring.map { LiveLine.Element(char: $0) }
-                return LiveLine(chars: chars)
-            })
+        var result: [LiveLine] = []
+        for (idx, substr) in string.split(separator: "\n", omittingEmptySubsequences: false).enumerated() {
+            let chars = substr.map { LiveLine.Element(char: $0) }
+            let tempOrigin = CGPoint(x: CGFloat(idx) * 100, y: CGFloat(idx) * 100)
+            result.append(LiveLine(chars: chars, origin: tempOrigin))
+        }
+        
+        self.lines = result
     }
     
     var text: String {
