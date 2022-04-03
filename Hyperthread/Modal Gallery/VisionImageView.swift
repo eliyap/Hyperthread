@@ -125,8 +125,6 @@ final class VisionImageView: UIImageView {
                         self.imageVisionDelegate?.didReport(progress: progress)
                         self.visionRequestProgress = progress
                     }
-                    
-                    #warning("TODO: show request progress")
                 }
 
                 /// Dispatch request.
