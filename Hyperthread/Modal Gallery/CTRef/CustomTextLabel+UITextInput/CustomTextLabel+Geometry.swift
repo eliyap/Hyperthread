@@ -134,10 +134,10 @@ extension CustomTextLabel {
         } else if lineNo >= labelText.lines.count {
             lineNo = labelText.lines.count - 1
         }
-
+        
         let line = labelText.lines[lineNo]
         let lineWidth = line.chars.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
-        
+
         let result: CustomTextPosition
         if point.x < 0 {
             /// Off to the left.
@@ -150,7 +150,7 @@ extension CustomTextLabel {
         } else {
             /// Temporary `result`.
             var r: CustomTextPosition? = nil
-            
+
             var accumulatedWidth: CGFloat = 0
             for lineIndex: LiveLine.Index in line.chars.indices {
                 let charWidth: CGFloat = line[lineIndex].width
@@ -161,7 +161,7 @@ extension CustomTextLabel {
                 }
                 accumulatedWidth += charWidth
             }
-            
+
             result = r ?? CustomTextPosition(index: LiveDocument.Index(row: lineNo, column: line.endIndex))
         }
         
