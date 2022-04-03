@@ -35,7 +35,7 @@ extension CustomTextLabel {
         }
         
         /// Find prefix width.
-        let prefix = line.prefix(upTo: start.index.column)
+        let prefix = line.chars.prefix(upTo: start.index.column)
         let prefixWidth = prefix.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
 
         /// Find fragment width.
@@ -63,7 +63,7 @@ extension CustomTextLabel {
         let line = labelText.lines[index.row]
         let lineHeight = Self.font.lineHeight
         
-        let prefix = line.prefix(upTo: index.column)
+        let prefix = line.chars.prefix(upTo: index.column)
         let prefixWidth = prefix.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
 
         return CGRect(
@@ -112,7 +112,7 @@ extension CustomTextLabel {
 
             if row == start.row { 
                 /// Calculate prefix width.
-                let prefix = line.prefix(upTo: start.column)
+                let prefix = line.chars.prefix(upTo: start.column)
                 let prefixWidth = prefix.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
                 rect.origin.x += prefixWidth
             }
@@ -136,7 +136,7 @@ extension CustomTextLabel {
         }
 
         let line = labelText.lines[lineNo]
-        let lineWidth = line.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
+        let lineWidth = line.chars.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
         
         let result: CustomTextPosition
         if point.x < 0 {
@@ -152,7 +152,7 @@ extension CustomTextLabel {
             var r: CustomTextPosition? = nil
             
             var accumulatedWidth: CGFloat = 0
-            for lineIndex: LiveLine.Index in line.indices {
+            for lineIndex: LiveLine.Index in line.chars.indices {
                 let charWidth: CGFloat = line[lineIndex].width
                 if point.x < accumulatedWidth + charWidth {
                     let index = LiveDocument.Index(row: lineNo, column: lineIndex)

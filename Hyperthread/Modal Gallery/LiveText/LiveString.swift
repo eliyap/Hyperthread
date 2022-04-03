@@ -18,7 +18,23 @@ struct TempRectChar {
     }
 }
 
-typealias LiveLine = [TempRectChar]
+struct LiveLine {
+    public typealias Element = TempRectChar
+    public typealias Index = Int
+    var startIndex: Index { chars.startIndex }
+    var endIndex: Index { chars.endIndex }
+    func index(_ original: Index, offsetBy offset: Index) -> Index {
+        return chars.index(original, offsetBy: offset)
+    }
+    subscript(_ index: Index) -> Element {
+        return chars[index]
+    }
+    subscript(_ range: Range<Index>) -> ArraySlice<Element> {
+        return chars[range]
+    }
+    
+    let chars: [Element]
+}
 
 struct LiveDocument {
     
@@ -28,13 +44,14 @@ struct LiveDocument {
         self.lines = string
             .split(separator: "\n", omittingEmptySubsequences: false)
             .map({ (substring: Substring) -> LiveLine in
-                return substring.map { LiveLine.Element(char: $0) }
+                let chars = substring.map { LiveLine.Element(char: $0) }
+                return LiveLine(chars: chars)
             })
     }
     
     var text: String {
         lines
-            .map { (line: LiveLine) in String(line.map(\.char)) }
+            .map { (line: LiveLine) in String(line.chars.map(\.char)) }
             .joined(separator: "\n")
     }
     
@@ -57,7 +74,7 @@ struct LiveDocument {
             
             let start = startLine[range.lowerBound.column..<startLine.endIndex]
             let middle = middleLines
-                .map { (line: LiveLine) in String(line.map(\.char)) }
+                .map { (line: LiveLine) in String(line.chars.map(\.char)) }
                 .joined(separator: "\n")
             let end = endLine[endLine.startIndex..<range.upperBound.column]
             
@@ -100,7 +117,7 @@ struct LiveDocument {
                 /// Check if offset exceeds line length.
                 let line = lines[row]
                 column = line.startIndex
-                let remaining = line.distance(from: column, to: line.endIndex)
+                let remaining = line.chars.distance(from: column, to: line.endIndex)
                 
                 if remaining < offset {
                     /// If so, move to next line and repeat.
@@ -124,7 +141,7 @@ struct LiveDocument {
                 /// Check if offset exceeds line length.
                 let line = lines[row]
                 column = line.endIndex
-                let remaining = line.distance(from: line.startIndex, to: column)
+                let remaining = line.chars.distance(from: line.startIndex, to: column)
                 
                 if remaining < offset {
                     /// If so, move to previous line and repeat.
