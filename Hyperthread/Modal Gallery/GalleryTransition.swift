@@ -185,6 +185,7 @@ final class GalleryDismissingAnimator: NSObject, UIViewControllerAnimatedTransit
     }
 }
 
+/// Utility function which scales `rect` down to fit exactly in the center of `frame`.
 func scaleCenterFit(_ rect: CGRect, into frame: CGRect) -> CGRect {
     /// - Note: 0.99 accounts for small floating point errors.
     if (rect.size.width / rect.size.height) > (frame.size.width / frame.size.height) {
