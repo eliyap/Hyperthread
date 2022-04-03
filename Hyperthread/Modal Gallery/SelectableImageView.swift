@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import Vision
-import BlackBox
 import LTImage
 
 extension SelectableImageView: ActiveCellDelegate {
