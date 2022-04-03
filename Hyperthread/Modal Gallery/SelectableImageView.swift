@@ -9,9 +9,9 @@ import UIKit
 import LTImage
 
 extension SelectableImageView: ActiveCellDelegate {
-    
+    /// - Note: implementation contained in package, as it uses an `internal` type.
 }
 
 extension SelectableImageView: GeometryTargetProvider {
-    
+    /// - Note: implementation contained in package, as it uses an `internal` type.
 }
