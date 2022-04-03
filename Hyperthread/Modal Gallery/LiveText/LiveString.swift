@@ -18,6 +18,8 @@ struct TempRectChar {
     }
 }
 
+extension TempRectChar: Equatable { }
+
 struct LiveLine {
     public typealias Element = TempRectChar
     public typealias Index = Int
@@ -46,6 +48,8 @@ struct LiveLine {
     let height = CustomTextLabel.font.lineHeight
     let width: CGFloat
 }
+
+extension LiveLine: Equatable { }
 
 extension Collection where Element == LiveLine {
     func closest(to point: CGPoint) -> Element? {
