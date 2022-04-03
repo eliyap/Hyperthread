@@ -137,6 +137,7 @@
 		22D2573127883F75005FC3D8 /* ReferenceCrawler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */; };
 		22D257342788459D005FC3D8 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 22D257332788459D005FC3D8 /* Algorithms */; };
 		22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */; };
+		22D556A327F9E8990065A972 /* LTImage in Frameworks */ = {isa = PBXBuildFile; productRef = 22D556A227F9E8990065A972 /* LTImage */; };
 		22DBDC5327EA1EFF005D0595 /* VisionTextResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */; };
 		22EE928D2799C5BB003C9056 /* UserMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE928C2799C5BB003C9056 /* UserMessage.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
@@ -358,6 +359,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22D556A327F9E8990065A972 /* LTImage in Frameworks */,
 				22F2463D274CA41800AE17AD /* BlackBox in Frameworks */,
 				221A296D275D36B700C283FE /* SDWebImage in Frameworks */,
 				223BBF5D27377E4600375530 /* Twig in Frameworks */,
@@ -789,6 +791,7 @@
 				22F2463C274CA41800AE17AD /* BlackBox */,
 				221A296C275D36B700C283FE /* SDWebImage */,
 				22D257332788459D005FC3D8 /* Algorithms */,
+				22D556A227F9E8990065A972 /* LTImage */,
 			);
 			productName = UIBranch;
 			productReference = 223BBF2727377BE500375530 /* Hyperthread.app */;
@@ -1515,6 +1518,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 22D257322788459D005FC3D8 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
+		};
+		22D556A227F9E8990065A972 /* LTImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LTImage;
 		};
 		22F2463C274CA41800AE17AD /* BlackBox */ = {
 			isa = XCSwiftPackageProductDependency;
