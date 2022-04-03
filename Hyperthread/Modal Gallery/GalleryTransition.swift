@@ -71,7 +71,7 @@ final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransit
         }
         
         /// Animation start point.
-        target.frame = startingFrame
+        snapshot.frame = startingFrame
         galleryView.backgroundColor = .clear
         galleryView.transitionHide()
         target.layer.opacity = transitionOpacity
@@ -84,8 +84,8 @@ final class GalleryPresentingAnimator: NSObject, UIViewControllerAnimatedTransit
                 /// Animation end point.
                 galleryView.backgroundColor = .galleryBackground
                 galleryView.transitionShow()
-                target.frame = endingFrame
                 target.layer.opacity = 1
+                snapshot.frame = endingFrame
             },
             completion: { _ in
                 context.completeTransition(true)
