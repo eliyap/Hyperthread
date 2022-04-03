@@ -7,6 +7,7 @@
 
 import UIKit
 import BlackBox
+import LTImage
 
 final class ModalPageView: UICollectionView {
     

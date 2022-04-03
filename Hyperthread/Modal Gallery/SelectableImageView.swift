@@ -8,6 +8,7 @@
 import UIKit
 import Vision
 import BlackBox
+import LTImage
 
 final class SelectableImageView: UIView {
     

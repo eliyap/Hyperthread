@@ -9,6 +9,7 @@ import UIKit
 import SDWebImage
 import Vision
 import BlackBox
+import LTImage
 
 final class ZoomableImageView: UIScrollView {
     

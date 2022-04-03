@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import LTImage
 
 final class GalleryView: UIView {
     
