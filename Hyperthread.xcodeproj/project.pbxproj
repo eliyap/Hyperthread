@@ -319,6 +319,7 @@
 		22D2572D27883A56005FC3D8 /* ScrollPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollPosition.swift; sourceTree = "<group>"; };
 		22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceCrawler.swift; sourceTree = "<group>"; };
 		22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncHomeTimeline.swift; sourceTree = "<group>"; };
+		22D556A127F9DD8F0065A972 /* LTImage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = LTImage; path = ../LTImage; sourceTree = "<group>"; };
 		22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionTextResult.swift; sourceTree = "<group>"; };
 		22EE928C2799C5BB003C9056 /* UserMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessage.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
@@ -506,6 +507,7 @@
 			children = (
 				223BBF5B27377E3E00375530 /* Twig */,
 				22F2463B274CA40100AE17AD /* BlackBox */,
+				22D556A127F9DD8F0065A972 /* LTImage */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
