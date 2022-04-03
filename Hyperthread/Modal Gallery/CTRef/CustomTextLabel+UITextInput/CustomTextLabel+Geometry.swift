@@ -46,8 +46,8 @@ extension CustomTextLabel {
         let lineHeight = Self.font.lineHeight
 
         return CGRect(
-            x: prefixWidth,
-            y: CGFloat(start.index.row) * lineHeight,
+            x: prefixWidth + line.origin.x,
+            y: CGFloat(start.index.row) * lineHeight + line.origin.y,
             width: fragmentWidth,
             height: lineHeight
         )
@@ -67,8 +67,8 @@ extension CustomTextLabel {
         let prefixWidth = prefix.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
 
         return CGRect(
-            x: prefixWidth,
-            y: CGFloat(index.row) * lineHeight,
+            x: prefixWidth + line.origin.x,
+            y: CGFloat(index.row) * lineHeight + line.origin.y,
             width: CustomTextLabel.caretWidth,
             height: lineHeight
         )
@@ -104,8 +104,8 @@ extension CustomTextLabel {
             let fragmentWidth = fragment.map { (char: LiveLine.Element) in char.width }.reduce(0, +)
 
             var rect = CGRect(
-                x: 0,
-                y: CustomTextLabel.font.lineHeight * CGFloat(row),
+                x: line.origin.x,
+                y: CustomTextLabel.font.lineHeight * CGFloat(row) + line.origin.y,
                 width: fragmentWidth,
                 height: CustomTextLabel.font.lineHeight
             )
