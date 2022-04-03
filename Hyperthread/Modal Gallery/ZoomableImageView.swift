@@ -209,7 +209,7 @@ extension ZoomableImageView: UIScrollViewDelegate {
 
 extension ZoomableImageView: GeometryTargetProvider {
     var targetView: UIView {
-        imageView
+        imageView.targetView
     }
 }
 

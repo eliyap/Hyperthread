@@ -79,3 +79,9 @@ extension SelectableImageView: ActiveCellDelegate {
         visionImageView.didBecomeActiveCell()
     }
 }
+
+extension SelectableImageView: GeometryTargetProvider {
+    var targetView: UIView {
+        visionImageView
+    }
+}
