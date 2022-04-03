@@ -138,6 +138,7 @@
 		22D257342788459D005FC3D8 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 22D257332788459D005FC3D8 /* Algorithms */; };
 		22D2573627885720005FC3D8 /* AsyncHomeTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */; };
 		22D556A327F9E8990065A972 /* LTImage in Frameworks */ = {isa = PBXBuildFile; productRef = 22D556A227F9E8990065A972 /* LTImage */; };
+		22D556A527F9FB540065A972 /* CGPoint.distance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D556A427F9FB540065A972 /* CGPoint.distance.swift */; };
 		22DBDC5327EA1EFF005D0595 /* VisionTextResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */; };
 		22EE928D2799C5BB003C9056 /* UserMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EE928C2799C5BB003C9056 /* UserMessage.swift */; };
 		22F2463D274CA41800AE17AD /* BlackBox in Frameworks */ = {isa = PBXBuildFile; productRef = 22F2463C274CA41800AE17AD /* BlackBox */; };
@@ -321,6 +322,7 @@
 		22D2573027883F75005FC3D8 /* ReferenceCrawler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceCrawler.swift; sourceTree = "<group>"; };
 		22D2573527885720005FC3D8 /* AsyncHomeTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncHomeTimeline.swift; sourceTree = "<group>"; };
 		22D556A127F9DD8F0065A972 /* LTImage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = LTImage; path = ../LTImage; sourceTree = "<group>"; };
+		22D556A427F9FB540065A972 /* CGPoint.distance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.distance.swift; sourceTree = "<group>"; };
 		22DBDC5227EA1EFF005D0595 /* VisionTextResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionTextResult.swift; sourceTree = "<group>"; };
 		22EE928C2799C5BB003C9056 /* UserMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessage.swift; sourceTree = "<group>"; };
 		22F2463B274CA40100AE17AD /* BlackBox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BlackBox; path = ../BlackBox; sourceTree = "<group>"; };
@@ -593,6 +595,7 @@
 				22144E1C27B9B21F002AAFB6 /* UIImage.fill.swift */,
 				228A099D27F2163D003714A0 /* UITextGranularity+CustomStringConvertible.swift */,
 				228A099F27F2164F003714A0 /* UITextDirection+CustomStringConvertible.swift */,
+				22D556A427F9FB540065A972 /* CGPoint.distance.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1103,6 +1106,7 @@
 				22817BAF27E5486800D34C71 /* GalleryTransition.swift in Sources */,
 				22FBAAD227AEF85700FEEB71 /* Video.swift in Sources */,
 				2232DD2E2796F75000936846 /* MainTableWrapper.swift in Sources */,
+				22D556A527F9FB540065A972 /* CGPoint.distance.swift in Sources */,
 				22193DB12784050F005A7708 /* TweetViewDelegate.swift in Sources */,
 				2266D0C827616D6A0099477D /* ArrowRefreshControl.swift in Sources */,
 				22FBAAD027AECF6D00FEEB71 /* MediaFetcher.swift in Sources */,

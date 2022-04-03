@@ -83,9 +83,3 @@ fileprivate extension CGRect {
         return pt
     }
 }
-
-fileprivate extension CGPoint {
-    func distance(to other: CGPoint) -> CGFloat {
-        sqrt(pow(x-other.x, 2)+pow(y-other.y,2))
-    }
-}
