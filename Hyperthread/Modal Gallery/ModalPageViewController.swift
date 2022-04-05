@@ -17,7 +17,7 @@ final class ModalPageViewController: UIViewController {
     private let dataSource: ModalAlbumDataSource
     
     init(images: [UIImage?], startIndex: IndexPath, imageVisionDelegate: ImageVisionDelegate) {
-        self.pageView = .init(startIndex: startIndex)
+        self.pageView = .init(startIndex: startIndex, imageVisionDelegate: imageVisionDelegate)
         self.dataSource = .init(collectionView: pageView, cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseID, for: indexPath) as? Cell else {
                 fatalError("Failed to create or cast new cell!")
