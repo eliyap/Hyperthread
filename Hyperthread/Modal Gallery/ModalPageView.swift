@@ -93,6 +93,15 @@ extension ModalPageView: UICollectionViewDelegate {
             scrollToItem(at: startIndex, at: [], animated: false)
             hasSetStartIndex = true
         }
+        guard let cell = cell as? ModalPageViewCell else {
+            assert(false, "Incorrect type!")
+            return
+        }
+        
+        /// Attach delegate at initialization.
+        if indexPath == getCurrentIndexPath() {
+            cell.imageVisionDelegate = self.imageVisionDelegate
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -103,6 +112,9 @@ extension ModalPageView: UICollectionViewDelegate {
             return
         }
         cell.resetDisplay()
+        
+        /// Detach delegate when view disappears. This prevents off screen views sending errant messages.
+        cell.imageVisionDelegate = nil
     }
 }
 
@@ -142,6 +154,9 @@ extension ModalPageView: UIScrollViewDelegate {
         isScrolling = false
         
         updateTarget()
+        
+        /// Also attach delegate to new view.
+        getCurrentCell()?.imageVisionDelegate = self.imageVisionDelegate
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -150,6 +165,9 @@ extension ModalPageView: UIScrollViewDelegate {
         }
         
         updateTarget()
+        
+        /// Also attach delegate to new view.
+        getCurrentCell()?.imageVisionDelegate = self.imageVisionDelegate
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
