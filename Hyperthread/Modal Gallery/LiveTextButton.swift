@@ -173,7 +173,6 @@ final class LoadCircleView: UIView {
 
 extension LoadCircleView: ImageVisionDelegate {
     func didReport(progress: Double) -> Void {
-        print("drawing progress \(progress)")
         self.reportedProgress = progress
         redraw(progress: progress)
     }
