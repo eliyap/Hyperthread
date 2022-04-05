@@ -34,6 +34,7 @@ final class ModalPageView: UICollectionView {
     init(startIndex: IndexPath, imageVisionDelegate: ImageVisionDelegate) {
         self.startIndex = startIndex
         self.targetIndex = startIndex
+        self.imageVisionDelegate = imageVisionDelegate
         super.init(frame: .zero, collectionViewLayout: ModalPageLayout())
         
         delegate = self
