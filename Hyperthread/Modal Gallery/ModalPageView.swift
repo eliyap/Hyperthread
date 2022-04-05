@@ -27,8 +27,11 @@ final class ModalPageView: UICollectionView {
     /// Whether scroll view is currently scrolling.
     public private(set) var isScrolling: Bool = false
     
+    /// Simply a weak reference.
+    private weak var imageVisionDelegate: ImageVisionDelegate? = nil
+    
     @MainActor
-    init(startIndex: IndexPath) {
+    init(startIndex: IndexPath, imageVisionDelegate: ImageVisionDelegate) {
         self.startIndex = startIndex
         self.targetIndex = startIndex
         super.init(frame: .zero, collectionViewLayout: ModalPageLayout())
