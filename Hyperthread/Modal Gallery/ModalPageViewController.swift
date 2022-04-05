@@ -25,7 +25,6 @@ final class ModalPageViewController: UIViewController {
             
             let image: UIImage? = images[indexPath.item]
             cell.configure(image: image, frame: collectionView.safeAreaLayoutGuide.layoutFrame)
-            cell.imageVisionDelegate = imageVisionDelegate
             return cell
         })
         super.init(nibName: nil, bundle: nil)
