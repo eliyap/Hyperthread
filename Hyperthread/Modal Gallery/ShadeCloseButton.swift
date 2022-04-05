@@ -33,7 +33,7 @@ final class ShadeCloseButton: UIButton {
         
         /// Constrain visible part to superview, not actual area.
         NSLayoutConstraint.activate([
-            closeIcon.leftAnchor.constraint(equalToSystemSpacingAfter: parent.leftAnchor, multiplier: horizontalMargin),
+            closeIcon.leftAnchor.constraint(equalToSystemSpacingAfter: parent.safeAreaLayoutGuide.leftAnchor, multiplier: horizontalMargin),
             /// Ensure view covers label.
             closeIcon.bottomAnchor.constraint(equalTo: sibling.bottomAnchor),
             closeIcon.topAnchor.constraint(equalTo: sibling.topAnchor),

@@ -43,7 +43,7 @@ final class LiveTextButton: UIButton {
         
         /// Constrain visible part to superview, not actual area.
         NSLayoutConstraint.activate([
-            parent.rightAnchor.constraint(equalToSystemSpacingAfter: textIcon.rightAnchor, multiplier: horizontalMargin),
+            parent.safeAreaLayoutGuide.rightAnchor.constraint(equalToSystemSpacingAfter: textIcon.rightAnchor, multiplier: horizontalMargin),
             /// Ensure view covers label.
             textIcon.bottomAnchor.constraint(equalTo: sibling.bottomAnchor),
             textIcon.topAnchor.constraint(equalTo: sibling.topAnchor),
